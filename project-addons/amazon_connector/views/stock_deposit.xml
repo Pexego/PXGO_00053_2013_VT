@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_deposit_form_add_amazon_fields" model="ir.ui.view">
+        <field name="name">stock.deposit.form</field>
+        <field name="model">stock.deposit</field>
+        <field name="inherit_id" ref="stock_deposit.view_stock_deposit_form"/>
+        <field name="arch" type="xml">
+            <group name="main_grp" position="after">
+                <group string="Amazon">
+                    <field name="amazon_order_id"/>
+                    <field name="original_deposit_id"/>
+                    <field name="amazon_return_id"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>

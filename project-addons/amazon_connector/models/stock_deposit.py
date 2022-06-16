@@ -5,6 +5,8 @@ class StockDeposit(models.Model):
     _inherit = 'stock.deposit'
 
     amazon_order_id = fields.Many2one("amazon.sale.order")
+    original_deposit_id = fields.Many2one("stock.deposit", copy=False)
+    amazon_return_id = fields.Many2one("amazon.return")
 
     @api.multi
     def create_invoice(self, journal_id=None):

@@ -18,8 +18,7 @@
 #
 ##############################################################################
 from odoo import models, fields, api, exceptions, _
-from odoo.exceptions import ValidationError
-
+from odoo.exceptions import ValidationError, UserError
 
 class StockReturnDeposit(models.TransientModel):
     _name = 'stock.return.deposit'
@@ -29,7 +28,7 @@ class StockReturnDeposit(models.TransientModel):
         wiz_lines = []
         deposit_obj = self.env['stock.deposit']
         deposit_ids = self.env.context.get('active_ids', [])
-        deposits = deposit_obj.search([('id', 'in', deposit_ids), ('state', '=', 'draft')])
+        deposits = deposit_obj.search([('id', 'in', deposit_ids)])
         for deposit in deposits:
             wiz_lines.append({'deposit_id': deposit.id,
                               'partner_id': deposit.partner_id.id,
@@ -42,11 +41,17 @@ class StockReturnDeposit(models.TransientModel):
 
     deposit_change_qty = fields.One2many('stock.return.deposit.change.qty', 'wizard_id',
                                          string='Deposits', default=_get_active_deposits)
+    options = fields.Selection(
+        selection=[('client_warehouse', 'Return to client warehouse'),
+                   ('own_warehouse', 'Return to our warehouse'), ],
+        default='own_warehouse' ,required=True)
 
     @api.multi
     def create_return(self):
         deposit_ids = []
         # Change deposit quantity -> create a new deposit with the remaining qty
+        if self.options=='own_warehouse' and any([x.state != 'draft' for x in self.deposit_change_qty.mapped('deposit_id')]):
+            raise UserError(_("You cannot return a deposit that is in a non-draft status to our warehouse"))
         for line in self.deposit_change_qty:
             qty_deposit = line.deposit_id.product_uom_qty
             if line.qty_to_return > qty_deposit or line.qty_to_return == 0:
@@ -57,56 +62,14 @@ class StockReturnDeposit(models.TransientModel):
                 line.deposit_id.write({'product_uom_qty': line.qty_to_return})
             deposit_ids.append(line.deposit_id.id)
         deposits = self.env['stock.deposit'].browse(deposit_ids)
-
-        move_obj = self.env['stock.move']
-        picking_type_id = self.env.ref('stock.picking_type_in')
-        deposit_location = self.env.ref('stock_deposit.stock_location_deposit')
-
-        sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id)
-        for deposit in sorted_deposits:
-            picking = self.env['stock.picking'].create({
-                'picking_type_id': picking_type_id.id,
-                'location_id': deposit.move_id.location_dest_id.id,
-                'location_dest_id': picking_type_id.default_location_dest_id.id})
-            if not picking['partner_id']:
-                partner_id = deposit.partner_id.id
-                commercial = deposit.user_id.id
-                group_id = deposit.sale_id.procurement_group_id.id
-                picking.write({'partner_id': partner_id, 'commercial': commercial,
-                               'group_id': group_id, 'origin': deposit.sale_id.name})
-
-            elif picking['group_id'] != deposit.sale_id.procurement_group_id:
-                picking = self.env['stock.picking'].create({
-                    'picking_type_id': picking_type_id.id,
-                    'location_id': deposit.move_id.location_dest_id.id,
-                    'location_dest_id': picking_type_id.default_location_dest_id.id
-                })
-                partner_id = deposit.partner_id.id
-                commercial = deposit.user_id.id
-                group_id = deposit.sale_id.procurement_group_id.id
-                picking.write({'partner_id': partner_id, 'commercial': commercial,
-                               'group_id': group_id, 'origin': deposit.sale_id.name})
-
-            values = {
-                'product_id': deposit.product_id.id,
-                'product_uom_qty': deposit.product_uom_qty,
-                'product_uom': deposit.product_uom.id,
-                'partner_id': deposit.partner_id.id,
-                'name': 'Sale Deposit: ' + deposit.move_id.name,
-                'location_id': deposit.move_id.location_dest_id.id,
-                'location_dest_id': picking_type_id.default_location_dest_id.id,
-                'picking_id': picking.id,
-                'commercial': deposit.user_id.id,
-                'group_id': group_id
-            }
-            move = move_obj.create(values)
-            move._action_confirm()
-            deposit.move_id.sale_line_id.write({'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced-deposit.product_uom_qty, 'invoice_status': 'to invoice'})
-            deposit.write({'state': 'returned', 'return_picking_id': picking.id})
-        picking.action_assign()
+        if self.options == 'client_warehouse':
+            deposits.with_context({'client_warehouse':True}).return_deposit()
+        else:
+            deposits.return_deposit()
 
 
-class StockReturnDeposit(models.TransientModel):
+
+class StockReturnDepositChangeQty(models.TransientModel):
     _name = 'stock.return.deposit.change.qty'
 
     wizard_id = fields.Many2one('stock.return.deposit')
