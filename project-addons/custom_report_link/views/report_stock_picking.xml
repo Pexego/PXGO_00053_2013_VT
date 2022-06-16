@@ -277,39 +277,4 @@
         </record>
 
     </data>
-    <data noupdate="1">
-        <record id="picking_done_dropship_template" model="mail.template">
-                <field name="name">Aviso de envío dropship</field>
-                <field name="email_from">${(object.company_id.email or 'comercial@visiotechsecurity.com')|safe}</field>
-                <field name="subject">VISIOTECH - Shipped products</field>
-                <field name="model_id" ref="stock.model_stock_picking"/>
-                <field name="email_to" >${(object.sale_id.partner_id.email or '')|safe}</field>
-                <field name="reply_to">${(object.sale_id.user_id.email or 'noreply@localhost')|safe}</field>
-                <field name="auto_delete" eval="False"/>
-                <field name="report_template" ref="custom_report_link.report_picking_dropship_custom_action"/>
-                <field name="report_name">Picking_${(object.name or '').replace('/','_')}</field>
-                <field name="body_html"><![CDATA[<p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Dear customer,</p>
-    % if object.carrier_name and object.carrier_name == "GENERICA":
-        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We inform you that our warehouse has prepared the products corresponding to the delivery note ${object.name} of the order ${object.sale_id.name}.</p>
-    % elif object.carrier_name:
-        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We hereby inform you that we have sent your order # ${object.sale_id.name}, the delivery note number is${object.name}. This order is now in the process of shipping and can no longer be changed.</p>
-        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">The transport company responsible for the shipping of your order is
-    ${object.carrier_name}
-        % if object.carrier_tracking_ref:
-            and the tracking number of your order is
-    ${object.carrier_tracking_ref}. </p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
-            % if object.carrier_name == "TNT":
-                 <a href="https://www.tnt.com/express/es_es/site/herramientas-envio/seguimiento.html?searchType=ref&amp;cons=${object.carrier_tracking_ref}" style="text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;"> Tracking of your order ${object.sale_id.name}</a>
-            % elif object.carrier_name == "DHL EXPRESS":
-                <a href="https://www.dhl.com/es-es/home/tracking/tracking-express.html?submit=1&amp;tracking-id=${object.carrier_tracking_ref}" style="text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;"> Tracking of your order ${object.sale_id.name}</a>
-            % endif
-            </p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
-            <b style="font-weight:bold;">Be aware that if you receive an error checking the tracking information you may need to search by the shipments reference number instead.  Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>
-        % endif
-        </p>
-    % endif
-    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Best regards,</p>
-                ]]></field>
-            </record>
-    </data>
 </odoo>

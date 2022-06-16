@@ -11,6 +11,7 @@
                 <xpath expr="//group[@name='sale_shipping']/field[@name='picking_policy']" position="after">
                     <field name="scheduled_date"
                            attrs="{'readonly': [('state','in', ('progress', 'manual', 'shipping_except', 'invoice_except', 'done', 'history', 'cancel'))]}"/>
+                    <field name="not_sync_picking" string="Non-Synchronizable Picking" groups="base.group_system" />
                 </xpath>
             </field>
         </record>

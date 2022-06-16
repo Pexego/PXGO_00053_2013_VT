@@ -152,7 +152,7 @@ class SaleOrder(models.Model):
             'web.user.buyer'):
             res.message_post(body=_("Prepaid option checked by Web Team"))
         return res
-
+        
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"

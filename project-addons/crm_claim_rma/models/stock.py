@@ -29,6 +29,17 @@ class StockPicking(models.Model):
 
     claim_id = fields.Many2one('crm.claim', 'Claim')
 
+    @api.multi
+    def check_send_email_extended(self, vals):
+        res = super(StockPicking, self).check_send_email_extended(vals)
+        return res or (self.picking_type_code == 'outgoing' and self.claim_id and self.claim_id.delivery_type == 'shipping' and
+                       self.location_dest_id == self.env.ref('stock.stock_location_customers'))
+
+    def get_email_template(self):
+        if self.claim_id:
+            return self.env.ref('crm_claim_rma.picking_done_template_claim').with_context(lang=self.partner_id.commercial_partner_id.lang)
+        return super(StockPicking, self).get_email_template()
+
 
 # This part concern the case of a wrong picking out. We need to create a new
 # stock_move in a picking already open.
