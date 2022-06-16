@@ -59,7 +59,7 @@ class StockContainer(models.Model):
         for container in self:
             if container.eta:
                 container.set_eta = True
-    
+
     @api.multi
     @api.depends('date_expected')
     def _set_date_exp(self):
@@ -215,6 +215,7 @@ class StockMove(models.Model):
     container_id = fields.Many2one('stock.container', "Container")
     subtotal_price = fields.Float('Subtotal', compute='_calc_subtotal')
     partner_ref = fields.Char(related='purchase_line_id.order_id.partner_ref')
+    virtual_stock_conservative = fields.Float(related="product_id.virtual_stock_conservative")
 
     @api.multi
     def _calc_subtotal(self):
