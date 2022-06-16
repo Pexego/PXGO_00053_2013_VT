@@ -6,7 +6,7 @@
     'author': 'Visiotech',
     "depends": ['base', 'sale', 'account', 'product', 'stock_deposit','custom_account'],
     "data": ["data/data.xml", "views/company.xml", "views/product.xml", "views/amazon_sale_order.xml", "data/cron.xml",
-             "data/email.xml",
+             "data/email.xml", "views/amazon_returns.xml", "views/stock_deposit.xml",
              "wizard/retry_orders.xml",
              "wizard/create_full_invoices.xml",
              "security/ir.model.access.csv",
