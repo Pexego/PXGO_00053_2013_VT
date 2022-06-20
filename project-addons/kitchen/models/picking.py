@@ -79,8 +79,6 @@ class StockPicking(models.Model):
                     body=_('This picking has been created from an order with customized products'))
             elif bck.customization_ids:
                 bck.not_sync = True
-            else:
-                pick.not_sync = True
         return bcks
 
     @api.multi

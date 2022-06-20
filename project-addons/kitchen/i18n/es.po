@@ -543,6 +543,11 @@ msgid "Erase Logo"
 msgstr "Borrar Logo"
 
 #. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_line_wizard_id
+msgid "wizard"
+msgstr "wizard"
+
+#. module: kitchen
 #: code:addons/kitchen/wizard/create_customization_wizard.py:70
 #: code:addons/kitchen/models/kitchen_customization.py:342
 msgid "You can't create a customization without check erase logo option of this product : %s"
