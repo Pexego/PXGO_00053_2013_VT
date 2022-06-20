@@ -92,6 +92,7 @@
                             <field name="notify_users" widget="many2many_tags"/>
                             <field name="notify_sales_team"/>
                             <field name="user"/>
+                            <field name="scheduled_shipping_date"/>
                         </group>
                         <group>
                             <field name="date_planned" readonly="1"/>
@@ -135,7 +136,8 @@
         <field name="name">kitchen.customization.tree</field>
         <field name="model">kitchen.customization</field>
         <field name="arch" type="xml">
-            <tree string="Kitchen customization" default_order="date_customization asc">
+            <tree string="Kitchen customization" default_order="date_customization asc"
+                  decoration-danger="scheduled_shipping_date!=False and state not in ['done','cancel'] and scheduled_shipping_date&lt;=current_date">
                 <field name="date_customization"/>
                 <field name="name"/>
                 <field name="commercial_id"/>
@@ -144,6 +146,7 @@
                 <field name="products_qty_format" string="Products and Quantities"/>
                 <field name="user"/>
                 <field name="date_planned"/>
+                <field name="scheduled_shipping_date"/>
                 <field name="state"/>
             </tree>
         </field>

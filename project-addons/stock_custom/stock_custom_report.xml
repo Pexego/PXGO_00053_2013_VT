@@ -14,30 +14,28 @@
             file="stock_custom.report_picking_with_attachments"
         />
 
-    <record id="picking_done_template_claim" model="mail.template">
-            <field name="name">Aviso de envío RMA</field>
-            <field name="email_from">${(object.company_id.email or 'comercial@visiotechsecurity.com')|safe}</field>
-            <field name="subject">VISIOTECH - Shipped products</field>
+        <record id="picking_done_template" model="mail.template">
+            <field name="name">Aviso de envío</field>
+            <field name="email_from">helpdesk@visiotechsecurity.com</field>
+            <field name="subject">Visiotech - Productos enviados</field>
             <field name="model_id" ref="stock.model_stock_picking"/>
             <field name="email_to" >${(object.partner_id.email or '')|safe}</field>
-            <field name="reply_to">${(object.partner_id.commercial_partner_id.user_id.email or 'noreply@localhost')|safe}</field>
+            <field name="reply_to">${('noreply@localhost')|safe}</field>
             <field name="auto_delete" eval="False"/>
-            <!--TODO: Mover a otro módulo (custom_emails_company pro ejemplo), fallo de dependencia<field name="report_template" ref="custom_report_link.report_picking_custom_action"/>-->
-            <field name="report_name">Picking_${(object.name or '').replace('/','_')}</field>
+            <field name="report_template" ref="custom_report_link.report_picking_custom_valued_action"/>
+            <field name="report_name">Albarán Valorado_${(object.name or '').replace('/','_')}</field>
             <field name="body_html"><![CDATA[
-<p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Dear customer,</p>
-
-<p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We hereby inform you that we have prepared your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>
-% if object.carrier_name and object.carrier_name != "GENERICA":
-    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">The transport company responsible for the shipping of your order is ${object.carrier_name}
-    % if object.carrier_tracking_ref:
-        and the tracking number of your order is ${object.carrier_tracking_ref}. </p>
-        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
-            <b style="font-weight:bold;">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>
-        </p>
-    % endif
+<p>Estimado cliente,</p>
+<p>Le informamos de que ya hemos enviado los productos correspondientes al albarán ${object.name} del pedido ${object.sale_id.name}. Dado que este pedido se encuentra en proceso de envío, ya no podrás realizar ninguna modificación.</p>
+% if object.carrier_name:
+<p>La compañía de transportes responsable del envío de tu pedido es ${object.carrier_name}
+% if object.carrier_tracking_ref:
+ y el número de seguimiento de tu pedido es ${object.carrier_tracking_ref}. Ten en cuenta que la información de seguimiento de tu pedido puede no estar disponible en el momento en que recibas este e-mail.
 % endif
-<p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Best regards,</p>
+</p>
+% endif
+<p>Atentamente,</p>
+<p>VISIOTECH</p>
             ]]></field>
         </record>
 

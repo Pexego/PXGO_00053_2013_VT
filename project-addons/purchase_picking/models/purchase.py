@@ -29,7 +29,7 @@ class PurchaseOrder(models.Model):
 
     def _search_containers(self, operator, value):
         containers = self.env['stock.container'].search([('name', operator, value)])
-        return [('id', 'in', containers.mapped('picking_ids').mapped('purchase_id').ids)]
+        return [('id', 'in', containers.mapped('move_ids.purchase_line_id.order_id').ids)]
 
     picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 

@@ -5,7 +5,7 @@
     'description': """This module allows you to create and view product customizations""",
     'author': 'Visiotech',
     'website': 'www.visiotechsecurity.com',
-    "depends": ['base', 'sale', 'sale_stock','product'],
+    "depends": ['base', 'sale', 'sale_stock','product','scheduled_shipment', 'stock_custom'],
     "data": [
         'data/kitchen_group.xml', 'wizard/customization_wizard.xml', 'views/kitchen_customization.xml',
         'data/sequence.xml','data/parameters.xml',

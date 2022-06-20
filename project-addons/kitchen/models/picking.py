@@ -1,4 +1,5 @@
 from odoo import models, _, api, fields, exceptions
+from odoo.addons.queue_job.job import job
 
 
 class StockPicking(models.Model):
@@ -18,13 +19,6 @@ class StockPicking(models.Model):
     customization_ids = fields.One2many('kitchen.customization', compute="_compute_customizations")
 
     customization_count = fields.Integer(compute='_compute_customizations', default=0)
-
-    @api.onchange('not_sync')
-    def onchange_not_sync(self):
-        if self.customization_ids and self.customization_ids.filtered(
-                lambda c: c.state not in ('cancel', 'done')):
-            raise exceptions.UserError(_(
-                'You cannot change this value because there are customizations in progress. Please, cancel the customization first'))
 
     def action_view_customizations(self):
         if self.env.user.has_group('kitchen.group_kitchen'):
@@ -58,6 +52,41 @@ class StockPicking(models.Model):
                         }).action_show()
 
         return super(StockPicking, self).action_cancel()
+
+    @job(default_channel='root.schedule_picking')
+    @api.multi
+    def make_picking_sync(self):
+        res = super(StockPicking, self).make_picking_sync()
+        customization = self.customization_ids.filtered(lambda c: c.state != 'cancel')
+        if customization:
+            template = self.env.ref('kitchen.send_mail_to_kitchen_customization_scheduled_date')
+            ctx = dict()
+            ctx.update({
+                'lang': 'es_ES'
+            })
+            template.with_context(ctx).send_mail(customization.id)
+        return res
+
+    @api.multi
+    def action_accept_confirmed_qty(self):
+        bcks = super(StockPicking, self).action_accept_confirmed_qty()
+        for bck in bcks:
+            pick = bck.backorder_id
+            if bck.customization_ids and pick.customization_ids:
+                bck.customization_ids.create_backorder_customization(bck.move_lines)
+                bck.not_sync = True
+                bck.message_post(
+                    body=_('This picking has been created from an order with customized products'))
+            elif bck.customization_ids:
+                bck.not_sync = True
+            else:
+                pick.not_sync = True
+        return bcks
+
+    @api.multi
+    def check_send_email_extended(self, vals):
+        res = super(StockPicking, self).check_send_email_extended(vals)
+        return res and (not self.customization_ids or not self.customization_ids.filtered(lambda c: c.state != 'cancel'))
 
 
 class StockMove(models.Model):

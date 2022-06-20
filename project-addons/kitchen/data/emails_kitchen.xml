@@ -97,6 +97,18 @@
                 <li>Partner: <strong>${object.partner_id.name | safe}</strong></li>
                 <li>Old Preview Products: ctx.get('old_previews')</strong></li>
             </ul>
+             ]]>
+        </field>
+    </record>
+    <record id="send_mail_to_kitchen_customization_scheduled_date" model="mail.template">
+        <field name="name">Customization Scheduled Date</field>
+        <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+        <field name="subject">Scheduled date of customization request ${object.name} - ${object.partner_id.name | safe}</field>
+        <field name="email_to">${'cocina@visiotechsecurity.com'}</field>
+        <field name="model_id" ref="model_kitchen_customization"/>
+        <field name="lang">${ctx['lang']}</field>
+        <field name="body_html"><![CDATA[
+            <p>The Scheduled date of customization ${object.name} - ${object.partner_id.name or ''} is ${object.scheduled_shipping_date}.</p>
             <p>Best regards.</p>
          ]]>
         </field>
