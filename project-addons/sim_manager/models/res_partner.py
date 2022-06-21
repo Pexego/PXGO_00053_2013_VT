@@ -85,10 +85,13 @@ class ResPartner(models.Model):
                             invoice.compute_taxes()
                             
                             if partner.property_payment_term_id.with_context({'lang': 'es_ES'}).name in ('Prepago', 'Pago inmediato'):
-                                valid_mandate = self.env['account.banking.mandate'].search_count([('partner_id', '=', partner.id), ('state', '=', 'valid')])
-                                if valid_mandate > 0:
+                                valid_mandates = self.env['account.banking.mandate'].search([('partner_id', '=', partner.id), ('state', '=', 'valid')])
+                                if len(valid_mandates) > 0:
                                     rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
-                                    invoice.write({'payment_mode_id': rd_payment.id})
+                                    rb_payment = self.env['account.payment.mode'].search([('name', '=', 'Ricevuta bancaria')])
+                                    invoice.write({'payment_mode_id': rb_payment.id if rb_payment else rd_payment.id,
+                                                   'partner_bank_id': valid_mandates[0].partner_bank_id.id,
+                                                   'mandate_id': valid_mandates[0].id})
                                 else:
                                     mail_bank_error_message += _('Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n') \
                                                               % (partner.name, invoice.number)
