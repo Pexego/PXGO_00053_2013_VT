@@ -41,7 +41,7 @@ class ResPartner(models.Model):
                 for partner_data in eval(response.text):
                     if partner_data['odooId'] > 0:
                         partner = self.env['res.partner'].browse(partner_data['odooId'])
-                        if partner and partner_data['sims'] > 0 \
+                        if partner.exists() and partner_data['sims'] > 0 \
                                 and partner.comercial != 'VISIOTECH' and partner.comercial != 'Prueba España':
                             price_tags = {'M2M0,7euro': 0.7, 'M2M1euro': 1, 'M2M2euro': 2}
                             product_sim = self.env['product.product'].search([('default_code', '=', 'M2M_COMMUNICATION')])
