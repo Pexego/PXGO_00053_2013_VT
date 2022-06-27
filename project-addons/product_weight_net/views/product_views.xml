@@ -14,8 +14,23 @@
                         <span>kg</span>
                     </div>
                 </div>
+
+                <group name="traceability" position="before">
+                    <group string="Box data">
+                        <label for="weight_box"/>
+                        <div class="o_row">
+                            <field name="weight_box"/>
+                            <span>kg</span>
+                        </div>
+                        <label for="volume_box"/>
+                        <div class="o_row">
+                            <field name="volume_box"/>
+                            <span>m³</span>
+                        </div>
+                        <field name="qty_box"/>
+                    </group>
+                </group>
             </field>
         </record>
-
     </data>
 </odoo>
