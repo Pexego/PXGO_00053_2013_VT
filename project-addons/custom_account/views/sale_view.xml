@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_add_allow_payment_term" model="ir.ui.view">
+        <field name="name">sale.order.form.add.allow.payment.term</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="fiscal_position_id" position="after">
+                <field name="allow_payment_term"
+                    groups="base.group_system"/>
+            </field>
+        </field>
+    </record>
+</odoo>
