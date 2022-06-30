@@ -72,6 +72,6 @@ msgid "Num. Batteries"
 msgstr "Número de Baterias"
 
 #. module: product_battery
-#: model:ir.model.fields,field_description:product_battery.field_product_template_num_batteries
+#: model:ir.model.fields,field_description:product_battery.field_product_template_battery_mode
 msgid "Battery Mode"
 msgstr "Modo de Batería"
