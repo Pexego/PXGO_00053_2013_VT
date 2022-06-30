@@ -679,3 +679,28 @@ msgstr "Notas adiciones para el producto."
 #: model:ir.ui.view,arch_db:product.product_template_form_view
 msgid "Description for Internal"
 msgstr "Descripción interna"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_battery
+msgid "Product Battery"
+msgstr "Tipo de Batería"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_battery_mode
+msgid "Product Battery Mode"
+msgstr "Modo de Batería"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_country_origin_id
+msgid "Product Country Origin"
+msgstr "País de Origen del producto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_num_batteries
+msgid "Product Num Batteries"
+msgstr "Número de Baterías"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_weight
+msgid "Product Weight"
+msgstr "Peso del producto"
