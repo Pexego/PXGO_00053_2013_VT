@@ -697,10 +697,10 @@ msgstr "País de Origen del producto"
 
 #. module: stock_custom
 #: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_num_batteries
-msgid "Product Num Batteries"
+msgid "Num Batteries"
 msgstr "Número de Baterías"
 
 #. module: stock_custom
 #: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_weight
-msgid "Product Weight"
+msgid "Weight"
 msgstr "Peso del producto"
