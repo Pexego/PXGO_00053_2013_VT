@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <group name="group_lots_and_weight" position="inside">
                 <field name="battery_id"/>
+                <field name="num_batteries"/>
+                <field name="battery_mode"/>
             </group>
         </field>
     </record>
