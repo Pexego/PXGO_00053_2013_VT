@@ -44,6 +44,11 @@ class StockPickingReport(models.Model):
     origin = fields.Char('Origin', readonly=True)
     location_dest_name = fields.Char('Location Destination Name', readonly=True)
     product_pricelist = fields.Many2one('product.pricelist', 'Pricelist', readonly=True)
+    product_battery = fields.Many2one('product.battery', readonly=True)
+    product_battery_mode = fields.Char(readonly=True)
+    product_country_origin_id = fields.Many2one('res.country',readonly=True)
+    product_num_batteries = fields.Float('Num Batteries', readonly=True)
+    product_weight = fields.Float('Weight', readonly=True)
 
     def _select(self):
         select_str = """
@@ -59,7 +64,7 @@ class StockPickingReport(models.Model):
                             THEN abs((SUM(pack_line_2.product_qty) * p.last_purchase_price) / SUM(pack_line.product_qty * p_pack_line.last_purchase_price)) *
                             	(SUM(sol.price_unit * (1 - sol.discount/100)) / count(pack_line.id)) * SUM((sm.product_qty / pack_line_2.product_qty))
                          WHEN p_pack.is_pack and SUM(coalesce(sm_pack.price_unit,0)) = 0 and SUM(pack_line.product_qty * p_pack_line.last_purchase_price) = 0 /*Kit con varios productos - Alabrán no transferido - No se puede obtner el coste*/
-                            THEN (SUM(sol.price_unit * (1 - sol.discount/100)) * SUM(sm.product_qty)) / count(pack_line.id)	
+                            THEN (SUM(sol.price_unit * (1 - sol.discount/100)) * SUM(sm.product_qty)) / count(pack_line.id)
                          WHEN p_pack.is_pack and count(pack_line.id) = 1 /*Packs - X uds de un mismo producto*/
                             THEN (SUM(sol.price_unit * (1 - sol.discount/100)) / SUM(pack_line.product_qty))* SUM(sm.product_qty)
                           ELSE SUM(sol.price_unit * (1 - sol.discount/100)) * SUM(sm.product_qty)  /*Resto de casos*/
@@ -74,13 +79,18 @@ class StockPickingReport(models.Model):
                     t.categ_id as categ_id,
                     rp.area_id as area_id,
                     rp.state_id as state_name,
-                    rp.team_id as team_id, 
+                    rp.team_id as team_id,
                     t.state as product_state,
                     t.product_brand_id as product_brand_id,
                     rp.vat as partner_vat,
                     s.origin as origin,
                     sl.name as location_dest_name,
-                    so.pricelist_id as product_pricelist     
+                    so.pricelist_id as product_pricelist,
+                    t.origin_country_id as product_country_origin_id,
+                    t.battery_id as product_battery,
+                    t.battery_mode as product_battery_mode,
+                    t.num_batteries as product_num_batteries,
+                    t.weight as product_weight
 
         """
         return select_str
@@ -103,9 +113,9 @@ class StockPickingReport(models.Model):
                 LEFT JOIN sale_order so ON sol.order_id = so.id
                 LEFT JOIN product_product p_pack ON p_pack.id = sol.product_id and COALESCE(p_pack.is_pack, False) = True  /*Ref pack si proviene de pack*/
                 LEFT JOIN mrp_bom pack ON pack.product_id = p_pack.id AND pack.type = 'phantom'
-                LEFT JOIN mrp_bom_line pack_line ON pack_line.bom_id = pack.id 
+                LEFT JOIN mrp_bom_line pack_line ON pack_line.bom_id = pack.id
                 LEFT JOIN mrp_bom_line pack_line_2 ON pack_line_2.bom_id = pack.id and pack_line_2.product_id = sm.product_id and pack_line_2.id = pack_line.id
-                LEFT JOIN stock_move sm_pack ON sm_pack.sale_line_id = sm.sale_line_id 
+                LEFT JOIN stock_move sm_pack ON sm_pack.sale_line_id = sm.sale_line_id
                     and sm_pack.picking_type_id = sm.picking_type_id /*Para que no salgan devoluciones*/
                     and sm_pack.product_id = pack_line.product_id /*Asegurarnos que las lineas que encuentran son del pack*/
                     and sm_pack.state <> 'cancel'
@@ -137,14 +147,19 @@ class StockPickingReport(models.Model):
                     rp.state_id,
                     rp.team_id,
                     sm.id,
-                    p_pack.id, 
+                    p_pack.id,
                     t.state,
                     t.product_brand_id,
                     rp.vat,
                     s.origin,
                     sl.name,
                     so.pricelist_id,
-                    p.id
+                    p.id,
+                    t.origin_country_id,
+                    t.battery_id,
+                    t.battery_mode,
+                    t.num_batteries,
+                    t.weight
         """
         return group_by_str
 
