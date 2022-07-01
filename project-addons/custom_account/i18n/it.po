@@ -1033,7 +1033,7 @@ msgstr "Prodotto"
 #: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:55
 #, python-format
 msgid "You are trying to reclassify one entry that are already reconciled!"
-msgstr Stai tentando di riclassificare una nota già riconciliata!"
+msgstr "Stai tentando di riclassificare una nota già riconciliata!"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_bank_maturity
@@ -1211,3 +1211,14 @@ msgstr "Una linea di spostamento selezionata è già stata riconciliata..\n"
 " - Compagnia: %s\n"
 " - Fattura: %s\n"
 " - Quantità: %.2f€"
+
+#. module: custom_account
+#: code:addons/custom_account/models/sale.py:17
+#, python-format
+msgid "The order can not be confirmed, maximum amount exceeded for payment term selected"
+msgstr "L'ordine non può essere confermato, importo massimo superato per il termino di pagamento scelto"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_order_allow_payment_term
+msgid "Allow Payment Term"
+msgstr "Permettere termino di pagamento"
