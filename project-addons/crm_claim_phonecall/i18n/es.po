@@ -323,3 +323,9 @@ msgstr "\n"
 "</ul>\n"
 "\n"
 "         "
+
+#. module: crm_claim_phonecall
+#: code:addons/crm_claim_phonecall/crm_phonecall.py:201
+#, python-format
+msgid "Incidences Warning %s"
+msgstr "Aviso de Incidencias %S"
