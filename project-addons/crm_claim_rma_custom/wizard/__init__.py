@@ -21,3 +21,4 @@
 from . import claim_make_picking
 from . import claim_make_picking_from_picking
 from . import invoice_discount_wiz
+from . import product_incidences_advise_wiz

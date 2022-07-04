@@ -52,6 +52,9 @@
              'views/res_users_view.xml',
              'data/email_layout.xml',
              'views/res_partner_view.xml',
-             'views/sale_view.xml'],
+             'views/sale_view.xml',
+             'views/product_view.xml',
+             'data/groups.xml',
+             'wizard/product_incidences_advise_wiz.xml'],
     "installable": True
 }
