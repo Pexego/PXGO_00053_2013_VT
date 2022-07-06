@@ -234,9 +234,6 @@ class SaleOrderLine(models.Model):
     @api.depends('order_id.partner_id')
     def _compute_hide_reserve_buttons(self):
         for line in self:
-            if line.order_id.partner_id.user_id.id == line.env.user.id \
-                    or line.env.user.has_group('reserve_without_save_sale.reserves_editor'):
-                line.hide_reserve_buttons = False
-            else:
-                line.hide_reserve_buttons = True
+            line.hide_reserve_buttons = not(line.order_id.partner_id.user_id.id == line.env.user.id \
+                    or line.env.user.has_group('reserve_without_save_sale.reserves_editor'))
 
