@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <field name="fiscal_position_id" position="after">
                 <field name="allow_payment_term"
-                    groups="base.group_system"/>
+                    groups="account.group_account_manager"/>
             </field>
         </field>
     </record>
