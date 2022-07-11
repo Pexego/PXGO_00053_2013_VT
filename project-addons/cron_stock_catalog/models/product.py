@@ -42,8 +42,10 @@ class ProductProduct(models.Model):
                     product_fields.append(product[field][1])
                 elif field == 'state':
                     product_fields.append(translate_state[product[field]])
-                elif field == 'average_margin':
+                elif field in ('average_margin', 'standard_price', 'last_purchase_price'):
                     product_fields.append(round(product[field], 2))
+                elif field == 'last_purchase_date':
+                    product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
@@ -136,18 +138,18 @@ class ProductProduct(models.Model):
 
     def cron_general_alberto_3(self):
         headers = ["ID", "Referencia interna", "Entrante",
-                   "PVP_A", "PVP_B", "PVP_C", "PVP_D", "PVI_A", "PVI_B", "PVI_C", "PVI_D",
-                   "Margen PVD_A", "Margen PVD_B", "Margen PVD_C", "Margen PVI_A", "Margen PVI_B",
-                   "Margen PVI_C", "Margen PVI_D", "Stock Real", "Stock Disponible", "Coste 2",
+                   "PVP_Iberia", "PVP_Italia", "PVP_Francia", "PVP_Europa", "PVI_Iberia", "PVI_Italia", "PVI_Francia", "PVI_Europa",
+                   "Margen PVD_Iberia", "Margen PVD_Italia", "Margen PVD_Francia","Margen PVD_Europa", "Margen PVI_Iberia", "Margen PVI_Italia",
+                   "Margen PVI_Francia", "Margen PVI_Europa", "Stock Real", "Stock Disponible", "Coste 2",
                    "Nombre de la categoría Padre", "Nombre de la categoría", "Ventas en los últimos 60 días con stock",
                    "Días de stock restantes", "Nombre de la marca", "Stock Cocina", "Estado", "Joking",
                    "Fabricando"]
 
         domain = [('sale_ok', '=', True)]
 
-        fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price2", "list_price3",
-                  "list_price4", "pvi1_price", "pvi2_price", "pvi3_price", "pvi4_price", "margin_pvd1", "margin_pvd2",
-                  "margin_pvd3", "margin_pvi1", "margin_pvi2", "margin_pvi3", "margin_pvi4", "qty_available",
+        fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price3","list_price4", "list_price2",
+                  "pvi1_price", "pvi3_price", "pvi4_price", "pvi2_price", "margin_pvd1", "margin_pvd3",
+                  "margin_pvd4", 'margin_pvd2', "margin_pvi1", "margin_pvi3", "margin_pvi4", "margin_pvi2", "qty_available",
                   "virtual_available_wo_incoming", "standard_price_2", "categ_id",
                   "last_sixty_days_sales", "remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
                   "state", "joking", "qty_in_production"]

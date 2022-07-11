@@ -387,8 +387,8 @@ class AmazonSettlement(models.Model):
                                 lambda il: il.product_id == product[0])
                             if invoice_line:
                                 invoice_line = invoice_line[0]
-                                i_price_unit = invoice_line.price_total / invoice_line.quantity
-                                i_uds = int(abs(sum(
+                                i_price_unit = invoice_line.price_unit
+                                i_uds = round(abs(sum(
                                     item.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped(
                                         'amount'))) / i_price_unit)
                                 theoretical_amount += i_price_unit * i_uds

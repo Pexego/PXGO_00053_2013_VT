@@ -1561,6 +1561,7 @@ msgid "Check the status of the line"
 msgstr "Controlla lo stato della linea"
 
 #. module: crm_claim_rma
+<<<<<<< HEAD
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_product_id
 msgid "Product"
 msgstr "Prodotto"
@@ -1593,3 +1594,46 @@ msgstr "Tutte le unità sono state elaborate"
 #: code:addons/crm_claim_rma/claim_make_picking.py:84
 msgid "It is not possible to create pickings with more units than there are in the RMA"
 msgstr "Non è possibile creare note di consegna con più unità di quelle presenti nell'RMA"
+=======
+#: model:mail.template,subject:crm_claim_rma.picking_done_template_claim
+msgid "VISIOTECH - Shipped products"
+msgstr "VISIOTECH - Prodotti inviati"
+
+#. module: crm_claim_rma
+#: model:mail.template,report_name:crm_claim_rma.picking_done_template_claim
+msgid "Picking_${(object.name or '').replace('/','_')}"
+msgstr "Bolla_${(object.name or '').replace('/','_')}"
+
+#. module: stock_custom
+#: model:mail.template,body_html:crm_claim_rma.picking_done_template_claim
+msgid "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We hereby inform you that we have prepared your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>\n"
+"% if object.carrier_name and object.carrier_name != \"GENERICA\":\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The transport company responsible for the shipping of your order is ${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        and the tracking number of your order is ${object.carrier_tracking_ref}. </p>\n"
+"        <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"            <b style=\"font-weight:bold;\">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>\n"
+"        </p>\n"
+"    % endif\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Best regards,</p>\n"
+"            "
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Estimado cliente,</p>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le informiamo che il nostro magazzino ha preparato i prodotti corrispondenti alla bolla di consegna ${object.claim_id.number}, della richiesta ${object.name}.</p>\n"
+"% if object.carrier_name and object.carrier_name != \"GENERICA\":\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">La ditta di trasporto che cura la spedizione è ${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        e il numero di riferimento del tuo ordine è. </p>\n"
+"        <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"            <b style=\"font-weight:bold;\">Le informazioni di verifica del tuo ordine potrebbero non essere disponibili al momento in cui si riceve questa e-mail</b>\n"
+"        </p>\n"
+"    % endif\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordiali saluti,</p>\n"
+"            "
+>>>>>>> upstream/11.0

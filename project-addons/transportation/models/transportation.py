@@ -26,7 +26,7 @@ class Transporter(models.Model):
     _name = 'transportation.transporter'
 
     name = fields.Char('Name', size=64, required=True)
-    partner_id = fields.Many2one('res.partner', 'Partner', required=True)
+    partner_id = fields.Many2one('res.partner', 'Partner')
     service_ids = fields.Many2many('transportation.service',
                                    'transporter_service_rel',
                                    'transporter_id',

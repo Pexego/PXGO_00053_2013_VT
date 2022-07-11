@@ -445,3 +445,18 @@ msgstr "Bolla di consegna RMA"
 msgid "Damaged Picking"
 msgstr "Bolla di consegna danneggiato"
 
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_return_deposit_options
+msgid "Options"
+msgstr "Opzioni"
+
+#. module: stock_deposit
+#: selection:stock.return.deposit,options:0
+msgid "Return to client warehouse"
+msgstr "Ritorno al magazzino del cliente"
+
+#. module: stock_deposit
+#: selection:stock.return.deposit,options:0
+msgid "Return to our warehouse"
+msgstr "Ritorna al nostro magazzino"
+

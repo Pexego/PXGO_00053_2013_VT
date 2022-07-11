@@ -12,6 +12,7 @@ class SaleOrderLine(models.Model):
 
     description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
 
+    select_copy = fields.Boolean(' ')
 
     def write(self, vals):
         for line in self:
@@ -115,9 +116,9 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     picking_policy = fields.Selection(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
-    not_sync_picking = fields.Boolean()
     pricelist_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    force_generic_product = fields.Boolean(default=False)
 
     is_editable = fields.Boolean(compute='_get_is_editable', default=True)
 
@@ -236,6 +237,8 @@ class SaleOrder(models.Model):
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
+        if not self.force_generic_product and any(d.product_id.id == self.env.ref('sale_margin_percentage.generic_product').id for d in self.order_line):
+            raise UserError(_("You can't confirm a sale with the product %s.") % self.env.ref('sale_margin_percentage.generic_product').name)
         if not self.env.context.get('bypass_override', False) and (
                 not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False)):
             user_buyer = self.env['ir.config_parameter'].sudo().get_param(
@@ -276,11 +279,6 @@ class SaleOrder(models.Model):
                                         str(line.product_uom_qty) + '    '
                 if products_to_order:
                     sale.send_email_to_purchases(products_to_order)
-
-        if self.not_sync_picking:
-            for picking in self.picking_ids:
-                picking.not_sync = True
-
         return res
 
     @api.multi
@@ -302,7 +300,7 @@ class SaleOrder(models.Model):
 
         return True
 
-    def check_weight(self,onchange=False):
+    def check_weight(self, onchange=False):
         dhl_flight = self.transporter_id.name == "DHL" and self.service_id.by_air
         canary = self.partner_shipping_id and \
                  not self.env.context.get("bypass_canary_max_weight", False) and \
@@ -330,6 +328,15 @@ class SaleOrder(models.Model):
                     'message': _(
                         "This order to the Canary Islands exceeds %skg. Have you checked the shipping costs and conditions?") % canary_max_weight
                 }).action_show()
+
+    @api.multi
+    def copy_sale_lines(self):
+        for order in self:
+            for line in order.order_line:
+                if line.select_copy:
+                    line.copy({'order_id': order.id,
+                               'select_copy': False})
+                    line.select_copy = False
 
 
 class MailMail(models.Model):

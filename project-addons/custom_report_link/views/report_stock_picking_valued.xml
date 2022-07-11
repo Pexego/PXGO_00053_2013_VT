@@ -45,7 +45,7 @@
                                                       <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
                                                       <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==move.sale_line_id.product_id)"/>
                                                       <t t-if="len(product_reference)==1">
-                                                          <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: <strong t-field="product_reference.customer_reference"/></td>
+                                                          <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: (<strong t-field="product_reference.customer_reference"/>)<strong t-field="move.sale_line_id.product_id"/></td>
                                                       </t>
                                                       <t t-if="len(product_reference)!=1">
                                                           <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: <strong t-field="move.sale_line_id.product_id"/></td>
@@ -59,7 +59,7 @@
                                                   </tr>
                                               <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==move.product_id)"/>
                                               <t t-if="len(product_reference)==1">
-                                                  <td><span t-field="product_reference.customer_reference"/></td>
+                                                  <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="move.product_id"/></td>
                                               </t>
                                               <t t-if="len(product_reference)!=1">
                                                   <td><span t-field="move.product_id"/></td>
@@ -99,7 +99,7 @@
                                               </tr>
                                               <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==move.product_id)"/>
                                               <t t-if="len(product_reference)==1">
-                                                  <td><span t-field="product_reference.customer_reference"/></td>
+                                                  <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="move.product_id"/></td>
                                               </t>
                                               <t t-if="len(product_reference)!=1">
                                                   <td><span t-field="move.product_id"/></td>

@@ -5,6 +5,7 @@
             <xpath expr=".">
                 <link rel="stylesheet" href="/custom_theme_it/static/src/css/style_light_responsive_it.css"/>
                 <link rel="stylesheet" href="/web_responsive/static/src/less/variables.less"/>
+                <link rel="stylesheet" href="/custom_theme_it/static/src/less/variables.less"/>
                 <link rel="stylesheet" href="/web_responsive/static/src/less/app_drawer.less"/>
             </xpath>
         </template>

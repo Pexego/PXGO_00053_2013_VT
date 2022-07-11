@@ -20,4 +20,12 @@
         <field name="key">web.sim.invoice.endpoint.key</field>
         <field name="value"></field>
     </record>
+    <record id="web_sim_limit_endpoint" model="ir.config_parameter">
+        <field name="key">web.sim.limit.endpoint</field>
+        <field name="value"></field>
+    </record>
+    <record id="web_sim__active_limit" model="ir.config_parameter">
+        <field name="key">web.sim.active.limit</field>
+        <field name="value"></field>
+    </record>
 </odoo>

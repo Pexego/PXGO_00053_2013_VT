@@ -80,20 +80,6 @@ class ClaimMakePicking(models.TransientModel):
                              'note': note,
                              'claim_line_id': claim_line.id
                              })
-                        if p_type == 'outgoing' and bom_line.product_id.type == 'product':
-                            reserv_vals = {
-                                'product_id': bom_line.product_id.id,
-                                'product_uom': bom_line.product_id.uom_id.id,
-                                'product_uom_qty': bom_line.product_qty * qty,
-                                'date_validity': False,
-                                'name': u"{}".format(claim_line.claim_id.number),
-                                'location_id': picking_id.location_id.id,
-                                'location_dest_id': picking_id.location_dest_id.id,
-                                'move_id': move.id,
-                                'claim_id': claim_line.claim_id.id,
-                            }
-                            reserve = self.env['stock.reservation'].create(reserv_vals)
-                            reserve.reserve()
                 else:
                     super(ClaimMakePicking, self).create_move(
                         wizard_line, p_type, picking_id, claim, note)

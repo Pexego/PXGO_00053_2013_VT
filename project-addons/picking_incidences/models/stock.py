@@ -187,6 +187,7 @@ class StockPicking(models.Model):
 
     @api.multi
     def action_accept_confirmed_qty(self):
+        result = self.env['stock.picking']
         for pick in self:
             #check move lines confirmed qtys
             for move in pick.move_lines:
@@ -220,22 +221,11 @@ class StockPicking(models.Model):
                 bck.write({'move_type': 'one'})
                 self.action_assign()
                 pick.move_lines.write({'state': 'assigned'})
-                if bck.customization_ids and pick.customization_ids:
-                    bck.customization_ids.create_backorder_customization(new_moves)
-                    bck.not_sync = True
-                    bck.message_post(
-                        body=_('This picking has been created from an order with customized products'))
-                elif pick.customization_ids:
-                    bck.not_sync = False
-                elif bck.customization_ids:
-                    pick.not_sync = False
+                result |= bck
             pick.message_post(body=_("User %s accepted confirmed qties.") %
                               self.env.user.name)
-            if pick.sale_id.scheduled_date and not bck.customization_ids:
-                bck.not_sync = True
-                bck.scheduled_picking = True
-                bck._process_picking_scheduled_time()
 
+            return result
     @api.model
     def cron_accept_qty_incoming_shipments(self):
         pickings_ref = ''
@@ -265,6 +255,14 @@ class StockPicking(models.Model):
             composer_id.with_context(ctx).send_mail()
 
         return True
+
+    @api.multi
+    def get_signature(self):
+        self.ensure_one()
+        signature = ''
+        for move in self.move_lines.sorted(key=lambda r: r.product_id.default_code):
+            signature += '%s%s' % (move.product_id.default_code, move.product_uom_qty)
+        return signature
 
 
 class ReturnPicking(models.TransientModel):

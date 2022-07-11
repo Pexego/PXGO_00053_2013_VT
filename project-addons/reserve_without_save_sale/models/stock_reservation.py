@@ -192,7 +192,7 @@ class StockReservation(models.Model):
         reserve_orders = reservation_to_release.mapped('sale_line_id.order_id')
         # Send email grouping by user
         for user in user_ids:
-            orders_user = reserve_orders.filtered(lambda x: x.user_id == user)
+            orders_user = reserve_orders.filtered(lambda x: x.user_id == user and x.state == 'reserve')
             # Prepare email data
             order_data = [order.name + ' (' + order.partner_id.name + ')' for order in orders_user]
             mail_pool = self.env['mail.mail']

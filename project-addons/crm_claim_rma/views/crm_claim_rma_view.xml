@@ -80,7 +80,7 @@
         <field name="name">CRM - Claims Tree</field>
         <field name="model">claim.line</field>
         <field name="arch" type="xml">
-            <tree string="Returned lines" editable="bottom">                
+            <tree string="Returned lines" editable="bottom">
                 <field name="product_id"/>
                 <button name="equivalent_products" string="Change product" type="object" icon="fa-retweet"/>
                 <field name="equivalent_product_id" readonly="1"/>
@@ -105,8 +105,8 @@
         <field name="name">CRM - Supplier Lines Tree</field>
         <field name="model">claim.line</field>
         <field name="arch" type="xml">
-            <tree string="Supplier lines" editable="bottom">     
-                <field name="claim_id" />           
+            <tree string="Supplier lines" editable="bottom">
+                <field name="claim_id" />
                 <field name="product_id"/>
                 <field name="equivalent_product_id" readonly="1"/>
                 <field name="name" string="Customer description"/>
@@ -248,71 +248,6 @@
         </field>
     </record>
 
-<record model="ir.ui.view" id="crm_claim_rma_form_view">
-    <field name="name">CRM - Claim product return Form</field>
-    <field name="model">crm.claim</field>
-    <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
-    <field name="arch" type="xml">
-        <field name="partner_id" position="replace">
-            <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
-            <field name="invoice_type"/>
-            <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
-            <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
-            <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
-        </field>
-        <xpath expr="/form/sheet/group[3]/notebook/page[2]" position="before">
-            <page string="Product Return">
-                <group name="Product Return">
-                    <separator string="Product Return" colspan="4"/>
-                    <group>
-                        <field name="delivery_address_id" context="{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'search_default_parent_id': partner_id}" required="1"/>
-                    </group>
-                    <group>
-                    </group>
-                    <field name="claim_line_ids" nolabel="1" colspan="4" editable="top"/>
-                </group>
-                <field name="state_show_buttons" invisible="1"/>
-                <group attrs="{'invisible':[('state_show_buttons', '=', False)]}">
-                    <separator string="Action" colspan="4" name="action_sep"/>
-                    <div>
-                        <button name="%(action_claim_picking_in)d"
-                                string="New Products Return"
-                                type="action" target="new"
-                                context="{'warehouse_id': warehouse_id,
-                                    'partner_id': partner_id,
-                                    'type': claim_type}"/>
-
-                        <button name="%(action_claim_picking_out)d"
-                                string="New Delivery"
-                                type="action" target="new"
-                                context="{'warehouse_id': warehouse_id,
-                                    'partner_id': partner_id,
-                                    'type': claim_type}"/>
-
-                        <button name="%(account.action_account_invoice_refund)d" attrs="{'invisible': [('invoice_type', '=', 'invoice')]}"
-                                type='action' string='New Refund'
-                                context="{
-                                    'invoice_ids': [invoice_id],
-                                    'claim_line_ids': claim_line_ids,
-                                    'description': name,
-                                    'claim_id': id,
-                                    'type': claim_type
-                                    }"/>
-                    </div>
-                </group>
-            </page>
-            <page string="Generated Documents">
-                <separator colspan="2" string="Refunds"/>
-                <field name="invoice_ids" colspan="4" readonly="1"/>
-                <separator colspan="2" string="Receptions / Deliveries"/>
-                <field name="picking_ids" colspan="4" readonly="1"/>
-            </page>
-       </xpath>
-    </field>
-</record>
-
-
-
 <!-- Right side link to orders -->
     <act_window
     id="act_crm_claim_rma_sale_orders"
@@ -365,7 +300,7 @@
 <record model="ir.ui.view" id="crm_claim_rma_form_view2">
     <field name="name">CRM - Claim product return Form</field>
     <field name="model">crm.claim</field>
-    <field name="inherit_id" ref="crm_claim_rma_form_view"/>
+    <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
         <field name="arch" type="xml">
             <field name="date_deadline" position="after">
                 <field name="claim_type" options="{'no_create': True}"/>
@@ -424,6 +359,69 @@
                 <field name="date"/>
             </field>
         </field>
+</record>
+
+<record model="ir.ui.view" id="crm_claim_rma_form_view">
+    <field name="name">CRM - Claim product return Form</field>
+    <field name="model">crm.claim</field>
+    <field name="inherit_id" ref="crm_claim_rma_form_view2"/>
+    <field name="arch" type="xml">
+        <field name="partner_id" position="replace">
+            <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
+            <field name="invoice_type"/>
+            <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
+            <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
+            <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
+        </field>
+        <xpath expr="/form/sheet/group[3]/notebook/page[2]" position="before">
+            <page string="Product Return">
+                <group name="Product Return">
+                    <separator string="Product Return" colspan="4"/>
+                    <group>
+                        <field name="delivery_address_id" context="{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'search_default_parent_id': partner_id}" required="1"/>
+                    </group>
+                    <group>
+                    </group>
+                    <field name="claim_line_ids" nolabel="1" colspan="4" editable="top"/>
+                </group>
+                <field name="state_show_buttons" invisible="1"/>
+                <group attrs="{'invisible':[('state_show_buttons', '=', False)]}">
+                    <separator string="Action" colspan="4" name="action_sep"/>
+                    <div>
+                        <button name="%(action_claim_picking_in)d"
+                                string="New Products Return"
+                                type="action" target="new"
+                                context="{'warehouse_id': warehouse_id,
+                                    'partner_id': partner_id,
+                                    'type': claim_type}"/>
+
+                        <button name="%(action_claim_picking_out)d"
+                                string="New Delivery"
+                                type="action" target="new"
+                                context="{'warehouse_id': warehouse_id,
+                                    'partner_id': partner_id,
+                                    'type': claim_type}"/>
+
+                        <button name="%(account.action_account_invoice_refund)d" attrs="{'invisible': [('invoice_type', '=', 'invoice')]}"
+                                type='action' string='New Refund'
+                                context="{
+                                    'invoice_ids': [invoice_id],
+                                    'claim_line_ids': claim_line_ids,
+                                    'description': name,
+                                    'claim_id': id,
+                                    'type': claim_type
+                                    }"/>
+                    </div>
+                </group>
+            </page>
+            <page string="Generated Documents">
+                <separator colspan="2" string="Refunds"/>
+                <field name="invoice_ids" colspan="4" readonly="1"/>
+                <separator colspan="2" string="Receptions / Deliveries"/>
+                <field name="picking_ids" colspan="4" readonly="1"/>
+            </page>
+       </xpath>
+    </field>
 </record>
 
 <!-- Crm claim Search view -->

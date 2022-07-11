@@ -32,7 +32,7 @@ Sales display stock
 """,
     "depends": ["base", "sale", "stock", "account",
                 "product_virtual_stock_conservative",
-                "stock_reserve"],
+                "stock_reserve", "product_states"],
     "data": [
         "views/sale_view.xml",
         "views/product_view.xml",

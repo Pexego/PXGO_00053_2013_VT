@@ -357,7 +357,9 @@ class ResPartner(models.Model):
     sale_order_count = fields.Integer(compute='_sale_order_count',
                                       string='# of Sales Order')
     invoice_type_id = fields.Many2one('res.partner.invoice.type',
-                                      'Invoice type')
+                                      'Invoice type',
+                                      default=lambda self: self.env['res.partner.invoice.type'].search(
+                                          [('name', '=', 'Diaria')]).id)
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
     notified_creditoycaucion = fields.Date("Notified to Crédito y Caución")
@@ -527,6 +529,8 @@ class ResPartner(models.Model):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
+        if 'name' in vals:
+            vals['name'] = vals['name'].rstrip().lstrip()
         for partner in self:
             if not partner.active and 'active' in vals:
                 if vals['active']:

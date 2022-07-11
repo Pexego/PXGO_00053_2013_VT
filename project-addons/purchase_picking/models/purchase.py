@@ -27,6 +27,10 @@ class PurchaseOrder(models.Model):
 
     _inherit = 'purchase.order'
 
+    def _search_containers(self, operator, value):
+        containers = self.env['stock.container'].search([('name', operator, value)])
+        return [('id', 'in', containers.mapped('move_ids.purchase_line_id.order_id').ids)]
+
     picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 
     date_planned = fields.Datetime(string='Scheduled Date', compute='', store=True, index=True)
@@ -35,7 +39,7 @@ class PurchaseOrder(models.Model):
 
     total_disc = fields.Float(compute='_get_amount_discount', store=True, readonly=True, string='Disc. amount')
 
-    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
+    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers', search='_search_containers')
 
     @api.multi
     def _get_containers(self):

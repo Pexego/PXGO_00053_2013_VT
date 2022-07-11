@@ -941,3 +941,46 @@ msgstr "Réclamations en cours"
 #, python-format
 msgid "The product has no supplier configured."
 msgstr "Le produit n'a pas de fournisseur défini."
+
+#. module: crm_claim_rma
+#: model:mail.template,body_html:crm_claim_rma.picking_done_template_claim
+msgid "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We hereby inform you that we have prepared your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>\n"
+"% if object.carrier_name and object.carrier_name != \"GENERICA\":\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The transport company responsible for the shipping of your order is ${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        and the tracking number of your order is ${object.carrier_tracking_ref}. </p>\n"
+"        <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"            <b style=\"font-weight:bold;\">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>\n"
+"        </p>\n"
+"    % endif\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Best regards,</p>\n"
+"            "
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cher client,</p>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Nous vous informons que notre entrepôt a préparé les produits correspondant au bon de livraison ${object.claim_id.number}, de la réclamation ${object.name}.</p>\n"
+"% if object.carrier_name and object.carrier_name != \"GENERICA\":\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le transporteur responsable de l'envoi est ${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        et le numéro de suivi est ${object.carrier_tracking_ref}. </p>\n"
+"        <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"            <b style=\"font-weight:bold;\">Tenez compte que l'information du suivi de votre commande peut ne pas être disponible pendant de la reception de cet e-mail.</b>\n"
+"        </p>\n"
+"    % endif\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordialement,</p>\n"
+"            "
+
+#. module: crm_claim_rma
+#: model:mail.template,subject:crm_claim_rma.picking_done_template_claim
+msgid "VISIOTECH - Shipped products"
+msgstr "VISIOTECH - Produits envoyés"
+
+#. module: crm_claim_rma
+#: model:mail.template,report_name:crm_claim_rma.picking_done_template_claim
+msgid "Picking_${(object.name or '').replace('/','_')}"
+msgstr "Bon_${(object.name or '').replace('/','_')}"

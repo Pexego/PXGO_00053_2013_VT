@@ -64,9 +64,9 @@ class SaleOrderLine(models.Model):
                 sale_price = line.price_unit * line.product_uom_qty * ((100.0 - line.discount) / 100.0)
                 purchase_price = line.purchase_price * line.product_uom_qty
                 if line.product_id.product_brand_id.id in self.env['rappel'].search([('name', 'like', 'Vale Ahorro%')], limit=1).brand_ids.ids:
-                    if line.order_id.partner_id.property_product_pricelist.name in ('PVPA 55', 'PVPB 55', 'PVPC 55'):
+                    if line.order_id.partner_id.property_product_pricelist.name in ('PVPIberia 55', 'PVPEuropa 55', 'PVPItalia 55'):
                         rappel = sale_price * 0.10
-                    elif line.order_id.partner_id.property_product_pricelist.name in ('PVPA 52,5', 'PVPB 52,5', 'PVPC 52,5'):
+                    elif line.order_id.partner_id.property_product_pricelist.name in ('PVPIberia 52,5', 'PVPEuropa 52,5', 'PVPItalia 52,5'):
                         rappel = sale_price * 0.05
                     else:
                         rappel = 0.0
@@ -116,7 +116,8 @@ class SaleOrder(models.Model):
             sale.margin = 0.0
             margin = 0.0
             sale_price = 0.0
-            for line in sale.order_line:
+            generic_product = self.env.ref('sale_margin_percentage.generic_product').id
+            for line in sale.order_line.filtered(lambda l: l.product_id.id != generic_product and not l.deposit):
                 if not line.deposit:
                     if line.price_unit > 0:
                         margin += line.margin or 0.0
@@ -134,16 +135,15 @@ class SaleOrder(models.Model):
             margin_rappel = 0.0
             sale_price = 0.0
             purchase_price = 0.0
-            for line in sale.order_line:
-                if not line.deposit:
-                    if line.price_unit > 0:
-                        margin_rappel += line.margin_rappel or 0.0
-                    else:
-                        margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
-                    sale_price += line.price_subtotal or 0.0
-                    purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
+            generic_product = self.env.ref('sale_margin_percentage.generic_product').id
+            for line in sale.order_line.filtered(lambda l: l.product_id.id != generic_product and not l.deposit):
+                if line.price_unit > 0:
+                    margin_rappel += line.margin_rappel or 0.0
+                else:
+                    margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
+                sale_price += line.price_subtotal or 0.0
+                purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
             if sale_price:
-
                 if sale_price < purchase_price:
                     sale.margin_rappel = round((margin_rappel * 100) / purchase_price, 2)
                 else:
