@@ -1,5 +1,6 @@
 from odoo import models, _, api, fields, exceptions
 from odoo.addons.queue_job.job import job
+from datetime import datetime
 
 
 class StockPicking(models.Model):
@@ -79,6 +80,9 @@ class StockPicking(models.Model):
                     body=_('This picking has been created from an order with customized products'))
             elif bck.customization_ids:
                 bck.not_sync = True
+                if not ((pick.group_id and pick.group_id.sale_id and pick.group_id.sale_id.not_sync_picking)
+                        or (pick.scheduled_shipping_date and pick.scheduled_shipping_date > datetime.now())):
+                    pick.not_sync = False
         return bcks
 
     @api.multi
