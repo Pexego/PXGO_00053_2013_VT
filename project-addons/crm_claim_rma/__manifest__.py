@@ -77,7 +77,7 @@ Contributors:
                 'mrp_repair',
                 'stock_reserve',
                 'crm_claim_type',
-                'stock_deposit'
+                'stock_deposit',
                 'stock_custom',
                 'sale_display_stock',
                 'crm_claim_type'

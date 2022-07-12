@@ -348,7 +348,6 @@ msgid "RMP partner"
 msgstr "Azienda RMP"
 
 #. module: crm_rma_advance_location
-<<<<<<< HEAD
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_from_picking_line_product_id
 msgid "Product"
 msgstr "Prodotto"
@@ -374,8 +373,8 @@ msgstr "Tutte le unità sono state elaborate"
 #: code:addons/crm_rma_advance_location/claim_make_picking_to_refurbish.py:89
 msgid "You cannot send more than %i of this product %s"
 msgstr "Non puoi inviare più di %i unità di questo prodotto %s"
-=======
+
+#. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to refurbish stock"
 msgstr "Prodotto in guasti"
->>>>>>> upstream/11.0

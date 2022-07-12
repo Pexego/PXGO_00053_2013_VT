@@ -9,11 +9,7 @@
                     <button name="%(stock_return_deposit_action)d" type="action"
                         string="Return"
                         class="oe_highlight"
-<<<<<<< HEAD
-                        states="draft" groups="stock_custom.group_stock_force_availability"/>
-=======
-                        states="draft,invoiced"/>
->>>>>>> upstream/11.0
+                        states="draft,invoiced" groups="stock_custom.group_stock_force_availability"/>
                     <button name="sale" type="object"
                         string="Sale"
                         class="oe_highlight"
@@ -67,7 +63,7 @@
                                 <field name="sale_picking_id"/>
                                 <field name="return_picking_id" />
                                 <field name="loss_picking_id" />
-                                <field name="damaged_move_id" />
+                                <field name="damaged_move_ids" widget="many2many_tags" />
                                 <field name="damaged_picking_id"/>
                                 <field name="claim_move_id" />
                                 <field name="claim_picking_id" />

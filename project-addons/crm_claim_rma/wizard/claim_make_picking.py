@@ -173,8 +173,16 @@ class ClaimMakePicking(models.TransientModel):
         if self.env.context.get('picking_type') == 'in':
             lines_with_deposits = self.claim_line_ids.filtered(lambda c: c.claim_line_id.deposit_id)
             if lines_with_deposits:
-                pickings |= self.create_picking(lines_with_deposits, deposit_mode=True)
-                lines_with_deposits.mapped('claim_line_id.deposit_id').set_rma()
+                pick = self.create_picking(lines_with_deposits, deposit_mode=True)
+                pickings |= pick
+                for line in lines_with_deposits:
+                    deposit = line.claim_line_id.deposit_id
+                    if line.product_qty < deposit.product_uom_qty:
+                        new_deposit = deposit.copy()
+                        new_deposit.write({'product_uom_qty': deposit.product_uom_qty - line.product_qty})
+                        deposit.write({'product_uom_qty': line.product_qty})
+                    move = pick.move_lines.filtered(lambda m: m.claim_line_id == line.claim_line_id)
+                    deposit.set_rma(move)
 
         lines = self.claim_line_ids - lines_with_deposits
         if lines:
@@ -199,10 +207,12 @@ class ClaimMakePicking(models.TransientModel):
 
         claim = claim_obj.browse(context['active_id'])
         partner_id = claim.delivery_address_id
+        not_sync = False
         if context.get('picking_type') == 'out':
             p_type = 'outgoing'
         else:
             p_type = 'incoming'
+            not_sync = True
             if context.get('picking_type', False):
                 note = 'RMA picking ' + str(p_type)
                 if claim_lines and deposit_mode:
@@ -223,6 +233,7 @@ class ClaimMakePicking(models.TransientModel):
              'location_dest_id': location_dest_id.id,
              'note': note,
              'claim_id': claim.id,
+             'not_sync':not_sync
              })
         # Create picking lines
         for wizard_claim_line in claim_lines:

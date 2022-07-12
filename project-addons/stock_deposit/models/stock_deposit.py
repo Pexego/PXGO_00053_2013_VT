@@ -81,10 +81,16 @@ class StockDeposit(models.Model):
     user_id = fields.Many2one('res.users', 'Comercial', required=False,
                               readonly=False, ondelete='cascade', index=1)
 
-    damaged_move_id = fields.Many2one('stock.move', 'Move to damaged location', required=False,
-                                      readonly=True, ondelete='cascade', index=1)
-    damaged_picking_id = fields.Many2one(related='damaged_move_id.picking_id',
-                                         string='Damaged Picking',
+    def _compute_damaged_move_ids(self):
+        for deposit in self:
+            if deposit.damaged_picking_id:
+                deposit.damaged_move_ids = [(6, 0, deposit.damaged_picking_id.move_lines.filtered(
+                    lambda m, d=deposit: m.product_id == d.product_id).ids)]
+
+    damaged_move_ids = fields.Many2many(
+        comodel_name='stock.move',
+        string='Move to damaged location', compute="_compute_damaged_move_ids")
+    damaged_picking_id = fields.Many2one('stock.picking', string='Damaged Picking',
                                          readonly=True)
 
     claim_move_id = fields.Many2one('stock.move', 'Move to RMA location', required=False,
@@ -98,15 +104,16 @@ class StockDeposit(models.Model):
     claim_id = fields.Many2one('crm.claim')
 
     @api.multi
-    def set_damaged(self, move_id):
+    def set_damaged(self, picking_id):
         for d in self:
             d.state = 'damaged'
-            d.damaged_move_id = move_id.id
+            d.damaged_picking_id = picking_id.id
 
     @api.multi
-    def set_rma(self):
+    def set_rma(self, move_id):
         for d in self:
             d.state = 'rma'
+            d.claim_move_id = move_id
 
     @api.multi
     def sale(self):

@@ -124,6 +124,7 @@ class ClaimMakePickingFromPicking(models.TransientModel):
             'partner_id': prev_picking.claim_id.company_id.partner_id.id
         }
         picking_id = prev_picking.copy(default_picking_data)
+        moves_qty = {}
         for wizard_picking_line in wizard.picking_line_ids:
             wizard_move = wizard_picking_line.move_id
             if wizard_picking_line.product_qty > (wizard_move.product_uom_qty - wizard_move.qty_used):
@@ -145,17 +146,29 @@ class ClaimMakePickingFromPicking(models.TransientModel):
             }
             move_id = wizard_picking_line.move_id.copy(default_move_data)
             wizard_move.qty_used += wizard_picking_line.product_qty
+            if wizard_move in moves_qty:
+                moves_qty[move_id] += wizard_picking_line.product_qty
+            else:
+                moves_qty[move_id] = wizard_picking_line.product_qty
 
         if picking_id:
             picking_id.action_assign()
             # if we validate the picking, it fails because there is no quantity available
             # picking_id.button_validate()
-
-        if prev_picking and prev_picking.move_lines and prev_picking.move_lines[0].claim_line_id.deposit_id:
-            if context.get('picking_type', '') == 'picking_input':
-                deposits = prev_picking.move_lines.mapped('claim_line_id.deposit_id')
-                if deposits:
-                    deposits.return_deposit(claim_id=prev_picking.claim_id)
+        picking_type = context.get('picking_type', '')
+        if picking_type in ['picking_input', 'picking_breakage_loss']:
+            for n_move, qty in moves_qty.items():
+                deposit = n_move.origin_move_id.claim_line_id.deposit_id
+                if deposit:
+                    if qty < deposit.product_uom_qty:
+                        old_deposit = deposit
+                        deposit = old_deposit.copy()
+                        deposit.write({'product_uom_qty': qty})
+                        old_deposit.write({'product_uom_qty': old_deposit.product_uom_qty - qty})
+                    if picking_type == 'picking_input':
+                        deposit.return_deposit(claim_id=picking_id.claim_id)
+                    else:
+                        deposit.deposit_loss()
         if products:
             message = _("You shouldn't send the following products to stock due to they are 'make to order' %s. "
                         "Please check the picking (%s) carefully before validate it") % (

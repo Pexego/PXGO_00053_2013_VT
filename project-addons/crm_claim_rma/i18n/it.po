@@ -1561,7 +1561,6 @@ msgid "Check the status of the line"
 msgstr "Controlla lo stato della linea"
 
 #. module: crm_claim_rma
-<<<<<<< HEAD
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_product_id
 msgid "Product"
 msgstr "Prodotto"
@@ -1594,7 +1593,8 @@ msgstr "Tutte le unità sono state elaborate"
 #: code:addons/crm_claim_rma/claim_make_picking.py:84
 msgid "It is not possible to create pickings with more units than there are in the RMA"
 msgstr "Non è possibile creare note di consegna con più unità di quelle presenti nell'RMA"
-=======
+
+#. module: crm_Claim_rma
 #: model:mail.template,subject:crm_claim_rma.picking_done_template_claim
 msgid "VISIOTECH - Shipped products"
 msgstr "VISIOTECH - Prodotti inviati"
@@ -1636,4 +1636,3 @@ msgstr "\n"
 "% endif\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordiali saluti,</p>\n"
 "            "
->>>>>>> upstream/11.0

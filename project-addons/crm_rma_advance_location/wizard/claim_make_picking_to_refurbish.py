@@ -83,6 +83,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             'partner_id': partner_id
         }
         picking_id = prev_picking.copy(default_picking_data)
+        moves_qty = {}
         for wizard_picking_line in self.picking_line_ids:
             wizard_move = wizard_picking_line.move_id
             if wizard_picking_line.product_qty > (wizard_move.product_uom_qty - wizard_move.qty_used):
@@ -102,13 +103,28 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'product_uom_qty': 1,
                 'origin_move_id': wizard_move.id
             }
-            wizard_picking_line.move_id.copy(default_move_data)
+            new_move = wizard_picking_line.move_id.copy(default_move_data)
+            if wizard_move in moves_qty:
+                new_moves, qty = moves_qty[wizard_move]
+                new_moves += new_move
+                moves_qty[wizard_move] = (new_moves, qty+1)
+            else:
+                moves_qty[wizard_move] = (new_move, 1)
+
         if picking_id:
             picking_id.action_assign()
             picking_id.action_done()
-        if prev_picking and prev_picking.move_lines and prev_picking.move_lines[0].claim_line_id.deposit_id:
-            for move in prev_picking.move_lines:
-                move.claim_line_id.deposit_id.set_damaged(move)
+        for n_moves, qty in moves_qty.values():
+            deposit = n_moves[0].origin_move_id.claim_line_id.deposit_id
+            if deposit:
+                if qty < deposit.product_uom_qty:
+                    new_deposit = deposit.copy()
+                    new_deposit.write({'product_uom_qty': qty})
+                    deposit.write({'product_uom_qty': deposit.product_uom_qty - qty})
+                    new_deposit.set_damaged(picking_id)
+                else:
+                    deposit.set_damaged(picking_id)
+
         rmps = self.env['crm.claim']
         for l in self.picking_line_ids:
             product = l.move_id.product_id

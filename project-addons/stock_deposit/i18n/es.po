@@ -438,7 +438,6 @@ msgid "This deposit has invoices in non-draft status, please check it before rev
 msgstr "Este depósito tiene facturas en estado distinto a borrador, por favor, compruebalo antes de revertirlo"
 
 #. module: stock_deposit
-<<<<<<< HEAD
 #: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_form
 msgid "Create RMA"
 msgstr "Crear RMA"
@@ -494,3 +493,8 @@ msgstr "Devolver a nuestro almacén"
 #, python-format
 msgid "You cannot return a draft deposit to client warehouse"
 msgstr "No puedes devolver al almacén de cliente un depósito en borrador"
+
+#. module: stock_deposit
+#: selection:stock.deposit,state:0
+msgid "Damaged"
+msgstr "Averiado"
