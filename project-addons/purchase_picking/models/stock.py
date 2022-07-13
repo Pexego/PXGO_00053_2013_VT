@@ -37,10 +37,10 @@ class StockContainer(models.Model):
     notes_warehouse = fields.Text(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
     telex = fields.Selection([
-        ('pending', 'Pending'),
         ('asked', 'Asked'),
+        ('claimed', 'Claimed'),
         ('received', 'Received')
-    ], required=1, default='pending')
+    ])
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)
     cost = fields.Float(sting="Cost")
     n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
