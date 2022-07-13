@@ -54,7 +54,7 @@ class ProductTemplateListener(Component):
         if record.image or len(fields) != 1:
             for field in up_fields:
                 if field in fields:
-                    if record.sale_ok or "sale_ok" in fields:
+                    if record.sale_ok or "sale_ok" in fields or "name" in fields:
                         product = self.env["product.product"].search(
                             [('product_tmpl_id', '=', record.id)])
                         product.with_delay(priority=11, eta=60).update_product()
@@ -88,7 +88,7 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume", "standard_price_2_inc"
+            "weight", "volume", "standard_price_2_inc", "name"
         ]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
@@ -97,7 +97,7 @@ class ProductListener(Component):
 
         for field in up_fields:
             if field in fields:
-                if record.sale_ok or "sale_ok" in fields:
+                if record.sale_ok or "sale_ok" in fields or "name" in fields:
                     record.with_delay(priority=11, eta=30).update_product()
                     break
 

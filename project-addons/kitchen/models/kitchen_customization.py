@@ -37,6 +37,8 @@ class KitchenCustomization(models.Model):
     comments = fields.Text(string='Comments')
     order_state = fields.Selection(related='order_id.state')
 
+    scheduled_shipping_date = fields.Datetime('Scheduled shipping date', related='order_id.scheduled_date', readonly=True, store=True)
+
     def _compute_products_format(self):
         for customization in self:
             customization.products_qty_format = ""
@@ -54,13 +56,8 @@ class KitchenCustomization(models.Model):
         if self.customization_line and self.customization_line[0].move_ids:
             picking = self.customization_line[0].move_ids.filtered(lambda m: m.state != 'cancel')[0].picking_id
             if picking:
-                notes = picking.internal_notes or ""
-                picking_mssg = self.env['ir.config_parameter'].sudo().get_param('kitchen.picking.message')
-                notes += "%s \n" % picking_mssg
-                if picking.scheduled_shipping_date:
-                    picking.write({'internal_notes': notes})
-                else:
-                    picking.write({'not_sync': False, 'internal_notes': notes})
+                picking_template = picking.get_email_template()
+                picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
         template = self.env.ref('kitchen.send_mail_to_commercials_customization_done')
         ctx = dict()
         ctx.update({

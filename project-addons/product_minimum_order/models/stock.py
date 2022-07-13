@@ -25,4 +25,4 @@ class StockPicking(models.Model):
                     min_qty = move.product_id.sale_in_groups_of
                     # Assign the maximum qty available base on the minimum qty required
                     move.qty_confirmed = min_qty * (int(move.qty_confirmed / min_qty))
-        super().action_accept_confirmed_qty()
+        return super().action_accept_confirmed_qty()

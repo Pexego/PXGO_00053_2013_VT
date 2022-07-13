@@ -641,48 +641,9 @@ msgid "Apply at finish"
 msgstr "Aplicar al finalizar"
 
 #. module: stock_custom
-#: model:mail.template,body_html:stock_custom.picking_done_template_claim
-msgid "\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
-"\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We hereby inform you that we have prepared your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>\n"
-"% if object.carrier_name and object.carrier_name != \"GENERICA\":\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The transport company responsible for the shipping of your order is ${object.carrier_name}\n"
-"    % if object.carrier_tracking_ref:\n"
-"        and the tracking number of your order is ${object.carrier_tracking_ref}. </p>\n"
-"        <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"            <b style=\"font-weight:bold;\">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>\n"
-"        </p>\n"
-"    % endif\n"
-"% endif\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Best regards,</p>\n"
-"            "
-msgstr "\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Estimado cliente,</p>\n"
-"\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le informamos que hemos preparado los productos correspondientes a la reclamación ${object.claim_id.number}, el número de albarán es ${object.name}.</p>\n"
-"% if object.carrier_name and object.carrier_name != \"GENERICA\":\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">La empresa responsable del envío es ${object.carrier_name}\n"
-"    % if object.carrier_tracking_ref:\n"
-"        y el número de seguimiento es ${object.carrier_tracking_ref}. </p>\n"
-"        <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"            <b style=\"font-weight:bold;\">Tenga en cuenta que la información de seguimiento de tu pedido puede no estar disponible en el momento en que recibas este e-mail.</b>\n"
-"        </p>\n"
-"    % endif\n"
-"% endif\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Atentamente,</p>\n"
-"            "
-
-#. module: stock_custom
 #: model:mail.template,subject:stock_custom.picking_done_template
-#: model:mail.template,subject:stock_custom.picking_done_template_claim
 msgid "VISIOTECH - Shipped products"
 msgstr "VISIOTECH - Productos enviados"
-
-#. module: stock_custom
-#: model:mail.template,report_name:stock_custom.picking_done_template_claim
-msgid "Picking_${(object.name or '').replace('/','_')}"
-msgstr "Albarán_${(object.name or '').replace('/','_')}"
 
 #. module: stock_custom
 #: model:ir.ui.view,arch_db:stock_custom.view_move_review_search
@@ -718,3 +679,28 @@ msgstr "Notas adiciones para el producto."
 #: model:ir.ui.view,arch_db:product.product_template_form_view
 msgid "Description for Internal"
 msgstr "Descripción interna"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_battery
+msgid "Product Battery"
+msgstr "Tipo de Batería"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_battery_mode
+msgid "Product Battery Mode"
+msgstr "Modo de Batería"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_country_origin_id
+msgid "Product Country Origin"
+msgstr "País de Origen del producto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_num_batteries
+msgid "Num Batteries"
+msgstr "Número de Baterías"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_weight
+msgid "Weight"
+msgstr "Peso del producto"

@@ -852,11 +852,11 @@ SWIFT/BIC: BESCPTPL
                     <div class="pull-left">
                         <t t-if="o.partner_id.amazon_parent_id">
                         <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id"
-                                t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                                t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': false}"/>
                         </t>
                         <t t-if="not o.partner_id.amazon_parent_id">
                             <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
-                                    t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                                    t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': false}"/>
                         </t>
                     </div>
                     <div class="pull-right text-right">

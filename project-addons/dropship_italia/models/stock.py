@@ -70,3 +70,7 @@ class StockPicking(models.Model):
                     and picking.sale_id.partner_shipping_id.dropship and not self.env.user.has_group('base.group_system'):
                 raise exceptions.UserError(_('This order cannot be canceled here, should be canceled in Italy'))
         return super(StockPicking, self).action_cancel()
+
+    def check_send_email_base(self, vals):
+        res = super(StockPicking, self).check_send_email_base(vals)
+        return res and not self.partner_id.commercial_partner_id.country_code

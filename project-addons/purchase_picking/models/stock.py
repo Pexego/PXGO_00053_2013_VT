@@ -78,12 +78,11 @@ class StockContainer(models.Model):
                 container.set_date_exp = True
 
     @api.multi
-    @api.depends('move_ids.picking_id.state')
+    @api.depends('move_ids.state')
     def _set_arrived(self):
         for container in self:
-            container.arrived = False
-            if container.picking_ids and all(pick_state == 'done' for pick_state in container.picking_ids.mapped('state')):
-                container.arrived = True
+            container.arrived = container.move_ids and all(move_state in ['done', 'cancel'] for move_state in
+                                                           container.move_ids.mapped('state'))
 
     @api.multi
     def _set_date_expected(self):
@@ -106,25 +105,16 @@ class StockContainer(models.Model):
                     container.move_ids.write({'date_expected': max_date})
                     container.date_expected = max_date
 
-
     @api.multi
     def _get_picking_ids(self):
         for container in self:
-            res = []
-            pickings_warehouse = ""
-            aux = 0
-            for line in container.move_ids:
-                if line.picking_id.id not in res:
-                    res.append(line.picking_id.id)
-                    container.picking_ids = res
-                    aux += 1
-                    if line.picking_id and aux < 3:
-                        pickings_warehouse = pickings_warehouse + line.picking_id.name + ", "
-                if pickings_warehouse and aux < 3:
-                    container.pickings_warehouse = pickings_warehouse[:-2]
-                elif pickings_warehouse and aux >= 3:
-                    container.pickings_warehouse = pickings_warehouse + "..."
-
+            pickings = container.move_ids.mapped('picking_id')
+            container.picking_ids = pickings
+            pickings_warehouse_obj = pickings[:2]
+            pickings_warehouse = ', '.join(pickings_warehouse_obj.mapped('name'))
+            if len(pickings) > 2:
+                pickings_warehouse += "..."
+            container.pickings_warehouse = pickings_warehouse
 
     @api.multi
     def _get_ref(self):

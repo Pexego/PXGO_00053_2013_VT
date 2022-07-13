@@ -1,7 +1,7 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class SaleOrder(models.Model):
@@ -129,3 +129,17 @@ WHERE A.order_id IS NOT NULL
             'target': 'new',
             'context': ctx,
         }
+
+
+class SaleOrderLine(models.Model):
+
+    _inherit = 'sale.order.line'
+
+    @api.multi
+    @api.depends('order_id.partner_id')
+    def _compute_hide_reserve_buttons(self):
+        super(SaleOrderLine, self)._compute_hide_reserve_buttons()
+        for line in self:
+            line.hide_reserve_buttons = line.hide_reserve_buttons and \
+                                        not (line.order_id.partner_id.user_id.sale_team_id.id == line.env.user.sale_team_id.id
+                                             and not line.env.user.has_group('stock_custom.group_comercial_ext'))
