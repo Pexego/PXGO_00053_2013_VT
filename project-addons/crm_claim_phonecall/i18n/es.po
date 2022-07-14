@@ -328,4 +328,4 @@ msgstr "\n"
 #: code:addons/crm_claim_phonecall/crm_phonecall.py:201
 #, python-format
 msgid "Incidences Warning %s"
-msgstr "Aviso de Incidencias %S"
+msgstr "Aviso de Incidencias %s"
