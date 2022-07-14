@@ -40,7 +40,9 @@
                 'mail',
                 'picking_incidences',
                 'custom_account'],
-    "data": ['views/crm_claim_view.xml',
+    "data": [
+             'data/groups.xml',
+             'views/crm_claim_view.xml',
              'data/substate_data.xml',
              'security/ir.model.access.csv',
              'wizard/claim_make_picking_view.xml',
@@ -54,7 +56,6 @@
              'views/res_partner_view.xml',
              'views/sale_view.xml',
              'views/product_view.xml',
-             'data/groups.xml',
              'wizard/product_incidences_advise_wiz.xml'],
     "installable": True
 }
