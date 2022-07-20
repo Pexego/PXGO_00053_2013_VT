@@ -272,3 +272,9 @@ msgstr "Fatto"
 #: selection:crm.phonecall,call_state:0
 msgid "Recall pending"
 msgstr "Chiamata in attesa"
+
+#. module: crm_claim_phonecall
+#: code:addons/crm_claim_phonecall/crm_phonecall.py:201
+#, python-format
+msgid "Incidences Warning %s"
+msgstr "Avviso di incidenti %s"
