@@ -543,6 +543,11 @@ msgid "Erase Logo"
 msgstr "Borrar Logo"
 
 #. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_line_wizard_id
+msgid "wizard"
+msgstr "wizard"
+
+#. module: kitchen
 #: code:addons/kitchen/wizard/create_customization_wizard.py:70
 #: code:addons/kitchen/models/kitchen_customization.py:342
 msgid "You can't create a customization without check erase logo option of this product : %s"
@@ -557,3 +562,16 @@ msgstr "No puedes marcar los campos personalizable y borrar logo a la vez"
 #: model:ir.model.fields,field_description:kitchen.field_customization_line_sale_product_id
 msgid "Sale Product"
 msgstr "Producto en el Pedido"
+
+#. module: kitchen
+#: model:mail.template,body_html:kitchen.send_mail_to_kitchen_customization_scheduled_date
+msgid "\n"
+"            <p>The Scheduled date of customization ${object.name} - ${object.partner_id.name or ''} is ${object.scheduled_shipping_date}.</p>\n"
+"            <p>Best regards.</p>\n"
+"         \n"
+"        "
+msgstr "\n"
+"            <p>La fecha de envío planificada de la personalización ${object.name} - ${object.partner_id.name or ''} es ${object.scheduled_shipping_date}.</p>\n"
+"            <p>Saludos.</p>\n"
+"         \n"
+"        "

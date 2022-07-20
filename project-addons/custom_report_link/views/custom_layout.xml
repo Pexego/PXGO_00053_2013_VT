@@ -717,8 +717,10 @@ SWIFT/BIC: BESCPTPL
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
-                    <address t-field="company.partner_id"
+                    <address t-if="o.invoice_type_id.name != 'Factura simplificada' and not o.partner_id.amazon_parent_id" t-field="company.partner_id"
                              t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <address t-if="o.invoice_type_id.name == 'Factura simplificada' or o.partner_id.amazon_parent_id" t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'retail_phone']}"/>
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="country_code == 'IT'"> <!-- Esto es para Odoo Italia -->
@@ -852,11 +854,11 @@ SWIFT/BIC: BESCPTPL
                     <div class="pull-left">
                         <t t-if="o.partner_id.amazon_parent_id">
                         <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id"
-                                t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                                t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': false}"/>
                         </t>
                         <t t-if="not o.partner_id.amazon_parent_id">
                             <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
-                                    t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                                    t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': false}"/>
                         </t>
                     </div>
                     <div class="pull-right text-right">

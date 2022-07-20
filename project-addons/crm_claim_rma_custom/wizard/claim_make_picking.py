@@ -75,20 +75,6 @@ class ClaimMakePicking(models.TransientModel):
                              'note': note,
                              'claim_line_id': claim_line.id
                              })
-                        if p_type == 'outgoing' and bom_line.product_id.type == 'product':
-                            reserv_vals = {
-                                'product_id': bom_line.product_id.id,
-                                'product_uom': bom_line.product_id.uom_id.id,
-                                'product_uom_qty': bom_line.product_qty * claim_line.product_returned_quantity,
-                                'date_validity': False,
-                                'name': u"{}".format(claim_line.claim_id.number),
-                                'location_id': self.claim_line_source_location.id,
-                                'location_dest_id': self.claim_line_dest_location.id,
-                                'move_id': move.id,
-                                'claim_id': claim_line.claim_id.id,
-                            }
-                            reserve = self.env['stock.reservation'].create(reserv_vals)
-                            reserve.reserve()
                         claim_line.write({write_field: move.id})
                 else:
                     super(ClaimMakePicking, self).create_move(
@@ -99,6 +85,16 @@ class ClaimMakePicking(models.TransientModel):
 
     @api.multi
     def action_create_picking(self):
+        if not self.env.context.get('bypass_product_incidences_advise', False):
+            incidences = self.claim_line_ids.mapped('product_id.incidence_ids').filtered(lambda i:i.warn)
+            if incidences:
+                return self.env['product.incidences.advise.wiz'].create({
+                    'origin_reference':
+                        '%s,%s' % ('claim_make_picking.wizard', self.id),
+                    'continue_method': 'action_create_picking',
+                    'incidence_ids': [(6, 0, incidences.ids)],
+                    'claim_id': self.env.context.get('active_id')
+                }).action_show()
         res = super(ClaimMakePicking, self).action_create_picking()
         if self.odoo_management or (self.not_sync or
                                     self.claim_line_dest_location.not_sync):

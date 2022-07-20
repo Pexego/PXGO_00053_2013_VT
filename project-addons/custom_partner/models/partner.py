@@ -529,6 +529,8 @@ class ResPartner(models.Model):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
+        if 'name' in vals:
+            vals['name'] = vals['name'].rstrip().lstrip()
         for partner in self:
             if not partner.active and 'active' in vals:
                 if vals['active']:

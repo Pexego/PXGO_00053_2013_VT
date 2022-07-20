@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="stock.menu_action_production_lot_form" groups="base.group_no_one"/>
+    <delete model="ir.ui.menu" search="[('id','=',ref('stock.menu_action_production_lot_form'))]"/>
 
     <record id="view_lot_moves_tree" model="ir.ui.view">
         <field name="name">stock.lot.moves.tree</field>

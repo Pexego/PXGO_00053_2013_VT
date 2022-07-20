@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="group_product_incidences_manager" model="res.groups">
+        <field name="name">Product Incidences Manager</field>
+    </record>
+</odoo>

@@ -41,7 +41,7 @@ class ResPartner(models.Model):
                 for partner_data in eval(response.text):
                     if partner_data['odooId'] > 0:
                         partner = self.env['res.partner'].browse(partner_data['odooId'])
-                        if partner and partner_data['sims'] > 0 \
+                        if partner.exists() and partner_data['sims'] > 0 \
                                 and partner.comercial != 'VISIOTECH' and partner.comercial != 'Prueba España':
                             price_tags = {'M2M0,7euro': 0.7, 'M2M1euro': 1, 'M2M2euro': 2}
                             product_sim = self.env['product.product'].search([('default_code', '=', 'M2M_COMMUNICATION')])
@@ -83,21 +83,23 @@ class ResPartner(models.Model):
                                 line_voz._onchange_account_id()
                                 line_voz.price_unit = 0.15
                             invoice.compute_taxes()
-                            invoice.action_invoice_open()
-
-                            if partner.property_payment_term_id.name in ('Prepago', 'Pago inmediato'):
-                                valid_mandate = self.env['account.banking.mandate'].search_count([('partner_id', '=', partner.id), ('state', '=', 'valid')])
-                                if valid_mandate > 0:
+                            
+                            if partner.property_payment_term_id.with_context({'lang': 'es_ES'}).name in ('Prepago', 'Pago inmediato'):
+                                valid_mandates = self.env['account.banking.mandate'].search([('partner_id', '=', partner.id), ('state', '=', 'valid')])
+                                if len(valid_mandates) > 0:
                                     rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
-                                    invoice.write({'payment_mode_id': rd_payment.id})
+                                    rb_payment = self.env['account.payment.mode'].search([('name', '=', 'Ricevuta bancaria')])
+                                    invoice.write({'payment_mode_id': rb_payment.id if rb_payment else rd_payment.id,
+                                                   'partner_bank_id': valid_mandates[0].partner_bank_id.id,
+                                                   'mandate_id': valid_mandates[0].id})
                                 else:
                                     mail_bank_error_message += _('Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n') \
                                                               % (partner.name, invoice.number)
+                            invoice.action_invoice_open()
                         else:
                             error += 'Partner id %s not found ' % partner_data['odooId']
             else:
                 error += 'Response %s with error: %s' % (response.status_code, response.text)
-            print(error)
 
             # Send mail to accounting if there is partners without bank account
             if mail_bank_error_message:

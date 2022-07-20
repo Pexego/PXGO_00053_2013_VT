@@ -35,3 +35,16 @@ class StockPicking(models.Model):
             else:
                 res = super(StockPicking, self).action_cancel()
         return res
+
+    def get_email_template(self):
+        if self.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
+            return self.env.ref('dropship_italia_it.picking_done_dropship_template').with_context(lang=self.sale_id.partner_id.lang)
+        return super(StockPicking, self).get_email_template()
+
+    def check_send_email_base(self, vals):
+        res = super(StockPicking, self).check_send_email_base(vals)
+        return res and not self.partner_id.commercial_partner_id.country_code
+
+    def check_send_email_extended(self, vals):
+        res = super(StockPicking, self).check_send_email_base(vals)
+        return res or self.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship')

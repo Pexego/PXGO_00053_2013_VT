@@ -152,7 +152,7 @@ class SaleOrder(models.Model):
             'web.user.buyer'):
             res.message_post(body=_("Prepaid option checked by Web Team"))
         return res
-
+        
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
@@ -162,3 +162,16 @@ class SaleOrderLine(models.Model):
         res = super()._get_products_non_editable()
         res.append(self.env.ref("prepaid_order_discount.prepaid_discount_product").id)
         return res
+
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        super()._get_invoice_qty()
+        for line in self.filtered(lambda l: l.product_id.id == self.env.ref('prepaid_order_discount.prepaid_discount_product').id):
+            qty_invoiced = 0.0
+            for invoice_line in line.invoice_lines:
+                if invoice_line.invoice_id.state != 'cancel':
+                    if invoice_line.invoice_id.type == 'out_invoice':
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+                    elif invoice_line.invoice_id.type == 'out_refund' and line.price_unit < 0:
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+            line.qty_invoiced = qty_invoiced

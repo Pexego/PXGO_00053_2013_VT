@@ -13,7 +13,6 @@
                 'product',
                 'sale_promotions_extend',
                 'commercial_rules',
-                'flask_middleware_connector',
                 'sale_custom'
                 ],
     'data': ['data/product_data.xml',

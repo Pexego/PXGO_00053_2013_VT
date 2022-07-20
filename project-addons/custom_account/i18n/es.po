@@ -1353,3 +1353,31 @@ msgstr "Sin Empleados"
 #: model:ir.ui.view,arch_db:custom_account.purchase_order_tree_inherit
 msgid "Shipments"
 msgstr "Envíos"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_purchase_order_filter_inherit_search
+msgid "Container"
+msgstr "Envíos"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account_bank_statement.py:81
+#, python-format
+msgid "A selected move line was already reconciled.\n"
+" - Partners: %s\n"
+" - Amounts: %s\n"
+""
+msgstr "Una línea de movimiento seleccionada ya ha sido conciliada.\n"
+" - Empresa: %s\n"
+" - Cantidad: %s\n"
+""
+
+#. module: custom_account
+#: code:addons/custom_account/models/sale.py:17
+#, python-format
+msgid "The order can not be confirmed, maximum amount exceeded for payment term selected"
+msgstr "El pedido no puede ser tramitado ya que se ha excedido la cantidad máxima para el plazo de pago seleccionado"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_order_allow_payment_term
+msgid "Allow Payment Term"
+msgstr "Permitir Plazo de pago"

@@ -74,6 +74,7 @@
                 <field name="partner_ref"/>
                 <field name="remark"/>
                 <field name="origin"/>
+                <field name="container_ids" string="Container"/>
               </xpath>
           </field>
       </record>

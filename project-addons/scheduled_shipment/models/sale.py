@@ -21,6 +21,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     scheduled_date = fields.Datetime('Scheduled shipping date')
+    not_sync_picking = fields.Boolean()
 
     @api.multi
     def write(self, vals):
@@ -42,6 +43,12 @@ class SaleOrder(models.Model):
                         raise ValidationError(_("Scheduled date must be bigger than current date"))
         return super().write(vals)
 
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
+        if self.not_sync_picking:
+            for picking in self.picking_ids:
+                picking.not_sync = True
+        return res
 
 class StockPicking(models.Model):
 
@@ -81,6 +88,16 @@ class StockPicking(models.Model):
     def make_picking_sync(self):
         if self.state != 'cancel':
             self.not_sync = False
+
+    @api.multi
+    def action_accept_confirmed_qty(self):
+        bcks = super(StockPicking, self).action_accept_confirmed_qty()
+        for bck in bcks:
+            if bck.backorder_id.sale_id.scheduled_date:
+                bck.not_sync = True
+                bck.scheduled_picking = True
+                bck._process_picking_scheduled_time()
+        return bcks
 
 
 class StockMove(models.Model):
