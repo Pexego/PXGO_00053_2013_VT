@@ -209,7 +209,6 @@ class EdifMenssage(models.Model):
             msg += self.IMD(line.name.replace("\n", " ").replace("+", "-"))
             msg += self.QTY('47', str(line.quantity))
             msg += self.MOA('66', '{:.2f}'.format(line.price_subtotal))
-            msg += self.MOA('203', '{:.2f}'.format(line.price_subtotal))
             msg += self.PRI('AAA', str(round(line.price_unit * (1 - (line.discount/100)), 2)))
             if line.discount:
                 msg += self.PRI('AAB', str(line.price_unit))

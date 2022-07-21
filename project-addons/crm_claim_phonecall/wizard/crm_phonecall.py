@@ -189,13 +189,20 @@ class CrmPhonecall(models.Model):
             self.is_bigaccount = True
         else:
             self.is_bigaccount = False
-            
 
     @api.multi
     @api.onchange('product_id')
     def onchange_product_id(self):
         if self.product_id:
             self.brand_id = self.product_id.product_brand_id
+            incidences_descr = self.product_id._get_incidences_warn_description()
+            if incidences_descr:
+                warning = {}
+                title = _("Incidences Warning %s") % self.product_id.name
+                warning['title'] = title
+                warning['message'] = incidences_descr
+                result = {'warning': warning}
+                return result
 
 
 class ResPartner(models.Model):

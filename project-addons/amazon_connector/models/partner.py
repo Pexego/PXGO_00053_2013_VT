@@ -6,7 +6,12 @@ class ResPartner(models.Model):
 
     amazon_child_ids = fields.One2many('res.partner', 'amazon_parent_id', string='Amazon Contacts')
     amazon_parent_id = fields.Many2one('res.partner')
+    retail_phone = fields.Char("Retail Phone")
 
+    @api.onchange('retail_phone', 'country_id', 'company_id')
+    def _onchange_retail_phone_validation(self):
+        if self.retail_phone:
+            self.retail_phone = self.phone_format(self.retail_phone)
 
     @api.depends('amazon_parent_id.name')
     def _compute_display_name(self):

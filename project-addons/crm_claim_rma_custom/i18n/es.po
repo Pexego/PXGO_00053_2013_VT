@@ -669,3 +669,43 @@ msgstr "Secuencia"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_price_subtotal
 msgid "Price Subtotal"
 msgstr "Precio Subtotal"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.product_incidences_advise_wizard
+msgid "Continue"
+msgstr "Continuar"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.product_incidences_advise_wizard
+msgid "Product Incidences Advise"
+msgstr "Aviso de incidencias de producto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_product_incidence_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_product_incidence_description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_product_incidence_warn
+msgid "Warn"
+msgstr "Avisar"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_product_incidence_create_date
+msgid "Created On"
+msgstr "Fecha de Creación"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_product_incidence_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.product_add_incidences
+msgid "Incidences"
+msgstr "Incidencias"
