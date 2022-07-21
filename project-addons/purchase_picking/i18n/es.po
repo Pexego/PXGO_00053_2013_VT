@@ -562,8 +562,8 @@ msgstr "Llegadas"
 
 #. module: purchase_picking
 #: selection:stock.container,telex:0
-msgid "Pending"
-msgstr "Pendiente"
+msgid "Claimed"
+msgstr "Reclamado"
 
 #. module: purchase_picking
 #: selection:stock.container,telex:0

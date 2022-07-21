@@ -516,8 +516,8 @@ msgstr "Arrivi"
 
 #. module: purchase_picking
 #: selection:stock.container,telex:0
-msgid "Pending"
-msgstr "In attesa di"
+msgid "Claimed"
+msgstr "Rivendicare"
 
 #. module: purchase_picking
 #: selection:stock.container,telex:0
