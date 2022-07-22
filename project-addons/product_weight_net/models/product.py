@@ -11,10 +11,12 @@ class ProductTemplate(models.Model):
 
     weight_box = fields.Float('Net Weight Box', digits=dp.get_precision('Stock Weight'),
                               help="The net weight in Kg")
-    volume_box = fields.Float('Volume Box', digits=dp.get_precision('Stock Weight'),
-                                  help="The net weight in Kg")
-    qty_box = fields.Float('Qty Box', digits=dp.get_precision('Stock Weight'),
-                                  help="The net weight in Kg")
+    volume_box = fields.Float('Volume Box', digits=dp.get_precision('Stock Weight'))
+    qty_box = fields.Integer('Qty Box')
+
+    uds_per_pallet = fields.Integer("Units Per Pallet")
+
+
 class ProductProduct(models.Model):
 
     _inherit = 'product.product'

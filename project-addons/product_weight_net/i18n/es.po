@@ -55,3 +55,8 @@ msgstr "Unidades Cartón"
 #: view:product.template:product_weight_net.product_add_weight_net
 msgid "Box data"
 msgstr "Datos Cartón"
+
+#. module: product_weight_net
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_uds_per_pallet
+msgid "Units Per Pallet"
+msgstr "Unidades por Pallet"
