@@ -107,7 +107,7 @@ class PurchaseOrder(models.Model):
             order_es.write({'transporter_id': vals['transporter_id'],
                             'service_id': vals['service_id']})
 
-        for line in self.order_line:
+        for line in self.order_line.filtered(lambda l: not l.sale_line_id.original_line_id and l.product_id.type == 'product'):
             l_vals = self.prepare_order_line_es(line, order_es_id, odoo_es)
             odoo_es.env['sale.order.line'].create(l_vals)
 

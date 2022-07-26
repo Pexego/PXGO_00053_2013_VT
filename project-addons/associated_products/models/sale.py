@@ -56,10 +56,8 @@ class SaleOrderLine(models.Model):
                     'original_line_id': line.id,
                     'customer_lead': associated.associated_id.sale_delay or 0.0,
                     'tax_id': [(6, 0, tax_ids.ids)],
-                    'discount':discount,
-                    # TODO: migrar junto con módulo commision_report
-                    # 'agent': line.agent.id,
-                    # 'commission': line.commission.id
+                    'discount': discount,
+                    'route_id': line.route_id.id or False
                 }
                 new_line = self.create(args_line)
                 new_line.product_id_change()
@@ -95,10 +93,8 @@ class SaleOrderLine(models.Model):
                      'original_line_id': line.id,
                      'customer_lead': associated.associated_id.sale_delay or 0.0,
                      'tax_id': [(6, 0, tax_ids.ids)],
-                     'discount':discount,
-                     # TODO: migrar junto con módulo commision_report
-                     # 'agent': line.agent.id,
-                     # 'commission': line.commission.id
+                     'discount': discount,
+                     'route_id': line.route_id.id or False
                     }
                     new_line = self.create(args_line)
                     new_line.product_id_change()
