@@ -81,7 +81,7 @@ class StockPicking(models.Model):
             elif bck.customization_ids:
                 bck.not_sync = True
                 if not ((pick.group_id and pick.group_id.sale_id and pick.group_id.sale_id.not_sync_picking)
-                        or (pick.scheduled_shipping_date and pick.scheduled_shipping_date > datetime.now())):
+                        or (pick.scheduled_shipping_date and datetime.strptime(pick.scheduled_shipping_date, '%Y-%m-%d %H:%M:%S') > datetime.now())):
                     pick.not_sync = False
         return bcks
 
