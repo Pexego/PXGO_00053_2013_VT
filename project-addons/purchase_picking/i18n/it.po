@@ -515,6 +515,21 @@ msgid "Arrivals"
 msgstr "Arrivi"
 
 #. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Claimed"
+msgstr "Rivendicare"
+
+#. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Asked"
+msgstr "Chiesto"
+
+#. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Received"
+msgstr "Ricevuto"
+
+#. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_virtual_stock_conservative
 msgid "Virtual Stock Conservative"
 msgstr "Quantità disponibile"

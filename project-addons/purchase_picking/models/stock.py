@@ -36,7 +36,11 @@ class StockContainer(models.Model):
     notes_purchases = fields.Char(string="Notes", help="Purchases notes")
     notes_warehouse = fields.Text(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
-    telex = fields.Boolean(string="Telex", help="Telex")
+    telex = fields.Selection([
+        ('asked', 'Asked'),
+        ('claimed', 'Claimed'),
+        ('received', 'Received')
+    ])
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)
     cost = fields.Float(sting="Cost")
     n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
@@ -52,6 +56,12 @@ class StockContainer(models.Model):
     set_eta = fields.Boolean(string="set_eta", help="Set eta", default=0, compute="_set_eta", store=True)
     set_date_exp = fields.Boolean(string="set_date_expected", help="Set date expected", default=0, compute="_set_date_exp", store=True)
     incidences = fields.Boolean("Incidences")
+
+    @api.onchange("type")
+    def onchange_locations(self):
+        for container in self:
+            if container.type in ['air', 'road']:
+                container.telex = 'received'
 
     @api.multi
     @api.depends('eta')
