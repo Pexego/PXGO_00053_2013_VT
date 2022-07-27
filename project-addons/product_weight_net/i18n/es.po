@@ -35,3 +35,28 @@ msgstr "El peso bruto en Kg"
 #: model:ir.model.fields,help:product_weight_net.field_weight_net
 msgid "The net weight in Kg."
 msgstr "El peso neto en Kg"
+
+#. module: product_weight_net
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_weight_box
+msgid "Weight Box"
+msgstr "Peso Cartón"
+
+#. module: product_weight_net
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_volume_box
+msgid "Volume Box"
+msgstr "Volumen Cartón"
+
+#. module: product_weight_net
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_qty_box
+msgid "Qty Box"
+msgstr "Unidades Cartón"
+
+#. module: product_weight_net
+#: view:product.template:product_weight_net.product_add_weight_net
+msgid "Box data"
+msgstr "Datos Cartón"
+
+#. module: product_weight_net
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_uds_per_pallet
+msgid "Units Per Pallet"
+msgstr "Unidades por Pallet"

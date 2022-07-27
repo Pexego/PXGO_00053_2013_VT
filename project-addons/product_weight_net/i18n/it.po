@@ -35,3 +35,8 @@ msgstr "Il peso lordo in Kg"
 #: model:ir.model.fields,help:product_weight_net.field_weight_net
 msgid "The net weight in Kg."
 msgstr "Il peso netto in Kg"
+
+#. module: product_weight_net
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_uds_per_pallet
+msgid "Units Per Pallet"
+msgstr "Unità per pallet"
