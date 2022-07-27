@@ -37,7 +37,7 @@ class SaleOrderLine(models.Model):
         product_id = vals.get('product_id')
 
         line = super(SaleOrderLine, self).create(vals)
-        if product_id:
+        if product_id and not self.env.context.get('not_associated', False):
             product = product_obj.browse(product_id)
             for associated in product.associated_product_ids:
                 qty = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
@@ -67,7 +67,7 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         pricelist_obj = self.env['product.pricelist']
         fiscal_obj = self.env['account.fiscal.position']
-        if vals.get('product_id'):
+        if vals.get('product_id') and not self.env.context.get('not_associated', False):
             res = super(SaleOrderLine, self).write(vals)
             for line in self:
                 if line.assoc_line_ids:
