@@ -129,3 +129,14 @@ class PurchaseOrder(models.Model):
         for pick in self.picking_ids:
             pick.picking_es_id = picking_es_ids[0]
             pick.picking_es_str = picking_es.name
+
+
+class PurchaseOrderLine(models.Model):
+
+    _inherit = "purchase.order.line"
+
+    def _prepare_stock_moves(self, picking):
+        res = super()._prepare_stock_moves(picking)
+        if self.sale_line_id.route_id.id == self.env.ref("stock_dropshipping.route_drop_shipping").id:
+            res[0]['price_unit'] = -res[0]['price_unit']
+        return res
