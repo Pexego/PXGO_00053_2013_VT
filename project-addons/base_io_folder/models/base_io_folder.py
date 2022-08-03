@@ -54,6 +54,7 @@ class BaseIOFolder(models.Model):
         """
         self.ensure_one()
         list = os.listdir(self.directory_path)
+        list = sorted(list)
         continue_search = max_commit_length and len(list) > max_commit_length
         if continue_search:
             list = list[:max_commit_length]
@@ -94,7 +95,8 @@ class BaseIOFolder(models.Model):
             raise ValidationError(_('Unknown path provided: %s'
                                     % self.directory_path))
         files, continue_search = self._get_files_in_directory(max_commit_length)
-
+        import ipdb
+        ipdb.set_trace()
         for file_imported in files:
             file_full_name = source_name(self.directory_path,
                                          file_imported)
