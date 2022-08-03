@@ -12,7 +12,8 @@
              "security/ir.model.access.csv",
              "views/invoice.xml",
              "views/amazon_settlement.xml",
-             "report/account_invoice_report_view.xml"
+             "report/account_invoice_report_view.xml",
+             "views/partner_view.xml"
              ],
     "installable": True
 }

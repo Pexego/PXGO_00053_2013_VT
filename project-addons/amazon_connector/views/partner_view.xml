@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_add_retail_phone" model="ir.ui.view">
+        <field name="name">res.partner.add.retail.phone</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="before">
+                <field name="retail_phone" widget="phone" groups="base.group_system"/>
+            </xpath>
+        </field>
+    </record>
+
+    <template id="contact" inherit_id="base.contact">
+        <xpath expr="//div[@itemprop='address']" position="after">
+            <div t-if="object.retail_phone and 'retail_phone' in fields">
+                <i t-if="not options.get('no_marker') or options.get('phone_icons')" class='fa fa-phone fa-fw'/>
+                <span itemprop="retail_phone" t-esc="object.retail_phone"/>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
