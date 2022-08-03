@@ -95,8 +95,7 @@ class BaseIOFolder(models.Model):
             raise ValidationError(_('Unknown path provided: %s'
                                     % self.directory_path))
         files, continue_search = self._get_files_in_directory(max_commit_length)
-        import ipdb
-        ipdb.set_trace()
+
         for file_imported in files:
             file_full_name = source_name(self.directory_path,
                                          file_imported)
