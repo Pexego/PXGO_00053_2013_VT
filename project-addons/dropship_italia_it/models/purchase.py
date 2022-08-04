@@ -107,8 +107,9 @@ class PurchaseOrder(models.Model):
             order_es.write({'transporter_id': vals['transporter_id'],
                             'service_id': vals['service_id']})
 
-        for line in self.order_line:
+        for line in self.order_line.filtered(lambda l: l.product_id.type == 'product'):
             l_vals = self.prepare_order_line_es(line, order_es_id, odoo_es)
+            odoo_es.env.context['not_associated'] = True
             odoo_es.env['sale.order.line'].create(l_vals)
 
         product_ship = odoo_es.env['product.product'].search([('default_code', '=', 'SPEDIZIONE')])
@@ -128,3 +129,14 @@ class PurchaseOrder(models.Model):
         for pick in self.picking_ids:
             pick.picking_es_id = picking_es_ids[0]
             pick.picking_es_str = picking_es.name
+
+
+class PurchaseOrderLine(models.Model):
+
+    _inherit = "purchase.order.line"
+
+    def _prepare_stock_moves(self, picking):
+        res = super()._prepare_stock_moves(picking)
+        if self.sale_line_id.route_id.id == self.env.ref("stock_dropshipping.route_drop_shipping").id:
+            res[0]['price_unit'] = -res[0]['price_unit']
+        return res
