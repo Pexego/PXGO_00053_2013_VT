@@ -589,6 +589,7 @@ BIC: UNCRITMMXXX
                     <t t-if="country_code == 'ES'"><!-- Esto es para Odoo España -->
                         <t t-if="lang == 'es_ES'">
                             <pre style="font-size:12px; color:#6D6E70;">
+Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
 Sabadell Atlantico
 IBAN ES52 0081 0530 5900 0109 8214
 BIC: BSABESBB
@@ -596,13 +597,15 @@ BIC: BSABESBB
                         </t>
                         <t t-if="lang == 'en_US'">
                             <pre style="font-size:12px; color:#6D6E70;">
-CAIXABANC
+Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
+CAIXABANK
 IBAN ES46 2100 1726 5902 0032 1288
 BIC: CAIXESBBXXX
                             </pre>
                         </t>
                         <t t-if="lang == 'fr_FR'">
                             <pre style="font-size:12px; color:#6D6E70;">
+Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
 Banco Santander
 IBAN ES11 0075 0240 1006 0056 6137
 BIC: BSCHESMM
@@ -610,18 +613,28 @@ BIC: BSCHESMM
                         </t>
                         <t t-if="lang == 'it_IT'">
                             <pre style="font-size:12px; color:#6D6E70;">
-CAIXABANC
+INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
+CAIXABANK
 IBAN ES46 2100 1726 5902 0032 1288
 BIC: CAIXESBBXXX
                             </pre>
                         </t>
                         <t t-if="lang == 'pt_PT'">
                             <pre style="font-size:12px; color:#6D6E70;">
+Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
 NOVOBANCO
 Nº: 0001 1726 6211
 NIB: 0007 0000 00117266211 23
 IBAN PT50 0007 0000 0011 7266 2112 3
 SWIFT/BIC: BESCPTPL
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'de_DE'">
+                            <pre style="font-size:12px; color:#6D6E70">
+Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
+CAIXABANK
+IBAN ES46 2100 1726 5902 0032 1288
+BIC: CAIXESBBXXX
                             </pre>
                         </t>
                     </t>
@@ -1106,27 +1119,31 @@ SWIFT/BIC: BESCPTPL
                         <t t-if="country_code == 'ES'"><!-- Esto es para Odoo España -->
                             <t t-if="lang == 'es_ES'">
                                 <pre style="font-size:12px; color:#6D6E70;">
+Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
 Sabadell Atlantico
 IBAN ES52 0081 0530 5900 0109 8214
 BIC: BSABESBB
                                 </pre>
                             </t>
-                            <t t-if="lang in ('en_US','de_DE')">
-                                <pre style="font-size:12px; color:#6D6E70">
-CAIXABANC
+                            <t t-if="lang == 'en_US'">
+                                <pre style="font-size:12px; color:#6D6E70;">
+Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
+CAIXABANK
 IBAN ES46 2100 1726 5902 0032 1288
 BIC: CAIXESBBXXX
                                 </pre>
                             </t>
                             <t t-if="lang == 'fr_FR'">
-                                <pre style="font-size:12px; color:#6D6E70">
+                                <pre style="font-size:12px; color:#6D6E70;">
+Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
 Banco Santander
 IBAN ES11 0075 0240 1006 0056 6137
 BIC: BSCHESMM
                                 </pre>
                             </t>
                             <t t-if="lang == 'pt_PT'">
-                                <pre style="font-size:12px; color:#6D6E70">
+                                <pre style="font-size:12px; color:#6D6E70;">
+Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
 NOVOBANCO
 Nº: 0001 1726 6211
 NIB: 0007 0000 00117266211 23
@@ -1136,8 +1153,16 @@ SWIFT/BIC: BESCPTPL
                             </t>
                             <t t-if="lang == 'it_IT'">
                                 <pre style="font-size:12px; color:#6D6E70;">
-INTESTATARIO: LONG XIANG IMPORTACION EXPORTACION SL
-BANCA: CAIXABANC
+INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
+CAIXABANK
+IBAN ES46 2100 1726 5902 0032 1288
+BIC: CAIXESBBXXX
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'de_DE'">
+                                <pre style="font-size:12px; color:#6D6E70">
+Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
+CAIXABANK
 IBAN ES46 2100 1726 5902 0032 1288
 BIC: CAIXESBBXXX
                                 </pre>
