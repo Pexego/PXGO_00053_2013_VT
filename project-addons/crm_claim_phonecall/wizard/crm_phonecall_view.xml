@@ -106,7 +106,7 @@
                     <field name="partner_country"/>
                     <field name="user_id"/>
                     <field name="call_type_sat"/>
-                    <field name="product_id" string="Product"/>
+                    <field name="product_id" string="Product" options="{'no_create': True}"/>
                     <field name="brand_id" options="{'no_create': True}"/>
                     <field name="category_id"/>
                     <field name="subject" string="Subject"/>
