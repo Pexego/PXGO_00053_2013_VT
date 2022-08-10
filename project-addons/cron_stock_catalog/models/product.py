@@ -150,7 +150,7 @@ class ProductProduct(models.Model):
         fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price3","list_price4", "list_price2",
                   "pvi1_price", "pvi3_price", "pvi4_price", "pvi2_price", "margin_pvd1", "margin_pvd3",
                   "margin_pvd4", 'margin_pvd2', "margin_pvi1", "margin_pvi3", "margin_pvi4", "margin_pvi2", "qty_available",
-                  "virtual_available_wo_incoming", "standard_price_2", "categ_id",
+                  "virtual_available_wo_incoming", "standard_price_2_inc", "categ_id",
                   "last_sixty_days_sales", "remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
                   "state", "joking", "qty_in_production"]
 
@@ -177,7 +177,7 @@ class ProductProduct(models.Model):
                     product_fields.append(categ.name)
                 elif field == 'state':
                     product_fields.append(translate_state[product[field]])
-                elif field in ('standard_price_2', 'joking'):
+                elif field in ('standard_price_2_inc', 'joking'):
                     product_fields.append(round(product[field], 2))
                 else:
                     product_fields.append(product[field])
