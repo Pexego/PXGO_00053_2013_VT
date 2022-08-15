@@ -52,22 +52,24 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.origin and 'MO' in picking.origin and vals.get('date_done', False) and picking.state == 'done':
                 mrp_product = production_obj.search([('name', '=', picking.origin)])
+                location_dest_id = self.env.ref('stock.stock_location_company')
                 if mrp_product and mrp_product.picking_out.id == picking.id:
                     # Create in picking
                     pick_in = picking.create({'partner_id': picking.partner_id.id,
                                               'picking_type_id': self.env.ref('stock.picking_type_in').id,
                                               'location_id': mrp_product.move_finished_ids and
                                                              mrp_product.move_finished_ids[0].location_id.id,
-                                              'location_dest_id': mrp_product.move_finished_ids and
-                                                                  mrp_product.move_finished_ids[0].location_dest_id.id,
+                                              'location_dest_id': location_dest_id.id,
                                               'origin': picking.origin})
                     # Update reference in_picking
                     mrp_product.picking_in = pick_in.id
                     cost_moves = sum(picking.move_lines.mapped('price_unit'))
                     production = production_obj.search([('name', '=', picking.origin)])
                     production.move_finished_ids.write({'price_unit': -cost_moves,
-                                                        'picking_id': pick_in.id})
-                    production.move_finished_ids.mapped('move_line_ids').write({'picking_id': pick_in.id})
+                                                        'picking_id': pick_in.id,
+                                                        'location_dest_id': location_dest_id.id})
+                    production.move_finished_ids.mapped('move_line_ids').write({'picking_id': pick_in.id,
+                                                                                'location_dest_id': location_dest_id.id})
                     pick_in.action_assign()
                 elif mrp_product.picking_in.id == picking.id:
                     mrp_product.button_mark_done()
