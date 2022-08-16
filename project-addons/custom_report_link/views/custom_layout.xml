@@ -736,8 +736,7 @@ BIC: CAIXESBBXXX
                         <address t-if="o.invoice_type_id.name == 'Factura simplificada' or o.partner_id.amazon_parent_id" t-field="company.partner_id"
                                  t-options="{'widget': 'contact', 'fields': ['address', 'retail_phone']}"/>
                     </t>
-                    <address t-if="country_code != 'ES'" style="font-size:14px; color:#6D6E70" t-field="company.partner_id"
-                                    t-options="{'widget': 'contact', 'fields': ['address', 'phone'], 'no_marker': false}"/>
+                    <address t-if="country_code != 'ES'" t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone'], 'no_marker': false}"/>
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="country_code == 'IT'"> <!-- Esto es para Odoo Italia -->
