@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <odoo>
+
+    <menuitem id="mrp.menu_mrp_root" groups="-mrp.group_mrp_user"/>
+
     <record id="view_repair_order_form_add_claim" model="ir.ui.view">
         <field name="name">mrp.repair.form.add_claim</field>
         <field name="model">mrp.repair</field>

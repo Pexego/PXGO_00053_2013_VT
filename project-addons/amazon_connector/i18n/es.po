@@ -1765,3 +1765,8 @@ msgstr "Entidad Comercial"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_is_business_order
 msgid "Is Business Order"
 msgstr "Cliente empresarial"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_partner_retail_phone
+msgid "Retail Phone"
+msgstr "Teléfono Retail"

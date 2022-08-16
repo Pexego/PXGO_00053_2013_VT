@@ -990,16 +990,21 @@ msgid "status"
 msgstr "status"
 
 #. module: kitchen
-<<<<<<< HEAD
+#: code:addons/kitchen/wizard/create_customization_wizard.py:73
+#, python-format
+msgid "you can't create a customization of a done order"
+msgstr "No puedes crear una personalización de un pedido tramitado"
+
+#. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_customization_line_wizard_id
 msgid "wizard"
 msgstr "wizard"
 
 #. module: kitchen
-#: code:addons/kitchen/wizard/create_customization_wizard.py:73
-#, python-format
-msgid "you can't create a customization of a done order"
-msgstr "No puedes crear una personalización de un pedido tramitado"
+#: code:addons/kitchen/wizard/create_customization_wizard.py:70
+#: code:addons/kitchen/models/kitchen_customization.py:342
+msgid "You can't create a customization without check erase logo option of this product : %s"
+msgstr "No puedes crear una personalización sin marcar el check de borrar logo para este producto : %s"
 
 #. module: kitchen
 #: code:addons/kitchen/models/kitchen_customization.py:391

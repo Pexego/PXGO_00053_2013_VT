@@ -39,7 +39,8 @@ class KitchenCustomization(models.Model):
     comments = fields.Text(string='Comments')
     order_state = fields.Selection(related='order_id.state')
 
-    scheduled_shipping_date = fields.Datetime('Scheduled shipping date', related='order_id.scheduled_date', readonly=True, store=True)
+    scheduled_shipping_date = fields.Datetime('Scheduled shipping date', related='order_id.scheduled_date',
+                                              readonly=True, store=True)
 
     def _compute_products_format(self):
         for customization in self:
@@ -95,8 +96,8 @@ class KitchenCustomization(models.Model):
             lines_in_order = self.env['kitchen.customization.line']
             for line in self.customization_line:
                 if line.sale_line_id and (line.product_id == line.sale_line_id.product_id or (
-                        line.sale_line_id.product_id.bom_ids and line.product_id.id in
-                        line.sale_line_id.product_id.bom_ids[0].bom_line_ids.mapped('product_id').ids)):
+                    line.sale_line_id.product_id.bom_ids and line.product_id.id in
+                    line.sale_line_id.product_id.bom_ids[0].bom_line_ids.mapped('product_id').ids)):
                     lines_in_order |= line
             if lines_in_order != self.customization_line:
                 raise exceptions.UserError(
@@ -133,7 +134,7 @@ class KitchenCustomization(models.Model):
     def action_cancel(self):
         for customization in self:
             if customization.state in ['done', 'in_progress'] \
-                    and not self.env.user.has_group('kitchen.group_kitchen'):
+                and not self.env.user.has_group('kitchen.group_kitchen'):
                 raise exceptions.UserError(
                     _("You can't cancel an active customization. Please, contact the kitchen staff."))
             if customization.state in ['sent', 'in_progress', 'waiting']:
@@ -179,8 +180,8 @@ class KitchenCustomization(models.Model):
             self.notify_users = [(6, 0, [self.order_id.user_id.id])]
             self.customization_line = False
             for line in self.order_id.order_line.filtered(
-                    lambda l: (l.product_id.customizable or l.product_id.erase_logo) and not l.deposit and
-                              l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes' and l.price_unit >= 0):
+                lambda l: (l.product_id.customizable or l.product_id.erase_logo) and not l.deposit and
+                          l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes' and l.price_unit >= 0):
                 if line.product_id.bom_ids and line.product_id.bom_ids[0].bom_line_ids:
                     for bom in line.product_id.bom_ids[0].bom_line_ids:
                         customization_qty = sum([x.get("product_qty", 0) for x in
@@ -283,15 +284,11 @@ class KitchenCustomization(models.Model):
         for customization in self:
             customization.reservation_status = "waiting"
             if customization.customization_line:
-                if all(
-                        [x.reservation_status and x.reservation_status != "waiting" for x in
-                         customization.customization_line]):
-                    if not customization.order_id or (
-                            customization.order_id.state == 'sale' and customization.state != 'sent'):
-                        customization.action_confirm()
+                if all([x.reservation_status and x.reservation_status != "waiting" for x in
+                        customization.customization_line]):
                     customization.reservation_status = "to customize"
-                elif customization.state == 'sent':
-                    customization.write({'state': 'waiting'})
+                else:
+                    customization.state = 'waiting'
                     customization.reservation_status = "waiting"
 
     backorder_id = fields.Many2one('kitchen.customization', ondelete='cascade')
@@ -388,27 +385,18 @@ class KitchenCustomizationLine(models.Model):
             self.sale_line_id = line.id
             self.onchange_product_qty()
 
-    reserved_qty = fields.Float(compute="_compute_reserved_qty", store=True)
-
-    @api.depends('move_ids.move_line_ids.product_id', 'move_ids.move_line_ids.product_uom_id',
-                 'move_ids.move_line_ids.product_uom_qty', 'move_ids', 'move_ids.picking_id.state')
-    def _compute_reserved_qty(self):
-        for line in self:
-            move_ids = line.move_ids.filtered(lambda m: m.state != 'cancel')
-            line.reserved_qty = sum(move_ids.mapped(
-                'reserved_availability')) if move_ids and move_ids[0].picking_id.state == 'assigned' else 0
-
     reservation_status = fields.Selection([
         ('waiting', 'Waiting Availability'),
         ('to customize', 'Fully Reserved')
     ], string='Reservation Status', compute='_compute_reservation_status', store=True,
         default='waiting')
 
-    @api.depends('reserved_qty')
+    @api.depends('move_ids.picking_id', 'move_ids.picking_id.state')
     def _compute_reservation_status(self):
         for line in self:
             line.reservation_status = "waiting"
-            if line.reserved_qty >= line.product_qty:
+            moves = line.move_ids.filtered(lambda m: m.state != 'cancel')
+            if moves and all([p.state == 'assigned' for p in moves.mapped('picking_id')]):
                 line.reservation_status = "to customize"
 
     move_ids = fields.One2many('stock.move', 'customization_line')
