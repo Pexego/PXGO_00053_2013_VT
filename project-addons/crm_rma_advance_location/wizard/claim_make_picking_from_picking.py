@@ -166,9 +166,9 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                         deposit.write({'product_uom_qty': qty})
                         old_deposit.write({'product_uom_qty': old_deposit.product_uom_qty - qty})
                     if picking_type == 'picking_input':
-                        deposit.return_deposit(claim_id=picking_id.claim_id)
+                        deposit.return_deposit(picking_claim_id=picking_id)
                     else:
-                        deposit.deposit_loss()
+                        deposit.deposit_loss(move_claim_id=n_move)
         if products:
             message = _("You shouldn't send the following products to stock due to they are 'make to order' %s. "
                         "Please check the picking (%s) carefully before validate it") % (
