@@ -90,7 +90,7 @@ class ClaimMakePicking(models.TransientModel):
     @api.multi
     def action_create_picking(self):
         if not self.env.context.get('bypass_product_incidences_advise', False):
-            incidences = self.claim_line_ids.mapped('product_id.incidence_ids').filtered(lambda i:i.warn)
+            incidences = self.claim_line_ids.mapped('claim_line_id.product_id.incidence_ids').filtered(lambda i:i.warn)
             if incidences:
                 return self.env['product.incidences.advise.wiz'].create({
                     'origin_reference':
