@@ -51,13 +51,22 @@ class StockPicking(models.Model):
                 if picking.qty == self.qty:
                     picking.action_done()
                 else:
-                    # Prior to make the partial, we put the qty done on each move
+                    pick_lines = {}
                     for move in self.move_lines:
-                        for move_es in picking.move_lines:
-                            if move.product_id.default_code == move_es.product_id.default_code:
-                                move_es.qty_ready = move.quantity_done
-                                move_es.quantity_done = move.quantity_done
-                                break
+                        # create a dict with the products and qtys, grouped by product
+                        product_code = move.product_id.default_code
+                        if product_code in pick_lines.keys():
+                            pick_lines[product_code] = pick_lines[product_code] + move.quantity_done
+                        else:
+                            pick_lines[product_code] = move.quantity_done
+                    for move_es in picking.move_lines:
+                        product_name = move_es.product_id.default_code
+                        qty_done = min(move_es.product_uom_qty, pick_lines.get(product_name, 0))
+                        move_es.qty_ready = qty_done
+                        move_es.quantity_done = qty_done
+                        if qty_done > 0:
+                            pick_lines[product_name] = pick_lines[product_name] - qty_done
+
                     picking.with_incidences = True
                     picking.move_type = 'direct'
                     picking.action_accept_ready_qty()

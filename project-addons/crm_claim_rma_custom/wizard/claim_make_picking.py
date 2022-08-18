@@ -89,6 +89,16 @@ class ClaimMakePicking(models.TransientModel):
 
     @api.multi
     def action_create_picking(self):
+        if not self.env.context.get('bypass_product_incidences_advise', False):
+            incidences = self.claim_line_ids.mapped('product_id.incidence_ids').filtered(lambda i:i.warn)
+            if incidences:
+                return self.env['product.incidences.advise.wiz'].create({
+                    'origin_reference':
+                        '%s,%s' % ('claim_make_picking.wizard', self.id),
+                    'continue_method': 'action_create_picking',
+                    'incidence_ids': [(6, 0, incidences.ids)],
+                    'claim_id': self.env.context.get('active_id')
+                }).action_show()
         res = super(ClaimMakePicking, self).action_create_picking()
         if self.odoo_management or (self.not_sync or
                                     self.claim_line_dest_location.not_sync):

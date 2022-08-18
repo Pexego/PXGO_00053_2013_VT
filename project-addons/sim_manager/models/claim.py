@@ -14,13 +14,20 @@ class ClaimMakePicking(models.TransientModel):
         move = picking_id.move_lines.filtered(lambda l: l.claim_line_id.id == claim_line_id)
         move.write({'lots_text': claim_line.prodlot_id})
 
+
+class ClaimMakePickingFromPicking(models.TransientModel):
+
+    _inherit = 'claim_make_picking_from_picking.wizard'
+
     @api.multi
-    def action_create_picking(self):
-        for wizard_claim_line in self.claim_line_ids:
-            claim_line = wizard_claim_line.claim_line_id
-            if claim_line.product_id.track_serial and not claim_line.prodlot_id:
+    def action_create_picking_from_picking(self):
+        for pick_line in self.picking_line_ids:
+            move = pick_line.move_id
+            if move.product_id.track_serial and not move.claim_line_id.prodlot_id:
                 raise UserError(_("You must specify the serial number of the serial products"))
-        res = super(ClaimMakePicking, self).action_create_picking()
+            elif move.claim_line_id.product_id.track_serial and move.claim_line_id.prodlot_id:
+                move.lots_text = move.claim_line_id.prodlot_id
+        res = super(ClaimMakePickingFromPicking, self).action_create_picking_from_picking()
         return res
 
 
