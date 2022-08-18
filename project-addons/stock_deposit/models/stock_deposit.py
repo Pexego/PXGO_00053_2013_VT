@@ -150,11 +150,15 @@ class StockDeposit(models.Model):
                  'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 
-    def return_deposit(self,claim_id=False):
+    def return_deposit(self, picking_claim_id=False):
         sorted_deposits = sorted(self, key=lambda d: d.sale_id)
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_in')
         for deposit in sorted_deposits:
+            if picking_claim_id:
+                deposit.write({'state': 'returned', 'return_picking_id': picking_claim_id.id})
+                continue
+
             location_dest_id = picking_type_id.default_location_dest_id.id
             location_id = deposit.move_id.location_dest_id.id
             if self.env.context.get("client_warehouse"):
@@ -165,8 +169,7 @@ class StockDeposit(models.Model):
             picking = self.env['stock.picking'].create({
                 'picking_type_id': picking_type_id.id,
                 'location_id': location_id,
-                'location_dest_id': location_dest_id,
-                'claim_id': claim_id.id if claim_id else False}
+                'location_dest_id': location_dest_id}
             )
             if not picking['partner_id']:
                 partner_id = deposit.partner_id.id
@@ -181,7 +184,6 @@ class StockDeposit(models.Model):
                     'partner_id': deposit.partner_id.id,
                     'location_id': location_id,
                     'location_dest_id': location_dest_id,
-                    'claim_id': claim_id.id if claim_id else False
                 })
                 partner_id = deposit.partner_id.id
                 commercial = deposit.user_id.id
@@ -237,41 +239,44 @@ class StockDeposit(models.Model):
         return True
 
     @api.multi
-    def deposit_loss(self):
+    def deposit_loss(self, move_claim_id=False):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
         deposit_loss_loc = self.env.ref('stock_deposit.stock_location_deposit_loss')
         for deposit in self:
-            group_id = deposit.sale_id.procurement_group_id
-            picking = self.env['stock.picking'].create(
-                {'picking_type_id': picking_type_id.id,
-                 'partner_id': deposit.partner_id.id,
-                 'origin': deposit.sale_id.name,
-                 'date_done': fields.Datetime.now(),
-                 'invoice_state': 'none',
-                 'commercial': deposit.user_id.id,
-                 'location_id': deposit.move_id.location_dest_id.id,
-                 'location_dest_id': deposit_loss_loc.id,
-                 'group_id': group_id.id,
-                 'not_sync': True})
-            values = {
-                'product_id': deposit.product_id.id,
-                'product_uom_qty': deposit.product_uom_qty,
-                'product_uom': deposit.product_uom.id,
-                'partner_id': deposit.partner_id.id,
-                'name': u'Loss Deposit: ' + deposit.move_id.name,
-                'location_id': deposit.move_id.location_dest_id.id,
-                'location_dest_id': deposit_loss_loc.id,
-                'invoice_state': 'none',
-                'picking_id': picking.id,
-                'commercial': deposit.user_id.id,
-                'group_id': group_id.id
-            }
-            move = move_obj.create(values)
-            move._action_confirm()
-            picking.action_assign()
-            picking.action_done()
-            deposit.write({'state': 'loss', 'loss_move_id': move.id})
+            if move_claim_id:
+                loss_move = move_claim_id
+            else:
+                group_id = deposit.sale_id.procurement_group_id
+                picking = self.env['stock.picking'].create(
+                    {'picking_type_id': picking_type_id.id,
+                     'partner_id': deposit.partner_id.id,
+                     'origin': deposit.sale_id.name,
+                     'date_done': fields.Datetime.now(),
+                     'invoice_state': 'none',
+                     'commercial': deposit.user_id.id,
+                     'location_id': deposit.move_id.location_dest_id.id,
+                     'location_dest_id': deposit_loss_loc.id,
+                     'group_id': group_id.id,
+                     'not_sync': True})
+                values = {
+                    'product_id': deposit.product_id.id,
+                    'product_uom_qty': deposit.product_uom_qty,
+                    'product_uom': deposit.product_uom.id,
+                    'partner_id': deposit.partner_id.id,
+                    'name': u'Loss Deposit: ' + deposit.move_id.name,
+                    'location_id': deposit.move_id.location_dest_id.id,
+                    'location_dest_id': deposit_loss_loc.id,
+                    'invoice_state': 'none',
+                    'picking_id': picking.id,
+                    'commercial': deposit.user_id.id,
+                    'group_id': group_id.id
+                }
+                loss_move = move_obj.create(values)
+                loss_move._action_confirm()
+                picking.action_assign()
+                picking.action_done()
+            deposit.write({'state': 'loss', 'loss_move_id': loss_move.id})
 
     @api.multi
     def create_invoice(self, journal_id=None):
