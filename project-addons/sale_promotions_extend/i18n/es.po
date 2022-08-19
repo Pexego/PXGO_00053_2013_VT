@@ -681,6 +681,12 @@ msgstr "Cambio precio de tarifa en categoría"
 #. modules: sale_promotions_extend
 #: selection:promos.rules.actions,action_type:0
 #, python-format
+msgid "Change pricelist price brand"
+msgstr "Cambio precio de tarifa en marca"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
 msgid "Discount % on not Brand accumulated"
 msgstr "Descuento % en NO marca"
 
