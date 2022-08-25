@@ -115,7 +115,7 @@ class CustomizationWizard(models.TransientModel):
                 product_previews = []
                 product_old_previews = []
                 previews = []
-                if line.mapped('type_ids').filtered(lambda t: t.preview):
+                if not self.order_id.skip_checking_previews and line.mapped('type_ids').filtered(lambda t: t.preview):
                     req = request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (partner_ref,line.original_product_id.default_code),
                                   verify=False)
                     if req.status_code != 200:

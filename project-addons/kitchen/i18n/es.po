@@ -1029,3 +1029,8 @@ msgstr "\n"
 "            <p>Saludos.</p>\n"
 "         \n"
 "        "
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_sale_order_skip_checking_previews
+msgid "Skip checking Previews"
+msgstr "Omitir comprobación de Previews"
