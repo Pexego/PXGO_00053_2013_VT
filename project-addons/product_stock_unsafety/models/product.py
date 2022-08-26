@@ -169,3 +169,18 @@ class ProductProduct(models.Model):
     min_suggested_qty = fields.Integer(
         'Min qty suggested', compute='_get_min_suggested_qty')
     seller_id = fields.Many2one('res.partner', related='seller_ids.name', store=True, string='Main Supplier')
+
+    @api.multi
+    def write(self, vals):
+        active = 'active' in vals.keys()
+        type = 'type' in vals.keys()
+        for product in self:
+            if product.orderpoint_ids and ((active and not vals.get('active')) or (type and vals.get('type') != 'product')):
+                product.orderpoint_ids.write({'active': False})
+            elif (active and vals.get('active')) or (type and vals.get('type') == 'product'):
+                orderpoints = self.env['stock.warehouse.orderpoint'].search(
+                    [('active', '=', False), ('product_id', '=', product.id)], limit=1, order='create_date DESC')
+                if orderpoints:
+                    orderpoints.write({'active': True})
+
+        return super().write(vals)

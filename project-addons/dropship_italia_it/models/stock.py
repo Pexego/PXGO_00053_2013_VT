@@ -48,3 +48,16 @@ class StockPicking(models.Model):
     def check_send_email_extended(self, vals):
         res = super(StockPicking, self).check_send_email_base(vals)
         return res or self.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship')
+
+
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    def _run_valuation(self, quantity=None):
+        res = super()._run_valuation(quantity=quantity)
+        if self._is_dropshipped():
+            self.write({
+                'price_unit': -self.price_unit,
+            })
+        return res
