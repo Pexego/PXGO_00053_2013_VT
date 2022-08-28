@@ -16,6 +16,12 @@
                 <xpath expr="//field[@name='fees_lines']/tree/field[@name='tax_id']" position="attributes">
                     <attribute name="domain">[('parent_id', '=', False), ('type_tax_use', '&lt;&gt;', 'purchase')]</attribute>
                 </xpath>
+                <field name="product_id" position="attributes">
+                    <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+                </field>
+                <xpath expr="//field[@name='operations']/tree/field[@name='product_id']" position="attributes">
+                    <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+                </xpath>
             </field>
         </record>
 
