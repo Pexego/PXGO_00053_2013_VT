@@ -13,6 +13,7 @@
     "depends": [
         "base",
         "sale",
+        "product_brand",
         "purchase",
         "account",
         "sale_stock",
@@ -31,6 +32,7 @@
     "data": [
         'views/sale_view.xml', 'views/email_purchase_template.xml',
         'data/parameters.xml', 'wizard/max_weight_advise_wiz.xml',
-        'security/sale_security.xml', 'views/sale_report_filters.xml'
+        'security/sale_security.xml', 'views/sale_report_filters.xml',
+        'views/product_view.xml'
     ],
 }
