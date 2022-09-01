@@ -9,8 +9,8 @@ class ProductTemplate(models.Model):
     weight_net = fields.Float('Net Weight', digits=dp.get_precision('Stock Weight'),
                               help="The net weight in Kg")
 
-    weight_box = fields.Float('Net Weight Box', digits=dp.get_precision('Stock Weight'),
-                              help="The net weight in Kg")
+    weight_box = fields.Float('Gross Weight Box', digits=dp.get_precision('Stock Weight'),
+                              help="The gross weight in Kg")
     volume_box = fields.Float('Volume Box', digits=dp.get_precision('Stock Weight'))
     qty_box = fields.Integer('Qty Box')
 
