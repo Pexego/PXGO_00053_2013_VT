@@ -37,7 +37,7 @@ class SaleOrderLine(models.Model):
         product_id = vals.get('product_id')
 
         line = super(SaleOrderLine, self).create(vals)
-        if product_id:
+        if product_id and not self.env.context.get('not_associated', False):
             product = product_obj.browse(product_id)
             for associated in product.associated_product_ids:
                 qty = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
@@ -56,10 +56,8 @@ class SaleOrderLine(models.Model):
                     'original_line_id': line.id,
                     'customer_lead': associated.associated_id.sale_delay or 0.0,
                     'tax_id': [(6, 0, tax_ids.ids)],
-                    'discount':discount,
-                    # TODO: migrar junto con módulo commision_report
-                    # 'agent': line.agent.id,
-                    # 'commission': line.commission.id
+                    'discount': discount,
+                    'route_id': line.route_id.id or False
                 }
                 new_line = self.create(args_line)
                 new_line.product_id_change()
@@ -69,7 +67,7 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         pricelist_obj = self.env['product.pricelist']
         fiscal_obj = self.env['account.fiscal.position']
-        if vals.get('product_id'):
+        if vals.get('product_id') and not self.env.context.get('not_associated', False):
             res = super(SaleOrderLine, self).write(vals)
             for line in self:
                 if line.assoc_line_ids:
@@ -95,10 +93,8 @@ class SaleOrderLine(models.Model):
                      'original_line_id': line.id,
                      'customer_lead': associated.associated_id.sale_delay or 0.0,
                      'tax_id': [(6, 0, tax_ids.ids)],
-                     'discount':discount,
-                     # TODO: migrar junto con módulo commision_report
-                     # 'agent': line.agent.id,
-                     # 'commission': line.commission.id
+                     'discount': discount,
+                     'route_id': line.route_id.id or False
                     }
                     new_line = self.create(args_line)
                     new_line.product_id_change()

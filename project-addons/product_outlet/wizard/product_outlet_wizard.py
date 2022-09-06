@@ -119,7 +119,8 @@ class ProductOutletWizard(models.TransientModel):
                  'default_code': product.default_code +
                                  categ_obj.browse(int(self.categ_id)).name,
                  'image_medium': product.image_medium,
-                 'barcode': self.ean13 or False})
+                 'barcode': self.ean13 or False,
+                 'purchase_ok': False})
             categ = self.env['product.category'].browse(int(self.categ_id))
             tag = self.env['product.tag'].search([('name', '=',
                                                    categ.name)])

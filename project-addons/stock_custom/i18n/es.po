@@ -704,3 +704,19 @@ msgstr "Número de Baterías"
 #: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_weight
 msgid "Weight"
 msgstr "Peso del producto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_weight_total
+msgid "Total Weight"
+msgstr "Peso total"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_num_batteries_total
+msgid "Num. Batteries Total"
+msgstr "Nº Total de Baterías"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_country_dest_id
+msgid "Country Dest"
+msgstr "País de Destino"
+
