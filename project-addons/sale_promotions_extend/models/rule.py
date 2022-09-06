@@ -178,6 +178,8 @@ class PromotionsRulesActions(models.Model):
              _('New discount line per product with tag')),
             ('change_pricelist_category',
              _('Change pricelist price category')),
+            ('change_pricelist_brand',
+             _('Change pricelist price brand')),
             ('brand_disc_perc_accumulated_reverse',
              _('Discount % on not Brand accumulated')),
             ('prod_disc_per_qty',
@@ -652,6 +654,13 @@ class PromotionsRulesActions(models.Model):
         for order_line in order.order_line:
             if eval(self.product_code) == \
                     order_line.product_id.categ_id.name:
+                self.change_pricelist_line(order_line)
+        return {}
+
+    def action_change_pricelist_brand(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) == \
+                    order_line.product_id.product_brand_id.name:
                 self.change_pricelist_line(order_line)
         return {}
 
