@@ -56,6 +56,12 @@ class StockLandedCost(models.Model):
             raise UserError(_('Not all the products have HS Code: %s') % product.default_code)
 
     @api.multi
+    def check_lines_weight(self, vals):
+        product = self.env['product.product'].browse(vals.get('product_id'))
+        if product and vals.get('weight', 0.0) == 0:
+            raise UserError(_('Not all the products have weight: %s') % product.default_code)
+
+    @api.multi
     def compute_landed_cost(self):
         AdjustementLines = self.env['stock.valuation.adjustment.lines']
         AdjustementLines.search([('cost_id', 'in', self.ids)]).unlink()
@@ -75,6 +81,10 @@ class StockLandedCost(models.Model):
             for val_line_values in all_val_line_values:
                 self.check_lines_hscode(val_line_values)
                 for cost_line in cost.cost_lines:
+                    if cost_line.split_method == 'by_weight':
+                        import ipdb
+                        ipdb.set_trace()
+                        self.check_lines_weight(val_line_values)
                     val_line_values.update({'cost_id': cost.id,
                                             'cost_line_id': cost_line.id})
                     self.env['stock.valuation.adjustment.lines'].\
