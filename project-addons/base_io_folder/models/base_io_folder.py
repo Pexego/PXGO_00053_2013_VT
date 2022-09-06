@@ -54,6 +54,7 @@ class BaseIOFolder(models.Model):
         """
         self.ensure_one()
         list = os.listdir(self.directory_path)
+        list = sorted(list)
         continue_search = max_commit_length and len(list) > max_commit_length
         if continue_search:
             list = list[:max_commit_length]

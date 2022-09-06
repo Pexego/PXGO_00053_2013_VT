@@ -209,3 +209,14 @@ msgstr "No puedes confirmar un pedido con el producto %s."
 #: model:ir.ui.view,arch_db:sale_custom.view_order_form_sync_picking
 msgid "Force generic product"
 msgstr "Forzar producto genérico"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:35
+#, python-format
+msgid "This partner cannot buy this product brand"
+msgstr "Este cliente no puede comprar esta marca de productos"
+
+#. module: sale_custom
+#: model:ir.model.fields,field_description:sale_custom.field_product_brand_category_ids
+msgid "Allow Partner Categories"
+msgstr "Permitir Categorías de Cliente"

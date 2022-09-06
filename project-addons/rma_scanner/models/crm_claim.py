@@ -68,5 +68,5 @@ class CrmClaim(models.Model):
             printer = self.env.user.default_printer
             if not printer:
                 printer = self.env['printing.printer'].search([('default', '=', True)])
-
-            self.env.ref('rma_scanner.rma_label_vt').print_label(printer, claim)
+            if printer:
+                self.env.ref('rma_scanner.rma_label_vt').print_label(printer, claim)
