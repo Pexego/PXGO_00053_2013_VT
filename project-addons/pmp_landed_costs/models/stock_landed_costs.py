@@ -82,8 +82,6 @@ class StockLandedCost(models.Model):
                 self.check_lines_hscode(val_line_values)
                 for cost_line in cost.cost_lines:
                     if cost_line.split_method == 'by_weight':
-                        import ipdb
-                        ipdb.set_trace()
                         self.check_lines_weight(val_line_values)
                     val_line_values.update({'cost_id': cost.id,
                                             'cost_line_id': cost_line.id})
