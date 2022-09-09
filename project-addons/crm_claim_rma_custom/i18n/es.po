@@ -706,6 +706,11 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_brand_id
+msgid "Brand"
+msgstr "Marca"
+
+#. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.product_add_incidences
 msgid "Incidences"
 msgstr "Incidencias"

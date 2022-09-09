@@ -652,8 +652,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_change_pricelist_category(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) == \
-                    order_line.product_id.categ_id.name:
+            if eval(self.product_code) in order_line.product_id.categ_id.display_name:
                 self.change_pricelist_line(order_line)
         return {}
 

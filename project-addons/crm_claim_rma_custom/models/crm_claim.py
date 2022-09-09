@@ -457,6 +457,7 @@ class CrmClaimLine(models.Model):
     claim_name = fields.Selection(related='claim_id.name', readonly=True)
     sequence = fields.Integer()
     deposit_id = fields.Many2one('stock.deposit', string='Deposit')
+    brand_id = fields.Many2one("product.brand", "Brand", readonly=True, related="product_id.product_brand_id")
 
     res = {}
 

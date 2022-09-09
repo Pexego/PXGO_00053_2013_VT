@@ -139,6 +139,7 @@ class KitchenCustomization(models.Model):
                     _("You can't cancel an active customization. Please, contact the kitchen staff."))
             if customization.state in ['sent', 'in_progress', 'waiting']:
                 context = {'lang': customization.commercial_id.lang,
+                           'email_from': self.env.user.login,
                            'email_to': self.commercial_id.login,
                            'email_cc': ','.join(self.notify_users.mapped('email')),
                            }
