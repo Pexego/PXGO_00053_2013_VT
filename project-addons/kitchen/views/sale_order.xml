@@ -19,6 +19,9 @@
                     <field name="customization_count_not_cancelled" invisible="1"/>
                 </button>
             </xpath>
+            <field name="company_id" position="after">
+                <field name="skip_checking_previews" groups="kitchen.admin_previews"/>
+            </field>
         </field>
     </record>
 </odoo>
