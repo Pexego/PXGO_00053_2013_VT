@@ -28,6 +28,11 @@ class SaleOrderLine(models.Model):
     def product_id_change_check_zero_quantity(self):
         if self.product_uom_qty <= 0:
             raise UserError(_('Product quantity cannot be negative or zero'))
+        if self.product_id and self.order_id and self.order_id.partner_id and self.product_id.product_brand_id:
+            product_categories = set(self.product_id.product_brand_id.category_ids)
+            partner_categories = set(self.order_id.partner_id.category_id)
+            if product_categories and not(product_categories & partner_categories):
+                raise UserError(_('This partner cannot buy this product brand'))
 
     @api.onchange('product_uom_qty', 'product_uom', 'route_id')
     def _onchange_product_id_check_availability(self):

@@ -269,5 +269,6 @@ class ReturnPicking(models.TransientModel):
     _inherit = 'stock.return.picking'
 
     def create_returns(self):
-        super(ReturnPicking, self).create_returns()
+        res = super(ReturnPicking, self).create_returns()
         self.picking_id.block_picking = False
+        return res

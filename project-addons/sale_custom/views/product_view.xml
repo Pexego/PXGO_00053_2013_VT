@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <record id="product_brand_add_categories" model="ir.ui.view">
+        <field name="name">product.brand.add.categories.form</field>
+        <field name="model">product.brand</field>
+        <field name="inherit_id" ref="product_brand.view_product_brand_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="category_ids" widget="many2many_tags"/>
+            </field>
+        </field>
+    </record>
+</odoo>
