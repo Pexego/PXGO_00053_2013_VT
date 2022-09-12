@@ -164,8 +164,11 @@ class AmazonSaleOrder(models.Model):
         state_index = headers.index('"Ship To State"')
         country_index = headers.index('"Ship To Country"')
         zip_index = headers.index('"Ship To Postal Code"')
-        for order in orders:
+        orders_len = len(orders)
+        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
+        for count, order in enumerate(orders):
             order = re.split(r',\s*(?![^"]*\"\,)', order)
+            order_number = count + 1
             if order[transaction_type_index] == "SHIPMENT":
                 order_name = order[order_name_index]
                 exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
@@ -276,6 +279,8 @@ class AmazonSaleOrder(models.Model):
                             amazon_order.send_error_mail()
                         if not only_read:
                             amazon_order.process_order()
+            if (order_number >= max_commit_len and order_number % max_commit_len == 0) or order_number == orders_len:
+                self.env.cr.commit()
 
     @api.multi
     def retry_order(self):

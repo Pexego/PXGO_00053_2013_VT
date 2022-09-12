@@ -77,12 +77,19 @@ class StockPicking(models.Model):
                 bck.customization_ids.create_backorder_customization(bck.move_lines)
                 bck.not_sync = True
                 bck.message_post(
-                    body=_('This picking has been created from an order with customized products'))
+                    body=_('This picking has been crFeated from an order with customized products'))
             elif bck.customization_ids:
                 bck.not_sync = True
                 if not ((pick.group_id and pick.group_id.sale_id and pick.group_id.sale_id.not_sync_picking)
-                        or (pick.scheduled_shipping_date and datetime.strptime(pick.scheduled_shipping_date, '%Y-%m-%d %H:%M:%S') > datetime.now())):
+                        or (pick.scheduled_shipping_date and datetime.strptime(pick.scheduled_shipping_date,
+                                                                               '%Y-%m-%d %H:%M:%S') > datetime.now())):
                     pick.not_sync = False
+            elif pick.customization_ids:
+                pick.not_sync = True
+                if not ((bck.group_id and bck.group_id.sale_id and bck.group_id.sale_id.not_sync_picking)
+                        or (bck.scheduled_shipping_date and datetime.strptime(pick.scheduled_shipping_date,
+                                                                               '%Y-%m-%d %H:%M:%S') > datetime.now())):
+                    bck.not_sync = False
         return bcks
 
     @api.multi
