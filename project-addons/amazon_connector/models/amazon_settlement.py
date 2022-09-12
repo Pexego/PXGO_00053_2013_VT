@@ -305,7 +305,7 @@ class AmazonSettlement(models.Model):
                 settlement._reconcile_amazon_settlement_lines(line_refund_ids, amazon_max_difference_allowed,
                                                               refund_mode=True)
 
-    def _create_move(self, total_amount, partner_id, refund_mode=False):
+    def _create_move(self, total_amount, total_difference, partner_id, refund_mode=False):
         journal_id = self.env['account.journal'].search([('code', '=', 'AMAZ'), ('name', '=', 'Amazon')])
         vals = {'journal_id': journal_id.id,
                 'date': datetime.now()
@@ -316,6 +316,7 @@ class AmazonSettlement(models.Model):
         else:
             vals.update({'ref': "Devoluciones desde web Amazon",
                          'amazon_refund_settlement_id': self.id})
+
         move = self.env['account.move'].create(vals)
         account_430 = self.env['account.account'].search(
             [('code', '=', '43000000'), ('company_id', '=', self.env.user.company_id.id)])
@@ -350,9 +351,31 @@ class AmazonSettlement(models.Model):
                 'account_id': account_trans.id,
                 'debit': total_amount,
             }
+        move_lines = []
+        if total_difference:
+            if total_difference > 0:
+                account_difference = self.env['account.account'].search(
+                    [('code', '=', '66800001'), ('company_id', '=', self.env.user.company_id.id)])
+
+                values_difference = {'name': "Cambio de divisa", 'account_id': account_difference.id,
+                                     'debit': abs(total_difference)}
+
+            else:
+                account_difference = self.env['account.account'].search(
+                    [('code', '=', '76800001'), ('company_id', '=', self.env.user.company_id.id)])
+
+                values_difference = {'name': "Cambio de divisa", 'account_id': account_difference.id,
+                                     'credit': abs(total_difference)}
+            if refund_mode:
+                values_trans['credit'] = values_trans['credit'] - total_difference
+            else:
+                values_trans['debit'] = values_trans['debit'] - total_difference
+            values_difference.update(values)
+            move_lines.append(values_difference)
         values_430.update(values)
         values_trans.update(values)
-        move_lines = [values_trans, values_430]
+        move_lines.append(values_trans)
+        move_lines.append(values_430)
         move.line_ids = [(0, 0, x) for x in move_lines]
         move.post()
         return move
@@ -362,8 +385,9 @@ class AmazonSettlement(models.Model):
         states = ['cancel']
         lines_with_products = {}
         moves = {}
-        partner_lines ={}
-        partner_amount= {}
+        partner_lines = {}
+        partner_amount = {}
+        partner_difference = {}
         lines_with_moves = self.env['amazon.settlement.line']
         if not refund_mode:
             states += ['paid']
@@ -406,7 +430,10 @@ class AmazonSettlement(models.Model):
                     line.settlement_id.company_currency_id,
                     line.settlement_id.currency_id)
                 positive_events = abs(line.amount_items_positive_events) / rate
-                if abs(theoretical_amount) - positive_events <= amazon_max_difference_allowed:
+                difference = abs(theoretical_amount) - positive_events
+                allow_difference = difference <= amazon_max_difference_allowed
+                different_currency = line.currency_id != line.settlement_id.company_currency_id
+                if allow_difference or different_currency:
                     if line.move_id:
                         lines_with_moves |= line
                         if moves.get(line.move_id, False):
@@ -415,12 +442,16 @@ class AmazonSettlement(models.Model):
                             moves[line.move_id] = line
                     else:
                         invoice_partner = amazon_invoice.partner_id
-                        if partner_lines.get(invoice_partner,False):
+                        if partner_lines.get(invoice_partner, False):
                             partner_lines[invoice_partner] |= line
                             partner_amount[invoice_partner] += theoretical_amount
+                            if different_currency and difference != 0:
+                                partner_difference[invoice_partner] += difference
                         else:
                             partner_lines[invoice_partner] = line
                             partner_amount[invoice_partner] = theoretical_amount
+                            if different_currency and difference != 0:
+                                partner_difference[invoice_partner] = difference
                 else:
                     if theoretical_amount > 0:
                         line.error = _('Total amount != Theoretical total amount (%f-%f)\n') % (
@@ -439,7 +470,8 @@ class AmazonSettlement(models.Model):
         for p, lines_group_by_partner in partner_lines.items():
             total_amount = partner_amount.get(p)
             if total_amount > 0:
-                move = self._create_move(total_amount, p, refund_mode)
+                total_difference = partner_difference.get(p, False)
+                move = self._create_move(total_amount, total_difference, p, refund_mode)
                 lines_group_by_partner.write({'move_id': move.id})
                 if refund_mode:
                     lines_group_by_partner.reconcile_refund_lines(move, lines_with_products)

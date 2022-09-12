@@ -33,6 +33,9 @@
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="after">
                 <field name="tariff" readonly="1"/>
             </xpath>
+            <xpath expr="//field[@name='cost_lines']/tree/field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+            </xpath>
             <field name="picking_ids" position="attributes">
                 <attribute name="domain">[('state', '=', 'done'),('picking_type_code', '=', 'incoming')]</attribute>
             </field>

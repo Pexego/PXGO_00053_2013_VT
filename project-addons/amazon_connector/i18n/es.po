@@ -1428,7 +1428,7 @@ msgstr "Status of the returned product. Meaning:\n"
 "                           Disposition           Description\n"
 "                            SELLABLE              La unidad se devolvió a tu inventario y está disponible de nuevo para la compra.\n"
 "                                                       \n"
-"                            DAMAGED               Amazon se responsabiliza de los daños. Propiedad transferida a Amazon. Amazon te compensa según la
+"                            DAMAGED               Amazon se responsabiliza de los daños. Propiedad transferida a Amazon. Amazon te compensa según la"
 "                                                  Política de reembolso por inventario extraviado o dañado de Logística de Amazon..\n"
 "                                                  \n"
 "                            CUSTOMER DAMAGED      La unidad se devolvió a tu inventario como "no apta para venta". Esto no significa necesariamente que el propio producto
@@ -1602,7 +1602,7 @@ msgstr "no es posible encontrar un pedido de amazon con este nombre '%s' \n"
 #: code:addons/amazon_connector/models/amazon_returns.py:246
 #, python-format
 msgid "Unable to find product with this ASIN '%s'\n"
-msgstr No es posible encontrar un producto con este ASIN '%s'\n"
+msgstr "No es posible encontrar un producto con este ASIN '%s'\n"
 
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
