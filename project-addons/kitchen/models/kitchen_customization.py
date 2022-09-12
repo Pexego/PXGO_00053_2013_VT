@@ -162,7 +162,7 @@ class KitchenCustomization(models.Model):
             partner_ref = self.order_id.partner_id.ref
             for line in self.customization_line.filtered(lambda l:l.preview_selector):
                 req = requests.request('POST', previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                    partner_ref, line.product_id.default_code),verify=False)
+                    partner_ref, line.product_id.default_code))
                 if req.status_code != 200:
                     raise exceptions.UserError(
                         _("There are no previews for this partner and this product %s") % line.product_id.default_code)
@@ -302,8 +302,8 @@ class KitchenCustomization(models.Model):
             partner_ref = self.order_id.partner_id.ref
             for line in lines:
                 req = requests.request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                partner_ref, line.product_id.default_code), verify=False)
-                if req.status_code != 200:
+                partner_ref, line.product_id.default_code))
+                if req.status_code != 200 or len(req.json())==0:
                     raise exceptions.UserError(_("There are no previews for this partner and this product %s") % line.product_id.default_code)
                 previews = req.json()
                 new_previews = [x.get('status') == 'Approved' for x in previews]
