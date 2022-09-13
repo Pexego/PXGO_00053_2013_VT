@@ -456,7 +456,7 @@ class KitchenCustomizationPreview(models.Model):
     _name = 'kitchen.customization.preview'
 
     name = fields.Char()
-    photo = fields.Binary()
+    photo = fields.Binary(attachment=True)
     url = fields.Char()
     line_id = fields.Many2one('kitchen.customization.line')
     status = fields.Char()
