@@ -19,6 +19,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _, exceptions
+from datetime import datetime, timedelta
 
 
 class StockContainer(models.Model):
@@ -137,6 +138,16 @@ class StockContainer(models.Model):
                 responsible = self.env['sale.order'].search([('name', '=', container.origin)]).user_id
             container.user_id = responsible
 
+    @api.depends('conf', 'date_expected', 'eta')
+    def _get_order_date(self):
+        for container in self:
+            if container.conf and container.date_expected:
+                container.date_to_order = datetime.strptime(container.date_expected, "%Y-%m-%d") + timedelta(days=365)
+            elif not container.conf and container.eta:
+                container.date_to_order = container.eta
+            else:
+                container.date_to_order = '2000-01-01'
+
     name = fields.Char("Container Ref.", required=True)
     date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
                                     store=True, readonly=False, required=False)
@@ -147,6 +158,8 @@ class StockContainer(models.Model):
     user_id = fields.Many2one(string='Responsible', compute='_get_responsible')
     company_id = fields.Many2one("res.company", "Company", required=True,
                                  default=lambda self: self.env['res.company']._company_default_get('stock.container'))
+
+    date_to_order = fields.Date(compute='_get_order_date', store=True)
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Container name must be unique')
