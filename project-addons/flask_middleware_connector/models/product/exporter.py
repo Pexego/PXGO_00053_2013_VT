@@ -1,7 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.addons.component.core import Component
-
+import datetime
 
 class ProductProductExporter(Component):
     _name = 'product.product.exporter'
@@ -40,7 +40,8 @@ class ProductProductExporter(Component):
             'state': binding.state,
             'sale_in_groups_of': binding.sale_in_groups_of,
             'replacement_id': binding.replacement_id.id,
-            'date_next_incoming': binding.compute_date_next_incoming(),
+            'date_next_incoming': binding.date_next_incoming if binding.date_next_incoming else (
+                    datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S"),
             'weight': binding.weight,
             'volume': binding.volume,
             'cost_price': binding.standard_price_2_inc,
@@ -77,7 +78,6 @@ class ProductProductExporter(Component):
 
 
 class ProductProductAdapter(Component):
-
     _name = 'product.general.adapter'
     _inherit = 'middleware.adapter'
     _apply_on = 'product.product'
@@ -105,7 +105,6 @@ class ProductCategoryExporter(Component):
 
 
 class ProductCategoryAdapter(Component):
-
     _name = 'productcategory.general.adapter'
     _inherit = 'middleware.adapter'
     _apply_on = 'product.category'
@@ -121,7 +120,7 @@ class ProductBrandExporter(Component):
     def update(self, binding, mode):
         vals = {"name": binding.name,
                 "odoo_id": binding.id,
-                "no_csv":binding.no_csv,}
+                "no_csv": binding.no_csv, }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
@@ -132,7 +131,6 @@ class ProductBrandExporter(Component):
 
 
 class ProductBrandAdapter(Component):
-
     _name = 'productbrand.general.adapter'
     _inherit = 'middleware.adapter'
     _apply_on = 'product.brand'
@@ -161,7 +159,6 @@ class ProductbrandRelExporter(Component):
 
 
 class ProductbrandRelAdapter(Component):
-
     _name = 'productbrandcountryrel.general.adapter'
     _inherit = 'middleware.adapter'
     _apply_on = 'brand.country.rel'
@@ -189,7 +186,6 @@ class ProductTagExporter(Component):
 
 
 class ProductTagAdapter(Component):
-
     _name = 'producttag.general.adapter'
     _inherit = 'middleware.adapter'
     _apply_on = 'product.tag'

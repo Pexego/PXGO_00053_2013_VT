@@ -175,14 +175,20 @@ class ProductProduct(models.Model):
             return exporter.delete_product_tag_rel(self)
         return True
 
+    @api.multi
     def compute_date_next_incoming(self):
-        moves = self.env['stock.move'].search(
-            [('product_id', '=', self.id), ('purchase_line_id', '!=', False), ('state', 'not in', ['cancel','done']),
-             ('location_dest_id.usage', 'like', 'internal'),'|',('picking_id','!=',False),('container_id','!=',False)]).sorted(
-            key=lambda m: m.date_expected and m.date_reliability)
-        if moves:
-            return moves[0].date_expected
-        return (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
+        for product in self:
+            product.date_next_incoming = False
+            moves = self.env['stock.move'].search(
+                [('product_id', '=', product.id), ('purchase_line_id', '!=', False),
+                 ('state', 'not in', ['cancel', 'done']),
+                 ('location_dest_id.usage', 'like', 'internal'), '|', ('picking_id', '!=', False),
+                 ('container_id', '!=', False)]).sorted(
+                key=lambda m: m.date_expected and m.date_reliability)
+            if moves:
+                product.date_next_incoming = moves[0].date_expected
+
+    date_next_incoming = fields.Datetime(compute="compute_date_next_incoming")
 
 
 class ProductCategoryListener(Component):

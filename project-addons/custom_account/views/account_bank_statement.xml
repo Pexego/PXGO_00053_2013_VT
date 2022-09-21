@@ -9,6 +9,9 @@
                 <field name="state" invisible="1"/>
                 <button name="action_launch_ignore" attrs="{'invisible': ['|',('journal_entry_ids', '!=', []), ('state', '=', 'confirm')]}" string="Ignore" type="object" icon="fa fa-close text-danger"/>
             </xpath>
+            <xpath expr="//sheet/notebook/page/field[@name='line_ids']/tree/field[@name='partner_id']" position="attributes">
+                 <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+            </xpath>
         </field>
     </record>
 
