@@ -112,3 +112,9 @@ msgstr "Prezzo d'aquisto (unità)"
 #, python-format
 msgid "Not all the products have HS Code: %s"
 msgstr "Non tutti i prodotti hanno il codice HS: %s"
+
+#. module: pmp_landed_costs
+#: code:addons/pmp_landed_costs/models/stock_landed_costs.py:66
+#, python-format
+msgid "Not all the products have weight: %s"
+msgstr "Non tutti i prodotti hanno il peso: %s"

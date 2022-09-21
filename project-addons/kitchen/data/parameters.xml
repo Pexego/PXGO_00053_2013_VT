@@ -4,4 +4,8 @@
         <field name="key">kitchen.picking.message</field>
         <field name="value">PERSONALIZADO</field>
     </record>
+    <record id="kitchen_previews_url" model="ir.config_parameter">
+        <field name="key">kitchen.previews.url</field>
+        <field name="value">https://personalizaciones.visiotechsecurity.com/odoo/</field>
+    </record>
 </odoo>

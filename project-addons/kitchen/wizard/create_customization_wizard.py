@@ -1,6 +1,7 @@
 from odoo import models, fields, api, exceptions, _
 
 from odoo.exceptions import UserError
+from requests import request
 
 
 class CustomizationLine(models.TransientModel):
@@ -79,6 +80,11 @@ class CustomizationWizard(models.TransientModel):
                                                                              (6, 0, self.notify_users.ids)],
                                                                          'notify_sales_team': self.notify_sales_team
                                                                          })
+        old_previews = ""
+        products_error_state = {}
+        partner_ref = self.order_id.partner_id.ref
+        previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+
         for line in self.customization_line:
             qty = line.qty
             if not line.type_ids and not line.product_erase_logo:
@@ -106,8 +112,38 @@ class CustomizationWizard(models.TransientModel):
                 raise UserError(_(
                     "You can't create a customization with a bigger quantity of the product than what appears in the order: %s") % line.original_product_id.default_code)
             elif qty > 0:
-                lines += customization.create_line(line.original_product_id, qty, line)
+                product_previews = []
+                product_old_previews = []
+                previews = []
+                if not self.order_id.skip_checking_previews and line.mapped('type_ids').filtered(lambda t: t.preview):
+                    req = request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (partner_ref,line.original_product_id.default_code))
+                    if req.status_code != 200 or len(req.json())==0:
+                        raise UserError(_("There are no previews for this partner and this product %s") % line.original_product_id.default_code)
+                    previews = req.json()
+                for prev in previews:
+                    state = prev.get('status', False)
+                    if state == 'Approved':
+                        product_previews.append(prev)
+                    elif state == 'OldPreview':
+                        product_old_previews.append(prev)
+                    else:
+                        products_error_state[line.original_product_id.default_code] = state
+
+                    if product_previews and line.original_product_id.default_code in products_error_state:
+                        del products_error_state[line.original_product_id.default_code]
+                if not product_previews and product_old_previews:
+                    product_previews = product_old_previews
+                    old_previews += line.original_product_id.default_code
+                    if line.original_product_id.default_code in products_error_state:
+                        del products_error_state[line.original_product_id.default_code]
+                if not products_error_state:
+                    lines += customization.create_line(line.original_product_id, qty, line, product_previews)
+        if products_error_state:
+            raise UserError(_("There are no active previews of these products: %s" %str(products_error_state)))
         if lines:
+            if old_previews:
+                template = self.env.ref('kitchen.send_mail_old_previews')
+                template.with_context({'lang': 'es_ES', 'old_previews': old_previews}).send_mail(customization.id)
             return {
                 'view_type': 'form',
                 'view_mode': 'form',

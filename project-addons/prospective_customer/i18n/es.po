@@ -78,3 +78,9 @@ msgstr "Email del contacto"
 #: model:ir.ui.view,arch_db:prospective_customer.sale_order_add_prospective_form
 msgid "Leads"
 msgstr "Oportunidades"
+
+#. module: prospective_customer
+#: code:addons/prospective_customer/models/res_partner.py:34
+#, python-format
+msgid "You cannot check prospective and active checks at the same time"
+msgstr "No puedes marcar los checks de Potencial y Activo a la misma vez"

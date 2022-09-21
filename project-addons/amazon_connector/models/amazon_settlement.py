@@ -411,7 +411,7 @@ class AmazonSettlement(models.Model):
                                 lambda il: il.product_id == product[0])
                             if invoice_line:
                                 invoice_line = invoice_line[0]
-                                i_price_unit = invoice_line.price_unit
+                                i_price_unit = invoice_line.price_total / invoice_line.quantity
                                 i_uds = round(abs(sum(
                                     item.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped(
                                         'amount'))) / i_price_unit)
@@ -432,7 +432,7 @@ class AmazonSettlement(models.Model):
                 positive_events = abs(line.amount_items_positive_events) / rate
                 difference = abs(theoretical_amount) - positive_events
                 allow_difference = difference <= amazon_max_difference_allowed
-                different_currency = line.currency_id != line.settlement_id.company_currency_id
+                different_currency = line.settlement_id.currency_id != line.settlement_id.company_currency_id
                 if allow_difference or different_currency:
                     if line.move_id:
                         lines_with_moves |= line
