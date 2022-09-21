@@ -116,6 +116,11 @@ class StockDeposit(models.Model):
             d.claim_move_id = move_id
 
     @api.multi
+    def set_draft(self):
+        for d in self:
+            d.state = 'draft'
+
+    @api.multi
     def sale(self):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
