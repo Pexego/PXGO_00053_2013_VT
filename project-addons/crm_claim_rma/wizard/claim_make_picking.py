@@ -31,6 +31,7 @@ class ClaimMakePickingLine(models.TransientModel):
     product_qty = fields.Float()
     deposit_id = fields.Many2one('stock.deposit')
     claim_line_id = fields.Many2one('claim.line')
+    equivalent_product_id = fields.Many2one('product.product')
 
 
 class ClaimMakePicking(models.TransientModel):
@@ -76,6 +77,7 @@ class ClaimMakePicking(models.TransientModel):
             product_moves_qty = sum(moves.mapped('product_uom_qty'))
             if product_moves_qty < line.product_returned_quantity:
                 good_lines.append({'product_id': line.product_id.id,
+                                   'equivalent_product_id': line.equivalent_product_id.id,
                                    'product_qty': line.product_returned_quantity - product_moves_qty,
                                    'claim_line_id': line.id,
                                    'deposit_id': line.deposit_id.id,
@@ -129,8 +131,7 @@ class ClaimMakePicking(models.TransientModel):
         product = claim_line.product_id
         context = self.env.context
         qty = wizard_line.product_qty
-        if context.get('picking_type', 'in') == u'out':
-            if claim_line.equivalent_product_id:
+        if context.get('picking_type', 'in') == u'out' and claim_line.equivalent_product_id:
                 product = claim_line.equivalent_product_id
         move_id = move_obj.create(
             {'name': product.name,
@@ -170,7 +171,8 @@ class ClaimMakePicking(models.TransientModel):
             if claim_line.product_returned_quantity - product_moves_qty - line.product_qty < 0:
                 raise exceptions.UserError(_("It is not possible to create pickings with more units than there are in "
                                              "the RMA"))
-        if self.env.context.get('picking_type') == 'in':
+        p_type=self.env.context.get('picking_type')
+        if p_type in ['in','out']:
             lines_with_deposits = self.claim_line_ids.filtered(lambda c: c.claim_line_id.deposit_id)
             if lines_with_deposits:
                 pick = self.create_picking(lines_with_deposits, deposit_mode=True)
@@ -181,8 +183,11 @@ class ClaimMakePicking(models.TransientModel):
                         new_deposit = deposit.copy()
                         new_deposit.write({'product_uom_qty': deposit.product_uom_qty - line.product_qty})
                         deposit.write({'product_uom_qty': line.product_qty})
-                    move = pick.move_lines.filtered(lambda m: m.claim_line_id == line.claim_line_id)
-                    deposit.set_rma(move)
+                    if p_type == 'in':
+                        move = pick.move_lines.filtered(lambda m: m.claim_line_id == line.claim_line_id)
+                        deposit.set_rma(move)
+                    else:
+                        deposit.set_draft()
 
         lines = self.claim_line_ids - lines_with_deposits
         if lines:
@@ -208,15 +213,19 @@ class ClaimMakePicking(models.TransientModel):
         claim = claim_obj.browse(context['active_id'])
         partner_id = claim.delivery_address_id
         not_sync = False
-        if context.get('picking_type') == 'out':
+        picking_type = context.get('picking_type',"")
+        if picking_type == 'out':
             p_type = 'outgoing'
         else:
             p_type = 'incoming'
             not_sync = True
-            if context.get('picking_type', False):
-                note = 'RMA picking ' + str(p_type)
-                if claim_lines and deposit_mode:
-                    location_id = claim_lines[0].claim_line_id.deposit_id.move_id.location_dest_id
+            note = 'RMA picking ' + str(p_type)
+        if claim_lines and deposit_mode:
+            deposit = claim_lines[0].claim_line_id.deposit_id
+            if picking_type == 'in':
+                location_id = deposit.move_id.location_dest_id
+            elif picking_type == 'out':
+                location_dest_id = deposit.move_id.location_dest_id
 
         # create picking
         type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)])

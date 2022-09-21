@@ -997,6 +997,7 @@ msgstr "Reparaciones"
 
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_equivalent_product_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_equivalent_product_id
 msgid "Replacement"
 msgstr "Reemplazo"
 
