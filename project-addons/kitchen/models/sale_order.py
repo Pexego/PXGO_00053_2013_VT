@@ -80,6 +80,8 @@ class SaleOrder(models.Model):
                 }).action_show()
         return super(SaleOrder, self).action_confirm()
 
+    skip_checking_previews = fields.Boolean("Skip checking Previews")
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'

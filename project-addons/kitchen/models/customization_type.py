@@ -7,3 +7,5 @@ class KitchenCustomization(models.Model):
     name = fields.Char('Name')
 
     rule_ids = fields.One2many('automatic.customization.type.rule','type_id')
+
+    preview = fields.Boolean()
