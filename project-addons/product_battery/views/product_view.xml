@@ -12,6 +12,9 @@
                 <field name="num_batteries" attrs="{'required':[('battery_id','!=',False),('battery_id','!=',%(product_battery.no_battery)d),('state','!=','end')],
                 'readonly':['|',('battery_id','=',False),('battery_id','=',%(product_battery.no_battery)d)]}"/>
             </group>
+            <field name="company_id" position="before">
+                    <field name="batt_origin"/>
+            </field>
         </field>
     </record>
 </odoo>
