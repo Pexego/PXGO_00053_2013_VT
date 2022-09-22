@@ -32,6 +32,10 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="attributes">
+                    <attribute name="sum">Total Qty.</attribute>
+                </xpath>
+
                 <field name="notes" position="after">
                     <field name="sale_notes" class="oe_inline" placeholder="Purchase Sale Notes" nolabel="1"/>
                 </field>
