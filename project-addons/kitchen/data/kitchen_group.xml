@@ -4,5 +4,8 @@
         <record id="group_kitchen" model="res.groups">
             <field name="name">Kitchen</field>
         </record>
+        <record id="admin_previews" model="res.groups">
+            <field name="name">Admin Previews</field>
+        </record>
     </data>
 </odoo>

@@ -18,7 +18,8 @@
 #
 ##############################################################################
 
-from odoo import models, fields
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 class ResPartner(models.Model):
@@ -26,4 +27,9 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     prospective = fields.Boolean("Prospective")
+
+    @api.onchange('prospective', 'active')
+    def _onchange_prospective_or_active(self):
+        if self.prospective and self.active:
+            raise UserError(_("You cannot check prospective and active checks at the same time"))
 

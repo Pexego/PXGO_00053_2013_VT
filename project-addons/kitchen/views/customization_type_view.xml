@@ -19,6 +19,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="preview"/>
                     </group>
                     <group>
                         <field name="rule_ids">
