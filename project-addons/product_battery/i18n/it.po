@@ -34,6 +34,26 @@ msgid "Notes"
 msgstr "Note"
 
 #. module: product_battery
+#: model:ir.model.fields,field_description:product_battery.field_product_template_batt_origin
+msgid "Origin"
+msgstr "Origine"
+
+#. module: product_battery
+#: selection:product.template,batt_origin:0
+msgid "Extra Community"
+msgstr "Extracomunitario"
+
+#. module: product_battery
+#: selection:product.template,batt_origin:0
+msgid "Intra Community"
+msgstr "Intracomunitario"
+
+#. module: product_battery
+#: selection:product.template,batt_origin:0
+msgid "National"
+msgstr "Nazionale"
+
+#. module: product_battery
 #: model:ir.actions.act_window,help:product_battery.action_battery
 msgid "Manage the battery types"
 msgstr "Gestire i tipi di batteria"

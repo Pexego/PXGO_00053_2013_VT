@@ -73,7 +73,7 @@
                                     />
                                     <field name="name"/>
                                     <field name="move_dest_ids" invisible="1"/>
-                                    <field name="product_qty"/>
+                                    <field name="product_qty" sum="Total Qty."/>
                                     <field name="production_qty"/>
                                     <field name="split_qty"/>
                                     <field name="shipment_qty"/>
