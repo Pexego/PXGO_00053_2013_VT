@@ -62,6 +62,26 @@ msgid "Is Battery"
 msgstr "Es Batería"
 
 #. module: product_battery
+#: model:ir.model.fields,field_description:product_battery.field_product_template_batt_origin
+msgid "Origin"
+msgstr "Procedencia"
+
+#. module: product_battery
+#: selection:product.template,batt_origin:0
+msgid "Extra Community"
+msgstr "Extracomunitario"
+
+#. module: product_battery
+#: selection:product.template,batt_origin:0
+msgid "Intra Community"
+msgstr "Intracomunitario"
+
+#. module: product_battery
+#: selection:product.template,batt_origin:0
+msgid "National"
+msgstr "Nacional"
+
+#. module: product_battery
 #: selection:product.template,battery_mode:0
 msgid "Contains Battery"
 msgstr "Contiene Batería"
