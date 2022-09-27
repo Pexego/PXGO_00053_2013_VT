@@ -12,3 +12,9 @@ class ProductTemplate(models.Model):
         string='Battery Mode',
         selection=[('is_battery', 'Is Battery'),
                    ('contains_battery', 'Contains Battery')])
+
+    batt_origin = fields.Selection(
+        string='Origin',
+        selection=[('extra', 'Extra Community'),
+                   ('intra', 'Intra Community'),
+                   ('national', 'National')])
