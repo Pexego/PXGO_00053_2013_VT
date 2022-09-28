@@ -22,6 +22,10 @@ from odoo import models, api, fields, exceptions, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
+class ClaimMakePickingLine(models.TransientModel):
+    _inherit = "claim.make.picking.wizard.line"
+
+    sequence = fields.Integer()
 
 class ClaimMakePicking(models.TransientModel):
 
@@ -128,3 +132,15 @@ class ClaimMakePicking(models.TransientModel):
                 raise exceptions.Warning(
                     _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
         return super(ClaimMakePicking, self).default_get(vals)
+
+    @api.model
+    def _get_claim_lines(self):
+        res_lines = super(ClaimMakePicking, self)._get_claim_lines()
+        for line in res_lines:
+            claim_line_id = self.env['claim.line'].browse(line.get('claim_line_id'))
+            line['sequence'] = claim_line_id.sequence
+        return res_lines
+
+    claim_line_ids = fields.Many2many(
+        'claim.make.picking.wizard.line',
+        string='Claim lines', default=_get_claim_lines)
