@@ -30,6 +30,16 @@ class ClaimMakePickingLine(models.TransientModel):
     product_id = fields.Many2one('product.product')
     product_qty = fields.Float()
     deposit_id = fields.Many2one('stock.deposit')
+    prodlot_id = fields.Char(
+            string='Serial/Lot n°',
+            help="The serial/lot of the returned product")
+    substate_id = fields.Many2one(
+        'substate.substate',
+        string='Sub state',
+        help="Select a sub state to precise the standard state. Example 1:"
+             " state = refused; substate could be warranty over, not in "
+             "warranty, no problem,... . Example 2: state = to treate; "
+             "substate could be to refund, to exchange, to repair,...")
     claim_line_id = fields.Many2one('claim.line')
     equivalent_product_id = fields.Many2one('product.product')
 
@@ -64,7 +74,10 @@ class ClaimMakePicking(models.TransientModel):
         context = self.env.context
         line_obj = self.env['claim.line']
         good_lines = []
-        line_ids = line_obj.search([('claim_id', '=', context['active_id'])])
+        domain = [('claim_id', '=', context['active_id'])]
+        if context.get('picking_type') == 'out':
+            domain += [('deposit_id','=',False)]
+        line_ids = line_obj.search(domain)
         for line in line_ids:
             if context.get('picking_type') == 'out':
                 moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
@@ -81,6 +94,8 @@ class ClaimMakePicking(models.TransientModel):
                                    'product_qty': line.product_returned_quantity - product_moves_qty,
                                    'claim_line_id': line.id,
                                    'deposit_id': line.deposit_id.id,
+                                   'substate_id': line.substate_id.id,
+                                   'prodlot_id': line.prodlot_id
                                    })
         if not good_lines:
             raise exceptions.UserError(_('All units are already processed'))

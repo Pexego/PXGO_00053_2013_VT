@@ -10,19 +10,21 @@
         <field name="model">claim_make_picking.wizard</field>
         <field name="arch" type="xml">
             <form string="Select exchange lines to add in picking" >
-                <separator string="Locations" colspan="4" invisible="context.get('product_return', False)"/>
-                <group invisible="context.get('product_return', False)">
-                    <field name="claim_line_source_location" colspan="4" nolabel="1"/>
-                    <field name="claim_line_dest_location" colspan="4" nolabel="1"/>
+                <separator string="Locations" invisible="context.get('product_return', False)"/>
+                <group name="locations" invisible="context.get('product_return', False)">
+                    <field name="claim_line_source_location" string="Source location"/>
+                    <field name="claim_line_dest_location" string="Dest. location" readonly="1" />
                 </group>
                 <separator string="Select lines for picking" colspan="4"/>
                 <field name="claim_line_ids" nolabel="1" colspan="4" >
                     <tree string="Returned lines" create="false" delete="true" editable="top">
                         <field name="claim_line_id" invisible="1"/>
                         <field name="product_id" readonly="1"/>
-                        <field name="equivalent_product_id" readonly="1"/>
+                        <field name="equivalent_product_id" readonly="1" invisible="context.get('product_return', False)"/>
                         <field name="product_qty"/>
-                        <field name="deposit_id" readonly="1"/>
+                        <field name="prodlot_id" readonly="1"/>
+                        <field name="deposit_id" readonly="1" invisible="context.get('product_out', False)"/>
+                        <field name="substate_id" readonly="1" invisible="context.get('product_return', False)"/>
                     </tree>
                 </field>
                 <footer>
@@ -52,7 +54,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="context">{'picking_type': 'out'}</field>
+        <field name="context">{'picking_type': 'out', 'product_out': True}</field>
     </record>
 
 </odoo>
