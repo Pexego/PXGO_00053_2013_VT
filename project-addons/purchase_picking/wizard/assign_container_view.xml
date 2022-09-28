@@ -7,7 +7,7 @@
             <form string="Assign container">
                 <group>
                     <group>
-                        <field name="container_id"/>
+                        <field name="container_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                     </group>
                 </group>
                 <footer>
