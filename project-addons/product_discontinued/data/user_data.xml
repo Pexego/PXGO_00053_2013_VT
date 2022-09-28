@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record model="res.partner" id="support_team_partner">
+            <field name="name">Support Team</field>
+            <field name="customer" eval="False"/>
+            <field name="email">supporteam@visiotechsecurity.com</field>
+            <field name="email2">supporteam@visiotechsecurity.com</field>
+            <field name="delivery_type">installations</field>
+    </record>
+    <record model="res.users" id="support_team_user">
+        <field name="name">Support Team</field>
+        <field name="login">supporteam@visiotechsecurity.com</field>
+        <field name="lang">es_ES</field>
+        <field name="partner_id" ref="product_discontinued.support_team_partner"/>
+    </record>
+</odoo>

@@ -13,10 +13,10 @@
             <ul>
             % for move in ctx['moves']:
                 % if move.product_id.replacement_id:
-                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (replacement product: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>
+                    <li> <strong>${move.sale_line_id.order_id.name | move.claim_line_id.claim_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order | move.picking_id.date}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (replacement product: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>
                 % endif
                 % if not move.product_id.replacement_id:
-                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (ask purchasing team if the product is going to be available or not)</li>
+                    <li> <strong>${move.sale_line_id.order_id.name | move.claim_line_id.claim_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order | move.picking_id.date}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (ask purchasing team if the product is going to be available or not)</li>
                 % endif
             % endfor
             </ul>
