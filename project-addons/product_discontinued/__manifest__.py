@@ -11,9 +11,12 @@ the button commission_free will disappear of the view
     "depends": [
         "product",
         "sale",
+        "transportation",
+        "custom_account",
         "sale_customer_discount"
     ],
     "data": [
+        "data/user_data.xml",
         "views/product_discontinued_view.xml",
         "data/cron.xml",
         "views/email_template.xml",

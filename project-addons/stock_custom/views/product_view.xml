@@ -39,9 +39,9 @@
     <record id="product_form_view_move_button" model="ir.ui.view">
         <field name="name">product.product.form</field>
         <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
+            <xpath expr="//button[@name='%(stock.action_stock_level_forecast_report_product)d']" position="before">
                 <button class="oe_inline oe_stat_button" name="action_view_moves"
                     string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
                 <button class="oe_inline oe_stat_button" name="action_view_moves_dates"
@@ -57,6 +57,12 @@
                             attrs="{'invisible':[('type', 'not in', ['product', 'consu'])]}"
                             class="oe_stat_button" icon="fa-arrows-v"
                             groups="stock_custom.group_comercial_ext"/>
+            </xpath>
+            <xpath expr="//button[@name='%(stock.action_stock_level_forecast_report_product)d']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_routes']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
         </field>
     </record>
