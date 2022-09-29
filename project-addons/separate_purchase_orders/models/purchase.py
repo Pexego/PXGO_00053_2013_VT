@@ -74,12 +74,27 @@ class PurchaseOrder(models.Model):
     def create(self,vals):
         if self._context.get("default_state",False)=="purchase_order":
             vals["name"] = self.env['ir.sequence'].next_by_code('split.purchase.orders.name') or 'New'
+        vals.update(self._prepare_add_missing_fields(vals))
         res = super(PurchaseOrder, self).create(vals)
         for rec in res:
             if rec.state == 'purchase_order':
                 rec.order_line.mapped('product_id').set_product_last_purchase(
                     rec.id)
                 rec._add_supplier_to_product()
+        return res
+
+    @api.model
+    def _prepare_add_missing_fields(self, values):
+        """ Deduce missing required fields from the onchange """
+        res = {}
+        onchange_fields = ['currency_id']
+        if values.get('partner_id') and any(f not in values for f in onchange_fields):
+            with self.env.do_in_onchange():
+                order = self.new(values)
+                order.onchange_partner_id()
+                for field in onchange_fields:
+                    if field not in values:
+                        res[field] = order._fields[field].convert_to_write(order[field], order)
         return res
 
     @api.multi
@@ -170,3 +185,23 @@ class PurchaseOrderLine(models.Model):
             if line.order_id.state == 'purchase_order' and line.production_qty != line.product_qty:
                 raise UserError(_("You cannot delete a line that has confirmed quantities"))
         return super(PurchaseOrderLine, self).unlink()
+
+    @api.model
+    def _prepare_add_missing_fields(self, values):
+        """ Deduce missing required fields from the onchange """
+        res = {}
+        onchange_fields = ['name', 'price_unit', 'product_uom', 'taxes_id', 'date_planned']
+        if values.get('order_id') and values.get('product_id') and any(f not in values for f in onchange_fields):
+            with self.env.do_in_onchange():
+                line = self.new(values)
+                line.onchange_product_id()
+                for field in onchange_fields:
+                    if field not in values:
+                        res[field] = line._fields[field].convert_to_write(line[field], line)
+        return res
+
+    @api.model
+    def create(self, vals):
+        vals.update(self._prepare_add_missing_fields(vals))
+        return super(PurchaseOrderLine, self).create(vals)
+
