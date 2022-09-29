@@ -57,6 +57,7 @@ class MergePurchaseOrder(models.TransientModel):
         if self.merge_type in ('new_cancel', 'new_delete'):
             so = self.env['sale.order'].create({'partner_id': partner, 'state': sale_orders[0].state, 'prepaid_option': prepaid_option})
             so.onchange_partner_id()
+            so.write({'partner_shipping_id': partner_shipping_id})
             self.merge_orders(sale_orders, so)
         else:
             so = self.sale_order_id
