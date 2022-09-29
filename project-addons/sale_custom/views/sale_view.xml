@@ -48,6 +48,10 @@
                 <field name="area_id" invisible="1"/>
                 <button name="copy_sale_lines" icon="fa-copy" type="object" class="oe_right" attrs="{'invisible': [('area_id', '!=', %(product_customer_reference.projects_big_accounts_area)d)]}"/>
             </xpath>
+            <field name="client_order_ref" position="after">
+                <field name="is_project"/>
+                <field name="project_ref" attrs="{'invisible':[('is_project','=',False)]}"/>
+            </field>
         </field>
     </record>
 
@@ -332,7 +336,6 @@
         <field name="inherit_id" ref="scheduled_shipment.view_order_form_scheduled_date"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='sale_shipping']/field[@name='scheduled_date']" position="after">
-                <field name="not_sync_picking" string="Non-Synchronizable Picking" groups="base.group_system" />
                 <field name="force_generic_product" string="Force generic product" groups="base.group_system" />
             </xpath>
         </field>
