@@ -382,6 +382,7 @@ class BaseSynchro(models.TransientModel):
                 time.sleep(1)
                 dt = time.strftime('%Y-%m-%d %H:%M:%S')
             obj_rec.write({'synchronize_date': dt})
+            self.env.cr.commit()
         end_date = time.strftime('%Y-%m-%d, %Hh %Mm %Ss')
 
         # Creating res.request for summary results
