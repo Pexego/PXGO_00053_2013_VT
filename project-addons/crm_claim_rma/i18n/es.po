@@ -1614,3 +1614,23 @@ msgstr "VISIOTECH - Productos enviados"
 msgid "Picking_${(object.name or '').replace('/','_')}"
 msgstr "Albarán_${(object.name or '').replace('/','_')}"
 
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Purchase error"
+msgstr "Comprado por error"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Cancel by order delay"
+msgstr "Cancelado por retraso en pedido"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Does not correspond with web description"
+msgstr "No corresponde con descripción de web"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Missing parts"
+msgstr "Partes o accesorios faltantes"
+

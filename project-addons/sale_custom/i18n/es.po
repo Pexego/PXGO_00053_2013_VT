@@ -220,3 +220,13 @@ msgstr "Este cliente no puede comprar esta marca de productos"
 #: model:ir.model.fields,field_description:sale_custom.field_product_brand_category_ids
 msgid "Allow Partner Categories"
 msgstr "Permitir Categorías de Cliente"
+
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:sale_custom.field_sale_order_is_project
+msgid "Is Project"
+msgstr "Proyecto"
+
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:sale_custom.field_sale_order_project_ref
+msgid "Project Ref"
+msgstr "Referencia obra"

@@ -127,6 +127,17 @@ class SaleOrder(models.Model):
 
     is_editable = fields.Boolean(compute='_get_is_editable', default=True)
 
+    is_project = fields.Boolean()
+
+    project_ref = fields.Char()
+
+    @api.multi
+    @api.onchange('is_project')
+    def onchange_is_project(self):
+       for order in self:
+            order.not_sync_picking = order.is_project
+            order.no_promos = order.is_project
+
     @api.multi
     def _get_is_editable(self):
         for order in self:

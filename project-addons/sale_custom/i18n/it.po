@@ -216,3 +216,13 @@ msgstr "Questo cliente non può acquistare questa marca di prodottis"
 #: model:ir.model.fields,field_description:sale_custom.field_product_brand_category_ids
 msgid "Allow Partner Categories"
 msgstr "Consenti categorie di partner"
+
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:sale_custom.field_sale_order_is_project
+msgid "Is Project"
+msgstr "Progetto"
+
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:sale_custom.field_sale_order_project_ref
+msgid "Project Ref"
+msgstr "Riferimento del progetto"
