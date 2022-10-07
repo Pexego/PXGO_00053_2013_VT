@@ -82,7 +82,6 @@ class SaleOrder(models.Model):
         action = self.env.ref('stock_deposit.action_stock_deposit').read()[0]
         if len(self.deposit_ids) > 0:
             action['domain'] = [('id', 'in', self.deposit_ids.ids)]
-            action['context'] = [('id', 'in', self.deposit_ids.ids)]
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
