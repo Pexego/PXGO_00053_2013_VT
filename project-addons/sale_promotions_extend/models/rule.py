@@ -234,7 +234,7 @@ class PromotionsRulesActions(models.Model):
             self.arguments = 'sale_point_rule_name'
 
         elif self.action_type == 'disc_per_product':
-            self.product_code = '["tag_product","reg_exp_product_code"]'
+            self.product_code = '["tag_product","reg_exp_product_code",quantity(optional)]'
             self.arguments = '0.00'
         elif self.action_type == 'prod_disc_per_qty':
             self.product_code = '"product_reference",..."'
@@ -547,69 +547,19 @@ class PromotionsRulesActions(models.Model):
                 self.apply_perc_discount_price_accumulated(order_line)
         return {}
 
-    def action_disc_per_product(self, order):
-        # first get all the product with the tag
-        products_tag = \
-            sum(order.order_line
-                .filtered(lambda l, promo=self:
-                          eval(promo.product_code)[0]
-                          in l.product_id.tag_ids._get_tag_recursivity())
-                .mapped('product_uom_qty'))
+    @staticmethod
+    def get_qty_by_tag(tag, order):
+        if not tag or not order:
+            return 0
+        return sum(order.order_line
+                   .filtered(lambda l, promo_tag=tag: promo_tag in l.product_id.tag_ids._get_tag_recursivity())
+                   .mapped('product_uom_qty'))
 
-        # then, get a dict with all the products that match the condition
-        products_exp = []
-        for line in order.order_line:
-            if re.match(eval(self.product_code)[1], line.product_id.default_code):
-                for qty in range(int(line.product_uom_qty)):
-                    products_exp.append(line.price_subtotal/line.product_uom_qty)
-        products_exp.sort()
-
-        new_lines = []
-        for count, price in enumerate(products_exp):
-            if count >= products_tag:
-                break
-            else:
-                # Group by products with same price
-                if count > 0 and price == products_exp[count-1]:
-                    new_lines[len(new_lines)-1][0] += 1
-                else:
-                    new_lines.append([1, price])
-
-        # new_lines -> [[qty, price], [qty, price], ...]
-        for line in new_lines:
-            vals = {
-                'sequence': 999,
-                'order_id': order.id,
-                'product_id': self.env.ref('commercial_rules.product_discount').id,
-                'name': '%s' % (
-                    self.promotion.with_context({'lang': order.partner_id.lang}).line_description),
-                'price_unit': -line[1],
-                'discount': int(self.arguments),
-                'promotion_line': True,
-                'product_uom_qty': line[0],
-                'product_uom': 1
-            }
-            self.create_line(vals)
-
-    def action_fix_price_per_product(self, order):
-        # first get all the product with the tag
-        products_tag = \
-            sum(order.order_line
-                .filtered(lambda l, promo=self:
-                          eval(promo.product_code)
-                          in l.product_id.tag_ids._get_tag_recursivity())
-                .mapped('product_uom_qty'))
-
-        products_exp = []
-        for line in order.order_line.sorted(key=lambda r: r.price_unit):
-            if line.product_id.default_code in eval(self.arguments).keys() and products_tag > 0:
-                for qty in range(int(line.product_uom_qty)):
-                    products_exp.append([line.price_subtotal / line.product_uom_qty, line.product_id.default_code])
-        products_exp.sort()
-
+    @staticmethod
+    def get_new_lines(products_exp, products_tag):
         new_lines = []
         for count, product in enumerate(products_exp):
-            if count >= products_tag:
+            if count >= products_tag :
                 break
             else:
                 # Group by products with same price
@@ -617,21 +567,70 @@ class PromotionsRulesActions(models.Model):
                     new_lines[len(new_lines) - 1][0] += 1
                 else:
                     new_lines.append([1, product[0], product[1]])
+        return new_lines
 
-        # new_lines -> [[qty, price, product], [qty, price, product], ...]
+    @staticmethod
+    def get_match_products(order, condition_exp):
+        products_exp = []
+        for line in order.order_line:
+            if eval(condition_exp):
+                for _ in range(int(line.product_uom_qty)):
+                    price_unit = round(line.price_subtotal / line.product_uom_qty, 2)
+                    products_exp.append([price_unit, line.product_id.default_code])
+        products_exp.sort()
+        return products_exp
+
+    def create_lines_per_product(self, order, new_lines, price_unit_exp):
         for line in new_lines:
             vals = {
                 'sequence': 999,
                 'order_id': order.id,
                 'product_id': self.env.ref('commercial_rules.product_discount').id,
-                'name': 'Promo %s' % line[2],
-                'price_unit': -(line[1] - eval(self.arguments)[line[2]]),
+                'name': 'Promo %s - %s' % (
+                    self.promotion.with_context({'lang': order.partner_id.lang}).line_description, line[2]),
+                'price_unit': eval(price_unit_exp),
                 'discount': 0.0,
                 'promotion_line': True,
                 'product_uom_qty': line[0],
                 'product_uom': 1
             }
             self.create_line(vals)
+
+    def action_disc_per_product(self, order):
+        product_code = eval(self.product_code)
+        # first get all the product with the tag
+        products_tag = self.get_qty_by_tag(product_code[0], order)
+        # ["tag_product","reg_exp_product_code", Optionally a third parameter that indicates the maximum amount to which
+        # it applies per product. Default is 1]
+        if len(product_code) > 2:
+            products_tag *= product_code[2]
+        # then, get a dict with all the products that match the condition
+        products_exp = []
+        if products_tag > 0:
+            products_exp = self.get_match_products(order,
+                                                   condition_exp="re.match('%s', line.product_id.default_code)" % product_code[1])
+
+        new_lines = self.get_new_lines(products_exp, products_tag)
+        # new_lines -> [[qty, price, product], [qty, price, product], ...]
+
+        # Finally, create all new_lines with discount 0% and expression price evaluated as price
+        self.create_lines_per_product(order, new_lines,
+                                      price_unit_exp="-line[1] * ((%s or 0.0) / 100.0)" % eval(self.arguments))
+
+    def action_fix_price_per_product(self, order):
+        # first get all the product with the tag
+        products_tag = self.get_qty_by_tag(eval(self.product_code), order)
+        # then, get a dict with all the products that match the condition
+        products_exp = []
+        if products_tag > 0:
+            products_exp = self.get_match_products(order,
+                                                  condition_exp="line.product_id.default_code in %s" % list(eval(self.arguments).keys()))
+
+        new_lines = self.get_new_lines(products_exp, products_tag)
+        # new_lines -> [[qty, price, product], [qty, price, product], ...]
+        # Finally, create all new_lines with discount 0% and expression price evaluated as price
+        self.create_lines_per_product(order, new_lines,
+                                      price_unit_exp="-(line[1] - %s[line[2]])" % eval(self.arguments))
 
     def action_tag_disc_perc_line(self, order):
         for order_line in order.order_line:
