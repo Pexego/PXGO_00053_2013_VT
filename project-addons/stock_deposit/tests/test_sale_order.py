@@ -45,7 +45,6 @@ class TestSaleOrder(TransactionCase):
 
         # assert
         self.assertEqual(action.get('domain', []), deposits_domain)
-        self.assertEqual(action.get('context', []), deposits_domain)
         self.assertEqual(action.get('type', False), 'ir.actions.act_window')
 
     def test_action_view_deposits_when_there_are_no_deposits(self):
