@@ -273,6 +273,9 @@
                     </group>
                 </group>
             </xpath>
+            <button name="toggle_active" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </button>
         </field>
     </record>
 </odoo>
