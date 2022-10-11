@@ -132,3 +132,8 @@ msgstr "Approvare ordine"
 #, python-format
 msgid "Order blocked. Approve pending, margin is below the limits."
 msgstr "Ordine bloccato. In attesa di approvazione, il margine è inferiore al limite."
+
+#. module: block_invoices
+#: model:ir.model.fields,field_description:block_invoices.field_product_product_exclude_margin
+msgid "Exclude Margin"
+msgstr "Non includere a margine"

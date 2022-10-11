@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#       * block_invoices
+#	* block_invoices
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-23 19:37+0000\n"
-"PO-Revision-Date: 2016-02-23 19:37+0000\n"
+"POT-Creation-Date: 2022-10-11 07:53+0000\n"
+"PO-Revision-Date: 2022-10-11 07:53+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,13 +16,24 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: block_invoices
-#: field:account.invoice,allow_confirm_blocked:0
-#: field:sale.order,allow_confirm_blocked:0
+#: model:ir.model.fields,field_description:block_invoices.field_account_invoice_allow_confirm_blocked
+#: model:ir.model.fields,field_description:block_invoices.field_sale_order_allow_confirm_blocked
+#: model:ir.model.fields,field_description:block_invoices.field_sale_order_allow_confirm_blocked_magreb
 msgid "Allow confirm"
-msgstr "Permitir confirmar"
+msgstr "Permitir envío"
 
 #. module: block_invoices
-#: view:res.partner:block_invoices.view_partner_form_add_block_sales_field
+#: model:ir.ui.view,arch_db:block_invoices.view_order_add_allow_confirm_form
+msgid "Approve Order"
+msgstr "Aprobar pedido"
+
+#. module: block_invoices
+#: model:ir.cron,cron_name:block_invoices.ir_cron_check_sales_blocked
+msgid "Base: Auto-vacuum internal data"
+msgstr "Base: Limpieza automática de datos internos"
+
+#. module: block_invoices
+#: model:ir.ui.view,arch_db:block_invoices.view_partner_form_add_block_sales_field
 msgid "Check"
 msgstr "Comprobar"
 
@@ -32,24 +43,61 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:73
+#: model:ir.model,name:block_invoices.model_res_partner
+msgid "Contact"
+msgstr "Cliente"
+
+#. module: block_invoices
+#: code:addons/block_invoices/wizard/sale_make_invoice_advance.py:17
+#, python-format
+msgid "Customer %s blocked by lack of payment.                         Check the maturity dates of their account move lines."
+msgstr "El cliente está bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/sale_order.py:51
 #, python-format
 msgid "Customer %s blocked by lack of payment. Check the maturity dates of their account move lines."
-msgstr "Cliente %s bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
+msgstr "El cliente está bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
 
 #. module: block_invoices
-#: code:addons/block_invoices/account_invoice.py:27
-#: code:addons/block_invoices/account_invoice.py:40
-#: code:addons/block_invoices/sale_make_invoice.py:49
-#: code:addons/block_invoices/sale_order.py:39
-#: code:addons/block_invoices/sale_order.py:52
-#: code:addons/block_invoices/stock_invoice_onshipping.py:47
+#: code:addons/block_invoices/models/sale_order.py:39
+#, python-format
+msgid "Customer blocked by lack of payment. Check the                     maturity dates of their account move lines."
+msgstr "El cliente está bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/account_invoice.py:27
+#: code:addons/block_invoices/models/account_invoice.py:40
 #, python-format
 msgid "Customer blocked by lack of payment. Check the maturity dates of their account move lines."
-msgstr "Cliente bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
+msgstr "El cliente está bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
 
 #. module: block_invoices
-#: field:res.company,block_customer_days:0
+#: model:ir.model.fields,field_description:block_invoices.field_res_partner_defaulter
+#: model:ir.model.fields,field_description:block_invoices.field_res_users_defaulter
+#: model:ir.model.fields,field_description:block_invoices.field_sale_order_defaulter
+msgid "Defaulter"
+msgstr "Moroso"
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/sale_order.py:31
+#, python-format
+msgid "Defaulter customer! Please contact the                     accounting department."
+msgstr "¡Cliente moroso! Por favor, contacte con el departamento de contabilidad."
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/sale_order.py:55
+#, python-format
+msgid "Defaulter customer! Please contact the accounting department."
+msgstr "¡Cliente moroso! Por favor, contacte con el departamento de contabilidad."
+
+#. module: block_invoices
+#: model:ir.model.fields,field_description:block_invoices.field_product_product_exclude_margin
+msgid "Exclude Margin"
+msgstr "No incluir en margen"
+
+#. module: block_invoices
+#: model:ir.model.fields,field_description:block_invoices.field_res_company_block_customer_days
 msgid "Grace days for blocking customers sales"
 msgstr "Días de gracia para bloquear las ventas al cliente"
 
@@ -59,77 +107,71 @@ msgid "Invoice"
 msgstr "Factura"
 
 #. module: block_invoices
-#: model:ir.model,name:block_invoices.model_res_partner
-msgid "Partner"
-msgstr "Empresa"
+#: model:res.groups,name:block_invoices.group_unblock_magreb
+msgid "Magreb unblock"
+msgstr "Desbloquear Magreb"
 
 #. module: block_invoices
-#: model:ir.model,name:block_invoices.model_sale_make_invoice
-msgid "Sales Make Invoice"
-msgstr "Ventas. Realizar factura"
+#: model:ir.model.fields,field_description:block_invoices.field_res_partner_never_block
+#: model:ir.model.fields,field_description:block_invoices.field_res_users_never_block
+msgid "Never block sales in this partner"
+msgstr "No bloquear ventas de este cliente"
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/sale_order.py:69
+#, python-format
+msgid "Order blocked. Approve pending"
+msgstr "Pedido bloquedado. Pendiente de aprobar"
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/sale_order.py:76
+#, python-format
+msgid "Order blocked. Approve pending, margin is below the limits."
+msgstr "Pedido bloquedado. Pendiente de aprobar, el margen está por debajo de los límites"
+
+#. module: block_invoices
+#: code:addons/block_invoices/models/sale_order.py:58
+#, python-format
+msgid "Order blocked. The client has not bank account."
+msgstr "Pedido bloqueado. EL cliente no tiene cuenta bancaria"
+
+#. module: block_invoices
+#: model:ir.model,name:block_invoices.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: block_invoices
+#: model:ir.model,name:block_invoices.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
 
 #. module: block_invoices
 #: model:ir.model,name:block_invoices.model_sale_order
-msgid "Sales Order"
-msgstr "Pedido de venta"
+msgid "Quotation"
+msgstr "Presupuesto"
 
 #. module: block_invoices
-#: field:res.partner,blocked_sales:0
+#: model:ir.model,name:block_invoices.model_sale_advance_payment_inv
+msgid "Sales Advance Payment Invoice"
+msgstr "Ventas. Anticipo pago factura"
+
+#. module: block_invoices
+#: model:ir.model.fields,field_description:block_invoices.field_account_invoice_blocked
+#: model:ir.model.fields,field_description:block_invoices.field_res_partner_blocked_sales
+#: model:ir.model.fields,field_description:block_invoices.field_res_users_blocked_sales
+#: model:ir.model.fields,field_description:block_invoices.field_sale_order_blocked
 msgid "Sales blocked?"
-msgstr "Ventas bloqueadas?"
+msgstr "¿Ventas Bloqueadas?"
 
 #. module: block_invoices
-#: model:ir.model,name:block_invoices.model_stock_invoice_onshipping
-msgid "Stock Invoice Onshipping"
-msgstr "Factura en el envío de existencias"
-
-#. module: block_invoices
-#: code:addons/block_invoices/account_invoice.py:47
-#: code:addons/block_invoices/account_invoice.py:72
-#: code:addons/block_invoices/sale_make_invoice.py:48
-#: code:addons/block_invoices/sale_order.py:49
-#: code:addons/block_invoices/stock_invoice_onshipping.py:46
+#: code:addons/block_invoices/models/account_invoice.py:39
+#: code:addons/block_invoices/models/sale_order.py:30
+#: code:addons/block_invoices/models/sale_order.py:38
 #, python-format
 msgid "Warning for %s"
 msgstr "Aviso para %s"
 
 #. module: block_invoices
-#: field:res.partner,defaulter:0
-msgid "Defaulter"
-msgstr "Moroso"
-
-#. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:52
-#, python-format
-msgid "Warning for %s"
-msgstr "Aviso para %s"
-
-#. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:31
-#: code:addons/block_invoices/sale_order.py:56
-#, python-format
-msgid "Defaulter customer! Please contact the accounting department."
-msgstr "¡Cliente moroso! Por favor, contacte con el departamento de contabilidad."
-
-#. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:66
-#, python-format
-msgid "Order blocked. Approve pending"
-msgstr "Pedido bloqueado. Pendiente de aprobación"
-
-#. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:59
-#, python-format
-msgid "Order blocked. The client has not bank account."
-msgstr "Pedido bloqueado. El cliente no tiene cuenta bancaria."
-
-#. module: block_invoices
-#: view:sale.order:block_invoices.view_order_add_allow_confirm_form
-msgid "Approve Order"
-msgstr "Aprobar pedido"
-
-#. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:92
-#, python-format
-msgid "Order blocked. Approve pending, margin is below the limits."
-msgstr "Pedido bloqueado. Pendiente de aprobación, el margen es inferior a los límites."
+#: model:ir.cron,name:block_invoices.ir_cron_check_sales_blocked
+msgid "[Visiotech]Check blocked sales on customers"
+msgstr "[Visiotech] Comprobar ventas bloqueadas en clientes"
