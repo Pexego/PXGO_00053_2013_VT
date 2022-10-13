@@ -17,6 +17,8 @@
                 </filter>
                 <filter name="partner_id" position="after">
                     <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
+                    <separator/>
+                    <filter name="without_af" string="No Autoinvoice" domain="[('number','not like','%AF%')]"/>
                     <filter string="Partner" name="commercial_partner_id" context="{'group_by':'commercial_partner_id'}"/>
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
                     <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
@@ -33,7 +35,7 @@
         </record>
 
         <record id="account.action_account_invoice_report_all" model="ir.actions.act_window">
-            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
+            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'search_default_without_af':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
             <field name="domain">['|', ('product_id', '=', False), ('product_id.not_include_report', '=', False)]</field>
         </record>
 
@@ -50,7 +52,7 @@
         <field name="view_mode">graph,pivot</field>
         <field name="groups" eval="[(4, ref('custom_account.group_big_accounts'))]"/>
         <field name="search_view_id" ref="account_invoice_report_add_filters"/>
-        <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
+        <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'search_default_without_af':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
         <field name="domain">['&amp;', '|', ('product_id', '=', False), ('product_id.not_include_report', '=', False),'|',('partner_category', 'ilike', 'proy'),('partner_category', 'ilike', 'grandes')]</field>
     </record>
 
