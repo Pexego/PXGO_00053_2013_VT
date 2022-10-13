@@ -66,6 +66,9 @@
                 <field name="amount_total_signed" position="attributes">
                     <attribute name="sum">Amount</attribute>
                 </field>
+                <field name="amount_total_signed" position="before">
+                    <field name="amount_untaxed_signed" sum="subtotal"/>
+                </field>
             </field>
         </record>
 
