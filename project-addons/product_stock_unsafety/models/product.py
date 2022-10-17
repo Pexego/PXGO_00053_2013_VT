@@ -177,7 +177,7 @@ class ProductProduct(models.Model):
         for product in self:
             if product.orderpoint_ids and ((active and not vals.get('active')) or (type and vals.get('type') != 'product')):
                 product.orderpoint_ids.write({'active': False})
-            elif (active and vals.get('active')) or (type and vals.get('type') == 'product'):
+            elif not product.orderpoint_ids and ((active and vals.get('active')) or (type and vals.get('type') == 'product')):
                 orderpoints = self.env['stock.warehouse.orderpoint'].search(
                     [('active', '=', False), ('product_id', '=', product.id)], limit=1, order='create_date DESC')
                 if orderpoints:
