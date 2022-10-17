@@ -1,5 +1,5 @@
 from odoo import models, fields, api, exceptions, _
-from odoo.tools import float_compare
+from odoo.tools import float_compare, float_round
 import re
 from datetime import datetime
 from dateutil import parser
@@ -236,7 +236,7 @@ class EdifMenssage(models.Model):
             else:
                 msg += self.TAX('VAT', str(round(tax.tax_id.amount, 2)))
             msg += self.MOA('125', str(invoice.amount_untaxed))  # TAX
-            msg += self.MOA('176', str(round(tax.amount, 2)))  # TAX
+            msg += self.MOA('176', str(float_round(tax.amount, 2)))  # TAX
         msg_count = msg.count("'") + 1
         msg += self.UNT(str(msg_count), msg_ref)
 
