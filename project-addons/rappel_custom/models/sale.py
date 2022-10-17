@@ -9,7 +9,8 @@ class SaleOrderLine(models.Model):
 
     @api.model
     def create(self, vals):
-        vals['no_rappel'] = self.env['sale.order'].browse(vals['order_id']).no_rappel
+        if vals.get('order_id'):
+            vals['no_rappel'] = self.env['sale.order'].browse(vals['order_id']).no_rappel
         line = super(SaleOrderLine, self).create(vals)
         return line
 
