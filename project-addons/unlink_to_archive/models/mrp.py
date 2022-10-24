@@ -7,6 +7,7 @@ class MrpBom(models.Model):
     @api.multi
     def unlink(self):
         self.write({'active': False})
+        self.bom_line_ids.unlink()
 
 class MrpBomLine(models.Model):
 
