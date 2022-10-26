@@ -498,3 +498,9 @@ msgstr "No puedes devolver al almacén de cliente un depósito en borrador"
 #: selection:stock.deposit,state:0
 msgid "Damaged"
 msgstr "Averiado"
+
+#. module: stock_deposit
+#: view:sale.order:stock_deposit.view_order_form_deposit
+msgid "Deposits"
+msgstr "Depósitos"
+

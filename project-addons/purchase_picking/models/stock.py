@@ -141,12 +141,10 @@ class StockContainer(models.Model):
     @api.depends('conf', 'date_expected', 'eta')
     def _get_order_date(self):
         for container in self:
-            if container.conf and container.date_expected:
-                container.date_to_order = datetime.strptime(container.date_expected, "%Y-%m-%d") + timedelta(days=365)
-            elif not container.conf and container.eta:
-                container.date_to_order = container.eta
+            if container.conf:
+                container.date_to_order = container.date_expected
             else:
-                container.date_to_order = '2000-01-01'
+                container.date_to_order = container.eta
 
     name = fields.Char("Container Ref.", required=True)
     date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected',

@@ -356,7 +356,7 @@ msgstr "Indice"
 #. module: stock_deposit
 #: model:ir.model.fields,help:stock_deposit.field_stock_deposit_product_uom_qty
 msgid "This is the quantity of products from an inventory point of view. For moves in the state 'done', this is the quantity of products that were actually moved. For other moves, this is the quantity of product that is planned to be moved. Lowering this quantity does not generate a backorder. Changing this quantity on assigned moves affects the product reservation, and should be done with care."
-msgstr "Questa è la quantità di prodotti dal punto di vista dell'inventario. Per i movimenti nello stato "Fine", si tratta della quantità di prodotto che è stata attualmente spostata. Per gli altri movimenti, questa è la quantità di prodotto che si prevede di spostare. La modifica di questo importo non genererà una bolla di consegna parziale. La modifica di questo importo nei movimenti assegnati influirà sulla prenotazione del prodotto, dovrebbe essere eseguita con cura. "
+msgstr "Questa è la quantità di prodotti dal punto di vista dell'inventario. Per i movimenti nello stato 'Fine', si tratta della quantità di prodotto che è stata attualmente spostata. Per gli altri movimenti, questa è la quantità di prodotto che si prevede di spostare. La modifica di questo importo non genererà una bolla di consegna parziale. La modifica di questo importo nei movimenti assegnati influirà sulla prenotazione del prodotto, dovrebbe essere eseguita con cura. "
 
 #. module: stock_deposit
 #: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_tree
@@ -459,4 +459,9 @@ msgstr "Ritorno al magazzino del cliente"
 #: selection:stock.return.deposit,options:0
 msgid "Return to our warehouse"
 msgstr "Ritorna al nostro magazzino"
+
+#. module: stock_deposit
+#: view:sale.order:stock_deposit.view_order_form_deposit
+msgid "Deposits"
+msgstr "Depositi"
 
