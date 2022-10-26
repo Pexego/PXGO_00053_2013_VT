@@ -457,3 +457,9 @@ msgstr "Devolver a nuestro almacén"
 #, python-format
 msgid "You cannot return a draft deposit to client warehouse"
 msgstr "No puedes devolver al almacén de cliente un depósito en borrador"
+
+#. module: stock_deposit
+#: view:sale.order:stock_deposit.view_order_form_deposit
+msgid "Deposits"
+msgstr "Depósitos"
+

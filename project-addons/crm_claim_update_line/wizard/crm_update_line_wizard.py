@@ -30,8 +30,12 @@ class CrmClaimUpdateLines(models.TransientModel):
     partner_id = fields.Many2one('res_partner', readonly=True)
     claim_origine = fields.Selection([('broken_down', 'Broken down product'),
                                       ('not_appropiate', 'Not appropiate product'),
+                                      ('purch_error', 'Purchase error'),
                                       ('cancellation', 'Order cancellation'),
+                                      ('delay', 'Cancel by order delay'),
                                       ('damaged', 'Damaged delivered product'),
+                                      ('description_error', 'Does not correspond with web description'),
+                                      ('missing_parts', 'Missing parts'),
                                       ('error', 'Shipping error'),
                                       ('exchange', 'Exchange request'),
                                       ('lost', 'Lost during transport'),
