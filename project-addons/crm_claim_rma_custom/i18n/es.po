@@ -18,7 +18,7 @@ msgstr ""
 #. module: crm_claim_rma_custom
 #: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_claim_sort
 msgid "Received Claims"
-msgstr "RMAs Recividos"
+msgstr "RMA Recibidos"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.menu,name:crm_claim_rma_custom.menu_crm_case_claims
