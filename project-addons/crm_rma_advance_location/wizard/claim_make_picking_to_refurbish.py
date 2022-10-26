@@ -137,10 +137,16 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                           ('stage_id', '=', self.env.ref('crm_claim.stage_claim5').id)]
                 if product.product_brand_id.code in eval(
                         self.env['ir.config_parameter'].sudo().get_param('brands_seller_ids_rmp')):
-                    suppliers += product.seller_ids.mapped('name')
+                    if product.normal_product_id:
+                        suppliers += product.normal_product_id.seller_ids.mapped('name')
+                    else:
+                        suppliers += product.seller_ids.mapped('name')
                     domain_p = domain + [('partner_id', 'in', suppliers.ids)]
                 else:
-                    suppliers += product.last_supplier_id
+                    if product.normal_product_id:
+                        suppliers += product.normal_product_id.last_supplier_id
+                    else:
+                        suppliers += product.last_supplier_id
                     domain_p = domain + [('partner_id', '=', suppliers.id)]
                 rmp_id = self.env['crm.claim'].search(domain_p)
                 suppliers_p = suppliers.mapped('rmp_partner')
@@ -167,6 +173,10 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'supplier_id': rmp_id.partner_id.id,
                 'substate_id': self.env.ref('crm_claim_rma_custom.substate_checked').id
             }
+            import ipdb
+            ipdb.set_trace()
+            if product.normal_product_id:
+                line_domain['product_id']: product.normal_product_id.id
             if not l.prodlot_id:
                 sec_list = self.env['crm.claim'].browse(rmp_id.id).claim_line_ids.mapped('sequence')
                 if sec_list:
