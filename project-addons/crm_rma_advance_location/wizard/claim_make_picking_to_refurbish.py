@@ -173,10 +173,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'supplier_id': rmp_id.partner_id.id,
                 'substate_id': self.env.ref('crm_claim_rma_custom.substate_checked').id
             }
-            import ipdb
-            ipdb.set_trace()
             if product.normal_product_id:
-                line_domain['product_id']: product.normal_product_id.id
+                line_domain['product_id'] = product.normal_product_id.id
             if not l.prodlot_id:
                 sec_list = self.env['crm.claim'].browse(rmp_id.id).claim_line_ids.mapped('sequence')
                 if sec_list:
