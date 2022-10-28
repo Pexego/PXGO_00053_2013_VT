@@ -8,9 +8,10 @@
     'description': """Block sales and invoices for customers from due dates.""",
     'author': 'Alberto Luengo, Comunitea',
     'website': 'luengocabanillas.com, http://www.comunitea.com',
-    "depends": ['sale', 'stock_account', 'custom_account', 'invoice_update_data'],
+    "depends": ['sale', 'stock_account', 'custom_account', 'invoice_update_data', 'sale_margin_percentage'],
     "data": ['views/res_company_view.xml', 'views/res_partner_view.xml',
              'views/sale_view.xml', 'views/account_invoice_view.xml',
-             'data/ir_cron.xml', 'data/parameters.xml', 'security/block_invoices.xml'],
+             'data/ir_cron.xml', 'data/parameters.xml', 'security/block_invoices.xml',
+             "views/product_view.xml"],
     "installable": True
 }
