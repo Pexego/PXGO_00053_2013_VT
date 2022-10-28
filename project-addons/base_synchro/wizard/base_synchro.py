@@ -52,6 +52,7 @@ class BaseSynchro(models.TransientModel):
     user_id = fields.Many2one('res.users', "Send Result To",
                               default=lambda self: self.env.user)
     report = []
+    report_error = []
     report_total = 0
     report_create = 0
     report_write = 0
@@ -230,51 +231,62 @@ class BaseSynchro(models.TransientModel):
                     object_dest = pool.browse([id2])
                     if standard_price_incr:
                         if not object_dest.seller_ids:
-                            value["seller_ids"] = [(6, 0, [self.env['product.supplierinfo'].create({
+                            value["seller_ids"] = [(0, 0, {
                                 'name': 27,
                                 'min_qty': 1,
                                 'price': standard_price_incr
-                            }).id])]
+                            })]
                         else:
                             object_dest.seller_ids[0].price = standard_price_incr
-                    object_dest.write(value)
+                    try:
+                        object_dest.write(value)
+                    except Exception as e:
+                        self.report_error.append('''ERROR: Problem with remote record %s model %s exception %s''' % (id, object.model_id.model, e))
                 else:
                     object_dest = pool_dest.get(object.model_id.model)
                     if standard_price_incr:
                         if not object_dest.seller_ids:
-                            value["seller_ids"] = [(6, 0, [self.env['product.supplierinfo'].create({
+                            value["seller_ids"] = [(0, 0, {
                                 'name': 27,
                                 'min_qty': 1,
                                 'price': standard_price_incr
-                            }).id])]
+                            })]
                         else:
                             object_dest.seller_ids[0].price = standard_price_incr
-                    object_dest.with_context(ctx).write([id2], value)
+                    try:
+                        object_dest.with_context(ctx).write([id2], value)
+                    except Exception as e:
+                        self.report_error.append('''ERROR: Problem with remote record %s model %s exception %s''' % (id, object.model_id.model, e))
+
                 self.report_total += 1
                 self.report_write += 1
+
             elif create:
                 _logger.debug("Creating model %s", object.model_id.name)
                 if standard_price_incr:
-                    value["seller_ids"] = [(6, 0, [self.env['product.supplierinfo'].create({
+                    value["seller_ids"] = [(6, 0, {
                         'name': 27,
                         'min_qty': 1,
                         'price': standard_price_incr
-                    }).id])]
-                if not destination_inverted:
-                    idnew = pool_dest.env[object.model_id.model]. \
-                        with_context(ctx).create(value)
-                    new_id = idnew.id
-                else:
-                    idnew = pool_dest.get(object.model_id.model). \
-                        with_context(ctx).create(value)
-                    new_id = idnew
-                self.env['base.synchro.obj.line'].create({
-                    'obj_id': object.id,
-                    'local_id': (action == 'u') and id or new_id,
-                    'remote_id': (action == 'd') and id or new_id
-                })
-                self.report_total += 1
-                self.report_create += 1
+                    })]
+                try:
+                    if not destination_inverted:
+                        idnew = pool_dest.env[object.model_id.model]. \
+                            with_context(ctx).create(value)
+                        new_id = idnew.id
+                    else:
+                        idnew = pool_dest.get(object.model_id.model). \
+                            with_context(ctx).create(value)
+                        new_id = idnew
+                    self.env['base.synchro.obj.line'].create({
+                        'obj_id': object.id,
+                        'local_id': (action == 'u') and id or new_id,
+                        'remote_id': (action == 'd') and id or new_id
+                    })
+                    self.report_total += 1
+                    self.report_create += 1
+                except Exception as e:
+                    self.report_error.append('''ERROR: Problem with remote record %s model %s exception %s''' % (id, object.model_id.model, e))
 
     @api.model
     def get_id(self, object_id, id, action):
@@ -382,6 +394,7 @@ class BaseSynchro(models.TransientModel):
                 time.sleep(1)
                 dt = time.strftime('%Y-%m-%d %H:%M:%S')
             obj_rec.write({'synchronize_date': dt})
+            self.env.cr.commit()
         end_date = time.strftime('%Y-%m-%d, %Hh %Mm %Ss')
 
         # Creating res.request for summary results
@@ -409,6 +422,17 @@ Exceptions:
                 'act_to': syn_obj.user_id.id,
                 'body': summary,
             })
+            if self.report_error:
+                vals = {
+                    'subject': 'Syncro fails',
+                    'body_html': '<br>'.join(self.report_error),
+                    'email_to': 'odoo_team@visiotechsecurity.com',
+                    'auto_delete': False,
+                    'email_from': 'odoo_team@visiotechsecurity.com',
+                }
+
+                mail_id = self.env['mail.mail'].sudo().create(vals)
+                mail_id.sudo().send()
             return {}
 
     @api.multi
