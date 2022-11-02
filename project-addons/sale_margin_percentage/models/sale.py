@@ -142,7 +142,7 @@ class SaleOrder(models.Model):
                 else:
                     margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
                 sale_price += line.price_subtotal or 0.0
-                purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
+                purchase_price += (line.product_id.standard_price_2_inc or 0.0) * line.product_uom_qty
             if sale_price:
                 if sale_price < purchase_price:
                     sale.margin_rappel = round((margin_rappel * 100) / purchase_price, 2)
