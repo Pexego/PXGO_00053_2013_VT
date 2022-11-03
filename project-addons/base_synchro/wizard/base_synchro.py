@@ -240,8 +240,10 @@ class BaseSynchro(models.TransientModel):
                             object_dest.seller_ids[0].price = standard_price_incr
                     try:
                         object_dest.write(value)
+                        self.env.cr.commit()
                     except Exception as e:
                         self.report_error.append('''ERROR: Problem with remote record %s model %s exception %s''' % (id, object.model_id.model, e))
+                        self.env.cr.rollback()
                 else:
                     object_dest = pool_dest.get(object.model_id.model)
                     if standard_price_incr:
@@ -255,8 +257,10 @@ class BaseSynchro(models.TransientModel):
                             object_dest.seller_ids[0].price = standard_price_incr
                     try:
                         object_dest.with_context(ctx).write([id2], value)
+                        self.env.cr.commit()
                     except Exception as e:
                         self.report_error.append('''ERROR: Problem with remote record %s model %s exception %s''' % (id, object.model_id.model, e))
+                        self.env.cr.rollback()
 
                 self.report_total += 1
                 self.report_write += 1
@@ -264,7 +268,7 @@ class BaseSynchro(models.TransientModel):
             elif create:
                 _logger.debug("Creating model %s", object.model_id.name)
                 if standard_price_incr:
-                    value["seller_ids"] = [(6, 0, {
+                    value["seller_ids"] = [(0, 0, {
                         'name': 27,
                         'min_qty': 1,
                         'price': standard_price_incr
@@ -285,8 +289,10 @@ class BaseSynchro(models.TransientModel):
                     })
                     self.report_total += 1
                     self.report_create += 1
+                    self.env.cr.commit()
                 except Exception as e:
                     self.report_error.append('''ERROR: Problem with remote record %s model %s exception %s''' % (id, object.model_id.model, e))
+                    self.env.cr.rollback()
 
     @api.model
     def get_id(self, object_id, id, action):
