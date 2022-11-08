@@ -44,8 +44,8 @@
             <xpath expr="//button[@name='%(stock.action_stock_level_forecast_report_product)d']" position="before">
                 <button class="oe_inline oe_stat_button" name="action_view_moves"
                     string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
-                <button class="oe_inline oe_stat_button" name="action_view_moves_dates"
-                    string="Stock moves dates" type="object" icon="fa-calendar" attrs="{'invisible':[('type', '=', 'service')]}" />
+                <!--button class="oe_inline oe_stat_button" name="action_view_moves_dates"
+                    string="Stock moves dates" type="object" icon="fa-calendar" attrs="{'invisible':[('type', '=', 'service')]}" /-->
                 <button class="oe_inline oe_stat_button" type="action" name="%(product_graphic_stock_grouped)d"
                     string="Stock Graphic"
                     icon="fa-bar-chart"
@@ -63,6 +63,20 @@
             </xpath>
             <xpath expr="//button[@name='action_view_routes']" position="attributes">
                 <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(stock.product_open_orderpoint)d']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="product_form_view_move_button_fechas" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="sale.product_form_view_sale_order_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(sale.action_product_sale_list)d']" position="before">
+                <button class="oe_inline oe_stat_button" name="action_view_moves_dates"
+                    string="Stock moves dates" type="object" icon="fa-calendar" attrs="{'invisible':[('type', '=', 'service')]}" />
             </xpath>
         </field>
     </record>
