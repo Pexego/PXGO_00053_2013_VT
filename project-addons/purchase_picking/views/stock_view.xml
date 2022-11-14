@@ -126,39 +126,46 @@
         <field name="arch" type="xml">
             <form string="Container">
                 <group col="6" colspan="2">
-                    <field name="name"/>
-                    <field name="status"/>
-                    <field name="ready"/>
-                    <field name="type"/>
-                    <field name="telex" attrs="{'invisible':[('type','in',('air', 'road'))]}"/>
-                    <label for="etd"/>
-                    <div>
-                        <field name="etd"/>
-                        <field name="departure" nolabel="1" style="padding-left: 15px;"/>
-                    </div>
-                    <field name="incoterm" context=""/>
-                    <field name="n_ref"/>
-                    <field name="eta"/>
-                    <field name="destination_port"/>
-                    <field name="ctns"/>
-                    <label for="date_expected"/>
-                    <div>
-                        <field name="date_expected"/>
-                        <field name="conf" nolabel="1" style="padding-left: 15px;"/>
-                    </div>
-                    <label for="forwarder"/>
-                    <div>
-                        <field name="forwarder"/>
-                        <field name="forwarder_comercial" nolabel="1" style="padding-left: 15px;" readonly="1"/>
-                    </div>
-                    <field name="dimensions" invisible="1"/>
-                    <field name="arrived"/>
-                    <field name="dimensions"/>
-                    <field name="notes_purchases" colspan="4" style="padding-right: 20%;"/>
-                    <field name="cost"/>
-                    <field name="notes_warehouse" colspan="4" style="padding-right: 20%;"/>
-                    <field name="incidences"/>
-
+                    <group colspan="2">
+                        <field name="name"/>
+                        <field name="type"/>
+                        <field name="incoterm" context=""/>
+                        <field name="destination_port"/>
+                        <label for="forwarder"/>
+                        <div>
+                            <field name="forwarder"/>
+                            <field name="forwarder_comercial" nolabel="1" style="padding-left: 15px;" readonly="1"/>
+                        </div>
+                        <field name="container_type"/>
+                        <field name="kilograms"/>
+                        <field name="cubic_meters"/>
+                        <field name="cost"/>
+                        <field name="incidences"/>
+                    </group>
+                    <group colspan="2">
+                        <field name="status"/>
+                        <field name="telex" attrs="{'invisible':[('type','in',('air', 'road'))]}"/>
+                        <field name="n_ref"/>
+                        <field name="ctns"/>
+                        <field name="notes_purchases"  style="padding-right: 20%;"/>
+                        <field name="notes_warehouse"  style="padding-right: 20%;"/>
+                    </group>
+                    <group colspan="2">
+                        <field name="ready"/>
+                         <label for="etd"/>
+                        <div>
+                            <field name="etd"/>
+                            <field name="departure" nolabel="1" style="padding-left: 15px;"/>
+                        </div>
+                        <field name="eta"/>
+                        <label for="date_expected"/>
+                        <div>
+                            <field name="date_expected"/>
+                            <field name="conf" nolabel="1" style="padding-left: 15px;"/>
+                        </div>
+                        <field name="arrived"/>
+                    </group>  
+                    
                 </group>
 
                 <group colspan="4">
@@ -230,7 +237,9 @@
                 <field name="incoterm"/>
                 <field name="destination_port"/>
                 <field name="forwarder_comercial"/>
-                <field name="dimensions"/>
+                <field name="container_type"/>
+                <field name="kilograms"/>
+                <field name="cubic_meters"/>
                 <field name="ready"/>
                 <field name="etd"/>
                 <field name="departure"/>
