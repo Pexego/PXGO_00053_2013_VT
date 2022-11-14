@@ -37,7 +37,6 @@
         "views/report_sale_order.xml",
         "views/report_purchase_order.xml",
         "views/report_stock_picking.xml",
-        "views/report_stock_picking_valued.xml",
         "views/report_invoice.xml",
         "views/report_claim.xml",
         "views/report_overdue.xml"],

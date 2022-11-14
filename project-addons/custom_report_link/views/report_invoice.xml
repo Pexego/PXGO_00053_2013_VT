@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="report_invoice_custom_document">
-       
+
 <t t-name="custom_report_link.report_invoice_custom_document">
         <t t-call="custom_report_link.external_layout_custom_invoice">
             <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.commercial_partner_id.lang})"/>
@@ -74,6 +74,7 @@
                                 <t t-set="control" t-value="0"/>
                                 <tr style="font-size:14px">
                                     <t t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
+
                                         <t t-if="l1.sale_order_id.name == p.name">
                                             <t t-if="not l1.sale_order_id.client_order_ref">
                                                 <!--<strong t-raw="l1"/>
@@ -128,14 +129,19 @@
                                     <td/>
                                     <td/>
                                 </tr>
-                                <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
+                                <t t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
+                                    <t t-set="pack" t-value="l1.product_id.bom_ids"/>
+
                                     <t t-if="l1.sale_order_id.name == p.name">
+                                        <tr>
                                             <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
+                                            <t t-set="pack" t-value="l1.product_id.bom_ids"/>
+
                                             <t t-if="len(product_reference)==1">
-                                                <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="l1.product_id"/></td>
+                                                <td style="font-weight: bold;">(<span t-field="product_reference.customer_reference"/>) <span t-field="l1.product_id"/></td>
                                             </t>
                                             <t t-if="len(product_reference)!=1">
-                                                <td><span t-field="l1.product_id"/></td>
+                                                <td style="font-weight: bold;"><span t-field="l1.product_id"/></td>
                                             </t>
                                             <t t-if="print_hs_code">
                                                 <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
@@ -166,8 +172,29 @@
                                             <t t-if="l1.product_id.type == 'service'">
                                                 <td class="text-center"/>
                                             </t>
+                                        </tr>
+                                        <tr t-if="pack" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                                <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
+                                                <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
+                                                <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
+                                                <t t-if="print_hs_code">
+                                                    <td class="text-center"><span t-field="p_line.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
+                                                </t>
+                                                <td><span t-field="p_line.product_id.product_tmpl_id.description_sale"/></td>
+                                                <t t-set="decimal" t-value="p_line.product_qty % 1"/>
+                                                <t t-if="not decimal == 0">
+                                                    <td class="text-center"><span t-esc="'%.1f'% (l1.quantity * p_line.product_qty)"/></td>
+                                                </t>
+                                                <t t-if="decimal == 0">
+                                                    <td class="text-center"><span t-esc="'%.0f'% (l1.quantity * p_line.product_qty)"/></td>
+                                                </t>
+                                                <td/>
+                                                <td/>
+                                                <td/>
+                                                <td/>
+                                        </tr>
                                     </t>
-                                </tr>
+                                </t>
                             </t>
                             <t t-set="others" t-value="0"/>
                             <t t-if="not o.sale_order_ids">
@@ -193,6 +220,7 @@
                                 </tr>
                             </t>
                             <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
+                                    <t t-set="pack" t-value="l1.product_id.bom_ids"/>
                                     <!--t t-if="l1.product_id.type == 'service'"-->
                                         <t t-if="not l1.origin">
                                             <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
@@ -232,6 +260,26 @@
                                             <t t-if="l1.product_id.type == 'service'">
                                                 <td class="text-center"/>
                                             </t>
+                                             <tr t-if="pack" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                                <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
+                                                <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
+                                                <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
+                                                <t t-if="print_hs_code">
+                                                    <td class="text-center"><span t-field="p_line.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
+                                                </t>
+                                                <td><span t-field="p_line.product_id.product_tmpl_id.description_sale"/></td>
+                                                <t t-set="decimal" t-value="p_line.product_qty % 1"/>
+                                                <t t-if="not decimal == 0">
+                                                    <td class="text-center"><span t-esc="'%.1f'% (l1.quantity * p_line.product_qty)"/></td>
+                                                </t>
+                                                <t t-if="decimal == 0">
+                                                    <td class="text-center"><span t-esc="'%.0f'% (l1.quantity * p_line.product_qty)"/></td>
+                                                </t>
+                                                <td/>
+                                                <td/>
+                                                <td/>
+                                                <td/>
+                                            </tr>
                                         </t>
                                     <!--/t-->
                              </tr>
@@ -239,6 +287,8 @@
                         <t t-if="not o.sale_order_ids">
                            <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                     <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
+                                    <t t-set="pack" t-value="l1.product_id.bom_ids"/>
+
                                     <t t-if="len(product_reference)==1">
                                         <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="l1.product_id"/></td>
                                     </t>
@@ -275,6 +325,26 @@
                                     <t t-if="l1.product_id.type == 'service'">
                                         <td class="text-center"/>
                                     </t>
+                                     <tr t-if="pack" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                                <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
+                                                <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
+                                                <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
+                                                <t t-if="print_hs_code">
+                                                    <td class="text-center"><span t-field="p_line.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
+                                                </t>
+                                                <td><span t-field="p_line.product_id.product_tmpl_id.description_sale"/></td>
+                                                <t t-set="decimal" t-value="p_line.product_qty % 1"/>
+                                                <t t-if="not decimal == 0">
+                                                    <td class="text-center"><span t-esc="'%.1f'% (l1.quantity * p_line.product_qty)"/></td>
+                                                </t>
+                                                <t t-if="decimal == 0">
+                                                    <td class="text-center"><span t-esc="'%.0f'% (l1.quantity * p_line.product_qty)"/></td>
+                                                </t>
+                                                <td/>
+                                                <td/>
+                                                <td/>
+                                                <td/>
+                                        </tr>
                             </tr>
                         </t>
                     </tbody>
