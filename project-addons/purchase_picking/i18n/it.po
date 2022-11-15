@@ -544,3 +544,21 @@ msgstr "Senza incidenti"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_ref_manufacturer
 msgid "Ref. Manufacturer"
 msgstr "Riferimento fornitore"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_kilograms
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_kilograms
+msgid "Kilograms"
+msgstr "Chilogrammi"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_cubic_meters
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_cubic_meters
+msgid "Cubic Meters"
+msgstr "Metri cubi"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_container_type
+msgid "Container type"
+msgstr "Tipo di contenitore"
