@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_add_special_shipping_costs" model="ir.ui.view">
+        <field name="name">product.template.form.add.special.shipping.costs</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <group name="group_lots_and_weight" position="inside">
+                <field name="special_shipping_costs"/>
+            </group>
+        </field>
+    </record>
+</odoo>
