@@ -32,30 +32,33 @@ class TestSaleOrder(SavepointCase):
                                                       })]
                                                   })
 
-    def test_verifies_that_special_shipping_costs_is_false_due_to_there_are_no_products_with_special_shipping_costs_checked(
+    def test_verifies_that_special_shipping_costs_is_false_and_its_transporter_is_not_changed_due_to_there_are_no_products_with_special_shipping_costs_checked(
         self):
         # act
         self.env['sale.order.line'].create({'name': self.product_id.name,
-                                             'product_id': self.product_id2.id,
-                                             'product_uom_qty': 1.0,
-                                             'product_uom': self.uom_id.id,
-                                             'price_unit': 100.0,
-                                             'order_id': self.order.id
-                                             })
+                                            'product_id': self.product_id2.id,
+                                            'product_uom_qty': 1.0,
+                                            'product_uom': self.uom_id.id,
+                                            'price_unit': 100.0,
+                                            'order_id': self.order.id
+                                            })
 
         # assert
         self.assertFalse(self.order.is_special_shipping_costs)
+        self.assertFalse(self.order.transporter_id)
 
-    def test_verifies_that_special_shipping_costs_is_true_due_to_there_are_products_with_special_shipping_costs_checked(
+    def test_verifies_that_special_shipping_costs_is_true_and_its_transporter_is_changeddue_to_there_are_products_with_special_shipping_costs_checked(
         self):
         # act
         self.env['sale.order.line'].create({'name': self.product_id.name,
-                                             'product_id': self.product_id.id,
-                                             'product_uom_qty': 1.0,
-                                             'product_uom': self.uom_id.id,
-                                             'price_unit': 100.0,
-                                             'order_id': self.order.id
-                                             })
+                                            'product_id': self.product_id.id,
+                                            'product_uom_qty': 1.0,
+                                            'product_uom': self.uom_id.id,
+                                            'price_unit': 100.0,
+                                            'order_id': self.order.id
+                                            })
 
         # assert
         self.assertTrue(self.order.is_special_shipping_costs)
+        self.assertEquals(self.order.transporter_id,
+                          self.env.ref('advise_special_shipping_costs.palletized_shipping_transporter'))
