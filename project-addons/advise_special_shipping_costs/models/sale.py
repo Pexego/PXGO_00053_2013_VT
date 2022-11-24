@@ -15,10 +15,11 @@ class SaleOrder(models.Model):
 
     @api.multi
     def _write(self, vals):
+        transporter_id = self.env.ref('advise_special_shipping_costs.palletized_shipping_transporter')
         if vals.get('is_special_shipping_costs', False):
-            vals['transporter_id'] = self.env.ref('advise_special_shipping_costs.palletized_shipping_transporter').id
+            vals['transporter_id'] = transporter_id.id
             vals['service_id'] = self.env.ref('advise_special_shipping_costs.palletized_shipping_service').id
-        elif 'is_special_shipping_costs' in vals.keys():
+        elif 'is_special_shipping_costs' in vals.keys() and self.transporter_id==transporter_id:
             vals['transporter_id'] = self.partner_id.transporter_id.id
             vals['service_id'] = self.partner_id.service_id.id
         return super()._write(vals)
