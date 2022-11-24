@@ -7,10 +7,10 @@
         <field name="arch" type="xml">
             <button name="compute_variables" position="after">
                 <field name="is_special_shipping_costs" invisible="1"/>
-                <div class="warning-advise">
+                <div class="warning-advise" attrs="{'invisible':[('is_special_shipping_costs','=',False)]}">
                     <tr class="center_elements">
                         <td><i class="fa fa-exclamation-triangle fa-2x" style="margin-right:10px"/></td>
-                        <td><span attrs="{'invisible':[('is_special_shipping_costs','=',False)]}">There are products with special shipping costs</span></td>
+                        <td><span>There are products with special shipping costs</span></td>
                     </tr>
                 </div>
             </button>
