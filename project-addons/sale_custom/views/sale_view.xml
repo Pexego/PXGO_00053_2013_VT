@@ -219,7 +219,7 @@
                     <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <field name="partner_shipping_id" position="attributes">
-                    <attribute name="options">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True,"create_edit":True,"create":True}</attribute>
                 </field>
                 <field name="partner_invoice_id" position="attributes">
                     <attribute name="options">{"always_reload": True}</attribute>

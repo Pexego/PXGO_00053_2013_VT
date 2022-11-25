@@ -170,8 +170,7 @@ class ProductProduct(models.Model):
         'Min qty suggested', compute='_get_min_suggested_qty')
     seller_id = fields.Many2one('res.partner', related='seller_ids.name', store=True, string='Main Supplier')
 
-    @api.multi
-    def write(self, vals):
+    def change_state_orderpoints(self, vals):
         active = 'active' in vals.keys()
         type = 'type' in vals.keys()
         for product in self:
@@ -183,4 +182,20 @@ class ProductProduct(models.Model):
                 if orderpoints:
                     orderpoints.write({'active': True})
 
+    @api.multi
+    def write(self, vals):
+        self.change_state_orderpoints(vals)
         return super().write(vals)
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    @api.multi
+    def write(self, vals):
+        product_products = self.mapped('product_variant_ids')
+        if product_products:
+            product_products.change_state_orderpoints(vals)
+
+        return super(ProductTemplate, self).write(vals)
+
+

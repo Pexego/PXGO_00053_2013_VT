@@ -26,10 +26,10 @@
                         string="Revert Invoice"
                         class="oe_highlight"
                         states="invoiced"/>
-                    <!--<button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
+                    <button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
                         string="Invoice"
                         class="oe_highlight"
-                        states="sale"/>-->
+                        states="sale"/>
 
                     <field name="state" widget="statusbar"
                     />
