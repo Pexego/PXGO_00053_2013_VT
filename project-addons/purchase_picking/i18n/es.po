@@ -591,17 +591,6 @@ msgstr "Sin incidencias"
 msgid "Ref. Manufacturer"
 msgstr "Referencia Proveedor"
 
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_kilograms
-#: model:ir.model.fields,help:purchase_picking.field_stock_container_kilograms
-msgid "Kilograms"
-msgstr "Kilogramos"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_cubic_meters
-#: model:ir.model.fields,help:purchase_picking.field_stock_container_cubic_meters
-msgid "Cubic Meters"
-msgstr "Metros Cúbicos"
 
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
