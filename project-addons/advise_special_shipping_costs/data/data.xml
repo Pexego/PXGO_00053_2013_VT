@@ -7,4 +7,9 @@
         <field name="name">Envío Paletizado</field>
         <field name="transporter_ids" eval="[(4, ref('advise_special_shipping_costs.palletized_shipping_transporter'))]"/>
     </record>
+
+    <record id="advise_special_shipping_email" model="ir.config_parameter">
+        <field name="key">advise_special_shipping_email</field>
+        <field name="value">operaciones@visiotechsecurity.com</field>
+    </record>
 </odoo>

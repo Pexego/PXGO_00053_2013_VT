@@ -43,5 +43,5 @@ msgstr "Spese di spedizione speciali"
 
 #. module: advise_special_shipping_costs
 #: model:ir.ui.view,arch_db:advise_special_shipping_costs.sale_order_add_advise_special_shipping_costs
-msgid "<span>There are products with special shipping costs</span>"
-msgstr "<span>Nell'ordine sono presenti prodotti con costi di spedizione speciali</span>"
+msgid "There are products with special shipping costs. Please contact"
+msgstr "Nell'ordine sono presenti prodotti con costi di spedizione speciali. Per favore, contattare con "
