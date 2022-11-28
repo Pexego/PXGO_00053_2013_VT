@@ -10,7 +10,7 @@
                 <div class="warning-advise" attrs="{'invisible':[('is_special_shipping_costs','=',False)]}">
                     <tr class="center_elements">
                         <td><i class="fa fa-exclamation-triangle fa-2x" style="margin-right:10px"/></td>
-                        <td><span>There are products with special shipping costs. Please contact <field name="advise_email"/></span></td>
+                        <td><p>There are products with special shipping costs.</p><span> Please contact <field name="advise_email"/></span></td>
                     </tr>
                 </div>
             </button>

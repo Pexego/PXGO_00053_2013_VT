@@ -17,7 +17,7 @@ class SaleOrder(models.Model):
     def _get_email_advise(self):
         advise = self.env['ir.config_parameter'].sudo().get_param('advise_special_shipping_email')
         for sale in self:
-            sale.advise_email=advise
+            sale.advise_email = advise
 
     advise_email = fields.Char(compute="_get_email_advise")
 
