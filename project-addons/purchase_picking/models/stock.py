@@ -51,6 +51,11 @@ class StockContainer(models.Model):
     incoterm = fields.Many2one('stock.incoterms', string='Incoterm', ondelete="restrict")
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
+    customs_channel = fields.Selection([
+        ('red', '🔴'),
+        ('orange', '🟠'),
+        ('green', '🟢')
+    ])
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(string="Departure", help="Transport departure")
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")

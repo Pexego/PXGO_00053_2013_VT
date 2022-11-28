@@ -128,6 +128,7 @@
                 <group col="6" colspan="2">
                     <field name="name"/>
                     <field name="status"/>
+                    <field name="customs_channel" />
                     <field name="ready"/>
                     <field name="type"/>
                     <field name="telex" attrs="{'invisible':[('type','in',('air', 'road'))]}"/>
@@ -236,6 +237,7 @@
                 <field name="departure"/>
                 <field name="eta"/>
                 <field name="status"/>
+                <field name="customs_channel" widget="color" options="{'readonly_mode': 'color'}"/>
                 <field name="date_expected"/>
                 <field name="conf"/>
                 <field name="telex"/>
