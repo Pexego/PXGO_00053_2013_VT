@@ -45,7 +45,8 @@ class ProductProductExporter(Component):
             'weight': binding.weight,
             'volume': binding.volume,
             'cost_price': binding.standard_price_2_inc,
-            'real_stock': binding.qty_available
+            'real_stock': binding.qty_available,
+            'special_shipping_costs': binding.special_shipping_costs
         }
         if binding.show_stock_outside:
             stock_qty = eval(

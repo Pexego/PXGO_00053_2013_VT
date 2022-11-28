@@ -46,7 +46,7 @@ class ProductTemplateListener(Component):
     def on_record_write(self, record, fields=None):
         up_fields = [
             "name", "list_price", "categ_id", "product_brand_id",
-            "show_stock_outside", "sale_ok", "weight", "volume"]
+            "show_stock_outside", "sale_ok", "weight", "volume", "special_shipping_costs"]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         if country_code == "IT":
@@ -88,7 +88,7 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume", "standard_price_2_inc", "name"
+            "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
         ]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
