@@ -105,9 +105,7 @@ class ClaimLine(models.Model):
              ('description_error', 'Does not correspond with web description'),
              ('missing_parts', 'Missing parts'),
              ('error', 'Shipping error'),
-             ('exchange', 'Exchange request'),
-             ('lost', 'Lost during transport'),
-             ('other', 'Other')
+             ('lost', 'Lost during transport')
              ],
             'Claim Subject', default='broken_down',
             required=True,
