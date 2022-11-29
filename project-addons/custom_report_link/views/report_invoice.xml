@@ -173,7 +173,7 @@
                                                 <td class="text-center"/>
                                             </t>
                                         </tr>
-                                        <tr t-if="pack" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                        <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
                                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
                                                 <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
                                                 <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
@@ -260,7 +260,7 @@
                                             <t t-if="l1.product_id.type == 'service'">
                                                 <td class="text-center"/>
                                             </t>
-                                             <tr t-if="pack" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                             <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
                                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
                                                 <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
                                                 <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
@@ -325,7 +325,7 @@
                                     <t t-if="l1.product_id.type == 'service'">
                                         <td class="text-center"/>
                                     </t>
-                                     <tr t-if="pack" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                     <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
                                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
                                                 <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
                                                 <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>

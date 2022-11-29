@@ -33,6 +33,7 @@
         "data/report_paperformat.xml",
         "data/parameters.xml",
         "views/custom_layout.xml",
+        "views/partner_view.xml",
         "views/stock_custom_report.xml",
         "views/report_sale_order.xml",
         "views/report_purchase_order.xml",
