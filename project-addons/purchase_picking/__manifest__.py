@@ -40,6 +40,7 @@
              'wizard/assign_container_view.xml',
              'wizard/cancel_moves_view.xml',
              'templates/assets.xml',
-             'views/warehouse_view.xml'],
+             'views/warehouse_view.xml',
+             'views/import_sheet_view.xml'],
     "installable": True
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="view_import_sheet_form" model="ir.ui.view">
+        <field name="name">import.sheet.form</field>
+        <field name="model">import.sheet</field>
+        <field name="arch" type="xml">
+            <form string="Import Sheet">
+                <group col="6" colspan="3">
+                    <field name="container_id"/>
+                    <field name="dua"/>
+                    <field name="dua_date"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="import_sheet_tree" model="ir.ui.view">
+        <field name="name">Import Sheets Tree</field>
+        <field name="model">import.sheet</field>
+        <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+        <field name="arch" type="xml">
+            <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
+                <field name="container_id"/>
+                <field name="dua"/>
+            </tree>
+        </field>
+    </record>
+</odoo>
