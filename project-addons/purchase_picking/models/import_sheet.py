@@ -1,11 +1,11 @@
 from odoo import fields, models
 
 
-class ImportSheets(models.Model):
+class ImportSheet(models.Model):
     """
     Class that models Importation Sheets. Registers import costs linked to shipping.
     """
-    _name = "import.sheets"
+    _name = "import.sheet"
 
     container_id = fields.Many2One(
         'stock.container',
