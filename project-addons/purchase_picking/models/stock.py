@@ -172,12 +172,20 @@ class StockContainer(models.Model):
         string="Import Sheets",
         required=True
     )
+    import_sheet_count = fields.Integer(compute='_get_import_sheet_count', default=0)
 
     date_to_order = fields.Date(compute='_get_order_date', store=True)
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Container name must be unique')
     ]
+
+    def _get_import_sheet_count(self):
+        """
+        Gets the list of import_sheet associated with the container and calculates
+        the count of them.
+        """
+        self.import_sheet_count = len(self.import_sheet_ids)
 
 
 class StockPicking(models.Model):

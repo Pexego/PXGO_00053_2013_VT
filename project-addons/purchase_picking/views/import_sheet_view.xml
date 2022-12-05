@@ -26,4 +26,12 @@
             </tree>
         </field>
     </record>
+
+    <record id="action_stock_container_import_sheets" model="ir.actions.act_window">
+        <field name="name">Stock Container Import Sheets</field>
+        <field name="res_model">import.sheet</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="import_sheet_form"/>
+    </record>
 </odoo>
