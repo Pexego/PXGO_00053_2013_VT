@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="reserve_it_assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript"
+                    src="/reserve_without_save_sale_custom_it/static/src/js/sale_order_line.js"/>
+        </xpath>
+    </template>
+    <record id="view_order_form_visibility_reserve_button_dropship" model="ir.ui.view">
+        <field name="name">sale.order.form.reserve.button.dropship</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='order_line']/tree//button[@name='%(stock_reserve_sale.action_sale_stock_reserve)d']"
+                position="attributes">
+                <attribute name="attrs">{'invisible': ['|','|', '|', ('reservation_ids', '!=', []),
+                    ('is_stock_reservable', '=', False), ('hide_reserve_buttons', '=',
+                    True),('route_id','=',%(stock_dropshipping.route_drop_shipping)d)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//button[@name='release_stock_reservation']"
+                   position="attributes">
+                <attribute name="attrs">{'invisible': ['|','|',('reservation_ids', '=', []), ('hide_reserve_buttons',
+                    '=', True),('route_id','=',%(stock_dropshipping.route_drop_shipping)d)]}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
