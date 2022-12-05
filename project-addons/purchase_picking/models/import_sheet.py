@@ -7,7 +7,7 @@ class ImportSheet(models.Model):
     """
     _name = "import.sheet"
 
-    container_id = fields.Many2One(
+    container_id = fields.Many2one(
         'stock.container',
         string="Container",
         ondelete="restrict",
@@ -16,8 +16,10 @@ class ImportSheet(models.Model):
     dua = fields.Char(string="DUA")
     dua_date = fields.Date(string="DUA date")
 
-    kgs = fields.Float(related="container_id.kgs", string="KGS", store=True)
-    Cbm = fields.Float(realted="container_id.cbm", string="CBM", store=True)
+    # FIXME: rm dimensions and add kgs, cbm when changed in container model
+    dimensions = fields.Char(related="container_id.dimensions", store=True)
+    # kgs = fields.Float(related="container_id.kgs", string="KGS", store=True)
+    # cbm = fields.Float(realted="container_id.cbm", string="CBM", store=True)
     incoterm = fields.Char(related="container_id.incoterm.code", readonly=True)
     destination_port = fields.Char(
         related="container_id.destination_port.port_code",

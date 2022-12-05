@@ -166,6 +166,13 @@ class StockContainer(models.Model):
     company_id = fields.Many2one("res.company", "Company", required=True,
                                  default=lambda self: self.env['res.company']._company_default_get('stock.container'))
 
+    import_sheet_ids = fields.One2many(
+        "import.sheet",
+        "container_id",
+        string="Import Sheets",
+        required=True
+    )
+
     date_to_order = fields.Date(compute='_get_order_date', store=True)
 
     _sql_constraints = [
