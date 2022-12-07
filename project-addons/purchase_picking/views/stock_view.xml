@@ -125,7 +125,7 @@
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
             <div class="oe_button_box" name="button_box">
-                <button type="action" name="action_stock_container_import_sheets" class="oe_stat_button">
+                <button type="object" name="action_view_sheets" class="oe_stat_button">
                     <field name="import_sheet_count" widget="statinfo" string="Import Sheets" help="Importation Sheets"/>
                     <field name="import_sheet_ids" invisible="1"/>
                 </button>

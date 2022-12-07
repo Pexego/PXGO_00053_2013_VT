@@ -187,6 +187,14 @@ class StockContainer(models.Model):
         """
         self.import_sheet_count = len(self.import_sheet_ids)
 
+    def action_view_sheets(self):
+
+        action = self.env.ref('purchase_picking.action_stock_container_import_sheets').read()[0]
+
+        action['domain'] = [('id', 'in', self.import_sheet_ids.ids)]
+
+        return action
+
 
 class StockPicking(models.Model):
 

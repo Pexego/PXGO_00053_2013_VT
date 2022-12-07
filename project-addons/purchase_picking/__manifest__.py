@@ -34,13 +34,13 @@
     "data": ['wizard/create_picking_move_view.xml',
              'views/purchase_view.xml',
              'data/res_partner_data.xml',
+             'views/import_sheet_view.xml',
              'views/stock_view.xml',
              'security/ir.model.access.csv',
              'security/purchase_picking_security.xml',
              'wizard/assign_container_view.xml',
              'wizard/cancel_moves_view.xml',
              'templates/assets.xml',
-             'views/warehouse_view.xml',
-             'views/import_sheet_view.xml'],
+             'views/warehouse_view.xml'],
     "installable": True
 }
