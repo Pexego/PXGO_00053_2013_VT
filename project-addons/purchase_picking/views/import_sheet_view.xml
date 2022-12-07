@@ -6,15 +6,19 @@
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
             <form string="Import Sheet">
-                <group col="6" colspan="3">
+                <group col="6" colspan="2">
                     <field name="container_id"/>
                     <field name="dua"/>
                     <field name="dua_date"/>
+                </group>
+                <group col="6" colspan="2">
                     <field name="dimensions"/>
                     <field name="incoterm"/>
                     <field name="destination_port"/>
                     <field name="forwarder_comercial"/>
                     <field name="track"/>
+                </group>
+                <group col="6" colspan="2">
                     <field name="treasury"/>
                     <field name="freight"/>
                     <field name="fee"/>
@@ -33,6 +37,18 @@
             <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
                 <field name="container_id"/>
                 <field name="dua"/>
+                <field name="dua_date"/>
+                <field name="dimensions"/>
+                <field name="incoterm"/>
+                <field name="destination_port"/>
+                <field name="forwarder_comercial"/>
+                <field name="track"/>
+                <field name="treasury"/>
+                <field name="freight"/>
+                <field name="fee"/>
+                <field name="inspection"/>
+                <field name="arrival_cost"/>
+                <field name="destination_cost"/>
             </tree>
         </field>
     </record>
@@ -43,6 +59,6 @@
         <field name="res_model">import.sheet</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_import_sheet_form"/>
+        <field name="view_id" ref="import_sheet_tree"/>
     </record>
 </odoo>
