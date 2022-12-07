@@ -11,7 +11,8 @@ class ImportSheet(models.Model):
         'stock.container',
         string="Container",
         ondelete="restrict",
-        required=True
+        required=True,
+        default=lambda self: self.env['stock.container'].browse(self.env.context['active_id'])
     )
     dua = fields.Char(string="DUA")
     dua_date = fields.Date(string="DUA date")
