@@ -26,6 +26,5 @@ class CrmClaim(models.Model):
 
     delivery_type = fields.Selection([
             ('shipping', 'Shipping'),
-            ('carrier', 'Carrier - Customer'),
             ('installations', 'Pickup in installations'), ],
             'Delivery type', required=True, default='shipping')

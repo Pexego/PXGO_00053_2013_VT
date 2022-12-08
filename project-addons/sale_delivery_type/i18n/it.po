@@ -17,7 +17,6 @@ msgstr ""
 
 #. module: sale_delivery_type
 #: selection:sale.order,delivery_type:0
-#: selection:crm.claim,delivery_type:0
 msgid "Carrier - Customer"
 msgstr "Corriere -  Cliente"
 
