@@ -48,6 +48,7 @@ msgstr "Consumido para"
 #: model:ir.ui.view,arch_db:purchase_picking.stock_move_search_add_new_state
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_container_id
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_container_id
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_id
 msgid "Container"
 msgstr "Envío"
 
@@ -531,6 +532,7 @@ msgstr "Configuración status"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_dimensions
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dimensions
 msgid "Dimensions"
 msgstr "Dimensiones"
 
@@ -616,4 +618,73 @@ msgstr "Referencia Proveedor"
 msgid "Customs Channel"
 msgstr "Canal"
 
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_container_type
+msgid "Container type"
+msgstr "Tipo de contenedor"
 
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_import_sheets
+msgid "Stock Container Import Sheets"
+msgstr "Hojas de Importación"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dua_date
+msgid "DUA date"
+msgstr "Fecha DUA"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_forwarded_comercial
+msgid "Forwarded"
+msgstr "Transitario"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_treasury
+msgid "Treasury"
+msgstr "Hacienda"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_freight
+msgid "Freight"
+msgstr "Flete"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_fee
+msgid "Fee"
+msgstr "Arancel"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_inspection
+msgid "Inspection"
+msgstr "Inspección"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_arrival_cost
+msgid "Arrival costs"
+msgstr "Costes de llegada"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_destination_costs
+msgid "Destination costs"
+msgstr "Costes de destino"
+
+#. module: purchase_picking
+#: selection:import.sheet,track:0
+msgid "Option 1"
+msgstr "Opción 1"
+
+#. module: purchase_picking
+#: selection:import.sheet,track:0
+msgid "Option 2"
+msgstr "Opción 2"
+
+#. module: purchase_picking
+#: selection:import.sheet,track:0
+msgid "Option 3"
+msgstr "Opción 3"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Import Sheets"
+msgstr "Hojas de Importación"
