@@ -27,8 +27,8 @@ class ImportSheet(models.Model):
         string="NAV/PTO",
         readonly=True
     )
-    forwarded_comercial = fields.Char(
-        related="container_id.forwarded_comercial",
+    forwarder_comercial = fields.Char(
+        related="container_id.forwarder_comercial",
         string="Forwarded",
         readonly=True
     )

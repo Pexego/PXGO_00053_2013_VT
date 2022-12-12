@@ -635,7 +635,7 @@ msgid "DUA date"
 msgstr "Fecha DUA"
 
 #. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_forwarded_comercial
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_forwarder_comercial
 msgid "Forwarded"
 msgstr "Transitario"
 
