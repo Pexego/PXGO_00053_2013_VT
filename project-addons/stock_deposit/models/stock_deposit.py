@@ -408,6 +408,7 @@ class StockDeposit(models.Model):
                 'country': commercial_partner_id.country_id.id,
             }
             claim_id = self.env['crm.claim'].create(claim_vals)
+            claim_id.onchange_partner_id()
             line_vals = {
                 'product_id': deposit.product_id.id,
                 'deposit_id': deposit.id,
