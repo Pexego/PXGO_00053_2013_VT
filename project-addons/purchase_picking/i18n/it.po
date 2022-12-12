@@ -48,6 +48,7 @@ msgstr "Consumato per"
 #: model:ir.ui.view,arch_db:purchase_picking.stock_move_search_add_new_state
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_container_id
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_container_id
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_id
 msgid "Container"
 msgstr "Spedizione"
 
@@ -460,6 +461,7 @@ msgstr "Configurazione status"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_dimensions
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dimensions
 msgid "Dimensions"
 msgstr "Dimensioni"
 
@@ -570,4 +572,72 @@ msgstr "Riferimento fornitore"
 msgid "Customs Channel"
 msgstr "Canale"
 
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_container_type
+msgid "Container type"
+msgstr "Tipo di contenitore"
 
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_import_sheets
+msgid "Stock Container Import Sheets"
+msgstr "Fogli di importazioni"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dua_date
+msgid "DUA date"
+msgstr "Data DUA"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_forwarded_comercial
+msgid "Forwarded"
+msgstr "Spedizioniere"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_treasury
+msgid "Treasury"
+msgstr "Tesoro"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_freight
+msgid "Freight"
+msgstr "Transporto merci"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_fee
+msgid "Fee"
+msgstr "Tariffa"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_inspection
+msgid "Inspection"
+msgstr "Ispezione"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_arrival_cost
+msgid "Arrival costs"
+msgstr "Costi d'arrivo"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_destination_costs
+msgid "Destination costs"
+msgstr "Costi di destinazione"
+
+#. module: purchase_picking
+#: selection:import.sheet,track:0
+msgid "Option 1"
+msgstr "Opzione 1"
+
+#. module: purchase_picking
+#: selection:import.sheet,track:0
+msgid "Option 2"
+msgstr "Opzione 2"
+
+#. module: purchase_picking
+#: selection:import.sheet,track:0
+msgid "Option 3"
+msgstr "Opzione 3"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Import Sheets"
+msgstr "Fogli di importazioni"
