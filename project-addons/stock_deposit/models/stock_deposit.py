@@ -327,6 +327,7 @@ class StockDeposit(models.Model):
                 line.qty_invoiced = line.product_qty
             invoice_ids.append(invoice.id)
             sale_deposit.write({'invoice_id': invoice.id})
+            invoice._onchange_invoice_line_ids()
         deposits.write({'state': 'invoiced'})
         return invoice_ids
 

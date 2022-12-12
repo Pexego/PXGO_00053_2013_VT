@@ -467,11 +467,6 @@ msgid "Error!"
 msgstr "Errore!"
 
 #. module: crm_claim_rma
-#: selection:claim.line,claim_origine:0
-msgid "Exchange request"
-msgstr "Sollecita cambio"
-
-#. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_planned_cost
 msgid "Expected cost"
 msgstr "Costo stimato"
@@ -808,11 +803,6 @@ msgstr "Il numero / riferimento deve essere unico per ogni azienda!"
 #: selection:claim.line,claim_origine:0
 msgid "Order cancellation"
 msgstr "Ordine cancellato"
-
-#. module: crm_claim_rma
-#: selection:claim.line,claim_origine:0
-msgid "Other"
-msgstr "Altro"
 
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_delay_expected

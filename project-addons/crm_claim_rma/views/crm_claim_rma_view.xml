@@ -378,7 +378,10 @@
                 <group name="Product Return">
                     <separator string="Product Return" colspan="4"/>
                     <group>
-                        <field name="delivery_address_id" context="{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'search_default_parent_id': partner_id}" required="1"/>
+                        <field name="delivery_address_id"
+                               options='{"create_edit":True,"create":True}'
+                               context="{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'search_default_parent_id': partner_id}"
+                               required="1"/>
                     </group>
                     <group>
                     </group>

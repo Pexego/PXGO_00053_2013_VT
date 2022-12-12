@@ -30,10 +30,10 @@
                     <button name="create_claim" type="object"
                         string="Create RMA"
                         class="oe_highlight" attrs="{'invisible':['|',('claim_id','!=',False),('state','!=','draft')]}"/>
-                    <!--<button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
+                    <button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
                         string="Invoice"
                         class="oe_highlight"
-                        states="sale"/>-->
+                        states="sale"/>
 
                     <field name="state" widget="statusbar"
                     />

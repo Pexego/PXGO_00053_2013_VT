@@ -13,6 +13,7 @@
                 <field name="name" readonly="1"/>
                 <field name="partner_id" readonly="1"/>
                 <field name="lots_text"/>
+                <field name="product_uom_qty" readonly="1"/>
                 <field name="date" readonly="1"/>
                 <field name="date_done" readonly="1"/>
                 <field name="state" readonly="1"/>
