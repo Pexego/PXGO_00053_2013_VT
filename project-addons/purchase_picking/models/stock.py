@@ -55,7 +55,7 @@ class StockContainer(models.Model):
         ('red', '🔴'),
         ('orange', '🟠'),
         ('green', '🟢')
-    ])
+    ],string="Customs Channel")
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(string="Departure", help="Transport departure")
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")

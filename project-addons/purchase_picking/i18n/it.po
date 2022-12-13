@@ -544,3 +544,8 @@ msgstr "Senza incidenti"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_ref_manufacturer
 msgid "Ref. Manufacturer"
 msgstr "Riferimento fornitore"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_customs_channel
+msgid "Customs Channel"
+msgstr "Canale Doganale"
