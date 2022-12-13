@@ -102,6 +102,7 @@ msgstr "Vendido a"
 
 #. module: sim_manager
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_state
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_state
 msgid "State"
 msgstr "Estado"
 
