@@ -74,12 +74,6 @@ msgid "Scan SIMs"
 msgstr "Escanear SIMs"
 
 #. module: sim_manager
-#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
-#, python-format
-msgid "Scan the #1 serial for %s"
-msgstr "Escanea el #1 ID para el %s"
-
-#. module: sim_manager
 #: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
 msgid "Scanning SIMs"
 msgstr "Escaneando SIMs"
@@ -107,7 +101,7 @@ msgid "State"
 msgstr "Estado"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:29
+#: code:addons/sim_manager/models/sim.py:70
 #, python-format
 msgid "{} created"
 msgstr "{} creado"
@@ -148,14 +142,14 @@ msgid "SIM Tags"
 msgstr "Etiquetas SIM"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:70
+#: code:addons/sim_manager/models/sim.py:81
 #, python-format
 msgid "Package %s finished. Scan for continue with next package"
 msgstr "Paquete %s terminado. Escanea el siguiente para continuar"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:78
-#: code:addons/sim_manager/models/sim.py:99
+#: code:addons/sim_manager/models/sim.py:89
+#: code:addons/sim_manager/models/sim.py:113
 #, python-format
 msgid "Scan the #%s serial for %s"
 msgstr "Escanea el #%s ID para el %s"
@@ -189,13 +183,13 @@ msgid "Type"
 msgstr "Tipo"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/stock.py:27
+#: code:addons/sim_manager/models/stock.py:30
 #, python-format
 msgid "Some of these SIM cards %s of the picking %s have not been found in the system."
 msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el sistema."
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:20
+#: code:addons/sim_manager/models/claim.py:25
 #, python-format
 msgid "You must specify the serial number of the serial products"
 msgstr "Debes especificar el número de serie de los productos con tracking"
@@ -206,19 +200,13 @@ msgid "[Odoo] Missing Bank Account on SIM invoice"
 msgstr "[Odoo] Faltan cuentas bancarias en facturas SIM"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/res_partner.py:82
-#, python-format
-msgid "Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n"
-msgstr "El cliente %s no tiene cuenta o un mandato válido. La factura %s no se ha cambiado. \n"
-
-#. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:37
+#: code:addons/sim_manager/models/claim.py:44
 #, python-format
 msgid "The serial numbers cannot be found in the system. Check the serials and the format."
 msgstr "Los números de serie no se encuentran en el sistema. Comprueba los números y el formato."
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:41
+#: code:addons/sim_manager/models/claim.py:48
 #, python-format
 msgid "Some introduced SIMs are not assigned to %s"
 msgstr "Algunas SIMs no están asignadas a %s"
@@ -233,3 +221,39 @@ msgstr "Pedido bloqueado, el cliente tiene demasiadas SIM inactivas. {}% Activo"
 #: model:ir.model.fields,field_description:sim_manager.field_sale_order_allow_sale_sim
 msgid "Allow SIM"
 msgstr "Permitir SIM"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Active"
+msgstr "Activa"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Active disuse"
+msgstr "Activa en desuso"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Unsuscribed"
+msgstr "Desactivada"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Blocked"
+msgstr "Bloqueada"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Preactivated"
+msgstr "Preactivada"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:34
+#, python-format
+msgid "Error while reading SIM state"
+msgstr "Error al leer el estado de la tarjeta SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_res_partner_sim_active_perc
+msgid "Active SIMs"
+msgstr "SIMs activas"

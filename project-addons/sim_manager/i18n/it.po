@@ -73,12 +73,6 @@ msgid "Scan SIMs"
 msgstr "Scansionare SIMs"
 
 #. module: sim_manager
-#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
-#, python-format
-msgid "Scan the #1 serial for %s"
-msgstr "Scansiona il #1 ID per il %s"
-
-#. module: sim_manager
 #: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
 msgid "Scanning SIMs"
 msgstr "Scasionando SIMs"
@@ -105,7 +99,7 @@ msgid "State"
 msgstr "Stato"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:29
+#: code:addons/sim_manager/models/sim.py:70
 #, python-format
 msgid "{} created"
 msgstr "{} creado"
@@ -136,14 +130,14 @@ msgid "Cancel"
 msgstr "Anulla"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:70
+#: code:addons/sim_manager/models/sim.py:81
 #, python-format
 msgid "Package %s finished. Scan for continue with next package"
 msgstr "Pachetto %s finito. Scansiona il sucesivo per continuare"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:78
-#: code:addons/sim_manager/models/sim.py:99
+#: code:addons/sim_manager/models/sim.py:89
+#: code:addons/sim_manager/models/sim.py:113
 #, python-format
 msgid "Scan the #%s serial for %s"
 msgstr "Scasiona il #%s ID per il %s"
@@ -178,13 +172,13 @@ msgid "Type"
 msgstr "Tipo"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/stock.py:27
+#: code:addons/sim_manager/models/stock.py:30
 #, python-format
 msgid "Some of these SIM cards %s of the picking %s have not been found in the system"
 msgstr "Alcuni di queste SIM card %s della bolla %s non esistono nel sistema."
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:20
+#: code:addons/sim_manager/models/claim.py:25
 #, python-format
 msgid "You must specify the serial number of the serial products"
 msgstr "Devi specificare il numero serie dei prodotti con traking"
@@ -211,3 +205,39 @@ msgstr "Ordine bloccato, il utente ha troppe SIM innative. {}% Attivo"
 #: model:ir.model.fields,field_description:sim_manager.field_sale_order_allow_sale_sim
 msgid "Allow SIM"
 msgstr "Permettere SIM"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Active"
+msgstr "Attiva"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Active disuse"
+msgstr "Attiva in disuso"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Unsuscribed"
+msgstr "Disattivata"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Blocked"
+msgstr "Bloccata"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Preactivated"
+msgstr "Preattivata"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:34
+#, python-format
+msgid "Error while reading SIM state"
+msgstr "Errore di lettura dello stato della carta SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_res_partner_sim_active_perc
+msgid "Active SIMs"
+msgstr "SIMs attive"
