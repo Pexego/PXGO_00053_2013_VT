@@ -4,6 +4,7 @@ import json
 import logging
 from odoo.addons.queue_job.job import job
 import requests
+import urllib
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +140,21 @@ class SimSerial(models.Model):
 
     code = fields.Char(string='Serial')
     package_id = fields.Many2one('sim.package', string='Package')
+    state = fields.Char(compute='_get_sim_state', string="State")
+
+    def _get_sim_state(self):
+        """
+        Returns the state of the SimSerial from the web
+        """
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        data = {'iccid': self.code}
+        web_endpoint = (
+            f"{self.env['ir.config_parameter'].sudo().get_param('web.sim.detail.endpoint')}"
+            f"?{urllib.parse.urlencode(data)}"
+        )
+        response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
+        self.state = json.loads(response.content.decode('utf-8'))['state']
 
 
 class SimType(models.Model):
