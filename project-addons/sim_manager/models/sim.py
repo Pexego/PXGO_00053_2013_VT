@@ -5,6 +5,8 @@ import logging
 from odoo.addons.queue_job.job import job
 import requests
 import urllib
+from odoo.exceptions import UserError
+
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +156,10 @@ class SimSerial(models.Model):
             f"?{urllib.parse.urlencode(data)}"
         )
         response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
-        self.state = json.loads(response.content.decode('utf-8'))['state']
+        if response.status_code == 200:
+            self.state = json.loads(response.content.decode('utf-8'))['state']
+        else:
+            raise UserError(_('Error while reading SIM state'))
 
 
 class SimType(models.Model):
