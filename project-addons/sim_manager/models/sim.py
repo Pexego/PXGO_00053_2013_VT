@@ -142,7 +142,16 @@ class SimSerial(models.Model):
 
     code = fields.Char(string='Serial')
     package_id = fields.Many2one('sim.package', string='Package')
-    state = fields.Char(compute='_get_sim_state', string="State")
+    state = fields.Selection(
+        compute='_get_sim_state', string="State", readonly=True,
+        selection=[
+            ('active', 'Active'),
+            ('active_disuse', 'Active disuse'),
+            ('unsuscribed', 'Unsuscribed'),
+            ('blocked', 'Blocked'),
+            ('preactivated', 'Preactivated')
+        ]
+    )
 
     def _get_sim_state(self):
         """
