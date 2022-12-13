@@ -4,12 +4,44 @@ import requests
 import json
 from datetime import datetime
 import calendar
+import urllib
 
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     sim_serial_ids = fields.One2many('sim.package', 'partner_id')
+    sim_active_perc = fields.Float(compute='_get_active_sims_perc', string='Active SIMs')
+
+
+    def _get_active_sims_perc(self):
+        """
+        Obtains the percentage of active SimSerials
+        """
+        sim_count = sum([int(package_id.qty) for package_id in self.sim_serial_ids])
+        if sim_count == 0:
+            # if no sims then no active sims
+            self.sim_active_perc = 0
+            return
+
+        num_active_sims = 0
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        data = {
+            'odoo_id': self.id,
+            'origin': country_code.lower()
+        }
+        web_endpoint = (
+            "http://sim-visiotech-dev.visiotechsecurity.com/administrator/customer/odoo/customerActiveSims"
+            f"?{urllib.parse.urlencode(data)}"
+        )
+        response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
+        if response.status_code == 200:
+            num_active_sims = int(response.content)
+
+        self.sim_active_perc = num_active_sims * 100 / sim_count
+
 
     def invoice_sim_packages(self, month=None):
         # execute only if come the month or if today is the last day of the month
