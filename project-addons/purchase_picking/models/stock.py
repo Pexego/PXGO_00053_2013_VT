@@ -31,6 +31,9 @@ class StockContainer(models.Model):
         ('road', 'Road'),
     ])
     dimensions = fields.Char(string="CBM/KG", help="Dimensions")
+    container_type = fields.Char(string="Container type", help="Container type")
+    cubic_meters = fields.Float(string="CBM", help="Cubic Meters")
+    kilograms = fields.Float(string="KG", help="Kilograms")
     ready = fields.Date(string="Ready", help="Ready merchandise date")
     etd = fields.Date(string="ETD", help="Date of departure of transport")
     eta = fields.Date(string="ETA", help="Arrival date at port / destination")
