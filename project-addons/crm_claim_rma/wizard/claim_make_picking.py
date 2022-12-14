@@ -23,9 +23,28 @@ from odoo import fields, models, _, exceptions, api
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
-#TODO: revisar este wizard al migrar crm_claim_rma_custom
-class ClaimMakePicking(models.TransientModel):
 
+class ClaimMakePickingLine(models.TransientModel):
+    _name = "claim.make.picking.wizard.line"
+
+    product_id = fields.Many2one('product.product')
+    product_qty = fields.Float()
+    deposit_id = fields.Many2one('stock.deposit')
+    prodlot_id = fields.Char(
+            string='Serial/Lot n°',
+            help="The serial/lot of the returned product")
+    substate_id = fields.Many2one(
+        'substate.substate',
+        string='Sub state',
+        help="Select a sub state to precise the standard state. Example 1:"
+             " state = refused; substate could be warranty over, not in "
+             "warranty, no problem,... . Example 2: state = to treate; "
+             "substate could be to refund, to exchange, to repair,...")
+    claim_line_id = fields.Many2one('claim.line')
+    equivalent_product_id = fields.Many2one('product.product')
+
+
+class ClaimMakePicking(models.TransientModel):
     _name = "claim_make_picking.wizard"
     _description = 'Wizard to create pickings from claim lines'
 
@@ -47,29 +66,39 @@ class ClaimMakePicking(models.TransientModel):
             elif context.get('type') == customer_type:
                 loc_id = partner.property_stock_customer
         elif context.get('picking_type') == 'in':
-            # Add the case of return to supplier !
-            line_ids = self._get_claim_lines()
-            loc_id = self._get_common_dest_location_from_line(line_ids)
+            loc_id = self.env.get('crm_rma_advance_location.stock_location_rma')
         return loc_id
 
     @api.model
     def _get_claim_lines(self):
-        # TODO use custom states to show buttons of this wizard or not instead
-        # of raise an error
         context = self.env.context
         line_obj = self.env['claim.line']
-        if context.get('picking_type') == 'out':
-            move_field = 'move_out_customer_id'
-        else:
-            move_field = 'move_in_customer_id'
         good_lines = []
-        line_ids = line_obj.search([('claim_id', '=', context['active_id'])])
+        domain = [('claim_id', '=', context['active_id'])]
+        if context.get('picking_type') == 'out':
+            domain += [('deposit_id','=',False)]
+        line_ids = line_obj.search(domain)
         for line in line_ids:
-            if not line[move_field] or line[move_field].state == 'cancel':
-                good_lines.append(line.id)
+            if context.get('picking_type') == 'out':
+                moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                    'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier',
+                                                                                    'customer'] and m.state != 'cancel')
+            else:
+                moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                    'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
+                    'crm_rma_advance_location.stock_location_rma') and m.state != 'cancel')
+            product_moves_qty = sum(moves.mapped('product_uom_qty'))
+            if product_moves_qty < line.product_returned_quantity:
+                good_lines.append({'product_id': line.product_id.id,
+                                   'equivalent_product_id': line.equivalent_product_id.id,
+                                   'product_qty': line.product_returned_quantity - product_moves_qty,
+                                   'claim_line_id': line.id,
+                                   'deposit_id': line.deposit_id.id,
+                                   'substate_id': line.substate_id.id,
+                                   'prodlot_id': line.prodlot_id
+                                   })
         if not good_lines:
-            raise exceptions.UserError(
-                _('A picking has already been created for this claim.'))
+            raise exceptions.UserError(_('All units are already processed'))
         return good_lines
 
     # Get default source location
@@ -95,118 +124,124 @@ class ClaimMakePicking(models.TransientModel):
         return loc_id
 
     claim_line_source_location = fields.Many2one(
-            'stock.location',
-            string='Source Location',
-            help="Location where the returned products are from.",
-            required=True, default=_get_source_loc)
+        'stock.location',
+        string='Source Location',
+        help="Location where the returned products are from.",
+        required=True, default=_get_source_loc)
     claim_line_dest_location = fields.Many2one(
-            'stock.location',
-            string='Dest. Location',
-            help="Location where the system will stock the returned products.",
-            required=True, default=_get_dest_loc)
+        'stock.location',
+        string='Dest. Location',
+        help="Location where the system will stock the returned products.",
+        required=True, default=_get_dest_loc)
     claim_line_ids = fields.Many2many(
-            'claim.line',
-            'claim_line_picking',
-            'claim_picking_id',
-            'claim_line_id',
-            string='Claim lines', default=_get_claim_lines)
-
-    def _get_common_dest_location_from_line(self, line_ids):
-        """Return the ID of the common location between all lines. If no common
-        destination was  found, return False"""
-        loc_id = False
-        line_obj = self.env['claim.line']
-        line_location = []
-        for line in line_obj.browse(line_ids):
-            if line.location_dest_id.id not in line_location:
-                line_location.append(line.location_dest_id.id)
-        if len(line_location) == 1:
-            loc_id = line_location
-        return loc_id
-
-    def _get_common_partner_from_line(self, line_ids):
-        """Return the ID of the common partner between all lines. If no common
-        partner was found, return False"""
-        partner_id = False
-        line_obj = self.env['claim.line']
-        line_partner = []
-        for line in line_obj.browse(line_ids):
-            if (line.warranty_return_partner
-                    and line.warranty_return_partner.id
-                    not in line_partner):
-                line_partner.append(line.warranty_return_partner.id)
-        if len(line_partner) == 1:
-            partner_id = line_partner[0]
-        return partner_id
-
-    @api.model
-    def action_cancel(self):
-        return {'type': 'ir.actions.act_window_close'}
+        'claim.make.picking.wizard.line',
+        string='Claim lines', default=_get_claim_lines)
 
     @api.multi
-    def create_move(self, claim_line, p_type, picking_id, claim, note, write_field):
+    def create_move(self, wizard_line, p_type, picking_id, claim, note):
         type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)])
         partner_id = claim.delivery_address_id
         move_obj = self.env['stock.move']
+        claim_line = wizard_line.claim_line_id
         product = claim_line.product_id
-        if self.env.context.get('picking_type', 'in') == u'out' and \
-                claim_line.equivalent_product_id:
-            product = claim_line.equivalent_product_id
-        qty = claim_line.product_returned_quantity
-
+        context = self.env.context
+        qty = wizard_line.product_qty
+        if context.get('picking_type', 'in') == u'out' and claim_line.equivalent_product_id:
+                product = claim_line.equivalent_product_id
         move_id = move_obj.create(
-            {'name': claim_line.product_id.name,
+            {'name': product.name,
              'priority': '0',
              'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
              'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
              'product_id': product.id,
              'picking_type_id': type_ids and type_ids[0].id,
-             'product_uom_qty': claim_line.product_returned_quantity,
-             'product_uom': claim_line.product_id.uom_id.id,
+             'product_uom_qty': qty,
+             'product_uom': product.uom_id.id,
              'partner_id': partner_id.id,
              'picking_id': picking_id.id,
              'state': 'draft',
              'price_unit': claim_line.unit_sale_price,
              'company_id': claim.company_id.id,
-             'location_id': self.claim_line_source_location.id,
-             'location_dest_id': self.claim_line_dest_location.id,
+             'location_id': picking_id.location_id.id,
+             'location_dest_id': picking_id.location_dest_id.id,
              'note': note,
              'claim_line_id': claim_line.id
              })
-        claim_line.write({write_field: move_id.id})
 
     # If "Create" button pressed
     def action_create_picking(self):
+        lines_with_deposits = self.env['claim.make.picking.wizard.line']
+        pickings = self.env['stock.picking']
+        for line in self.claim_line_ids:
+            claim_line = line.claim_line_id
+            if self.env.context.get('picking_type') == 'out':
+                moves = claim_line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                    'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier',
+                                                                                    'customer'] and m.state != 'cancel')
+            else:
+                moves = claim_line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                    'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
+                    'crm_rma_advance_location.stock_location_rma') and m.state != 'cancel')
+            product_moves_qty = sum(moves.mapped('product_uom_qty'))
+            if claim_line.product_returned_quantity - product_moves_qty - line.product_qty < 0:
+                raise exceptions.UserError(_("It is not possible to create pickings with more units than there are in "
+                                             "the RMA"))
+        p_type=self.env.context.get('picking_type')
+        if p_type in ['in','out']:
+            lines_with_deposits = self.claim_line_ids.filtered(lambda c: c.claim_line_id.deposit_id)
+            if lines_with_deposits:
+                pick = self.create_picking(lines_with_deposits, deposit_mode=True)
+                pickings |= pick
+                for line in lines_with_deposits:
+                    deposit = line.claim_line_id.deposit_id
+                    if line.product_qty < deposit.product_uom_qty:
+                        new_deposit = deposit.copy()
+                        new_deposit.write({'product_uom_qty': deposit.product_uom_qty - line.product_qty})
+                        deposit.write({'product_uom_qty': line.product_qty})
+                    if p_type == 'in':
+                        move = pick.move_lines.filtered(lambda m: m.claim_line_id == line.claim_line_id)
+                        deposit.set_rma(move)
+                    else:
+                        deposit.set_draft()
+
+        lines = self.claim_line_ids - lines_with_deposits
+        if lines:
+            pickings |= self.create_picking(lines)
+        action = self.env.ref('stock.action_picking_tree_all').read()[0]
+
+        if len(pickings) > 1:
+            action['domain'] = [('id', 'in', pickings.ids)]
+        elif pickings:
+            action['views'] = [(self.env.ref('stock.view_picking_form').id, 'form')]
+            action['res_id'] = pickings.id
+        return action
+
+    def create_picking(self, claim_lines, deposit_mode=False):
         picking_obj = self.env['stock.picking']
         claim_obj = self.env['crm.claim']
-        view_obj = self.env['ir.ui.view']
-        name = 'RMA picking out'
+        note = 'RMA picking out'
         context = self.env.context
-        if context.get('picking_type') == 'out':
-            p_type = 'outgoing'
-            write_field = 'move_out_customer_id'
-            note = 'RMA picking out'
-            view_xml_id = 'stock_picking_form'
-        else:
-            p_type = 'incoming'
-            write_field = 'move_in_customer_id'
-            if context.get('picking_type'):
-                note = 'RMA picking ' + str(context.get('picking_type'))
-                name = note
-        model = 'stock.picking'
-        view_id = view_obj.search([('model', '=', model),
-                                   ('type', '=', 'form'),
-                                   ])[0]
+
+        location_id = self.claim_line_source_location
+        location_dest_id = self.claim_line_dest_location
+
         claim = claim_obj.browse(context['active_id'])
         partner_id = claim.delivery_address_id
-        line_ids = [x.id for x in self.claim_line_ids]
-        # In case of product return, we don't allow one picking for various
-        # product if location are different
-        # or if partner address is different
-        if context.get('product_return'):
-            common_dest_loc_id = self._get_common_dest_location_from_line(line_ids)
-            self.env['claim.line'].browse(line_ids).auto_set_warranty()
-            common_dest_partner_id = self._get_common_partner_from_line(line_ids)
+        not_sync = False
+        picking_type = context.get('picking_type',"")
+        if picking_type == 'out':
+            p_type = 'outgoing'
+        else:
+            p_type = 'incoming'
+            not_sync = True
+            note = 'RMA picking ' + str(p_type)
+        if claim_lines and deposit_mode:
+            deposit = claim_lines[0].claim_line_id.deposit_id
+            if picking_type == 'in':
+                location_id = deposit.move_id.location_dest_id
+            elif picking_type == 'out':
+                location_dest_id = deposit.move_id.location_dest_id
+
         # create picking
         type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)])
         picking_id = picking_obj.create(
@@ -218,32 +253,17 @@ class ClaimMakePicking(models.TransientModel):
              'partner_id': partner_id.id,
              'invoice_state': "none",
              'company_id': claim.company_id.id,
-             'location_id': self.claim_line_source_location.id,
-             'location_dest_id': self.claim_line_dest_location.id,
+             'location_id': location_id.id,
+             'location_dest_id': location_dest_id.id,
              'note': note,
              'claim_id': claim.id,
+             'not_sync':not_sync
              })
         # Create picking lines
-        for wizard_claim_line in self.claim_line_ids:
-            self.create_move(wizard_claim_line, p_type, picking_id, claim, note, write_field)
+        for wizard_claim_line in claim_lines:
+            self.create_move(wizard_claim_line, p_type, picking_id, claim, note)
 
         if picking_id:
-            picking_id.action_assign()
-            # if we validate the picking, it fails because there is no quantity available
-            #picking_id.button_validate()
-            domain = ("[('picking_type_code', '=', '%s'), \
-                                   ('partner_id', '=', %s)]" %
-                      (p_type, partner_id.id))
+            picking_id.with_context({'claim_mode':True}).action_assign()
 
-            return {
-                'name': '%s' % name,
-                'view_type': 'form',
-                'view_mode': 'form',
-                'view_id': view_id.id,
-                'domain': domain,
-                'res_model': model,
-                'res_id': picking_id.id,
-                'type': 'ir.actions.act_window',
-            }
-        else:
-            return {'type': 'ir.actions.act_window_close'}
+        return picking_id

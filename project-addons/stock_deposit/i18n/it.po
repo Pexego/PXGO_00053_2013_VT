@@ -431,6 +431,21 @@ msgid "This deposit has invoices in non-draft status, please check it before rev
 msgstr "Questo deposito ha fatture in stato di non bozza, controllalo prima di ripristinarlo"
 
 #. module: stock_deposit
+#: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_form
+msgid "Create RMA"
+msgstr "Crea RMA"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_claim_picking_id
+msgid "RMA Picking Claim"
+msgstr "Bolla di consegna RMA"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_damaged_picking_id
+msgid "Damaged Picking"
+msgstr "Bolla di consegna danneggiato"
+
+#. module: stock_deposit
 #: model:ir.model.fields,field_description:stock_deposit.field_stock_return_deposit_options
 msgid "Options"
 msgstr "Opzioni"

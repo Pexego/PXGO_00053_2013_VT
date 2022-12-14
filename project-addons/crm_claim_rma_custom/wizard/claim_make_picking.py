@@ -22,6 +22,10 @@ from odoo import models, api, fields, exceptions, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
+class ClaimMakePickingLine(models.TransientModel):
+    _inherit = "claim.make.picking.wizard.line"
+
+    sequence = fields.Integer()
 
 class ClaimMakePicking(models.TransientModel):
 
@@ -50,10 +54,15 @@ class ClaimMakePicking(models.TransientModel):
 
 
     @api.multi
-    def create_move(self, claim_line, p_type, picking_id, claim, note, write_field):
+    def create_move(self, wizard_line, p_type, picking_id, claim, note):
         type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)]).ids
+        claim_line = wizard_line.claim_line_id
         if claim_line.product_id.bom_ids:
             partner_id = claim.delivery_address_id and claim.delivery_address_id.id or claim.partner_id.id
+            context = self.env.context
+            qty = claim_line.product_returned_quantity
+            if context.get('picking_type', 'in') == u'out':
+                qty = wizard_line.product_qty
             for bom in claim_line.product_id.bom_ids:
                 if bom.type == 'phantom':
                     for bom_line in bom.bom_line_ids:
@@ -64,29 +73,28 @@ class ClaimMakePicking(models.TransientModel):
                              'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                              'product_id': bom_line.product_id.id,
                              'picking_type_id': type_ids and type_ids[0],
-                             'product_uom_qty': bom_line.product_qty * claim_line.product_returned_quantity,
+                             'product_uom_qty': bom_line.product_qty * qty,
                              'product_uom': bom_line.product_id.uom_id.id,
                              'partner_id': partner_id,
                              'picking_id': picking_id.id,
                              'state': 'draft',
                              'company_id': claim.company_id.id,
-                             'location_id': self.claim_line_source_location.id,
-                             'location_dest_id': self.claim_line_dest_location.id,
+                             'location_id': picking_id.location_id.id,
+                             'location_dest_id': picking_id.location_dest_id.id,
                              'note': note,
                              'claim_line_id': claim_line.id
                              })
-                        claim_line.write({write_field: move.id})
                 else:
                     super(ClaimMakePicking, self).create_move(
-                        claim_line, p_type, picking_id, claim, note, write_field)
+                        wizard_line, p_type, picking_id, claim, note)
         else:
             return super(ClaimMakePicking, self).create_move(
-                claim_line, p_type, picking_id, claim, note, write_field)
+                wizard_line, p_type, picking_id, claim, note)
 
     @api.multi
     def action_create_picking(self):
         if not self.env.context.get('bypass_product_incidences_advise', False):
-            incidences = self.claim_line_ids.mapped('product_id.incidence_ids').filtered(lambda i:i.warn)
+            incidences = self.claim_line_ids.mapped('claim_line_id.product_id.incidence_ids').filtered(lambda i:i.warn)
             if incidences:
                 return self.env['product.incidences.advise.wiz'].create({
                     'origin_reference':
@@ -124,3 +132,15 @@ class ClaimMakePicking(models.TransientModel):
                 raise exceptions.Warning(
                     _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
         return super(ClaimMakePicking, self).default_get(vals)
+
+    @api.model
+    def _get_claim_lines(self):
+        res_lines = super(ClaimMakePicking, self)._get_claim_lines()
+        for line in res_lines:
+            claim_line_id = self.env['claim.line'].browse(line.get('claim_line_id'))
+            line['sequence'] = claim_line_id.sequence
+        return res_lines
+
+    claim_line_ids = fields.Many2many(
+        'claim.make.picking.wizard.line',
+        string='Claim lines', default=_get_claim_lines)

@@ -715,11 +715,6 @@ msgid "More precise description of the problem"
 msgstr "Descrizione dettagliata del problema"
 
 #. module: crm_claim_rma
-#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_in_customer_id
-msgid "Move Line from customer picking in"
-msgstr "Sposta linea dalla scelta del cliente"
-
-#. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_out_customer_id
 msgid "Move Line from customer picking out"
 msgstr "Sposta linea dalla scelta del cliente"
@@ -1002,6 +997,7 @@ msgstr "Riparazioni"
 
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_equivalent_product_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_equivalent_product_id
 msgid "Replacement"
 msgstr "Prodotto sostitutivo"
 
@@ -1141,6 +1137,7 @@ msgstr "Invia a fornitore"
 
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_prodlot_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_prodlot_id
 msgid "Serial/Lot n°"
 msgstr "Numero di serie"
 
@@ -1199,6 +1196,7 @@ msgstr "Revisione di stock"
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_substate_id
 #: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_name
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_substate_id
 msgid "Sub state"
 msgstr "Sotto stato"
 
@@ -1281,12 +1279,6 @@ msgstr "Il reclamo non ha fatture da rimborsare."
 #: model:ir.model.fields,help:crm_claim_rma.field_claim_line_invoice_line_id
 msgid "The invoice line related to the returned product"
 msgstr "La linea della fattura relativa al prodotto restituito"
-
-#. module: crm_claim_rma
-#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_move_in_customer_id
-#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_move_out_customer_id
-msgid "The move line related to the returned product"
-msgstr "La linea di spostamento relativa al prodotto restituito"
 
 #. module: crm_claim_rma
 #: code:addons/crm_claim_rma/crm_claim_rma.py:330
@@ -1562,6 +1554,40 @@ msgid "Check the status of the line"
 msgstr "Controlla lo stato della linea"
 
 #. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_product_qty
+msgid "Product Qty"
+msgstr "Qtà prodotto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_deposit_id
+msgid "Deposit"
+msgstr "Deposito"
+
+#. module: crm_claim_rma
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "Partially Sent"
+msgstr "Parzialmente spedito"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/claim_make_picking.py:84
+msgid "All units are already processed"
+msgstr "Tutte le unità sono state elaborate"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/claim_make_picking.py:84
+msgid "It is not possible to create pickings with more units than there are in the RMA"
+msgstr "Non è possibile creare note di consegna con più unità di quelle presenti nell'RMA"
+
+#. module: crm_Claim_rma
 #: model:mail.template,subject:crm_claim_rma.picking_done_template_claim
 msgid "VISIOTECH - Shipped products"
 msgstr "VISIOTECH - Prodotti inviati"

@@ -100,3 +100,8 @@ class StockMove(models.Model):
                         if not reservation.claim_id:
                             continue
         return super(StockMove, self).write(vals)
+
+    def _action_confirm(self, merge=True, merge_into=False):
+        if self.env.context.get('claim_mode', False):
+            merge = False
+        return super(StockMove, self)._action_confirm(merge, merge_into)
