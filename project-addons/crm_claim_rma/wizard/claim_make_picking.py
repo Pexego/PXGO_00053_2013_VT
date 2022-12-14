@@ -264,6 +264,6 @@ class ClaimMakePicking(models.TransientModel):
             self.create_move(wizard_claim_line, p_type, picking_id, claim, note)
 
         if picking_id:
-            picking_id.action_assign()
+            picking_id.with_context({'claim_mode':True}).action_assign()
 
         return picking_id
