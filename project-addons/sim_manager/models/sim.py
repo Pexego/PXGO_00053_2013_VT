@@ -152,6 +152,7 @@ class SimSerial(models.Model):
             ('preactivated', 'Preactivated')
         ]
     )
+    sim_service_ids = fields.One2many('sim.service', 'sim_serial_id', string="Services")
 
     def _get_sim_state(self):
         """
@@ -228,3 +229,19 @@ class SimExport(models.TransientModel):
     def sync_sim_web(self):
         pkg = self.env['sim.package'].browse(self.env.context["active_ids"])
         pkg.with_delay(priority=10).notify_sale_web(self.mode)
+
+
+class SimService(models.TransientModel):
+    """
+    Models the different services that a SimSerial has
+    """
+    _name = "sim.service"
+    _description = "Sim Service"
+
+    sim_serial_id = fields.One2many('sim.serial', string="Code")
+    type = fields.Selection(string="Type", selection=[
+        ("data", "Data"), ("sms", "SMS"), ("voice", "Voice")
+    ])
+    status = fields.Selection(string="Status", selection=[
+        ("active", "Active"), ("inactive", "Inactive"), ("bloacked", "Blocked")
+    ])
