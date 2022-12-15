@@ -170,6 +170,42 @@ class SimSerial(models.Model):
         else:
             raise UserError(_('Error while reading SIM state'))
 
+    def _set_state_to_sim(self, new_state):
+        """
+        Given a new state, sets this state to the SIM Serial.
+        """
+        posible_states = ('active', 'active_disuse', 'unsuscribed', 'blocked', 'preactivated')
+        if new_state not in posible_states:
+            raise UserError(_('A SimSerial cannot have state %s') % new_state)
+
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        body = {
+            "iccid": self.code,
+            "simServices": {
+                "dataService": "activated",
+                "smsService": "activated",
+                "voiceService": "activated"
+            },
+            "state": new_state
+        }
+        web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.update.endpoint')
+        response = requests.put(web_endpoint, headers=headers, data=json.dumps(body))
+        if response.status_code != 200:
+            raise UserError(_("An error ocurred while updating the sim state"))
+
+    def activate_sim(self):
+        """
+        Changes the state of the SIM to 'active'
+        """
+        self._set_state_to_sim('active')
+
+    def deactivate_sim(self):
+        """
+        Changes the state of the SIM to 'unsuscribed'
+        """
+        self._set_state_to_sim('unsuscribed')
+
 
 class SimType(models.Model):
     _name = 'sim.type'
