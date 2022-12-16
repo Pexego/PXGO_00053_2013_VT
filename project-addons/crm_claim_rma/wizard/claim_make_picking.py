@@ -88,10 +88,13 @@ class ClaimMakePicking(models.TransientModel):
                     'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
                     'crm_rma_advance_location.stock_location_rma') and m.state != 'cancel')
             product_moves_qty = sum(moves.mapped('product_uom_qty'))
-            if product_moves_qty < line.product_returned_quantity:
+            if (product_moves_qty < line.product_returned_quantity) or (context.get('picking_type') == 'out' and line.equivalent_product_id):
+                qty = line.product_returned_quantity - product_moves_qty
+                if qty <= 0:
+                    qty = line.product_returned_quantity
                 good_lines.append({'product_id': line.product_id.id,
                                    'equivalent_product_id': line.equivalent_product_id.id,
-                                   'product_qty': line.product_returned_quantity - product_moves_qty,
+                                   'product_qty': qty,
                                    'claim_line_id': line.id,
                                    'deposit_id': line.deposit_id.id,
                                    'substate_id': line.substate_id.id,
@@ -183,7 +186,8 @@ class ClaimMakePicking(models.TransientModel):
                     'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
                     'crm_rma_advance_location.stock_location_rma') and m.state != 'cancel')
             product_moves_qty = sum(moves.mapped('product_uom_qty'))
-            if claim_line.product_returned_quantity - product_moves_qty - line.product_qty < 0:
+            if (claim_line.product_returned_quantity - product_moves_qty - line.product_qty < 0) and \
+                not (claim_line.equivalent_product_id  and self.env.context.get('picking_type') == 'out'):
                 raise exceptions.UserError(_("It is not possible to create pickings with more units than there are in "
                                              "the RMA"))
         p_type=self.env.context.get('picking_type')
