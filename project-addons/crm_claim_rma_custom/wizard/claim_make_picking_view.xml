@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <group name="locations" position="after">
                 <group readonly="1" invisible="context.get('product_return', False)">
-                    <field name="odoo_management" readonly="1"/>
+                    <field name="odoo_management"/>
                     <field name="not_sync"/>
                 </group>
             </group>
