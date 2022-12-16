@@ -53,7 +53,7 @@ class StockContainer(models.Model):
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
     customs_channel = fields.Selection([
         ('red', '🔴'),
-        ('orange', '🟠'),
+        ('orange', '🟡'),
         ('green', '🟢')
     ],string="Customs Channel")
     ctns = fields.Char(string="Ctns")
