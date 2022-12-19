@@ -670,6 +670,11 @@ msgid "Destination costs"
 msgstr "Costes de destino"
 
 #. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_type
+msgid "Container Type"
+msgstr "Contenedor"
+
+#. module: purchase_picking
 #: selection:import.sheet,track:0
 msgid "Option 1"
 msgstr "Opción 1"
@@ -688,3 +693,18 @@ msgstr "Opción 3"
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Import Sheets"
 msgstr "Hojas de Importación"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
+msgid "General"
+msgstr "General"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Characteristics"
+msgstr "Características"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Costs"
+msgstr "Costes"
