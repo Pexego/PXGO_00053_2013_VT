@@ -3,4 +3,5 @@ access_stock_container,stock.container,model_stock_container,purchase.group_purc
 access_stock_container_manager,stock.container,model_stock_container,purchase.group_purchase_manager,1,1,1,1
 access_stock_container_status,stock.container.status,model_stock_container_status,purchase.group_purchase_user,1,1,1,1
 access_stock_container_port,stock.container.port,model_stock_container_port,purchase.group_purchase_user,1,1,1,1
-access_import_sheet,import.sheet,model_import_sheet,purchase.group_purchase_manager,1,1,1,1
+access_import_sheet,import.sheet,model_import_sheet,purchase.group_purchase_user,1,0,0,0
+access_import_sheet_manager,import.sheet,model_import_sheet,purchase.group_purchase_manager,1,1,1,1

@@ -125,7 +125,7 @@
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
             <div class="oe_button_box" name="button_box">
-                <button type="object" name="action_view_sheets" class="oe_stat_button">
+                <button type="object" name="action_view_sheets" class="oe_stat_button" groups="purchase.group_purchase_user">
                     <field name="import_sheet_count" widget="statinfo" string="Import Sheets" help="Importation Sheets"/>
                     <field name="import_sheet_ids" invisible="1"/>
                 </button>
@@ -171,8 +171,8 @@
                             <field name="conf" nolabel="1" style="padding-left: 15px;"/>
                         </div>
                         <field name="arrived"/>
-                    </group>  
-                    
+                    </group>
+
                 </group>
 
                 <group colspan="4">
