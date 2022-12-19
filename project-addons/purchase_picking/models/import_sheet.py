@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class ImportSheet(models.Model):
@@ -6,6 +6,7 @@ class ImportSheet(models.Model):
     Class that models Importation Sheets. Registers import costs linked to shipping.
     """
     _name = "import.sheet"
+    _rec_name = "dua"
 
     container_id = fields.Many2one(
         'stock.container',
@@ -37,6 +38,12 @@ class ImportSheet(models.Model):
         ("option2", "Option 2"),
         ("option3", "Option 3")
     ])
+    container_type = fields.Selection(
+        [('air', 'Air'), ('sea', 'Sea'), ('road', 'Road')],
+        string="Container Type",
+        related="container_id.type",
+        readonly=True
+    )
 
     treasury = fields.Char(string="Treasury")
     freight = fields.Float(string="Freight")

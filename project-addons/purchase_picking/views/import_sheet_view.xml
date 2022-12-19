@@ -6,19 +6,20 @@
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
             <form string="Import Sheet">
-                <group col="6" colspan="2">
-                    <field name="container_id"/>
+                <group col="2" string="General">
                     <field name="dua"/>
+                    <field name="container_id"/>
                     <field name="dua_date"/>
                 </group>
-                <group col="6" colspan="2">
+                <group col="4" string="Characteristics">
                     <field name="dimensions"/>
                     <field name="incoterm"/>
                     <field name="destination_port"/>
                     <field name="forwarder_comercial"/>
                     <field name="track"/>
+                    <field name="container_type"/>
                 </group>
-                <group col="6" colspan="2">
+                <group col="4" string="Costs">
                     <field name="treasury"/>
                     <field name="freight"/>
                     <field name="fee"/>
@@ -35,14 +36,15 @@
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
             <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
-                <field name="container_id"/>
                 <field name="dua"/>
+                <field name="container_id"/>
                 <field name="dua_date"/>
                 <field name="dimensions"/>
                 <field name="incoterm"/>
                 <field name="destination_port"/>
                 <field name="forwarder_comercial"/>
                 <field name="track"/>
+                <field name="container_type"/>
                 <field name="treasury"/>
                 <field name="freight"/>
                 <field name="fee"/>
