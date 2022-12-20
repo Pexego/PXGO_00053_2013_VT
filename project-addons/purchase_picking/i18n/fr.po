@@ -31,11 +31,6 @@ msgid "Virtual Stock Conservative"
 msgstr "Quantité disponible"
 
 #. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dimensions
-msgid "Dimensions"
-msgstr "Dimensions"
-
-#. module: purchase_picking
 #: model:ir.actions.act_window,name:purchase_picking.action_stock_container_import_sheets
 msgid "Stock Container Import Sheets"
 msgstr "Feuilles d'importation"
@@ -105,6 +100,16 @@ msgstr "Option 3"
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Import Sheets"
 msgstr "Feuilles d'importation"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Create New Sheet"
+msgstr "Créer une nouvelle feuille"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Importations"
+msgstr "Importations"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form

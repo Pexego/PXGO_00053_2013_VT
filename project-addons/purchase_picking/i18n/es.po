@@ -532,7 +532,6 @@ msgstr "Configuración status"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_dimensions
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dimensions
 msgid "Dimensions"
 msgstr "Dimensiones"
 
@@ -693,6 +692,16 @@ msgstr "Opción 3"
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Import Sheets"
 msgstr "Hojas de Importación"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Create New Sheet"
+msgstr "Crear nueva hoja"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Importations"
+msgstr "Importaciones"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
