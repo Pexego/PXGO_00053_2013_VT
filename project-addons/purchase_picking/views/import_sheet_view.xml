@@ -31,36 +31,12 @@
         </field>
     </record>
 
-    <record id="import_sheet_tree" model="ir.ui.view">
-        <field name="name">Import Sheets Tree</field>
-        <field name="model">import.sheet</field>
-        <field name="arch" type="xml">
-            <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
-                <field name="dua"/>
-                <field name="container_id"/>
-                <field name="dua_date"/>
-                <field name="dimensions"/>
-                <field name="incoterm"/>
-                <field name="destination_port"/>
-                <field name="forwarder_comercial"/>
-                <field name="track"/>
-                <field name="container_type"/>
-                <field name="treasury"/>
-                <field name="freight"/>
-                <field name="fee"/>
-                <field name="inspection"/>
-                <field name="arrival_cost"/>
-                <field name="destination_cost"/>
-            </tree>
-        </field>
-    </record>
-
     <record id="action_stock_container_import_sheets" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Stock Container Import Sheets</field>
         <field name="res_model">import.sheet</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="import_sheet_tree"/>
+        <field name="view_id" ref="view_import_sheet_form"/>
     </record>
 </odoo>

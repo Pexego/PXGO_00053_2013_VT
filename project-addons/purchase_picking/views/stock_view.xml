@@ -124,12 +124,6 @@
         <field name="name">stock.container.form</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <div class="oe_button_box" name="button_box">
-                <button type="object" name="action_view_sheets" class="oe_stat_button" groups="purchase.group_purchase_user">
-                    <field name="import_sheet_count" widget="statinfo" string="Import Sheets" help="Importation Sheets"/>
-                    <field name="import_sheet_ids" invisible="1"/>
-                </button>
-            </div>
             <form string="Container">
                 <group col="6" colspan="2">
                     <group colspan="2">
@@ -192,6 +186,31 @@
                                     <field name="backorder_id"/>
                                     <field name="state"/>
                                     <field name="id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Importations">
+                            <div>
+                                <button type="object" name="action_view_sheets" class="oe_highlight" groups="purchase.group_purchase_user" string="Create New Sheet">
+                                </button>
+                            </div>
+                            <field name="import_sheet_ids" widget="one2many_list" colspan="4" readonly="1">
+                                <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
+                                    <field name="dua"/>
+                                    <field name="container_id"/>
+                                    <field name="dua_date"/>
+                                    <field name="dimensions"/>
+                                    <field name="incoterm"/>
+                                    <field name="destination_port"/>
+                                    <field name="forwarder_comercial"/>
+                                    <field name="track"/>
+                                    <field name="container_type"/>
+                                    <field name="treasury"/>
+                                    <field name="freight"/>
+                                    <field name="fee"/>
+                                    <field name="inspection"/>
+                                    <field name="arrival_cost"/>
+                                    <field name="destination_cost"/>
                                 </tree>
                             </field>
                         </page>
