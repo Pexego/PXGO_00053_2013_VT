@@ -18,10 +18,18 @@ class ImportSheet(models.Model):
     dua = fields.Char(string="DUA")
     dua_date = fields.Date(string="DUA date")
 
-    # FIXME: rm dimensions and add kgs, cbm when changed in container model
-    dimensions = fields.Char(related="container_id.dimensions", readonly=True, store=True)
-    # kgs = fields.Float(related="container_id.kgs", string="KGS", store=True)
-    # cbm = fields.Float(realted="container_id.cbm", string="CBM", store=True)
+    kgs = fields.Float(
+        related="container_id.kilograms",
+        string="KGS",
+        store=True,
+        help="Kilograms"
+    )
+    cbm = fields.Float(
+        related="container_id.cubic_meters",
+        string="CBM",
+        store=True,
+        help="Cubic Meters"
+    )
     incoterm = fields.Char(related="container_id.incoterm.code", readonly=True, string="Incoterm")
     destination_port = fields.Char(
         related="container_id.destination_port.port_code",

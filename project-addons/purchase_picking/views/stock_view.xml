@@ -199,7 +199,8 @@
                                     <field name="dua"/>
                                     <field name="container_id"/>
                                     <field name="dua_date"/>
-                                    <field name="dimensions"/>
+                                    <field name="kgs"/>
+                                    <field name="cbm"/>
                                     <field name="incoterm"/>
                                     <field name="destination_port"/>
                                     <field name="forwarder_comercial"/>
