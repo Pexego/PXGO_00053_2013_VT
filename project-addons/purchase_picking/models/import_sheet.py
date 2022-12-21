@@ -8,13 +8,7 @@ class ImportSheet(models.Model):
     _name = "import.sheet"
     _rec_name = "dua"
 
-    container_id = fields.Many2one(
-        'stock.container',
-        string="Container",
-        ondelete="restrict",
-        required=True,
-        default=lambda self: self.env['stock.container'].browse(self.env.context['active_id'])
-    )
+    container_id = fields.Many2one('stock.container', string="Container")
     dua = fields.Char(string="DUA")
     dua_date = fields.Date(string="DUA date")
 

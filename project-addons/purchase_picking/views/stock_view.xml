@@ -190,11 +190,7 @@
                             </field>
                         </page>
                         <page string="Importations">
-                            <div>
-                                <button type="object" name="action_view_sheets" class="oe_highlight" groups="purchase.group_purchase_user" string="Create New Sheet">
-                                </button>
-                            </div>
-                            <field name="import_sheet_ids" widget="one2many_list" colspan="4" readonly="1">
+                            <field name="import_sheet_ids" widget="one2many_list" colspan="4">
                                 <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
                                     <field name="dua"/>
                                     <field name="container_id"/>

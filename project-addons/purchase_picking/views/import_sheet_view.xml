@@ -8,7 +8,7 @@
             <form string="Import Sheet">
                 <group col="2" string="General">
                     <field name="dua"/>
-                    <field name="container_id"/>
+                    <field name="container_id" readonly="1"/>
                     <field name="dua_date"/>
                 </group>
                 <group col="4" string="Characteristics">
