@@ -207,6 +207,15 @@ class SimSerial(models.Model):
         """
         self._set_state_to_sim('unsuscribed')
 
+    @api.multi
+    def action_open_sim_serial(self):
+        """
+        Returns the action that opens a SimSerial form
+        """
+        action = self.env.ref('sim_manager.action_open_sim_serial').read()[0]
+        action['res_id'] = self.id
+        return action
+
 
 class SimType(models.Model):
     _name = 'sim.type'
@@ -238,10 +247,10 @@ class SimService(models.TransientModel):
     _name = "sim.service"
     _description = "Sim Service"
 
-    sim_serial_id = fields.One2many('sim.serial', string="Code")
+    sim_serial_id = fields.Many2one('sim.serial', string="Code")
     type = fields.Selection(string="Type", selection=[
         ("data", "Data"), ("sms", "SMS"), ("voice", "Voice")
     ])
     status = fields.Selection(string="Status", selection=[
-        ("active", "Active"), ("inactive", "Inactive"), ("bloacked", "Blocked")
+        ("active", "Active"), ("inactive", "Inactive"), ("blocked", "Blocked")
     ])

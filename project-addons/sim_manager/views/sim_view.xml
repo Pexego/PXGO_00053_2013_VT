@@ -68,7 +68,8 @@
                     </group>
                     <field name="serial_ids" nolabel="1">
                         <tree editable="top">
-                            <field name="code"/>
+                            <field name="code" style="pointer-events:none;"/>
+                            <button name="action_open_sim_serial" string="Open Serial" type="object"/>
                         </tree>
                     </field>
                 </sheet>
@@ -205,6 +206,15 @@
                 </footer>
             </form>
         </field>
+    </record>
+
+    <record id="action_open_sim_serial" model="ir.actions.act_window">
+        <field name="name">Open SIM Serial</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.serial</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sim_serial_form"/>
+        <field name="target">new</field>
     </record>
 
     <record id="action_sim_package_creator" model="ir.actions.act_window">
