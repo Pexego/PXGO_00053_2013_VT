@@ -207,13 +207,42 @@ class SimSerial(models.Model):
         """
         self._set_state_to_sim('unsuscribed')
 
+    def _get_sim_services(self):
+        """
+        Gets SIM details and creates the services of the SimSerial
+        """
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        data = {'iccid': self.code}
+        web_endpoint = (
+            "http://sim-visiotech-dev.visiotechsecurity.com/administrator/sim/odoo/simDetail"
+            f"?{urllib.parse.urlencode(data)}"
+        )
+        response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
+        if response.status_code != 200:
+            raise UserError(_('Error while getting SIM services'))
+        services_response = json.loads(response.content.decode('utf-8'))['simServices']
+        service1 = self.env['sim.service'].create({
+            'sim_serial:id': self.id, 'type': 'data', 'status': services_response['dataService']
+        })
+        service2 = self.env['sim.service'].create({
+            'sim_serial:id': self.id, 'type': 'sms', 'status': services_response['smsService']
+        })
+        service3 = self.env['sim.service'].create({
+            'sim_serial:id': self.id, 'type': 'voice', 'status': services_response['voiceService']
+        })
+        self.write({'sim_service_ids': [(5,)]})
+        self.write({'sim_service_ids': [(4, service1.id), (4, service2.id), (4, service3.id)]})
+
     @api.multi
     def action_open_sim_serial(self):
         """
         Returns the action that opens a SimSerial form
         """
+        self._get_sim_services()
         action = self.env.ref('sim_manager.action_open_sim_serial').read()[0]
         action['res_id'] = self.id
+        action['domain'] = [('id', 'in', self.sim_service_ids.ids)]
         return action
 
 
@@ -252,5 +281,5 @@ class SimService(models.TransientModel):
         ("data", "Data"), ("sms", "SMS"), ("voice", "Voice")
     ])
     status = fields.Selection(string="Status", selection=[
-        ("active", "Active"), ("inactive", "Inactive"), ("blocked", "Blocked")
+        ("activated", "Activated"), ("deactivated", "Deactivated"), ("blocked", "Blocked")
     ])
