@@ -175,6 +175,9 @@ class SimSerial(models.Model):
         """
         Given a new state, sets this state to the SIM Serial.
         """
+        if any(['blocked' == s['status'] for s in self.sim_service_ids]):
+            raise UserError(_('Cannot block a SIM Service'))
+
         posible_states = ('active', 'active_disuse', 'unsuscribed', 'blocked', 'preactivated')
         if new_state not in posible_states:
             raise UserError(_('A SimSerial cannot have state %s') % new_state)
@@ -183,11 +186,7 @@ class SimSerial(models.Model):
         headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
         body = {
             "iccid": self.code,
-            "simServices": {
-                "dataService": "activated",
-                "smsService": "activated",
-                "voiceService": "activated"
-            },
+            "simServices": {f"{s['type']}Service": s['status'] for s in self.sim_service_ids},
             "state": new_state
         }
         web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.update.endpoint')
@@ -207,6 +206,12 @@ class SimSerial(models.Model):
         """
         self._set_state_to_sim('unsuscribed')
 
+    def update_sim_services(self):
+        """
+        Synchronizes with web the services' states of the SimSerial
+        """
+        self._set_state_to_sim(self.state)
+
     def _get_sim_services(self):
         """
         Gets SIM details and creates the services of the SimSerial
@@ -215,24 +220,23 @@ class SimSerial(models.Model):
         headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
         data = {'iccid': self.code}
         web_endpoint = (
-            "http://sim-visiotech-dev.visiotechsecurity.com/administrator/sim/odoo/simDetail"
+            f"{self.env['ir.config_parameter'].sudo().get_param('web.sim.detail.endpoint')}"
             f"?{urllib.parse.urlencode(data)}"
         )
         response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
         if response.status_code != 200:
             raise UserError(_('Error while getting SIM services'))
         services_response = json.loads(response.content.decode('utf-8'))['simServices']
-        service1 = self.env['sim.service'].create({
-            'sim_serial:id': self.id, 'type': 'data', 'status': services_response['dataService']
-        })
-        service2 = self.env['sim.service'].create({
-            'sim_serial:id': self.id, 'type': 'sms', 'status': services_response['smsService']
-        })
-        service3 = self.env['sim.service'].create({
-            'sim_serial:id': self.id, 'type': 'voice', 'status': services_response['voiceService']
-        })
-        self.write({'sim_service_ids': [(5,)]})
-        self.write({'sim_service_ids': [(4, service1.id), (4, service2.id), (4, service3.id)]})
+        service_list = ('data', 'sms', 'voice')
+        services = [
+            self.env['sim.service'].create({
+                'sim_serial_id': self.id,
+                'type': service_name,
+                'status': services_response[f'{service_name}Service']
+            }) for service_name in service_list
+        ]
+        to_update_list = [(5,)] + [(4, s.id) for s in services]
+        self.write({'sim_service_ids': to_update_list})
 
     @api.multi
     def action_open_sim_serial(self):
