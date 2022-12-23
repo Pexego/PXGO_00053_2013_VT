@@ -28,6 +28,7 @@ msgstr "Carte"
 #. module: sim_manager
 #: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
 #: model:ir.model.fields,field_description:sim_manager.field_sim_type_code
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_sim_serial_id
 msgid "Code"
 msgstr "Codice"
 
@@ -241,3 +242,63 @@ msgstr "Errore di lettura dello stato della carta SIM"
 #: model:ir.model.fields,field_description:sim_manager.field_res_partner_sim_active_perc
 msgid "Active SIMs"
 msgstr "SIMs attive"
+
+#. module: sim_manager
+#: selection:sim.service,type:0
+msgid "Data"
+msgstr "Dati"
+
+#. module: sim_manager
+#: selection:sim.service,type:0
+msgid "Voice"
+msgstr "Voce"
+
+#. module: sim_manager
+#: selection:sim.service,status:0
+msgid "Activated"
+msgstr "Attivato"
+
+#. module: sim_manager
+#: selection:sim.service,status:0
+msgid "Deactivated"
+msgstr "Disattivato"
+
+#. module: sim_manager
+#: selection:sim.service,status:0
+msgid "Blocked"
+msgstr "Bloccato"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_status
+msgid "Status"
+msgstr "Stato"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_sim_service_ids
+msgid "Services"
+msgstr "Servizi"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Save"
+msgstr "Risparmiare"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Activate"
+msgstr "Attivare"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Deactivate"
+msgstr "Disattivare"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+msgid "Open Serial"
+msgstr "Carta Aperta"
