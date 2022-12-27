@@ -112,7 +112,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 moves_qty[wizard_move] = (new_move, 1)
 
         if picking_id:
-            picking_id.action_assign()
+            picking_id.with_context({'claim_mode': True}).action_assign()
             picking_id.action_done()
         for n_moves, qty in moves_qty.values():
             deposit = n_moves[0].origin_move_id.claim_line_id.deposit_id
