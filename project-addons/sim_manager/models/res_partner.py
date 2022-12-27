@@ -13,7 +13,6 @@ class ResPartner(models.Model):
     sim_serial_ids = fields.One2many('sim.package', 'partner_id')
     sim_active_perc = fields.Float(compute='_get_active_sims_perc', string='Active SIMs')
 
-
     def _get_active_sims_perc(self):
         """
         Obtains the percentage of active SimSerials
@@ -33,7 +32,7 @@ class ResPartner(models.Model):
             'origin': country_code.lower()
         }
         web_endpoint = (
-            "http://sim-visiotech-dev.visiotechsecurity.com/administrator/customer/odoo/customerActiveSims"
+            f"{self.env['ir.config_parameter'].sudo().get_param('web.sim.active.endpoint')}"
             f"?{urllib.parse.urlencode(data)}"
         )
         response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
@@ -41,7 +40,6 @@ class ResPartner(models.Model):
             num_active_sims = int(response.content)
 
         self.sim_active_perc = num_active_sims * 100 / sim_count
-
 
     def invoice_sim_packages(self, month=None):
         # execute only if come the month or if today is the last day of the month
