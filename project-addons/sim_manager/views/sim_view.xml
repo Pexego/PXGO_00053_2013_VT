@@ -198,8 +198,8 @@
                      <field name="package_id" readonly="1"/>
                      <field name="state"/>
                 </group>
-                <field name="sim_service_ids" widget="one2many_list">
-                    <tree string="SIM Services" default_order="type asc" create="false" delete="false">
+                <field name="sim_service_ids">
+                    <tree string="SIM Services" default_order="type asc" create="false" delete="false" editable="bottom">
                         <field name="type" string="Service" readonly="1"/>
                         <field name="status" string="Estado" readonly="0"/>
                     </tree>
