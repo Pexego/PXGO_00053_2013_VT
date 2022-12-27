@@ -228,15 +228,14 @@ class SimSerial(models.Model):
             raise UserError(_('Error while getting SIM services'))
         services_response = json.loads(response.content.decode('utf-8'))['simServices']
         service_list = ('data', 'sms', 'voice')
-        services = [
+        services_ids = [
             self.env['sim.service'].create({
                 'sim_serial_id': self.id,
                 'type': service_name,
                 'status': services_response[f'{service_name}Service']
-            }) for service_name in service_list
+            }).id for service_name in service_list
         ]
-        to_update_list = [(5,)] + [(4, s.id) for s in services]
-        self.write({'sim_service_ids': to_update_list})
+        self.write({'sim_service_ids': [(6, 0, services_ids)]})
 
     @api.multi
     def action_open_sim_serial(self):
