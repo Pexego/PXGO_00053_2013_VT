@@ -69,7 +69,7 @@
                     <field name="serial_ids" nolabel="1">
                         <tree editable="top">
                             <field name="code" style="pointer-events:none;"/>
-                            <button name="action_open_sim_serial" string="Open Serial" type="object"/>
+                            <button name="action_open_sim_serial" type="object" icon="fa-external-link"/>
                         </tree>
                     </field>
                 </sheet>
@@ -206,11 +206,11 @@
                 </field>
                 <footer>
                     <button name="update_sim_services" string="Save" type="object"
-                            class="oe_stat_button"/>
+                            class="btn-primary"/>
                     <button name="activate_sim" string="Activate" type="object"
-                            class="oe_stat_button" attrs="{'invisible': [('state','!=','unsuscribed')]}"/>
+                            attrs="{'invisible': [('state','!=','unsuscribed')]}"/>
                     <button name="deactivate_sim" string="Deactivate" type="object"
-                            class="oe_stat_button" attrs="{'invisible': [('state','=','unsuscribed')]}"/>
+                            class="btn-danger" attrs="{'invisible': [('state','=','unsuscribed')]}"/>
                 </footer>
             </form>
         </field>
