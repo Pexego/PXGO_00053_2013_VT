@@ -313,8 +313,3 @@ msgstr "Activar"
 #: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
 msgid "Deactivate"
 msgstr "Desactivar"
-
-#. module: sim_manager
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
-msgid "Open Serial"
-msgstr "Abrir Tarjeta"
