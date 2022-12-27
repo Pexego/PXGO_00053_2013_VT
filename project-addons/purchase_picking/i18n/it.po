@@ -617,7 +617,7 @@ msgid "Arrival costs"
 msgstr "Costi d'arrivo"
 
 #. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_destination_costs
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_destination_cost
 msgid "Destination costs"
 msgstr "Costi di destinazione"
 
@@ -625,6 +625,11 @@ msgstr "Costi di destinazione"
 #: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_type
 msgid "Container Type"
 msgstr "Contenitore"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_track
+msgid "Track"
+msgstr "Circuito"
 
 #. module: purchase_picking
 #: selection:import.sheet,track:0
@@ -662,11 +667,11 @@ msgid "General"
 msgstr "Generale"
 
 #. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
 msgid "Characteristics"
 msgstr "Caratteristiche"
 
 #. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
 msgid "Costs"
 msgstr "Costi"
