@@ -737,11 +737,6 @@ msgid "Merchandise Not As Described"
 msgstr "Produit ne correspondant pas à sa description"
 
 #. module: crm_claim_rma
-#: selection:claim.line,claim_origine:0
-msgid "Exchange request"
-msgstr "Demande d'échange"
-
-#. module: crm_claim_rma
 #: model:ir.model,name:crm_claim_rma.model_substate_substate
 msgid "substate that precise a given state"
 msgstr "Sous état précisant l'état principal"
@@ -761,12 +756,6 @@ msgstr "Produit retourné"
 #: view:claim.line:0
 msgid "Current"
 msgstr "Actuel"
-
-#. module: crm_claim_rma
-#: selection:claim.line,claim_origine:0
-#: selection:crm.claim,claim_type:0
-msgid "Other"
-msgstr "Autre"
 
 #. module: crm_claim_rma
 #: view:crm.claim:0

@@ -191,9 +191,7 @@
                         <field name="move_in_supplier_state" attrs="{'invisible': [('supplier_line_id', '=', False)]}"/>
                         <field name="move_out_supplier_state" attrs="{'invisible': [('supplier_line_id', '=', False)]}"/>
                         <!--field name="invoice_line_id"/>
-                        <field name="refund_line_id"/>
-                        <field name="move_in_customer_id"/>
-                        <field name="move_out_customer_id"/-->
+                        <field name="refund_line_id"/-->
                     </group>
                 </group>
                 <group>
@@ -380,7 +378,10 @@
                 <group name="Product Return">
                     <separator string="Product Return" colspan="4"/>
                     <group>
-                        <field name="delivery_address_id" context="{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'search_default_parent_id': partner_id}" required="1"/>
+                        <field name="delivery_address_id"
+                               options='{"create_edit":True,"create":True}'
+                               context="{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'search_default_parent_id': partner_id}"
+                               required="1"/>
                     </group>
                     <group>
                     </group>
