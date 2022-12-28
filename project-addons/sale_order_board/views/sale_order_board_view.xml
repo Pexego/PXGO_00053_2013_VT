@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <field name="service_ids" position="after">
                 <field name="country_group_id"/>
+                <field name="fuel"/>
             </field>
         </field>
     </record>

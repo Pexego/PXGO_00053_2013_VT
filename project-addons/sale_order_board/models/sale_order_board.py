@@ -271,9 +271,10 @@ class SaleOrder(models.Model):
                             if data:
                                 currency = data['TotalCharge']['CurrencyCode']
                                 amount = data['TotalCharge']['MonetaryValue']
+                                percentage_increase = amount * (transporter.fuel/100)
                                 rated_status = {
                                     'currency': currency,
-                                    'amount': amount,
+                                    'amount': amount + percentage_increase,
                                     'service': service.name,
                                     'order_id': order.id,
                                     'wizard_id': new.id
@@ -356,15 +357,17 @@ class SaleOrder(models.Model):
 
                         if shipping_amount:
                             currency = "EUR"
+                            #if transporter.fuel != 0:
+                            percentage_increase = shipping_amount * (transporter.fuel/100)
                             rated_status = {
                                 'currency': currency,
-                                'amount': shipping_amount,
+                                'amount': shipping_amount + percentage_increase,
                                 'service': service_name,
                                 'order_id': order.id,
                                 'wizard_id': new.id
                             }
                             new.write({'data': [(0, 0, rated_status)]})
-
+                            
                 elif transporter.name == 'TNT':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('service.codes.tnt.api.request'))
                     account_number = order.env['ir.config_parameter'].sudo().get_param('account.number.tnt.api.request')
@@ -469,10 +472,11 @@ class SaleOrder(models.Model):
                                         except KeyError:
                                             message_error += "TNT: The service code \"%s\" is not defined in the system." % service_code
                                             continue
+                                        percentage_increase = shipping_amount * (transporter.fuel/100)
                                         rated_status = {
                                             'currency': currency,
                                             'transit_time': transit_time,
-                                            'amount': shipping_amount,
+                                            'amount': shipping_amount + percentage_increase,
                                             'service': service_name,
                                             'order_id': order.id,
                                             'wizard_id': new.id
@@ -602,16 +606,17 @@ class SaleOrder(models.Model):
                                     currency = data['TotalNet']['Currency']
                                     amount = data['Charges']['Charge'][0]['ChargeAmount'] + data['Charges']['Charge'][1]['ChargeAmount']
                                     transit_time = data["DeliveryTime"].replace("T", " ")[:-3]
+                                    percentage_increase = amount * (transporter.fuel/100)
                                     rated_status = {
                                         'transit_time': transit_time,
                                         'currency': currency,
-                                        'amount': amount,
+                                        'amount': amount + percentage_increase,
                                         'service': 'DHL ' + dhl_services_dict[data["@type"]],
                                         'order_id': order.id,
                                         'wizard_id': new.id
                                     }
                                     new.write({'data': [(0, 0, rated_status)]})
-
+                                 
         if message_error:
             new.message_error = message_error
         return {
@@ -625,13 +630,14 @@ class SaleOrder(models.Model):
             'type': 'ir.actions.act_window',
             'id': 'action_picking_rated_status',
             }
-
+        
 
 class TransportationTransporter(models.Model):
     _inherit = 'transportation.transporter'
 
     country_group_id = fields.Many2one('res.country.group', 'Country Group')
-
+    fuel = fields.Float(string="Fuel(%)", help="Percentage increase in transportation which varies depending on transporter")
+    
 
 class ResCountryGroup(models.Model):
     _inherit = 'res.country.group'
