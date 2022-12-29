@@ -8,18 +8,16 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     def cron_stock_catalog(self):
+        """
+            This method build a XLS File with information of products and email purchasing team
+        """
         headers = ["ID", "Último Proveedor", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
                    "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
                    "Cant. pedido más grande", "Días de stock restantes", "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado"]
 
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
-        domain = [('custom', '=', False), ('type', '!=', 'service')]
-        if country_code == "IT":
-            domain += [("categ_id.name", "not in", ["O1", "O2" , "Descatalogados"])]
-        else:
-            domain += [('seller_id.name', 'not ilike', 'outlet')]
+        domain = [('custom', '=', False), ('type', '!=', 'service'),("categ_id.name", "not in", ["Outlet", "O1", "O2" , "Descatalogados"])]
 
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
