@@ -27,7 +27,7 @@ class ProductProduct(models.Model):
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
-        products = self.env['product.product'].search_read(domain, fields + ["seller_id"])
+        products = self.env['product.product'].with_context({'lang': 'es_ES'}).search_read(domain, fields + ["seller_id"])
         for product in products:
             product_fields = []
             for field in fields:
