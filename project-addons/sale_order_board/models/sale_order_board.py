@@ -270,7 +270,7 @@ class SaleOrder(models.Model):
                             data = info["RateResponse"]["RatedShipment"]["NegotiatedRateCharges"]
                             if data:
                                 currency = data['TotalCharge']['CurrencyCode']
-                                amount = data['TotalCharge']['MonetaryValue']
+                                amount = float(data['TotalCharge']['MonetaryValue'])
                                 percentage_increase = amount * (transporter.fuel/100)
                                 rated_status = {
                                     'currency': currency,
@@ -357,7 +357,6 @@ class SaleOrder(models.Model):
 
                         if shipping_amount:
                             currency = "EUR"
-                            #if transporter.fuel != 0:
                             percentage_increase = shipping_amount * (transporter.fuel/100)
                             rated_status = {
                                 'currency': currency,
@@ -591,10 +590,11 @@ class SaleOrder(models.Model):
                                         transit_time = service["DeliveryTime"].replace("T", " ")[:-3]
                                         currency = service['TotalNet']['Currency']
                                         amount = service['Charges']['Charge'][0]['ChargeAmount'] + service['Charges']['Charge'][1]['ChargeAmount']
+                                        percentage_increase = float(amount) * (transporter.fuel/100)
                                         rated_status = {
                                             'transit_time': transit_time,
                                             'currency': currency,
-                                            'amount': amount,
+                                            'amount': amount + percentage_increase,
                                             'service': 'DHL ' + dhl_services_dict[service["@type"]],
                                             'order_id': order.id,
                                             'wizard_id': new.id
@@ -606,7 +606,7 @@ class SaleOrder(models.Model):
                                     currency = data['TotalNet']['Currency']
                                     amount = data['Charges']['Charge'][0]['ChargeAmount'] + data['Charges']['Charge'][1]['ChargeAmount']
                                     transit_time = data["DeliveryTime"].replace("T", " ")[:-3]
-                                    percentage_increase = amount * (transporter.fuel/100)
+                                    percentage_increase = float(amount) * (transporter.fuel/100)
                                     rated_status = {
                                         'transit_time': transit_time,
                                         'currency': currency,
@@ -616,7 +616,7 @@ class SaleOrder(models.Model):
                                         'wizard_id': new.id
                                     }
                                     new.write({'data': [(0, 0, rated_status)]})
-                                 
+
         if message_error:
             new.message_error = message_error
         return {
