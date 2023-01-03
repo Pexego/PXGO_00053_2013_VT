@@ -124,6 +124,7 @@
                     </group>
                     <notebook>
                         <page string="Purchase Suggestions">
+                            <button string="Export" type="object" name="export_to_excel"/>
                             <field name="line_ids"/>
                         </page>
                         <page string="Purchase Suggestions by week" invisible="1">
@@ -138,5 +139,27 @@
                 </sheet>
             </form>
         </field>
+    </record>
+
+    <record id="purchase_suggestions_wizard_report_form" model="ir.ui.view">
+        <field name="name">purchase.suggestions.wizard.report.form</field>
+        <field name="model">purchase.suggestions.wizard.report</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Suggestions Report" create="false" edit="false" open="false">
+                <group colspan="4">
+                    <field name="file_name" readonly="1"/>
+                    <field name="excel_file" string="" readonly="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_open_purchase_suggestions_wizard_report" model="ir.actions.act_window">
+        <field name="name">Purchase Suggestions Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.suggestions.wizard.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="purchase_suggestions_wizard_report_form"/>
+        <field name="target">new</field>
     </record>
 </odoo>

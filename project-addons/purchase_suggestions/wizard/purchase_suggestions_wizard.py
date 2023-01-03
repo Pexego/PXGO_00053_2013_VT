@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 from pandas.core.algorithms import quantile
 from numpy import mean
 from dateutil.relativedelta import relativedelta
+import base64
+from io import BytesIO
+import xlwt
 
 
 def calculate_distances(quantiles_by_product):
@@ -214,6 +217,43 @@ class PurchaseSuggestions(models.TransientModel):
     def create_order(self):
         #Función que creará el PO con los productos que haya en line_ids y las cantidades que haya en qty_to_purchase
         pass
+
+    @api.multi
+    def export_to_excel(self):
+        """
+        Creates an excel file containing purchase suggestions report that can be downloaded.
+        Returns the action that shows the report form.
+        """
+        filename = 'purchase_suggestions.xlsx'
+
+        workbook = xlwt.Workbook(encoding="UTF-8")
+        worksheet = workbook.add_sheet('Purchase Suggestions')
+        # TODO: escribimos el fichero entero
+        # worksheet.write(row, col, value)
+        worksheet.write(0, 0, 12)
+        worksheet.write(0, 1, 3)
+        with BytesIO() as fp:
+            workbook.save(fp)
+            record_id = self.env['purchase.suggestions.wizard.report'].create({
+                'excel_file': base64.encodebytes(fp.getvalue()),
+                'file_name': filename
+            },)
+        action = self.env.ref(
+            'purchase_suggestions.action_open_purchase_suggestions_wizard_report'
+        ).read()[0]
+        action['res_id'] = record_id.id
+        return action
+
+
+class PurchaseSuggestionsWizardReport(models.TransientModel):
+    """
+    Models the file with purchase suggestion report to be downloaded
+    """
+    _name = 'purchase.suggestions.wizard.report'
+    _rec_name = 'file_name'
+
+    excel_file = fields.Binary('excel file', readonly=True)
+    file_name = fields.Char('Excel File', size=64)
 
 
 class PurchaseSuggestionsWizard(models.TransientModel):
