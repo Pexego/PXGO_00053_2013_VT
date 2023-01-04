@@ -227,11 +227,11 @@ class PurchaseSuggestions(models.TransientModel):
         filename = 'purchase_suggestions.xlsx'
 
         workbook = xlwt.Workbook(encoding="UTF-8")
-        worksheet = workbook.add_sheet('Purchase Suggestions')
-        # TODO: escribimos el fichero entero
-        # worksheet.write(row, col, value)
-        worksheet.write(0, 0, 12)
-        worksheet.write(0, 1, 3)
+        worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report()
+        worksheet_names = [name for name in worksheet_headers]
+
+        self.write_on_report_file(workbook, worksheet_names, worksheet_row_values, worksheet_headers)
+
         with BytesIO() as fp:
             workbook.save(fp)
             record_id = self.env['purchase.suggestions.wizard.report'].create({
@@ -243,6 +243,123 @@ class PurchaseSuggestions(models.TransientModel):
         ).read()[0]
         action['res_id'] = record_id.id
         return action
+
+    def _get_rows_and_headers_for_report(self):
+        """
+        Returns two dictionaries. One with worksheet name as key and rows content as value.
+        The second with headers as value.
+        """
+        row_dict = {
+            'Purchase Suggestions': [
+                (
+                    line.product_id.default_code, line.qty, line.virtual_stock_conservative,
+                    line.qty_to_purchase, line.calculated_by
+                ) for line in self.line_ids
+            ],
+            'Purchase Suggestions by week': [
+                (
+                    line.product_id.default_code, line.min, line.q0, line.q1, line.q2, line.q3, line.q4,
+                    line.max, line.d1, line.d2, line.d3, line.d4, line.mean, line.calculated_by
+                ) for line in self.statistic_weeks_ids
+            ],
+            'Purchase Suggestions by month': [
+                (
+                    line.product_id.default_code, line.min, line.q0, line.q1, line.q2, line.q3, line.q4,
+                    line.max, line.d1, line.d2, line.d3, line.d4, line.mean, line.calculated_by
+                ) for line in self.statistic_month_ids
+            ]
+        }
+        header_dict = {
+            'Purchase Suggestions': [
+                'Product', 'Quantity', 'Quantity available',
+                'Quantity to purchase', 'Calculated by'
+            ],
+            'Purchase Suggestions by week': [
+                'Product', 'Min', 'Q0', 'Q1', 'Q2', 'Q3', 'Q5', 'Max',
+                'D1', 'D2', 'D3', 'D4', 'Mean', 'Calculated by'
+            ],
+            'Purchase Suggestions by month': [
+                'Product', 'Min', 'Q0', 'Q1', 'Q2', 'Q3', 'Q5', 'Max',
+                'D1', 'D2', 'D3', 'D4', 'Mean', 'Calculated by'
+            ]
+        }
+        return row_dict, header_dict
+
+    def write_on_report_file(self, workbook, worksheet_names, worksheet_row_values, worksheet_headers):
+        """
+        Writes the content of the report file
+
+        Parameters
+        ----------
+        workbook:
+            Workbook where we want to write sheets and content
+        worksheet_names: List[str]
+            Names of worksheets we are going to create in the workbook
+        worksheet_row_values: Dict[str, List[Tuple[Any]]]
+            Are the values we want to write on each worksheet.
+            Key is the name of the worksheet and values a list with the row values we want to write
+            into that sheet.
+        worksheet_headers: Dict[str, List[str]]
+            Headers we want to write on each worksheet.
+            Key is the name of the worksheet and values a list with the headers we want to write
+            into that sheet
+        """
+        for worksheet_name in worksheet_names:
+            worksheet = workbook.add_sheet(worksheet_name)
+            headers = worksheet_headers[worksheet_name]
+            row_values = worksheet_row_values[worksheet_name]
+            self._write_worksheet(worksheet, headers, row_values)
+
+    def _write_headers_on_report_file(self, worksheet, headers):
+        """
+        Writes the column headers in worksheet
+
+        Parameters
+        ----------
+        worksheet:
+            Worksheet where the headers are going to be writen
+        headers: List[str]
+            Headers we want to write
+        """
+        column = 0
+        for value in headers:
+            worksheet.write(0, column, value)
+            column += 1
+
+    def _write_row_on_report_file(self, worksheet, row_values, row_index):
+        """
+        Writes a row in the report
+
+        Parameters
+        ----------
+        worksheet:
+            Worksheet where the row is going to be writen
+        row_values: List[Any]
+            Values to write in the row
+        row_index: Int
+            The number of the row where we are going to write
+        """
+        column = 0
+        for value in row_values:
+            worksheet.write(row_index, column, value)
+            column += 1
+
+    def _write_worksheet(self, worksheet, headers, row_values):
+        """
+        Writes a complete sheet of the report
+
+        Parameters
+        ----------
+        worksheet:
+            Worksheet that is going to be writen
+        headers: List[str]
+            Headers of the columns that we want to write
+        row_values: List[List[Any]]
+            Content in rows we want to write in the worksheet
+        """
+        self._write_headers_on_report_file(worksheet, headers)
+        for index, row_elements in enumerate(row_values):
+            self._write_row_on_report_file(worksheet, row_elements, index + 1)
 
 
 class PurchaseSuggestionsWizardReport(models.TransientModel):
