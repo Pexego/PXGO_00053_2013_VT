@@ -145,11 +145,16 @@
         <field name="name">purchase.suggestions.wizard.report.form</field>
         <field name="model">purchase.suggestions.wizard.report</field>
         <field name="arch" type="xml">
-            <form string="Purchase Suggestions Report" create="false" edit="false" open="false">
+            <form string="Purchase Suggestions Report">
                 <group colspan="4">
                     <field name="file_name" readonly="1"/>
                     <field name="excel_file" string="" readonly="1"/>
                 </group>
+                <footer>
+                    <!--button name="get_excel_report" string="Export (XLS)" type="object"
+                            class="btn-primary"/-->
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>
