@@ -1,11 +1,12 @@
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, http
 from datetime import datetime, timedelta
 from pandas.core.algorithms import quantile
 from numpy import mean
 from dateutil.relativedelta import relativedelta
-import base64
 from io import BytesIO
 import xlwt
+from odoo.addons.web.controllers.main import content_disposition
+from odoo.http import request
 
 
 def calculate_distances(quantiles_by_product):
@@ -221,52 +222,99 @@ class PurchaseSuggestions(models.TransientModel):
     @api.multi
     def export_to_excel(self):
         """
-        Creates an excel file containing purchase suggestions report that can be downloaded.
         Returns the action that shows the report form.
         """
-        filename = 'purchase_suggestions.xlsx'
-
-        workbook = xlwt.Workbook(encoding="UTF-8")
-        worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report()
-        worksheet_names = [name for name in worksheet_headers]
-
-        self.write_on_report_file(workbook, worksheet_names, worksheet_row_values, worksheet_headers)
-
-        with BytesIO() as fp:
-            workbook.save(fp)
-            record_id = self.env['purchase.suggestions.wizard.report'].create({
-                'excel_file': base64.encodebytes(fp.getvalue()),
-                'file_name': filename
-            },)
+        record_id = self.env['purchase.suggestions.wizard.report'].create({
+            'file_name': 'purchase_suggestions_report'
+        },)
         action = self.env.ref(
             'purchase_suggestions.action_open_purchase_suggestions_wizard_report'
         ).read()[0]
         action['res_id'] = record_id.id
         return action
 
-    def _get_rows_and_headers_for_report(self):
+
+class PurchaseSuggestionsWizardReport(models.TransientModel):
+    """
+    Models the file with purchase suggestion report to be downloaded
+    """
+    _name = 'purchase.suggestions.wizard.report'
+    _rec_name = 'file_name'
+
+    file_name = fields.Char('Report name', size=64)
+
+    def get_excel_report(self):
+        """
+        Redirects to /purchase.suggestions/report controller to generate the excel report
+        """
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/binary/purchase.suggestions/report/{self.env.context["active_id"]}',
+            'target': 'self'
+        }
+
+
+class PurchaseSuggestionsReportController(http.Controller):
+    @http.route([
+        '/web/binary/purchase.suggestions/report/<model("purchase.suggestions"):wizard>'
+    ], type='http', auth="user", csrf=False)
+    def get_excel_report(self, wizard=None, **kwargs):
+        """
+        Generates and returns the report excel file which contains the purchase sugestions.
+
+        Parameters
+        ----------
+        wizard:
+            Purchase Suggestions instance from where we want to create the report
+        """
+        response = request.make_response(None, headers=[
+            ('Content-Type', 'application/vnd.ms-excel'),
+            ('Content-Disposition', content_disposition(
+                'purchase_suggestions_report' + '.xlsx'
+            ))
+        ])
+        worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report(wizard)
+        worksheet_names = [name for name in worksheet_headers]
+        with BytesIO() as output:
+            workbook = xlwt.Workbook(encoding="UTF-8")
+            self.write_on_report_file(workbook, worksheet_names, worksheet_row_values, worksheet_headers)
+            workbook.save(output)
+            response.stream.write(output.getvalue())
+        return response
+
+    @staticmethod
+    def _get_rows_and_headers_for_report(wizard):
         """
         Returns two dictionaries. One with worksheet name as key and rows content as value.
         The second with headers as value.
+
+        Parameters
+        ----------
+        wizard:
+            Purchase Suggestions instance from where we want to get row_values
+
+        Return
+        ------
+        row_dict, headers_dict
         """
         row_dict = {
             'Purchase Suggestions': [
                 (
                     line.product_id.default_code, line.qty, line.virtual_stock_conservative,
                     line.qty_to_purchase, line.calculated_by
-                ) for line in self.line_ids
+                ) for line in wizard.line_ids
             ],
             'Purchase Suggestions by week': [
                 (
                     line.product_id.default_code, line.min, line.q0, line.q1, line.q2, line.q3, line.q4,
                     line.max, line.d1, line.d2, line.d3, line.d4, line.mean, line.calculated_by
-                ) for line in self.statistic_weeks_ids
+                ) for line in wizard.statistic_weeks_ids
             ],
             'Purchase Suggestions by month': [
                 (
                     line.product_id.default_code, line.min, line.q0, line.q1, line.q2, line.q3, line.q4,
                     line.max, line.d1, line.d2, line.d3, line.d4, line.mean, line.calculated_by
-                ) for line in self.statistic_month_ids
+                ) for line in wizard.statistic_month_ids
             ]
         }
         header_dict = {
@@ -310,7 +358,8 @@ class PurchaseSuggestions(models.TransientModel):
             row_values = worksheet_row_values[worksheet_name]
             self._write_worksheet(worksheet, headers, row_values)
 
-    def _write_headers_on_report_file(self, worksheet, headers):
+    @staticmethod
+    def _write_headers_on_report_file(worksheet, headers):
         """
         Writes the column headers in worksheet
 
@@ -326,7 +375,8 @@ class PurchaseSuggestions(models.TransientModel):
             worksheet.write(0, column, value)
             column += 1
 
-    def _write_row_on_report_file(self, worksheet, row_values, row_index):
+    @staticmethod
+    def _write_row_on_report_file(worksheet, row_values, row_index):
         """
         Writes a row in the report
 
@@ -360,17 +410,6 @@ class PurchaseSuggestions(models.TransientModel):
         self._write_headers_on_report_file(worksheet, headers)
         for index, row_elements in enumerate(row_values):
             self._write_row_on_report_file(worksheet, row_elements, index + 1)
-
-
-class PurchaseSuggestionsWizardReport(models.TransientModel):
-    """
-    Models the file with purchase suggestion report to be downloaded
-    """
-    _name = 'purchase.suggestions.wizard.report'
-    _rec_name = 'file_name'
-
-    excel_file = fields.Binary('excel file', readonly=True)
-    file_name = fields.Char('Excel File', size=64)
 
 
 class PurchaseSuggestionsWizard(models.TransientModel):
