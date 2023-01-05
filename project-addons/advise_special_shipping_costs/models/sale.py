@@ -11,12 +11,10 @@ class SaleOrder(models.Model):
         Checks if the sale_order has special shipping costs
         """
         for order in self:
-            if order.delivery_type == 'shipping':
-                order.is_special_shipping_costs = order.order_line and order.order_line.filtered(
-                    lambda l: l.product_id.special_shipping_costs
-                )
-            else:
-                order.is_special_shipping_costs = False
+            order.is_special_shipping_costs = (
+                order.delivery_type == 'shipping' and order.order_line
+                and order.order_line.filtered(lambda l: l.product_id.special_shipping_costs)
+            )
 
     is_special_shipping_costs = fields.Boolean(compute="_compute_is_special_shipping_costs", store=True)
 
