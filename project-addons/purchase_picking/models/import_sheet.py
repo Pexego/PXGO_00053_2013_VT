@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models
 
 
 class ImportSheet(models.Model):
@@ -35,15 +35,9 @@ class ImportSheet(models.Model):
         string="Forwarded",
         readonly=True
     )
-    track = fields.Selection([
-        ("option1", "Option 1"),
-        ("option2", "Option 2"),
-        ("option3", "Option 3")
-    ])
-    container_type = fields.Selection(
-        [('air', 'Air'), ('sea', 'Sea'), ('road', 'Road')],
+    container_type = fields.Char(
         string="Container Type",
-        related="container_id.type",
+        related="container_id.container_type",
         readonly=True
     )
 

@@ -627,26 +627,6 @@ msgid "Container Type"
 msgstr "Contenitore"
 
 #. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_track
-msgid "Track"
-msgstr "Circuito"
-
-#. module: purchase_picking
-#: selection:import.sheet,track:0
-msgid "Option 1"
-msgstr "Opzione 1"
-
-#. module: purchase_picking
-#: selection:import.sheet,track:0
-msgid "Option 2"
-msgstr "Opzione 2"
-
-#. module: purchase_picking
-#: selection:import.sheet,track:0
-msgid "Option 3"
-msgstr "Opzione 3"
-
-#. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Import Sheets"
 msgstr "Fogli di importazioni"

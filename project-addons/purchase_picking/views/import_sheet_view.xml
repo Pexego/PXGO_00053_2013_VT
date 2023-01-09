@@ -17,7 +17,6 @@
                     <field name="incoterm"/>
                     <field name="destination_port"/>
                     <field name="forwarder_comercial"/>
-                    <field name="track"/>
                     <field name="container_type"/>
                 </group>
                 <group col="4" string="Costs">
