@@ -72,14 +72,10 @@ class ResPartnerRappelRel(models.Model):
         products = self.rappel_id.get_products()
         order_lines = self.env['sale.order.line'].search(
             [('order_id.partner_id', 'child_of', self.partner_id.id),
-                ('order_id.state', '=', 'sale'),
-                ('product_id', 'in', products),
-                ('qty_delivered', '>', 0)])
-        order_lines = order_lines.filtered(
-            lambda r: r.qty_delivered > r.qty_invoiced)
-        return sum(
-            [(x.qty_delivered - x.qty_invoiced) *
-             (x.price_subtotal / x.product_uom_qty) for x in order_lines])
+             ('order_id.state', 'in', ('done', 'sale')),
+             ('product_id', 'in', products),
+             ('invoice_status', '=', 'to invoice')])
+        return sum([x.qty_to_invoice * (x.price_subtotal / x.product_uom_qty) for x in order_lines])
 
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
