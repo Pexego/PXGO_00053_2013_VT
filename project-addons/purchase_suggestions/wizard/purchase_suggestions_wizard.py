@@ -323,11 +323,11 @@ class PurchaseSuggestionsReportController(http.Controller):
                 'Quantity to purchase', 'Calculated by'
             ],
             'Purchase Suggestions by week': [
-                'Product', 'Min', 'Q0', 'Q1', 'Q2', 'Q3', 'Q5', 'Max',
+                'Product', 'Min', 'Q0', 'Q1', 'Q2', 'Q3', 'Q4', 'Max',
                 'D1', 'D2', 'D3', 'D4', 'Mean', 'Calculated by'
             ],
             'Purchase Suggestions by month': [
-                'Product', 'Min', 'Q0', 'Q1', 'Q2', 'Q3', 'Q5', 'Max',
+                'Product', 'Min', 'Q0', 'Q1', 'Q2', 'Q3', 'Q4', 'Max',
                 'D1', 'D2', 'D3', 'D4', 'Mean', 'Calculated by'
             ]
         }
