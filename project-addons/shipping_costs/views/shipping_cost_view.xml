@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="shipping_cost_form_view" model="ir.ui.view">
+        <field name="name">shipping.cost.form</field>
+        <field name="model">shipping.cost</field>
+        <field name="arch" type="xml">
+            <group>
+                <field name="cost_name"/>
+                <field name="is_active"/>
+                <field name="transporter_id"/>
+                <!--field name="fuel"/-->
+                <field name="sequence"/>
+                <field name="volume"/>
+            </group>
+            <field name="fee_ids">
+                <tree string="Fees" editable="bottom">
+                    <field name="type"/>
+                    <field name="max_qty"/>
+                    <field name="price"/>
+                </tree>
+            </field>
+            <field name="supplement_ids">
+                <tree string="Supplements" editable="bottom">
+                    <field name="service"/>
+                    <field name="added_percentage"/>
+                </tree>
+            </field>
+        </field>
+    </record>
+</odoo>
