@@ -46,4 +46,3 @@ class ImportSheet(models.Model):
     fee = fields.Float(string="Fee")
     inspection = fields.Float(string="Inspection")
     arrival_cost = fields.Float(string="Arrival costs")
-    destination_cost = fields.Float(string="Destination costs")

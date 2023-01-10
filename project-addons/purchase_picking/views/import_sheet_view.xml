@@ -10,6 +10,7 @@
                     <field name="dua"/>
                     <field name="container_id" readonly="1"/>
                     <field name="dua_date"/>
+                    <field name="treasury"/>
                 </group>
                 <group col="4" string="Characteristics">
                     <field name="kgs"/>
@@ -20,12 +21,10 @@
                     <field name="container_type"/>
                 </group>
                 <group col="4" string="Costs">
-                    <field name="treasury"/>
                     <field name="freight"/>
                     <field name="fee"/>
                     <field name="inspection"/>
                     <field name="arrival_cost"/>
-                    <field name="destination_cost"/>
                 </group>
             </form>
         </field>

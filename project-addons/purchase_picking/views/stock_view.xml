@@ -195,18 +195,17 @@
                                     <field name="dua"/>
                                     <field name="container_id"/>
                                     <field name="dua_date"/>
+                                    <field name="treasury"/>
                                     <field name="kgs"/>
                                     <field name="cbm"/>
                                     <field name="incoterm"/>
                                     <field name="destination_port"/>
                                     <field name="forwarder_comercial"/>
                                     <field name="container_type"/>
-                                    <field name="treasury"/>
                                     <field name="freight"/>
                                     <field name="fee"/>
                                     <field name="inspection"/>
                                     <field name="arrival_cost"/>
-                                    <field name="destination_cost"/>
                                 </tree>
                             </field>
                         </page>

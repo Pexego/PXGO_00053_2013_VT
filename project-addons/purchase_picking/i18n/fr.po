@@ -71,11 +71,6 @@ msgid "Arrival costs"
 msgstr "Coûts d'arrivée"
 
 #. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_destination_cost
-msgid "Destination costs"
-msgstr "Costi de destination"
-
-#. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_type
 msgid "Container Type"
 msgstr "Conteneur"
