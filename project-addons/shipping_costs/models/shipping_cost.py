@@ -95,8 +95,3 @@ class ShippingCostSupplement(models.Model):
         string="Service"
     )
     added_percentage = fields.Float(string="Added percentage")
-    transporter_id = fields.Many2one(
-        "transportation.transporter",
-        related="shipping_cost_id.transporter_id",
-        store=True
-    )
