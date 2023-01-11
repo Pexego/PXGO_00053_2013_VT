@@ -4,8 +4,8 @@
     'summary': '',
     'description': '',
     'author': 'Visiotech',
-    'depends': [],
-    'data': ['security/ir.model.access.csv'],
+    'depends': ['sale', 'transportation', 'base'],
+    'data': ['security/ir.model.access.csv', 'views/shipping_cost_view.xml'],
     'installable': True,
     'auto_install': False,
 }
