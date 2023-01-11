@@ -6,11 +6,296 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-03 08:48+0000\n"
-"PO-Revision-Date: 2021-09-03 08:48+0000\n"
+"POT-Creation-Date: 2023-01-11 11:19+0000\n"
+"PO-Revision-Date: 2023-01-11 11:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_is_active
+msgid "Active"
+msgstr "Attivo"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_added_percentage
+msgid "Added percentage"
+msgstr "Added percentage"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_arguments
+msgid "Arguments"
+msgstr "Argomenti"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_ids
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Conditions"
+msgstr "Condizioni"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_create_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_create_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_create_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_create_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_create_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_create_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_display_name
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_display_name
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_display_name
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_display_name
+msgid "Display Name"
+msgstr "Visualizza Nome"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Fee"
+msgstr "Tassa"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_ids
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Fees"
+msgstr "Tasse"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_filter_by
+msgid "Filter by"
+msgstr "Filtra per"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_id
+msgid "ID"
+msgstr "ID"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost___last_update
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition___last_update
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee___last_update
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement___last_update
+msgid "Last Modified on"
+msgstr "Data di ultima modifica"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_write_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_write_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_write_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_write_uid
+msgid "Last Updated by"
+msgstr "Ultima modifica di"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_write_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_write_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_write_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_write_date
+msgid "Last Updated on"
+msgstr "Ultima modifica il"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_volume
+msgid "Max volume/palet"
+msgstr "Volume massimo/paletta"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_cost_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_operator
+msgid "Operator"
+msgstr "Operatore"
+
+#. module: shipping_costs
+#: selection:shipping.cost.fee,type:0
+msgid "Package"
+msgstr "Pacchetto"
+
+#. module: shipping_costs
+#: selection:shipping.cost.fee,type:0
+msgid "Pallet"
+msgstr "Palleta"
+
+#. module: shipping_costs
+#: selection:shipping.cost.fee,type:0
+msgid "Palletized service"
+msgstr "Servizio pallettizzato"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_price
+msgid "Price"
+msgstr "Prezzo"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_max_qty
+msgid "Quantity Max"
+msgstr "Quantità Massima"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Sale order conditions"
+msgstr "Condizioni d'ordine"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_sequence
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_service_ids
+msgid "Service"
+msgstr "Servizio"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_transportation_transporter_shipping_cost_id
+msgid "Shipping Cost"
+msgstr "Costo di Spedizione"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_transportation_service_shipping_cost_supplement_id
+msgid "Shipping Cost Supplement"
+msgstr "Supplemento alle spese di spedizione"
+
+#. module: shipping_costs
+#: model:ir.actions.act_window,name:shipping_costs.action_open_shipping_cost_view
+#: model:ir.ui.menu,name:shipping_costs.shipping_cost_item
+msgid "Shipping Costs"
+msgstr "Costi di spedizione"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_condition_shipping_cost_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_shipping_cost_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_shipping_cost_id
+msgid "Shipping cost"
+msgstr "Costo di spedizione"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Supplement"
+msgstr "Supplement"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_ids
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Supplements"
+msgstr "Supplementi"
+
+#. module: shipping_costs
+#: selection:shipping.cost.fee,type:0
+msgid "Total weight"
+msgstr "Peso totale"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_supplement_transporter_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_transporter_id
+msgid "Transporter"
+msgstr "Vettore"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fee_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:5
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "equals"
+msgstr "Pari a"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:7
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "greater than"
+msgstr "Maggiore di"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:8
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "greater than or equal to"
+msgstr "Maggiore o uguale a"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:11
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "is in"
+msgstr "In "
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:12
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "is not in"
+msgstr "Non in"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:9
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "less than"
+msgstr "Meno di"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:10
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "less than or equal to"
+msgstr "Meno o uguale a"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:6
+#: selection:shipping.cost.condition,operator:0
+#, python-format
+msgid "not equal to"
+msgstr "Diversi da"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost
+msgid "shipping cost"
+msgstr "Costo di spedizione"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost_condition
+msgid "shipping.cost.condition"
+msgstr "shipping.cost.condition"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost_fee
+msgid "shipping.cost.fee"
+msgstr "shipping.cost.fee"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost_supplement
+msgid "shipping.cost.supplement"
+msgstr "shipping.cost.supplement"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_transportation_service
+msgid "transportation.service"
+msgstr "transportation.service"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_transportation_transporter
+msgid "transportation.transporter"
+msgstr "transportation.transporter"
+
