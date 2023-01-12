@@ -299,3 +299,9 @@ msgstr "transportation.service"
 msgid "transportation.transporter"
 msgstr "transportation.transporter"
 
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:61
+#: code:addons/shipping_costs/models/shipping_cost.py:90
+#, python-format
+msgid "Cannot save with Services that doesn't belong to the transporter. Please, check the services chosen."
+msgstr "Error al guardar. No se pueden guardar servicios que no pertenezcan al transportista. Por favor, revisa los servicios elegidos."
