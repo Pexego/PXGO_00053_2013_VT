@@ -479,27 +479,27 @@ msgid "Sea shipping"
 msgstr "Envío marítimo"
 
 #. module: purchase_picking
-#: selection:stock.container,type:0
+#: selection:stock.container,customs_channel:0
 msgid "Road"
 msgstr "Terrestre"
 
 #. module: purchase_picking
-#: selection:stock.container,type:0
+#: selection:stock.container,customs_channel:0
 msgid "🔴 - Red"
 msgstr "🔴 - Rojo"
 
 #. module: purchase_picking
-#: selection:stock.container,type:0
+#: selection:stock.container,customs_channel:0
 msgid "🟠 - Orange"
 msgstr "🟠 - Naranja"
 
 #. module: purchase_picking
-#: selection:stock.container,type:0
+#: selection:stock.container,customs_channel:0
 msgid "🟡 - Yellow"
 msgstr "🟡 - Amarillo"
 
 #. module: purchase_picking
-#: selection:stock.container,type:0
+#: selection:stock.container,customs_channel:0
 msgid "🟢 - Green"
 msgstr "🟢 - Verde"
 
