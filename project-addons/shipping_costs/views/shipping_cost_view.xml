@@ -37,7 +37,7 @@
                     <page string="Supplement">
                         <field name="supplement_ids">
                             <tree string="Supplements" editable="bottom">
-                                <field name="service_ids" domain="[('transporter_ids.id', '=', parent.transporter_id)]"/>
+                                <field name="service_id" domain="[('transporter_ids.id', '=', parent.transporter_id)]"/>
                                 <field name="added_percentage"/>
                             </tree>
                         </field>

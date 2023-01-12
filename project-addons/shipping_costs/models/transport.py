@@ -10,4 +10,4 @@ class Transporter(models.Model):
 class TransportService(models.Model):
     _inherit = "transportation.service"
 
-    shipping_cost_supplement_id = fields.One2many("shipping.cost.supplement", "service_ids")
+    shipping_cost_supplement_id = fields.One2many("shipping.cost.supplement", "service_id")

@@ -1,4 +1,5 @@
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 COMPARATORS = [
@@ -40,6 +41,56 @@ class ShippingCost(models.Model):
         "shipping_cost_id",
         string="Supplements"
     )
+
+    @api.model
+    def create(self, vals):
+        # don't allow to save if services are not from transporter selected
+        transporter_id = vals.get('transporter_id', False)
+        supplements = vals.get('supplement_ids', False)
+
+        if not transporter_id or not supplements:
+            return super().create(vals)
+
+        transporter_services = self.env['transportation.transporter'].browse(
+            transporter_id
+        ).service_ids.ids
+
+        for supplement_list in supplements:
+            supplement_service = supplement_list[2]['service_id']
+            if supplement_service not in transporter_services:
+                raise UserError(_("Cannot save with Services that doesn't belong to the transporter. "
+                                  "Please, check the services chosen."))
+        return super().create(vals)
+
+    @api.multi
+    def write(self, vals):
+        # don't allow to save if services are not from transporter selected
+        for shipping_cost in self:
+            old_service_list = []
+            transporter_id = shipping_cost.transporter_id.id
+            # case new transporter, we get old services
+            if 'transporter_id' in vals:
+                transporter_id = vals['transporter_id']
+                supplement_id_list = shipping_cost.supplement_ids
+                supplement_id_to_rm = [
+                    elem[1] for elem in vals.get('supplement_ids', []) if elem[0] in [2, 1]
+                ]
+                supplement_id_list = supplement_id_list.filtered(lambda supp: supp.id not in supplement_id_to_rm)
+                old_service_list = supplement_id_list.mapped('service_id').ids
+            # we add new services
+            service_list = old_service_list + [
+                elem[2]['service_id'] for elem in vals.get('supplement_ids', []) if elem[0] in [0, 1]
+            ]
+            transporter_services = self.env['transportation.transporter'].browse(
+                transporter_id
+            ).service_ids.ids
+
+            for service_id in service_list:
+                if service_id not in transporter_services:
+                    raise UserError(_("Cannot save with Services that doesn't belong to the transporter. "
+                                      "Please, check the services chosen."))
+
+        return super().write(vals)
 
 
 class ShippingCostCondition(models.Model):
@@ -90,7 +141,7 @@ class ShippingCostSupplement(models.Model):
     _name = "shipping.cost.supplement"
 
     shipping_cost_id = fields.Many2one("shipping.cost", string="Shipping cost")
-    service_ids = fields.Many2one(
+    service_id = fields.Many2one(
         "transportation.service",
         string="Service"
     )
