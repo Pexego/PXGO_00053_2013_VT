@@ -201,7 +201,7 @@
                 <field name="sim_service_ids">
                     <tree string="SIM Services" default_order="type asc" create="false" delete="false" editable="bottom">
                         <field name="type" string="Service" readonly="1"/>
-                        <field name="status" string="Estado" readonly="0"/>
+                        <field name="status" string="Status" readonly="0"/>
                     </tree>
                 </field>
                 <footer>
