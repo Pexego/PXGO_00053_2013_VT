@@ -3,7 +3,7 @@ from odoo.tools import float_compare, float_round
 import re
 from datetime import datetime
 from dateutil import parser
-import ftplib
+import pysftp
 import logging
 import io
 import base64
@@ -398,37 +398,33 @@ class EdifFile(models.Model):
         ftp_folder = self.env['ir.config_parameter'].sudo().get_param('ftp_edi_folder')
 
         # FTP login and place
-        ftp = ftplib.FTP(ftp_dir)
-        ftp.login(user=ftp_user, passwd=ftp_pass)
-        ftp.cwd(ftp_folder)
+        cnopts = pysftp.CnOpts()
+        cnopts.hostkeys = None
+        sftp = pysftp.Connection(ftp_dir, username=ftp_user, password=ftp_pass, cnopts=cnopts)
+        sftp.chdir(ftp_folder)
 
         # Read the files
-        files = []
-        latest_date = False
-        date_reading = fields.Datetime.now()
         latest_date_str = self.search([], limit=1, order='read_date desc').read_date
+        latest_date = parser.parse(latest_date_str)
+        date_reading = fields.Datetime.now()
 
         _logger.info("EDI - Start reading files")
 
-        for line in ftp.mlsd(ftp_folder):  # Get the latest files only
-            datetime_str = line[1].get("modify")
-            line_datetime = parser.parse(datetime_str)
-            if latest_date_str:
-                latest_date = parser.parse(latest_date_str)
-            if line_datetime > latest_date and line[0] not in ['.', '..']:
-                files.append(line[0])
+        order_files = [o.filename for o in sftp.listdir_attr() if o.st_mtime > int(latest_date.timestamp())]
 
-        for file in files:
+        for file in order_files:
             vals = {
                 'file_name': file,
                 'read_date': date_reading,
                 'error': False
             }
             created_file = self.create(vals)
-            _logger.info("EDI - Parse file {}".format(file))
-            ftp.retrbinary("RETR %s" % file, callback=created_file.decode_file)
 
-        ftp.quit()
+            file_io = io.BytesIO()
+            sftp.getfo(file, file_io)
+            created_file.decode_file(data=file_io.getvalue())
+
+        sftp.close()
 
     @api.multi
     def decode_file(self, data):
@@ -449,13 +445,16 @@ class EdifFile(models.Model):
             ftp_folder = self.env['ir.config_parameter'].sudo().get_param('ftp_edi_folder')
 
             # FTP login and place
-            ftp = ftplib.FTP(ftp_dir)
-            ftp.login(user=ftp_user, passwd=ftp_pass)
-            ftp.cwd(ftp_folder)
+            cnopts = pysftp.CnOpts()
+            cnopts.hostkeys = None
+            sftp = pysftp.Connection(ftp_dir, username=ftp_user, password=ftp_pass, cnopts=cnopts)
+            sftp.chdir(ftp_folder)
 
-            ftp.retrbinary("RETR %s" % file.file_name, callback=file.decode_file)
+            file_io = io.BytesIO()
+            sftp.getfo(file, file_io)
+            file.decode_file(data=file_io.getvalue())
 
-            ftp.quit()
+            sftp.close()
 
     @api.multi
     def send_error_mail(self):
