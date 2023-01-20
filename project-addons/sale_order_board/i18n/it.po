@@ -60,5 +60,13 @@ msgstr "dei prodotti dell'ordine non hanno i pesi contrassegnati, si ricorda che
 msgid "  Calculate Shipping Prices"
 msgstr "  Calcolo della spedizione"
 
+#. module: sale_order_board
+#: model:ir.model.fields,help:sale_order_board.field_transportation_transporter_fuel
+msgid "Percentage increase in transportation which varies depending on transporter"
+msgstr "Aumento percentuale del costo di trasporto che varia a seconda del corriere "
 
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_transportation_transporter_fuel
+msgid "Fuel(%)"
+msgstr "Aumento dei costi di trasporto(%)"
 
