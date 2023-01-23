@@ -25,10 +25,13 @@
     'description': """This module adds associated products""",
     'author': 'Pexego Sistemas Informáticos',
     'website': '',
-    "depends": ['base',
-                'product',
-                'sale'],
-    "data": ['security/ir.model.access.csv',
+    "depends": ['base','product','sale','web',
+                'web_ir_actions_act_view_reload',
+                'web_ir_actions_act_multi'
+                ],
+    "data": [
+             'security/ir.model.access.csv',
+             'wizard/product_equivalent_wizard.xml',
               'views/product_view.xml'],
     "installable": True
 }

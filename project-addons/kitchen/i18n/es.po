@@ -894,6 +894,12 @@ msgid "You cannot cancel this picking because there are customizations in progre
 msgstr "No puedes cancelar este albarán porque hay personalizaciones en proceso"
 
 #. module: kitchen
+#: code:addons/kitchen/models/picking.py:103
+#, python-format
+msgid "This picking cannot be released as it has a customization assigned to it"
+msgstr "No se puede liberar el albarán porque tiene una personalización asociada"
+
+#. module: kitchen
 #: code:addons/kitchen/models/kitchen_customization.py:377
 #, python-format
 msgid "You cannot change the product quantity to less than 0"

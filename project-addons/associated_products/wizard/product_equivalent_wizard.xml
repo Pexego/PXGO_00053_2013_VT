@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_add_equivalent_product_wizard" model="ir.ui.view">
+        <field name="name">view.add.equivalent.product.wizard</field>
+        <field name="model">product.equivalent.wizard</field>
+        <field name="arch" type="xml">
+             <form string="Add Equivalent Product">
+                <group>
+                    <field name="equivalent_product_type" required="1"/>
+                    <field name="product_id" attrs="{'invisible': [('equivalent_product_type','!=','exist')],
+                        'required': [('equivalent_product_type','=','exist')]}"/>
+                     <field name="product_name" attrs="{'invisible': [('equivalent_product_type','!=','text')],
+                        'required': [('equivalent_product_type','=','text')]}"/>
+                </group>
+                <footer>
+                    <button name="action_done" string="Add" type="object"
+                        class="btn-primary"/>
+                    <button name="action_done_add_another" string="Add another" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_add_equivalent_product_wizard" model="ir.actions.act_window">
+        <field name="name">Add Equivalent Product</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.equivalent.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_add_equivalent_product_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

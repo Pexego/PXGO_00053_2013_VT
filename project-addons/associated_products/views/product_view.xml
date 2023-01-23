@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-        <record id="product_add_associateds_products_form" model="ir.ui.view">
-            <field name="name">product.product.add.associateds.form</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_normal_form_view"/>
-            <field name="arch" type="xml">
-                <notebook position="inside">
-                    <page string="Associated Products">
-                        <field name="associated_product_ids" nolabel="1"/>
-                    </page>
-                </notebook>
-            </field>
-        </record>
+    <record id="product_add_associateds_products_form" model="ir.ui.view">
+        <field name="name">product.product.add.associateds.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Associated Products">
+                    <field name="associated_product_ids" nolabel="1"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
 
-        <!-- product.associated views-->
-        <record id="product_associated_form" model="ir.ui.view">
-            <field name="name">product.associated.form</field>
-            <field name="model">product.associated</field>
-            <field name="arch" type="xml">
-                <form string="Associated products">
-                    <sheet>
+    <!-- product.associated views-->
+    <record id="product_associated_form" model="ir.ui.view">
+        <field name="name">product.associated.form</field>
+        <field name="model">product.associated</field>
+        <field name="arch" type="xml">
+            <form string="Associated products">
+                <sheet>
+                    <group>
                         <group>
-                            <group>
-                                <field name="associated_id"/>
-                            </group>
-                            <group>
-                                <field name="quantity"/>
-                                <field name="discount"/>
-                            </group>
+                            <field name="associated_id"/>
                         </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="discount"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-        <record id="product_associated_tree_view" model="ir.ui.view">
-            <field name="name">product.associated.tree</field>
-            <field name="model">product.associated</field>
-            <field name="field_parent">child_id</field>
-            <field name="arch" type="xml">
-                <tree toolbar="True" string="Products Associated">
-                    <field name="associated_id"/>
-                    <field name="quantity"/>
-                    <field name="discount"/>
-                </tree>
-            </field>
-        </record>
+    <record id="product_associated_tree_view" model="ir.ui.view">
+        <field name="name">product.associated.tree</field>
+        <field name="model">product.associated</field>
+        <field name="field_parent">child_id</field>
+        <field name="arch" type="xml">
+            <tree toolbar="True" string="Products Associated">
+                <field name="associated_id"/>
+                <field name="quantity"/>
+                <field name="discount"/>
+            </tree>
+        </field>
+    </record>
 
-        <!-- Equivalent products -->
-        <record id="product_add_equivalent_products" model="ir.ui.view">
-            <field name="name">product.equivalent.form</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_normal_form_view"/>
-            <field name="arch" type="xml">
-                <notebook position="inside">
-                    <page string="Equivalent Products">
-                        <field name="equivalent_product_ids" nolabel="1">
-                            <tree editable="top">
-                                <field name="equivalent_id"/>
-                            </tree>
-                            <form>
-                                <field name="equivalent_id"/>
-                            </form>
-                        </field>
-                    </page>
-                </notebook>
-            </field>
-        </record>
+    <!-- Equivalent products -->
+    <record id="product_add_equivalent_products" model="ir.ui.view">
+        <field name="name">product.equivalent.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Equivalent Products">
+                    <group>
+                        <group col="1">
+                            <button name="%(associated_products.action_view_add_equivalent_product_wizard)d"
+                                    type="action" string="Add Product" class="btn-primary oe_edit_only"/>
+                            <field name="equivalent_product_ids" nolabel="1">
+                                <tree create="false" editable="bottom">
+                                    <field name="equivalent_id" invisible="1"/>
+
+                                    <button name="action_open_product_equivalent" type="object"
+                                            class="oe_link"
+                                            icon="fa fa-external-link"
+                                            style="font-size: 16px;"
+                                            attrs="{'invisible':[('equivalent_id','=',False)]}"/>
+                                    <field name="product_name" readonly="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
 
     <record id="product_add_equivalent_products_search" model="ir.ui.view">
         <field name="name">product.add.equivalent.products.search</field>
