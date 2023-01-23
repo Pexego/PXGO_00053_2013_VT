@@ -9,9 +9,13 @@
     Product Pricelist Customizations
     Add margins and relations on product pricelist
 """,
-    "depends": ["base", "product", "sale_customer_discount"],
+    "depends": ["base", "product", "product_brand", "sale", "sale_customer_discount"],
     "data": [
-        "views/product_view.xml", "security/product_pricelist_custom.xml"
+        "security/ir.model.access.csv",
+        "views/brand_group_view.xml",
+        "views/product_view.xml",
+        "views/partner_view.xml",
+        "security/product_pricelist_custom.xml"
     ],
     "demo": [],
     'auto_install': False,

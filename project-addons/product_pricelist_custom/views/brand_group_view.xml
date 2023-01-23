@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="brand_group_view_search">
+        <field name="name">brand.group.search</field>
+        <field name="model">brand.group</field>
+        <field name="arch" type="xml">
+            <search string="Brand Group Search">
+                <field name="name"/>
+                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="brand_group_view_tree" model="ir.ui.view">
+        <field name="name">brand.group.tree</field>
+        <field name="model">brand.group</field>
+        <field name="arch" type="xml">
+            <tree string="Brand Group">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="brand_group_view" model="ir.ui.view">
+        <field name="name">brand.group.form</field>
+        <field name="model">brand.group</field>
+        <field name="arch" type="xml">
+            <form string="Brand Group">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive" groups="sales_team.group_sale_manager">
+                            <field name="active" widget="boolean_button"
+                                   options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                        <separator string="Pricelist Items"/>
+                        <field name="brand_ids" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="brand_group_action" model="ir.actions.act_window">
+        <field name="name">Brand Group</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">brand.group</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="brand_group_view_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a brand group.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_brand_group" name="Brand Group"
+              action="brand_group_action"
+              parent="sale.prod_config_main"/>
+
+</odoo>
