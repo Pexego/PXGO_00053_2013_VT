@@ -65,6 +65,11 @@ msgid "Active SIMs"
 msgstr "SIMs attive"
 
 #. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.res_partner_view_buttons_add_sims
+msgid "% Active SIMs"
+msgstr "% SIMs activas"
+
+#. module: sim_manager
 #: selection:sim.serial,state:0
 msgid "Active disuse"
 msgstr "Attiva in disuso"

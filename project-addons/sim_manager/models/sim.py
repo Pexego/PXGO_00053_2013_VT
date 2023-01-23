@@ -175,7 +175,7 @@ class SimSerial(models.Model):
         """
         Given a new state, sets this state to the SIM Serial.
         """
-        if any(['blocked' == s['status'] for s in self.sim_service_ids]):
+        if self.sim_service_ids.filtered(lambda service: service.status == 'blocked'):
             raise UserError(_('Cannot block a SIM Service'))
 
         posible_states = ('active', 'active_disuse', 'unsuscribed', 'blocked', 'preactivated')

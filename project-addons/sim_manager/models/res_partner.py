@@ -17,7 +17,7 @@ class ResPartner(models.Model):
         """
         Obtains the percentage of active SimSerials
         """
-        sim_count = sum([int(package_id.qty) for package_id in self.sim_serial_ids])
+        sim_count = len(self.sim_serial_ids.mapped('serial_ids'))
         if sim_count == 0:
             # if no sims then no active sims
             self.sim_active_perc = 0
@@ -39,7 +39,7 @@ class ResPartner(models.Model):
         if response.status_code == 200:
             num_active_sims = int(response.content)
 
-        self.sim_active_perc = num_active_sims * 100 / sim_count
+        self.sim_active_perc = round(num_active_sims * 100 / sim_count, 2)
 
     def invoice_sim_packages(self, month=None):
         # execute only if come the month or if today is the last day of the month
