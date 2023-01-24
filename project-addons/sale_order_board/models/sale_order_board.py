@@ -38,39 +38,62 @@ class SaleOrder(models.Model):
 
     @api.multi
     def compute_variables(self):
-        view_id = self.env['picking.rated.wizard']
-        new = view_id.create({})
+        new = self.env['picking.rated.wizard'].create({})
         data_list = self.env['picking.rated.wizard.tree']
         content = data_list.search([('order_id', '=', self.id)])
         message_error = ""
         if content:
             content.unlink()
         for order in self:
-            shipment_groups = order.env['res.country.group'].search([('shipment', '=', True),
-                                                                     ('country_ids', 'in', order.partner_shipping_id.country_id.id)])
-            transporter_ids = order.env['transportation.transporter'].search([('country_group_id', 'in', shipment_groups.ids)])
+            shipment_groups = order.env['res.country.group'].search([
+                ('shipment', '=', True), ('country_ids', 'in', order.partner_shipping_id.country_id.id)
+            ])
+            transporter_ids = order.env['transportation.transporter'].search(
+                [('country_group_id', 'in', shipment_groups.ids)]
+            )
 
             package_weight = 0.0
             package_pieces = 0
             products_wo_weight = 0
             products_without_weight = ''
+            package_volume = 0.0
+            products_wo_volume = 0
+            product_names_without_volume = ''
             for order_line in order.order_line:
                 if order_line.product_id.weight == 0 and order_line.product_id.type == 'product':
                     products_wo_weight += 1
-                    products_without_weight = products_without_weight + ' %s' % (order_line.product_id.default_code)
-                    continue
-                package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
-                package_pieces += int(order_line.product_uom_qty)
+                    products_without_weight += ' %s' % order_line.product_id.default_code
+                else:
+                    package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
+                    package_pieces += int(order_line.product_uom_qty)
+                if order_line.product_id.volume == 0 and order_line.product_id.type == 'product':
+                    products_wo_volume += 1
+                    product_names_without_volume += f' {order_line.product_id.default_code}'
+                else:
+                    package_volume += float(order_line.product_id.volume * order_line.product_uom_qty)
             num_pieces = int((package_weight / 20) + 1)
             package_weight = round(package_weight, 2)
             products_wo_weight = str(products_wo_weight)
+            package_volume = round(package_volume, 2)
+            products_wo_volume = str(products_wo_volume)
             if products_wo_weight != '0':
-                products_wo_weight = products_wo_weight +\
-                                     " of the product(s) of the order don't have set the weights," +\
-                                     " please take the shipping cost as an aproximation"
-            new.write({'total_weight': package_weight,
-                       'products_wo_weight': products_wo_weight,
-                       'products_without_weight': products_without_weight})
+                products_wo_weight += (
+                    " of the product(s) of the order don't have set the weights,"
+                    " please take the shipping cost as an approximation"
+                )
+            if products_wo_volume != '0':
+                products_wo_volume += (
+                    " of the product(s) of the order don't have set the volume,"
+                    " please take the shipping cost as an approximation"
+                )
+            new.write({
+                'total_weight': package_weight,
+                'products_wo_weight': products_wo_weight,
+                'products_without_weight': products_without_weight,
+                'total_volume': package_volume,
+                'products_wo_volume': products_wo_volume,
+                'product_names_without_volume': product_names_without_volume
+            })
             for transporter in transporter_ids:
 
                 # if we don't check name it may raise an unwanted AttributeError

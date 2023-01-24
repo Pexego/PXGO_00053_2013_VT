@@ -30,6 +30,9 @@ class PickingRatedWizard(models.TransientModel):
     data = fields.One2many('picking.rated.wizard.tree', 'wizard_id', string='Shipping Data', readonly=True)
     products_without_weight = fields.Char('', readonly=True)
     message_error = fields.Text('', readonly=True)
+    total_volume = fields.Char('Total Volume (Cbm)', readonly=True, digits=dp.get_precision('Stock Weight'))
+    products_wo_volume = fields.Char('', readonly=True)
+    product_names_without_volume = fields.Char('', readonly=True)
 
 
 class PickingRatedWizardTree(models.TransientModel):
