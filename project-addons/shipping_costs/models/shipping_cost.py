@@ -1,5 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+import math
+from operator import attrgetter
 
 
 COMPARATORS = [
@@ -146,3 +148,67 @@ class ShippingCostSupplement(models.Model):
         string="Service"
     )
     added_percentage = fields.Float(string="Added percentage")
+
+
+class SaleOrderShippingCost(models.TransientModel):
+    """
+    Calculates the shipping cost of a sale order
+    """
+    _name = "sale.order.shipping.cost"
+
+    sale_order_id = fields.Many2one("sale.order", "Sale Order")
+    shipping_cost_id = fields.Many2one("shipping.cost", "Shipping Cost")
+    pallet_number = fields.Integer(string="Pallet number", compute="_get_pallet_number")
+    sale_order_weight = fields.Float(string="Sale order weight", compute="_get_sale_order_weight")
+
+    def calculate_shipping_cost(self, pallet_mode=True):
+        """
+        Returns the final cost list of the sale order shipping
+        """
+        if pallet_mode:
+            base_fee_price = self._get_fee_price(mode='pallet')
+        else:
+            base_fee_price = self._get_fee_price(mode='total_weight')
+        # if no base_fee_price, then no fee
+        if base_fee_price is None:
+            return []
+
+        # TODO: fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.fuel)
+        service_price_list = [
+            {
+                'price': base_fee_price * (1 + supplement.added_percentage / 100),  # replace base_fee_price with fuel_added_price
+                'service_name': f'{supplement.service_id.name}',
+                'sale_order_shipping_cost_id': self.id
+            }
+            for supplement in self.shipping_cost_id.supplement_ids
+        ]
+
+        return service_price_list
+
+    def _get_fee_price(self, mode):
+        """
+        Searches among fees where type is mode and selects the one that fits more to the sale order
+        Returns the price of that fee.
+        """
+        fee_ids = self.shipping_cost_id.fee_ids.filtered(lambda fee: fee.type == mode)
+        if mode == 'pallet':
+            fee_ids = fee_ids.filtered(lambda fee: fee.max_qty >= self.pallet_number)
+        if mode == 'total_weight':
+            fee_ids = fee_ids.filtered(lambda fee: fee.max_qty >= self.sale_order_weight)
+        if len(fee_ids) == 0:
+            return None
+        fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
+        return fee_sorted[0].price
+
+    def _get_pallet_number(self):
+        """
+        Returns the pallet number of the sale.order shipping
+        """
+        sale_order_volume_list = self.sale_order_id.order_line.mapped('product_id.volume')
+        self.pallet_number = math.ceil(sum(sale_order_volume_list) * (1 / self.shipping_cost_id.volume))
+
+    def _get_sale_order_weight(self):
+        """
+        Returns the sale.order weight
+        """
+        self.sale_order_weight = sum(self.sale_order_id.order_line.mapped('product_id.weight'))
