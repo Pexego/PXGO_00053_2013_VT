@@ -9,7 +9,7 @@
                     <field name="cost_name"/>
                     <field name="is_active"/>
                     <field name="transporter_id"/>
-                    <!--field name="fuel"/-->
+                    <field name="fuel"/>
                 </group>
                 <group>
                     <field name="sequence"/>
@@ -43,6 +43,9 @@
                         </field>
                     </page>
                 </notebook>
+                <group colspan="6" col="6">
+                    <field name="note" placeholder="Setup default terms and conditions in your sales settings ..." nolabel="1"/>
+                </group>
             </form>
         </field>
     </record>

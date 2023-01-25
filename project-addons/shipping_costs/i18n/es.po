@@ -305,3 +305,13 @@ msgstr "transportation.transporter"
 #, python-format
 msgid "Cannot save with Services that doesn't belong to the transporter. Please, check the services chosen."
 msgstr "Error al guardar. No se pueden guardar servicios que no pertenezcan al transportista. Por favor, revisa los servicios elegidos."
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_shipping_cost_note
+msgid "Notes"
+msgstr "Notas"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Setup default terms and conditions in your sales settings ..."
+msgstr "Configure los términos y condiciones predeterminados en su configuración de ventas..."

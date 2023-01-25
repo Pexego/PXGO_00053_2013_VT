@@ -27,8 +27,7 @@ class ShippingCost(models.Model):
     cost_name = fields.Char(string="Name")
     is_active = fields.Boolean(string="Active")
     transporter_id = fields.Many2one("transportation.transporter", string="Transporter")
-    # TODO
-    # fuel = fields.Float(string="Fuel", related="transporter_id.¿fuel?", readonly=True)
+    fuel = fields.Float(string="Fuel", related="transporter_id.fuel", readonly=True)
     sequence = fields.Integer(string="Sequence")
     volume = fields.Float(string="Max volume/palet")
 
@@ -43,6 +42,8 @@ class ShippingCost(models.Model):
         "shipping_cost_id",
         string="Supplements"
     )
+
+    note = fields.Text("Notes", copy=False)
 
     @api.model
     def create(self, vals):
@@ -174,7 +175,7 @@ class SaleOrderShippingCost(models.TransientModel):
         if base_fee_price is None:
             return []
 
-        fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.transporter_id.fuel / 100)
+        fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.fuel / 100)
         service_price_list = [
             {
                 'price': fuel_added_price * (1 + supplement.added_percentage / 100),
