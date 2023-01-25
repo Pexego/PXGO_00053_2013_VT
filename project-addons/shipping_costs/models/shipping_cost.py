@@ -159,7 +159,8 @@ class SaleOrderShippingCost(models.TransientModel):
     sale_order_id = fields.Many2one("sale.order", "Sale Order")
     shipping_cost_id = fields.Many2one("shipping.cost", "Shipping Cost")
     pallet_number = fields.Integer(string="Pallet number", compute="_get_pallet_number")
-    sale_order_weight = fields.Float(string="Sale order weight", compute="_get_sale_order_weight")
+    sale_order_weight = fields.Float(string="Sale order weight", related="sale_order_id.sale_order_weight")
+    sale_order_volume = fields.Float(string="Sale order volume", related="sale_order_id.sale_order_volume")
 
     def calculate_shipping_cost(self, pallet_mode=True):
         """
@@ -173,10 +174,10 @@ class SaleOrderShippingCost(models.TransientModel):
         if base_fee_price is None:
             return []
 
-        # TODO: fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.fuel)
+        fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.transporter_id.fuel / 100)
         service_price_list = [
             {
-                'price': base_fee_price * (1 + supplement.added_percentage / 100),  # replace base_fee_price with fuel_added_price
+                'price': fuel_added_price * (1 + supplement.added_percentage / 100),
                 'service_name': f'{supplement.service_id.name}',
                 'sale_order_shipping_cost_id': self.id
             }
@@ -202,13 +203,6 @@ class SaleOrderShippingCost(models.TransientModel):
 
     def _get_pallet_number(self):
         """
-        Returns the pallet number of the sale.order shipping
+        Returns the pallet number of the sale_order shipping
         """
-        sale_order_volume_list = self.sale_order_id.order_line.mapped('product_id.volume')
-        self.pallet_number = math.ceil(sum(sale_order_volume_list) * (1 / self.shipping_cost_id.volume))
-
-    def _get_sale_order_weight(self):
-        """
-        Returns the sale.order weight
-        """
-        self.sale_order_weight = sum(self.sale_order_id.order_line.mapped('product_id.weight'))
+        self.pallet_number = math.ceil(self.sale_order_volume * (1 / self.shipping_cost_id.volume))

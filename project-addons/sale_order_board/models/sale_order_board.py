@@ -36,6 +36,9 @@ import time
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    sale_order_weight = fields.Float(string="Sale order weight", compute="_get_sale_order_weight")
+    sale_order_volume = fields.Float(string="Sale order volume", compute="_get_sale_order_volume")
+
     @api.multi
     def compute_variables(self):
         new = self.env['picking.rated.wizard'].create({})
@@ -52,50 +55,39 @@ class SaleOrder(models.Model):
                 [('country_group_id', 'in', shipment_groups.ids)]
             )
 
-            package_weight = 0.0
-            package_pieces = 0
-            products_wo_weight = 0
-            products_without_weight = ''
-            package_volume = 0.0
-            products_wo_volume = 0
-            product_names_without_volume = ''
-            for order_line in order.order_line:
-                if order_line.product_id.weight == 0 and order_line.product_id.type == 'product':
-                    products_wo_weight += 1
-                    products_without_weight += ' %s' % order_line.product_id.default_code
-                else:
-                    package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
-                    package_pieces += int(order_line.product_uom_qty)
-                if order_line.product_id.volume == 0 and order_line.product_id.type == 'product':
-                    products_wo_volume += 1
-                    product_names_without_volume += f' {order_line.product_id.default_code}'
-                else:
-                    package_volume += float(order_line.product_id.volume * order_line.product_uom_qty)
-            num_pieces = int((package_weight / 20) + 1)
-            package_weight = round(package_weight, 2)
-            products_wo_weight = str(products_wo_weight)
-            package_volume = round(package_volume, 2)
-            products_wo_volume = str(products_wo_volume)
-            if products_wo_weight != '0':
-                products_wo_weight += (
+            package_pieces = sum(order.order_line.mapped('product_uom_qty'))
+            product_without_weight_orm = order.order_line.mapped('product_id').filtered(
+                lambda product: product.weight == 0 and product.type == 'product'
+            )
+            product_without_volume_orm = order.order_line.mapped('product_id').filtered(
+                lambda product: product.volume == 0 and product.type == 'product'
+            )
+            message_products_weight = f'{len(product_without_weight_orm)}'
+            product_names_weight = ", ".join(product_without_weight_orm.mapped('default_code'))
+            message_products_volume = f'{len(product_without_volume_orm)}'
+            product_names_volume = ", ".join(product_without_volume_orm.mapped('default_code'))
+            num_pieces = int((order.sale_order_weight / 20) + 1)
+
+            if len(product_without_weight_orm) != 0:
+                message_products_weight += (
                     " of the product(s) of the order don't have set the weights,"
                     " please take the shipping cost as an approximation"
                 )
-            if products_wo_volume != '0':
-                products_wo_volume += (
-                    " of the product(s) of the order don't have set the volume,"
+            if len(product_without_volume_orm) != 0:
+                message_products_volume += (
+                    " of the product(s) of the order don't have set the weights,"
                     " please take the shipping cost as an approximation"
                 )
             new.write({
-                'total_weight': package_weight,
-                'products_wo_weight': products_wo_weight,
-                'products_without_weight': products_without_weight,
-                'total_volume': package_volume,
-                'products_wo_volume': products_wo_volume,
-                'product_names_without_volume': product_names_without_volume
+                'total_weight': order.sale_order_weight,
+                'products_wo_weight': message_products_weight,
+                'products_without_weight': product_names_weight,
+                'total_volume': order.sale_order_volume,
+                'products_wo_volume': message_products_volume,
+                'product_names_without_volume': product_names_volume
             })
-            for transporter in transporter_ids:
 
+            for transporter in transporter_ids:
                 # if we don't check name it may raise an unwanted AttributeError
                 if transporter.name in ['UPS', 'DHL', 'SEUR', 'TNT']:
                     call_method = f'_add_services_cost_{transporter.name}'
@@ -103,7 +95,9 @@ class SaleOrder(models.Model):
                         # equals to do order.call_method(...)
                         getattr(order, call_method)(
                             new,
-                            package_weight=package_weight, num_pieces=num_pieces, package_pieces=package_pieces
+                            package_weight=order.sale_order_weight,
+                            num_pieces=num_pieces,
+                            package_pieces=package_pieces
                         )
                     except(requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                         message_error += (
@@ -261,10 +255,13 @@ class SaleOrder(models.Model):
                             currency = service['TotalNet']['Currency']
                             amount = service['Charges']['Charge'][0]['ChargeAmount'] + service['Charges']['Charge'][1][
                                 'ChargeAmount']
+                            percentage_increase = float(amount) * (
+                                self.env['transportation.transporter'].search([('name', '=', 'DHL')]).fuel / 100
+                            )
                             rated_status = {
                                 'transit_time': transit_time,
                                 'currency': currency,
-                                'amount': amount,
+                                'amount': amount + percentage_increase,
                                 'service': 'DHL ' + dhl_services_dict[service["@type"]],
                                 'order_id': self.id,
                                 'wizard_id': picking_rated.id
@@ -276,11 +273,14 @@ class SaleOrder(models.Model):
                         currency = data['TotalNet']['Currency']
                         amount = data['Charges']['Charge'][0]['ChargeAmount'] + data['Charges']['Charge'][1][
                             'ChargeAmount']
+                        percentage_increase = float(amount) * (
+                            self.env['transportation.transporter'].search([('name', '=', 'DHL')]).fuel / 100
+                        )
                         transit_time = data["DeliveryTime"].replace("T", " ")[:-3]
                         rated_status = {
                             'transit_time': transit_time,
                             'currency': currency,
-                            'amount': amount,
+                            'amount': amount + percentage_increase,
                             'service': 'DHL ' + dhl_services_dict[data["@type"]],
                             'order_id': self.id,
                             'wizard_id': picking_rated.id
@@ -295,9 +295,7 @@ class SaleOrder(models.Model):
             self.env['ir.config_parameter'].sudo().get_param('service.codes.tnt.api.request'))
         account_number = self.env['ir.config_parameter'].sudo().get_param('account.number.tnt.api.request')
         account_country = self.env['ir.config_parameter'].sudo().get_param('account.country.tnt.api.request')
-        # account_user_test = self.env['ir.config_parameter'].sudo().get_param('account.user.test.tnt.api.request')
         account_user = self.env['ir.config_parameter'].sudo().get_param('account.user.tnt.api.request')
-        # account_password_test = self.env['ir.config_parameter'].sudo().get_param('account.password.test.tnt.api.request')
         account_password = self.env['ir.config_parameter'].sudo().get_param('account.password.tnt.api.request')
         url = self.env['ir.config_parameter'].sudo().get_param('url.tnt.api.request')
 
@@ -390,10 +388,13 @@ class SaleOrder(models.Model):
                         except KeyError:
                             services_not_found.append(service_code)
                             continue
+                        percentage_increase = shipping_amount * (
+                            self.env['transportation.transporter'].search([('name', '=', 'TNT')]).fuel / 100
+                        )
                         rated_status = {
                             'currency': currency,
                             'transit_time': transit_time,
-                            'amount': shipping_amount,
+                            'amount': shipping_amount + percentage_increase,
                             'service': service_name,
                             'order_id': self.id,
                             'wizard_id': picking_rated.id
@@ -446,7 +447,6 @@ class SaleOrder(models.Model):
                     '</soapenv:Body>'
                     '</soapenv:Envelope>')
 
-
             response_data = self._get_request_response(
                 url,
                 template,
@@ -476,9 +476,12 @@ class SaleOrder(models.Model):
 
             if shipping_amount:
                 currency = "EUR"
+                percentage_increase = shipping_amount * (
+                    self.env['transportation.transporter'].search([('name', '=', 'SEUR')]).fuel / 100
+                )
                 rated_status = {
                     'currency': currency,
-                    'amount': shipping_amount,
+                    'amount': shipping_amount + percentage_increase,
                     'service': service_name,
                     'order_id': self.id,
                     'wizard_id': picking_rated.id
@@ -631,10 +634,13 @@ class SaleOrder(models.Model):
                 data = info["RateResponse"]["RatedShipment"]["NegotiatedRateCharges"]
                 if data:
                     currency = data['TotalCharge']['CurrencyCode']
-                    amount = data['TotalCharge']['MonetaryValue']
+                    amount = float(data['TotalCharge']['MonetaryValue'])
+                    percentage_increase = amount * (
+                        self.env['transportation.transporter'].search([('name', '=', 'UPS')]).fuel / 100
+                    )
                     rated_status = {
                         'currency': currency,
-                        'amount': amount,
+                        'amount': amount + percentage_increase,
                         'service': service.name,
                         'order_id': self.id,
                         'wizard_id': picking_rated.id
@@ -655,6 +661,26 @@ class SaleOrder(models.Model):
             # we pass the argument we want to show in message_error
             raise requests.HTTPError(response.text)
         return response.text
+
+    def _get_sale_order_weight(self):
+        """
+        Calculates the sale_order weight
+        """
+        for order in self:
+            sale_order_weight = 0.0
+            for order_line in order.order_line:
+                sale_order_weight += order_line.product_id.weight * order_line.product_uom_qty
+            order.sale_order_weight = round(sale_order_weight, 3)
+
+    def _get_sale_order_volume(self):
+        """
+        Calculates the sale_order volume
+        """
+        for order in self:
+            sale_order_volume = 0.0
+            for order_line in order.order_line:
+                sale_order_volume += order_line.product_id.volume * order_line.product_uom_qty
+            order.sale_order_volume = round(sale_order_volume, 3)
 
 
 class TransportationTransporter(models.Model):
