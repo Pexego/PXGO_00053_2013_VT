@@ -274,10 +274,9 @@ class PurchaseSuggestionsReportController(http.Controller):
             ))
         ])
         worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report(wizard)
-        worksheet_names = [name for name in worksheet_headers]
         with BytesIO() as output:
             workbook = xlwt.Workbook(encoding="UTF-8")
-            self.write_on_report_file(workbook, worksheet_names, worksheet_row_values, worksheet_headers)
+            self.write_on_report_file(workbook, worksheet_row_values, worksheet_headers)
             workbook.save(output)
             response.stream.write(output.getvalue())
         return response
@@ -333,7 +332,7 @@ class PurchaseSuggestionsReportController(http.Controller):
         }
         return row_dict, header_dict
 
-    def write_on_report_file(self, workbook, worksheet_names, worksheet_row_values, worksheet_headers):
+    def write_on_report_file(self, workbook, worksheet_row_values, worksheet_headers):
         """
         Writes the content of the report file
 
@@ -341,8 +340,6 @@ class PurchaseSuggestionsReportController(http.Controller):
         ----------
         workbook:
             Workbook where we want to write sheets and content
-        worksheet_names: List[str]
-            Names of worksheets we are going to create in the workbook
         worksheet_row_values: Dict[str, List[Tuple[Any]]]
             Are the values we want to write on each worksheet.
             Key is the name of the worksheet and values a list with the row values we want to write
@@ -352,9 +349,9 @@ class PurchaseSuggestionsReportController(http.Controller):
             Key is the name of the worksheet and values a list with the headers we want to write
             into that sheet
         """
-        for worksheet_name in worksheet_names:
+
+        for worksheet_name, headers in worksheet_headers.items():
             worksheet = workbook.add_sheet(worksheet_name)
-            headers = worksheet_headers[worksheet_name]
             row_values = worksheet_row_values[worksheet_name]
             self._write_worksheet(worksheet, headers, row_values)
 
