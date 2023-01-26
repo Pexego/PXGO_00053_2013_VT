@@ -176,6 +176,7 @@
         <field name="arch" type="xml">
             <field name="default_code" position="attributes">
                 <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
             </field>
         </field>
     </record>
