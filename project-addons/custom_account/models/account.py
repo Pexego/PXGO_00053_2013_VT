@@ -291,6 +291,19 @@ class AccountInvoice(models.Model):
 
     scheme = fields.Selection(related="mandate_id.scheme")
 
+    @api.onchange('purchase_id')
+    def purchase_order_change(self):
+        """Concatenate purchase ref and containers in the invoice when batch"""
+        if self.purchase_id:
+            if not self.origin:
+                self.origin = self.purchase_id.name
+            else:
+                self.origin += ', %s' % self.purchase_id.name
+
+        res = super().purchase_order_change()
+        return res
+
+
 class PaymentMode(models.Model):
 
     _inherit = 'account.payment.mode'

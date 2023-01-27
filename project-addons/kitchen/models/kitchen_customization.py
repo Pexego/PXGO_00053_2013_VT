@@ -9,6 +9,18 @@ class KitchenCustomization(models.Model):
     _name = 'kitchen.customization'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
+    def _get_previews_params(self):
+        """
+            This method returns Headers and URL to make requests to Previews APi
+            :return a tuple (string, dict). Ex: {'https://www.previews.com',{'ApiKey': api_key, 'UserId': user_id}
+        """
+        previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+        api_key = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.api_key')
+        user_id = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.user_id')
+        headers = {'ApiKey': api_key, 'UserId': user_id}
+        return previews_url, headers
+
+
     @api.depends('commercial_id')
     def _compute_is_manager(self):
         self.is_manager = self.env.user.has_group('kitchen.group_kitchen')
@@ -158,19 +170,19 @@ class KitchenCustomization(models.Model):
             raise exceptions.UserError(_("You cannot activate a new customization because the selected order already "
                                          "has one, please cancel it before"))
         if self.customization_line:
-            previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+            previews_url, headers = self._get_previews_params()
             partner_ref = self.order_id.partner_id.ref
             for line in self.customization_line.filtered(lambda l:l.preview_selector):
-                req = requests.request('POST', previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                    partner_ref, line.product_id.default_code))
+                req = requests.post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
+                    partner_ref, line.product_id.default_code), headers=headers)
                 if req.status_code != 200:
                     raise exceptions.UserError(
                         _("There are no previews for this partner and this product %s") % line.product_id.default_code)
                 previews = req.json()
-                new_previews = [x.get('status') in ['Approved','OldPreview'] for x in previews]
+                new_previews = [x for x in previews if x.get('status') in ['Approved','OldPreview']]
                 if new_previews:
                     line.preview_ids.unlink()
-                    line.create_previews(new_previews)
+                    line.create_previews(new_previews, headers)
         self.state = 'draft'
 
     @api.onchange('order_id')
@@ -211,7 +223,7 @@ class KitchenCustomization(models.Model):
         }
         return self.customization_line.new(new_line)
 
-    def create_line(self, product_id, qty, line, previews=None):
+    def create_line(self, product_id, qty, line, previews=None, headers=None):
         new_line = {
             'product_id': product_id.id,
             'product_qty': qty,
@@ -221,7 +233,7 @@ class KitchenCustomization(models.Model):
             'type_ids': [(6, 0, line.type_ids.ids)]}
         line_c = self.env['kitchen.customization.line'].create(new_line)
         if previews:
-            line_c.create_previews(previews)
+            line_c.create_previews(previews, headers)
         return line
 
     @api.multi
@@ -298,18 +310,18 @@ class KitchenCustomization(models.Model):
     def action_check_old_preview(self):
         lines = self.customization_line.filtered(lambda l: l.preview_selector.name == 'OldPreview - Go to Sharepoint')
         if lines:
-            previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+            previews_url, headers = self._get_previews_params()
             partner_ref = self.order_id.partner_id.ref
             for line in lines:
-                req = requests.request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                partner_ref, line.product_id.default_code))
+                req = requests.post(previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
+                partner_ref, line.product_id.default_code), headers = headers)
                 if req.status_code != 200 or len(req.json())==0:
                     raise exceptions.UserError(_("There are no previews for this partner and this product %s") % line.product_id.default_code)
                 previews = req.json()
                 new_previews = [x.get('status') == 'Approved' for x in previews]
                 if new_previews:
                     line.preview_ids.unlink()
-                    line.create_previews(new_previews)
+                    line.create_previews(new_previews, headers)
 
     has_old_preview = fields.Boolean(compute="_compute_has_old_preview")
 
@@ -437,14 +449,15 @@ class KitchenCustomizationLine(models.Model):
     url = fields.Char(related="preview_selector.url")
     preview_ids = fields.One2many('kitchen.customization.preview', 'line_id')
 
-    def create_previews(self,previews):
+    def create_previews(self, previews, api_headers):
         for count, preview in enumerate(previews):
+            print(preview)
             if preview.get('status') == 'OldPreview':
                 new_preview = self.env['kitchen.customization.preview'].create(
                     {'line_id': self.id, 'name': _('OldPreview - Go to Sharepoint'),
                      'url': 'The previews are on Sharepoint', 'state': 'OldPreview'})
             else:
-                photo = base64.b64encode(requests.get(preview.get('logo')).content)
+                photo = base64.b64encode(requests.get(preview.get('logo'),headers=api_headers).content)
                 new_preview = self.env['kitchen.customization.preview'].create(
                     {'line_id': self.id, 'photo': photo, 'name': 'Preview %s' % str(count + 1),
                      'url': preview.get('urlView'), 'state': preview.get('status')})

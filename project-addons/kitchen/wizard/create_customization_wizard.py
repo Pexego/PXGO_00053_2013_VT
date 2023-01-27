@@ -1,7 +1,7 @@
 from odoo import models, fields, api, exceptions, _
 
 from odoo.exceptions import UserError
-from requests import request
+from requests import post
 
 
 class CustomizationLine(models.TransientModel):
@@ -83,7 +83,7 @@ class CustomizationWizard(models.TransientModel):
         old_previews = ""
         products_error_state = {}
         partner_ref = self.order_id.partner_id.ref
-        previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+        previews_url, headers = customization._get_previews_params()
 
         for line in self.customization_line:
             qty = line.qty
@@ -116,7 +116,8 @@ class CustomizationWizard(models.TransientModel):
                 product_old_previews = []
                 previews = []
                 if not self.order_id.skip_checking_previews and line.mapped('type_ids').filtered(lambda t: t.preview):
-                    req = request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (partner_ref,line.original_product_id.default_code))
+                    req = post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
+                    partner_ref, line.original_product_id.default_code), headers=headers)
                     if req.status_code != 200 or len(req.json())==0:
                         raise UserError(_("There are no previews for this partner and this product %s") % line.original_product_id.default_code)
                     previews = req.json()
@@ -137,7 +138,7 @@ class CustomizationWizard(models.TransientModel):
                     if line.original_product_id.default_code in products_error_state:
                         del products_error_state[line.original_product_id.default_code]
                 if not products_error_state:
-                    lines += customization.create_line(line.original_product_id, qty, line, product_previews)
+                    lines += customization.create_line(line.original_product_id, qty, line, product_previews,headers)
         if products_error_state:
             raise UserError(_("There are no active previews of these products: %s" %str(products_error_state)))
         if lines:

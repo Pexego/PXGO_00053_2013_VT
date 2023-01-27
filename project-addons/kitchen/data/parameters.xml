@@ -8,4 +8,12 @@
         <field name="key">kitchen.previews.url</field>
         <field name="value">https://personalizaciones.visiotechsecurity.com/odoo/</field>
     </record>
+    <record id="kitchen_previews_user_id" model="ir.config_parameter">
+        <field name="key">kitchen.previews.user_id</field>
+        <field name="value"/>
+    </record>
+    <record id="kitchen_previews_api_key" model="ir.config_parameter">
+        <field name="key">kitchen.previews.api_key</field>
+        <field name="value"/>
+    </record>
 </odoo>
