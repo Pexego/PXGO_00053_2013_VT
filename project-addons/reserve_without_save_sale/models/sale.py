@@ -61,12 +61,15 @@ class SaleOrder(models.Model):
             res.order_reserve()
         return res
 
+    def filter_lines_to_reserve(self):
+        return self.mapped('order_line').filtered(
+            lambda r: r.product_id and r.product_id.type != 'service' and r.promotion_line is not True)
+
     def order_reserve(self):
         if self.state in ["sale", "done", "cancel"]:
             return False
         self.write({'state': 'reserve'})
-        lines = self.mapped('order_line').filtered(
-            lambda r: r.product_id and r.product_id.type != 'service' and r.promotion_line is not True)
+        lines = self.filter_lines_to_reserve()
         lines.stock_reserve()
         return True
 
