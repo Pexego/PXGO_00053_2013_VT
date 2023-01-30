@@ -15,18 +15,23 @@ class SaleOrder(models.Model):
         """
         Overrides compute_variables in sale_order_board module
         Calculates the shipping costs.
-        When we have special shipping costs, calculates pallet shipping costs.
+        When we have special shipping costs, calculates pallet and weight shipping costs.
         If we don't have special shipping costs, calculates all shipping costs.
         """
-        picking_rated = self.env['picking.rated.wizard'].create({})
-        pallet_services_to_add = []
+        action_to_return = {
+            'name': 'Shipping Data Information',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'res_model': 'picking.rated.wizard',
+            'src_model': 'stock.picking',
+            'res_id': '',
+            'type': 'ir.actions.act_window',
+            'id': 'action_picking_rated_status',
+        }
+        picking_rated = self.env['picking.rated.wizard'].create({'sale_order_id': self})
+        services_to_add = []
         available_shipping_costs = self._get_available_shipping_costs()
-        products_without_weight = self.get_product_list_without_weight()
-        products_without_volume = self.get_product_list_without_volume()
-        number_product_without_weight = len(products_without_weight)
-        number_product_without_volume = len(products_without_volume)
-        product_names_without_weight = ", ".join(products_without_weight.mapped('default_code'))
-        product_names_without_volume = ", ".join(products_without_volume.mapped('default_code'))
         # calculate pallet & weight shipping costs
         for shipping_cost in available_shipping_costs:
             new_so_sc = self.env['sale.order.shipping.cost'].create({
@@ -34,9 +39,9 @@ class SaleOrder(models.Model):
                 'shipping_cost_id': shipping_cost.id
             })
 
-            pallet_service_cost_list = new_so_sc.calculate_shipping_cost()
-            pallet_service_cost_list += new_so_sc.calculate_shipping_cost(pallet_mode=False)
-            pallet_services_to_add = [
+            service_cost_list = new_so_sc.calculate_shipping_cost()
+            service_cost_list += new_so_sc.calculate_shipping_cost(pallet_mode=False)
+            services_to_add = [
                 (0, 0, {
                     'currency': 'EUR',
                     'transit_time': '',
@@ -44,60 +49,22 @@ class SaleOrder(models.Model):
                     'service': service['service_name'],
                     'order_id': self.id,
                     'wizard_id': picking_rated.id
-                }) for service in pallet_service_cost_list
+                }) for service in service_cost_list
             ]
         # if we have special shipping costs we only need pallet & weight service costs
         if self.is_special_shipping_costs:
-            message_products_weight = ''
-            message_products_volume = ''
-            if number_product_without_weight != 0:
-                message_products_weight = (
-                    "%s of the product(s) of the order don't have set the weights,"
-                    " please take the shipping cost as an approximation"
-                ) % number_product_without_weight
-            if number_product_without_volume != 0:
-                message_products_volume = (
-                    "%s of the product(s) of the order don't have set the weights,"
-                    " please take the shipping cost as an approximation"
-                ) % number_product_without_volume
-
-            picking_rated.write({
-                'data': pallet_services_to_add,
-                'total_weight': self.get_sale_order_weight(),
-                'products_wo_weight': message_products_weight,
-                'products_without_weight': product_names_without_weight,
-                'total_volume': self.get_sale_order_volume(),
-                'products_wo_volume': message_products_volume,
-                'product_names_without_volume': product_names_without_volume
-            })
-            return {
-                'name': 'Shipping Data Information',
-                'view_type': 'form',
-                'view_mode': 'form',
-                'target': 'new',
-                'res_model': 'picking.rated.wizard',
-                'src_model': 'stock.picking',
-                'res_id': picking_rated.id,
-                'type': 'ir.actions.act_window',
-                'id': 'action_picking_rated_status',
-            }
+            picking_rated = self.env['picking.rated.wizard'].create({'sale_order_id': self})
+            picking_rated.write({'data': services_to_add})
+            action_to_return['res_id'] = picking_rated.id
+            return action_to_return
 
         response = super().compute_variables()
         new_id = response['res_id']
         picking_rated = self.env['picking.rated.wizard'].browse(new_id)
-        picking_rated.write({'data': pallet_services_to_add})
+        picking_rated.write({'data': services_to_add})
+        action_to_return['res_id'] = picking_rated.id
 
-        return {
-            'name': 'Shipping Data Information',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'target': 'new',
-            'res_model': 'picking.rated.wizard',
-            'src_model': 'stock.picking',
-            'res_id': picking_rated.id,
-            'type': 'ir.actions.act_window',
-            'id': 'action_picking_rated_status',
-        }
+        return action_to_return
 
     def _get_available_shipping_costs(self):
         """

@@ -52,49 +52,23 @@ class SaleOrder(models.Model):
         string="Products without volume",
         compute="_get_product_names_without_volume"
     )
+    picking_rated_id = fields.One2many("picking.rated.wizard", "sale_order_id", string="Picking rated")
 
     @api.multi
     def compute_variables(self):
-        new = self.env['picking.rated.wizard'].create({})
+        new = self.env['picking.rated.wizard'].create({'sale_order_id': self})
         data_list = self.env['picking.rated.wizard.tree']
         content = data_list.search([('order_id', '=', self.id)])
         message_error = ""
         if content:
             content.unlink()
         for order in self:
-            message_products_weight = ''
-            message_products_volume = ''
             shipment_groups = order.env['res.country.group'].search([
                 ('shipment', '=', True), ('country_ids', 'in', order.partner_shipping_id.country_id.id)
             ])
             transporter_ids = order.env['transportation.transporter'].search(
                 [('country_group_id', 'in', shipment_groups.ids)]
             )
-            products_without_weight = order.get_product_list_without_weight()
-            products_without_volume = order.get_product_list_without_volume()
-            number_product_without_weight = len(products_without_weight)
-            number_product_without_volume = len(products_without_volume)
-            product_names_without_weight = ", ".join(products_without_weight.mapped('default_code'))
-            product_names_without_volume = ", ".join(products_without_volume.mapped('default_code'))
-
-            if number_product_without_weight != 0:
-                message_products_weight = (
-                    "%s of the product(s) of the order don't have set the weights,"
-                    " please take the shipping cost as an approximation"
-                ) % number_product_without_weight
-            if number_product_without_volume != 0:
-                message_products_volume = (
-                    "%s of the product(s) of the order don't have set the weights,"
-                    " please take the shipping cost as an approximation"
-                ) % number_product_without_volume
-            new.write({
-                'total_weight': order.get_sale_order_weight(),
-                'products_wo_weight': message_products_weight,
-                'products_without_weight': product_names_without_weight,
-                'total_volume': order.get_sale_order_volume(),
-                'products_wo_volume': message_products_volume,
-                'product_names_without_volume': product_names_without_volume
-            })
 
             for transporter in transporter_ids:
                 # if we don't check name it may raise an unwanted AttributeError
