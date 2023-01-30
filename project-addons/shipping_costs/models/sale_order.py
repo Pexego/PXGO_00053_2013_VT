@@ -21,6 +21,12 @@ class SaleOrder(models.Model):
         picking_rated = self.env['picking.rated.wizard'].create({})
         pallet_services_to_add = []
         available_shipping_costs = self._get_available_shipping_costs()
+        products_without_weight = self.get_product_list_without_weight()
+        products_without_volume = self.get_product_list_without_volume()
+        number_product_without_weight = len(products_without_weight)
+        number_product_without_volume = len(products_without_volume)
+        product_names_without_weight = ", ".join(products_without_weight.mapped('default_code'))
+        product_names_without_volume = ", ".join(products_without_volume.mapped('default_code'))
         # calculate pallet shipping costs
         for shipping_cost in available_shipping_costs:
             new_so_sc = self.env['sale.order.shipping.cost'].create({
@@ -29,11 +35,10 @@ class SaleOrder(models.Model):
             })
 
             pallet_service_cost_list = new_so_sc.calculate_shipping_cost()
-            # FIXME: assign correctly currency and transit_time
             pallet_services_to_add = [
                 (0, 0, {
-                    'currency': shipping_cost.cost_name,
-                    'transit_time': 'Por pallet',
+                    'currency': 'EUR',
+                    'transit_time': '',
                     'amount': service['price'],
                     'service': service['service_name'],
                     'order_id': self.id,
@@ -42,7 +47,28 @@ class SaleOrder(models.Model):
             ]
         # if we have special shipping costs we only need pallet service costs
         if self.is_special_shipping_costs:
-            picking_rated.write({'data': pallet_services_to_add})
+            message_products_weight = ''
+            message_products_volume = ''
+            if number_product_without_weight != 0:
+                message_products_weight = (
+                    "%s of the product(s) of the order don't have set the weights,"
+                    " please take the shipping cost as an approximation"
+                ) % number_product_without_weight
+            if number_product_without_volume != 0:
+                message_products_volume = (
+                    "%s of the product(s) of the order don't have set the weights,"
+                    " please take the shipping cost as an approximation"
+                ) % number_product_without_volume
+
+            picking_rated.write({
+                'data': pallet_services_to_add,
+                'total_weight': self.get_sale_order_weight(),
+                'products_wo_weight': message_products_weight,
+                'products_without_weight': product_names_without_weight,
+                'total_volume': self.get_sale_order_volume(),
+                'products_wo_volume': message_products_volume,
+                'product_names_without_volume': product_names_without_volume
+            })
             return {
                 'name': 'Shipping Data Information',
                 'view_type': 'form',
@@ -67,10 +93,9 @@ class SaleOrder(models.Model):
                 'shipping_cost_id': shipping_cost.id
             })
             for service in new_so_sc.calculate_shipping_cost(pallet_mode=False):
-                # FIXME: assign correctly currency and transit_time
                 rated_status = {
-                    'currency': shipping_cost.cost_name,
-                    'transit_time': 'Por peso',
+                    'currency': 'EUR',
+                    'transit_time': '',
                     'amount': service['price'],
                     'service': service['service_name'],
                     'order_id': self.id,

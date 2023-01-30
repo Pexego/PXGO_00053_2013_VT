@@ -36,8 +36,22 @@ import time
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    sale_order_weight = fields.Float(string="Sale order weight", compute="_get_sale_order_weight")
-    sale_order_volume = fields.Float(string="Sale order volume", compute="_get_sale_order_volume")
+    number_product_without_weight = fields.Integer(
+        string="Nº products without weight",
+        compute="_get_number_of_products_without_weight"
+    )
+    product_names_without_weight = fields.Char(
+        string="Products without weight",
+        compute="_get_product_names_without_weight"
+    )
+    number_product_without_volume = fields.Integer(
+        string="Nº products without volume",
+        compute="_get_number_of_products_without_volume"
+    )
+    product_names_without_volume = fields.Char(
+        string="Products without volume",
+        compute="_get_product_names_without_volume"
+    )
 
     @api.multi
     def compute_variables(self):
@@ -48,43 +62,38 @@ class SaleOrder(models.Model):
         if content:
             content.unlink()
         for order in self:
+            message_products_weight = ''
+            message_products_volume = ''
             shipment_groups = order.env['res.country.group'].search([
                 ('shipment', '=', True), ('country_ids', 'in', order.partner_shipping_id.country_id.id)
             ])
             transporter_ids = order.env['transportation.transporter'].search(
                 [('country_group_id', 'in', shipment_groups.ids)]
             )
+            products_without_weight = order.get_product_list_without_weight()
+            products_without_volume = order.get_product_list_without_volume()
+            number_product_without_weight = len(products_without_weight)
+            number_product_without_volume = len(products_without_volume)
+            product_names_without_weight = ", ".join(products_without_weight.mapped('default_code'))
+            product_names_without_volume = ", ".join(products_without_volume.mapped('default_code'))
 
-            package_pieces = sum(order.order_line.mapped('product_uom_qty'))
-            product_without_weight_orm = order.order_line.mapped('product_id').filtered(
-                lambda product: product.weight == 0 and product.type == 'product'
-            )
-            product_without_volume_orm = order.order_line.mapped('product_id').filtered(
-                lambda product: product.volume == 0 and product.type == 'product'
-            )
-            message_products_weight = f'{len(product_without_weight_orm)}'
-            product_names_weight = ", ".join(product_without_weight_orm.mapped('default_code'))
-            message_products_volume = f'{len(product_without_volume_orm)}'
-            product_names_volume = ", ".join(product_without_volume_orm.mapped('default_code'))
-            num_pieces = int((order.sale_order_weight / 20) + 1)
-
-            if len(product_without_weight_orm) != 0:
-                message_products_weight += (
-                    " of the product(s) of the order don't have set the weights,"
+            if number_product_without_weight != 0:
+                message_products_weight = (
+                    "%s of the product(s) of the order don't have set the weights,"
                     " please take the shipping cost as an approximation"
-                )
-            if len(product_without_volume_orm) != 0:
-                message_products_volume += (
-                    " of the product(s) of the order don't have set the weights,"
+                ) % number_product_without_weight
+            if number_product_without_volume != 0:
+                message_products_volume = (
+                    "%s of the product(s) of the order don't have set the weights,"
                     " please take the shipping cost as an approximation"
-                )
+                ) % number_product_without_volume
             new.write({
-                'total_weight': order.sale_order_weight,
+                'total_weight': order.get_sale_order_weight(),
                 'products_wo_weight': message_products_weight,
-                'products_without_weight': product_names_weight,
-                'total_volume': order.sale_order_volume,
+                'products_without_weight': product_names_without_weight,
+                'total_volume': order.get_sale_order_volume(),
                 'products_wo_volume': message_products_volume,
-                'product_names_without_volume': product_names_volume
+                'product_names_without_volume': product_names_without_volume
             })
 
             for transporter in transporter_ids:
@@ -92,12 +101,13 @@ class SaleOrder(models.Model):
                 if transporter.name in ['UPS', 'DHL', 'SEUR', 'TNT']:
                     call_method = f'_add_services_cost_{transporter.name}'
                     try:
+                        sale_order_weight = order.get_sale_order_weight()
                         # equals to do order.call_method(...)
                         getattr(order, call_method)(
                             new,
-                            package_weight=order.sale_order_weight,
-                            num_pieces=num_pieces,
-                            package_pieces=package_pieces
+                            package_weight=sale_order_weight,
+                            num_pieces=int((sale_order_weight / 20) + 1),
+                            package_pieces=sum(order.order_line.mapped('product_uom_qty'))
                         )
                     except(requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                         message_error += (
@@ -662,25 +672,39 @@ class SaleOrder(models.Model):
             raise requests.HTTPError(response.text)
         return response.text
 
-    def _get_sale_order_weight(self):
+    def get_product_list_without_volume(self):
+        """
+        Calculates the list of products without volume
+        """
+        return self.order_line.mapped('product_id').filtered(
+            lambda product: product.volume == 0 and product.type == 'product'
+        )
+
+    def get_product_list_without_weight(self):
+        """
+        Calculates the list of products without weight
+        """
+        return self.order_line.mapped('product_id').filtered(
+            lambda product: product.weight == 0 and product.type == 'product'
+        )
+
+    def get_sale_order_weight(self):
         """
         Calculates the sale_order weight
         """
-        for order in self:
-            sale_order_weight = 0.0
-            for order_line in order.order_line:
-                sale_order_weight += order_line.product_id.weight * order_line.product_uom_qty
-            order.sale_order_weight = round(sale_order_weight, 3)
+        sale_order_weight = 0.0
+        for order_line in self.order_line:
+            sale_order_weight += order_line.product_id.weight * order_line.product_uom_qty
+        return round(sale_order_weight, 3)
 
-    def _get_sale_order_volume(self):
+    def get_sale_order_volume(self):
         """
         Calculates the sale_order volume
         """
-        for order in self:
-            sale_order_volume = 0.0
-            for order_line in order.order_line:
-                sale_order_volume += order_line.product_id.volume * order_line.product_uom_qty
-            order.sale_order_volume = round(sale_order_volume, 3)
+        sale_order_volume = 0.0
+        for order_line in self.order_line:
+            sale_order_volume += order_line.product_id.volume * order_line.product_uom_qty
+        return round(sale_order_volume, 3)
 
 
 class TransportationTransporter(models.Model):

@@ -1,7 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import math
-from operator import attrgetter
 
 
 COMPARATORS = [
@@ -160,8 +159,8 @@ class SaleOrderShippingCost(models.TransientModel):
     sale_order_id = fields.Many2one("sale.order", "Sale Order")
     shipping_cost_id = fields.Many2one("shipping.cost", "Shipping Cost")
     pallet_number = fields.Integer(string="Pallet number", compute="_get_pallet_number")
-    sale_order_weight = fields.Float(string="Sale order weight", related="sale_order_id.sale_order_weight")
-    sale_order_volume = fields.Float(string="Sale order volume", related="sale_order_id.sale_order_volume")
+    sale_order_weight = fields.Float(string="Sale order weight", compute="_get_sale_order_weight")
+    sale_order_volume = fields.Float(string="Sale order volume", compute="_get_sale_order_volume")
 
     def calculate_shipping_cost(self, pallet_mode=True):
         """
@@ -207,3 +206,15 @@ class SaleOrderShippingCost(models.TransientModel):
         Returns the pallet number of the sale_order shipping
         """
         self.pallet_number = math.ceil(self.sale_order_volume * (1 / self.shipping_cost_id.volume))
+
+    def _get_sale_order_weight(self):
+        """
+        Calculates sale_order weight
+        """
+        self.sale_order_weight = self.sale_order_id.get_sale_order_weight()
+
+    def _get_sale_order_volume(self):
+        """
+        Calculates sale_order volume
+        """
+        self.sale_order_volume = self.sale_order_id.get_sale_order_volume()
