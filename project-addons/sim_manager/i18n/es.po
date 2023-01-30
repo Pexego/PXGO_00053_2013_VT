@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-03 08:48+0000\n"
-"PO-Revision-Date: 2021-09-03 08:48+0000\n"
+"POT-Creation-Date: 2023-01-12 15:54+0000\n"
+"PO-Revision-Date: 2023-01-12 15:54+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,10 +16,103 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sim_manager
-#: selection:sim.package,state:0
+#: model:mail.template,body_html:sim_manager.email_template_sim_bank_account_error
+msgid "\n"
+"                ${ctx.get('message_warn','') | safe}\n"
+"             \n"
+"            "
+msgstr "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"                ${ctx.get('message_warn','') | safe}\n"
+"             \n"
+"            </p>"
+
+#. module: sim_manager
+#: model:mail.template,body_html:sim_manager.email_template_sim_error
+msgid "\n"
+"                <p>${ctx.get('message_warn','')}</p>\n"
+"             \n"
+"            "
+msgstr "\n"
+"                <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">${ctx.get('message_warn','')}</p>\n"
+"             \n"
+"            "
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:183
+#, python-format
+msgid "A SimSerial cannot have state %s"
+msgstr "Una tarjeta SIM no puede tener el estado %s"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Activate"
+msgstr "Activar"
+
+#. module: sim_manager
+#: selection:sim.service,status:0
+msgid "Activated"
+msgstr "Activado"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Active"
+msgstr "Activa"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_res_partner_sim_active_perc
+#: model:ir.model.fields,field_description:sim_manager.field_res_users_sim_active_perc
+msgid "Active SIMs"
+msgstr "SIMs activas"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.res_partner_view_buttons_add_sims
+msgid "% Active SIMs"
+msgstr "% SIMs activas"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Active disuse"
+msgstr "Activa en desuso"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sale_order_allow_sale_sim
+msgid "Allow SIM"
+msgstr "Permitir SIM"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:195
+#, python-format
+msgid "An error ocurred while updating the sim state"
+msgstr "Se ha producido un error al actualizar el estado de la tarjeta SIM"
+
+#. module: sim_manager
 #: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+#: selection:sim.package,state:0
 msgid "Available"
-msgstr "Disponible"
+msgstr "Reservado"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+#: selection:sim.service,status:0
+msgid "Blocked"
+msgstr "Bloqueada"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.sim_export_wizard_view
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:179
+#, python-format
+msgid "Cannot block a SIM Service"
+msgstr "No se puede bloquear un servicio SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_qty
+msgid "Cantidad"
+msgstr "Cantidad"
 
 #. module: sim_manager
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_serial_ids
@@ -27,16 +120,160 @@ msgid "Cards"
 msgstr "Tarjetas"
 
 #. module: sim_manager
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "Cliente"
+msgstr "Cliente"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_sim_serial_id
 #: model:ir.model.fields,field_description:sim_manager.field_sim_type_code
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
 msgid "Code"
 msgstr "Código"
 
 #. module: sim_manager
+#: model:ir.model,name:sim_manager.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
+msgid "Create SIM package"
+msgstr "Create SIM package"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Create new SIM package"
+msgstr "Crear nuevo paquete SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_create_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_create_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_create_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_create_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_create_date
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_create_date
 #: model:ir.model.fields,field_description:sim_manager.field_sim_serial_create_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_create_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_create_date
 msgid "Created on"
 msgstr "Creado en"
+
+#. module: sim_manager
+#: selection:sim.service,type:0
+msgid "Data"
+msgstr "Datos"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Deactivate"
+msgstr "Desactivar"
+
+#. module: sim_manager
+#: selection:sim.service,status:0
+msgid "Deactivated"
+msgstr "Desactivado"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_display_name
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_display_name
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_display_name
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_display_name
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_display_name
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "ES"
+msgstr "ES"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "EU"
+msgstr "EU"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:228
+#, python-format
+msgid "Error while getting SIM services"
+msgstr "Error al obtener los servicios SIM"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:172
+#, python-format
+msgid "Error while reading SIM state"
+msgstr "Error al leer el estado de la tarjeta SIM"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Status"
+msgstr "Estado"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_id
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_id
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_id
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_id
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_id
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_id
+msgid "ID"
+msgstr "ID (identificación)"
+
+#. module: sim_manager
+#: model:ir.actions.server,name:sim_manager.ir_cron_invoice_sim_packages_ir_actions_server
+#: model:ir.cron,cron_name:sim_manager.ir_cron_invoice_sim_packages
+#: model:ir.cron,name:sim_manager.ir_cron_invoice_sim_packages
+msgid "Invoice SIM packages"
+msgstr "Factura de paquetes SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd___last_update
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package___last_update
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard___last_update
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial___last_update
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service___last_update
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_write_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_write_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_write_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_write_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_write_uid
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_write_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_write_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_write_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_write_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_write_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_claim_line
+msgid "List of product to return"
+msgstr "Listado de productos a devolver"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,help:sim_manager.action_sim_type_config
+msgid "Manage the SIM Types"
+msgstr "Gestionar tipos de SIM"
 
 #. module: sim_manager
 #: model:ir.actions.act_window,help:sim_manager.action_sim_package
@@ -44,9 +281,31 @@ msgid "Manage the SIM packages"
 msgstr "Gestionar los paquetes SIM"
 
 #. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_export_wzd_mode
+#: model:ir.ui.view,arch_db:sim_manager.sim_export_wizard_view
+msgid "Mode"
+msgstr "Modo"
+
+#. module: sim_manager
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_move_id
 msgid "Move"
 msgstr "Movimiento"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_new_code
+msgid "New package"
+msgstr "Nuevo Paquete"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_open_sim_serial
+msgid "Open SIM Serial"
+msgstr "Abrir Tarjeta SIM"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sale_order.py:34
+#, python-format
+msgid "Order block, the client has too many sims inactive. {}% Active"
+msgstr "Pedido bloqueado, el cliente tiene demasiadas SIM inactivas. {}% Activo"
 
 #. module: sim_manager
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_code
@@ -55,119 +314,61 @@ msgid "Package"
 msgstr "Paquete"
 
 #. module: sim_manager
-#: model:ir.actions.act_window,name:sim_manager.act_res_partner_sim_cards
-#: model:ir.ui.view,arch_db:sim_manager.res_partner_view_buttons_add_sims
-msgid "SIM Cards"
-msgstr "Tarjetas SIM"
-
-#. module: sim_manager
-#: model:ir.actions.act_window,name:sim_manager.action_sim_package
-#: model:ir.ui.menu,name:sim_manager.menu_sim_package
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_tree
-msgid "SIM packages"
-msgstr "Paquetes SIM"
-
-#. module: sim_manager
-#: model:ir.ui.menu,name:sim_manager.menu_sim_package_creator
-msgid "Scan SIMs"
-msgstr "Escanear SIMs"
-
-#. module: sim_manager
-#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
-#, python-format
-msgid "Scan the #1 serial for %s"
-msgstr "Escanea el #1 ID para el %s"
-
-#. module: sim_manager
-#: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
-msgid "Scanning SIMs"
-msgstr "Escaneando SIMs"
-
-#. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_code
-msgid "Serial"
-msgstr "Nº serie"
-
-#. module: sim_manager
-#: selection:sim.package,state:0
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
-msgid "Sold"
-msgstr "Vendido"
-
-#. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sim_package_partner_id
-msgid "Sold to"
-msgstr "Vendido a"
-
-#. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sim_package_state
-msgid "State"
-msgstr "Estado"
-
-#. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:29
-#, python-format
-msgid "{} created"
-msgstr "{} creado"
-
-#. module: sim_manager
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
-msgid "Create new SIM package"
-msgstr "Crear nuevo paquete SIM"
-
-#. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_new_code
-msgid "New package"
-msgstr "Nuevo Paquete"
-
-#. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
-msgid "Type"
-msgstr "Tipo"
-
-#. module: sim_manager
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
-msgid "Scan"
-msgstr "Escanear"
-
-#. module: sim_manager
-#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
-msgid "Cancel"
-msgstr "Cancelar"
-
-#. module: sim_manager
-#: model:ir.ui.view,arch_db:sim_manager.action_sim_package_report
-msgid "SIM Report"
-msgstr "SIM Informe"
-
-#. module: sim_manager
-#: model:ir.ui.menu,name:sim_manager.menu_sim_report
-msgid "SIM Tags"
-msgstr "Etiquetas SIM"
-
-#. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:70
+#: code:addons/sim_manager/models/sim.py:81
 #, python-format
 msgid "Package %s finished. Scan for continue with next package"
 msgstr "Paquete %s terminado. Escanea el siguiente para continuar"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:78
-#: code:addons/sim_manager/models/sim.py:99
-#, python-format
-msgid "Scan the #%s serial for %s"
-msgstr "Escanea el #%s ID para el %s"
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "Paquete"
+msgstr "Paquete"
 
 #. module: sim_manager
-#: model:ir.actions.act_window,help:sim_manager.action_sim_type_config
-msgid "Manage the SIM Types"
-msgstr "Gestionar tipos de SIM"
+#: selection:sim.serial,state:0
+msgid "Preactivated"
+msgstr "Preactivada"
 
 #. module: sim_manager
 #: model:ir.model.fields,field_description:sim_manager.field_sim_type_product_id
 msgid "Product"
 msgstr "Producto"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_sale_order
+msgid "Quotation"
+msgstr "Quotation"
+
+#. module: sim_manager
+#: selection:sim.export.wzd,mode:0
+msgid "Return"
+msgstr "Return"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.act_res_partner_sim_cards
+msgid "SIM Cards"
+msgstr "Tarjetas SIM"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_export_wizard
+#: model:ir.ui.view,arch_db:sim_manager.sim_export_wizard_view
+msgid "SIM Export Wizard"
+msgstr "SIM Export Wizard"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_service_form
+msgid "SIM Service"
+msgstr "Servicio SIM"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "SIM Services"
+msgstr "Servicios SIM"
+
+#. module: sim_manager
+#: model:ir.ui.menu,name:sim_manager.menu_sim_report
+msgid "SIM Tags"
+msgstr "Etiquetas SIM"
 
 #. module: sim_manager
 #: model:ir.ui.view,arch_db:sim_manager.view_sim_type_form
@@ -182,19 +383,239 @@ msgid "SIM Types"
 msgstr "Tipos de SIM"
 
 #. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
-#: model:ir.model.fields,field_description:sim_manager.field_sim_type_type
-msgid "Type"
-msgstr "Tipo"
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package
+#: model:ir.ui.menu,name:sim_manager.menu_sim_package
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_tree
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_report
+msgid "SIM packages"
+msgstr "Paquetes SIM"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/stock.py:27
+#: selection:sim.service,type:0
+msgid "SMS"
+msgstr "SMS"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sale_id
+msgid "Sale"
+msgstr "Venta"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Save"
+msgstr "Guardar"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Scan"
+msgstr "Escanear"
+
+#. module: sim_manager
+#: model:ir.ui.menu,name:sim_manager.menu_sim_package_creator
+msgid "Scan SIMs"
+msgstr "Escanear SIMs"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:89
+#: code:addons/sim_manager/models/sim.py:113
+#, python-format
+msgid "Scan the #%s serial for %s"
+msgstr "Escanea el #%s ID para el %s"
+
+#. module: sim_manager
+#: code:addons/sim_manager/wizard/sim_creator_wizard.py:42
+#, python-format
+msgid "Scan the #1 serial for %s"
+msgstr "Escanea el #1 ID para el %s"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator_scan
+msgid "Scanning SIMs"
+msgstr "Escaneando SIMs"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "Search"
+msgstr "Búsqueda"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_code
+msgid "Serial"
+msgstr "Nº serie"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_2
+msgid "Serie 2"
+msgstr "Serie 2"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_3
+msgid "Serie 3"
+msgstr "Serie 3"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_4
+msgid "Serie 4"
+msgstr "Serie 4"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_5
+msgid "Serie 5"
+msgstr "Serie 5"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_6
+msgid "Serie 6"
+msgstr "Serie 6"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_7
+msgid "Serie 7"
+msgstr "Serie 7"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_8
+msgid "Serie 8"
+msgstr "Serie 8"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_9
+msgid "Serie 9"
+msgstr "Serie 9"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_10
+msgid "Serie Fin"
+msgstr "Serie Fin"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_sim_1
+msgid "Serie Inicio"
+msgstr "Serie Inicio"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Service"
+msgstr "Servicio"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_sim_service_ids
+msgid "Services"
+msgstr "Servicios"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package_report
+msgid "Sim Report"
+msgstr "Sim Report"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_res_partner_sim_serial_ids
+#: model:ir.model.fields,field_description:sim_manager.field_res_users_sim_serial_ids
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_serial_form
+msgid "Sim Serial"
+msgstr "Sim Serial"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_sim_service
+msgid "Sim Service"
+msgstr "Servicio Sim"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+#: selection:sim.export.wzd,mode:0
+#: selection:sim.package,state:0
+msgid "Sold"
+msgstr "Vendido"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_partner_id
+msgid "Sold to"
+msgstr "Vendido a"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:48
+#, python-format
+msgid "Some introduced SIMs are not assigned to %s"
+msgstr "Algunas SIMs no están asignadas a %s"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/stock.py:30
 #, python-format
 msgid "Some of these SIM cards %s of the picking %s have not been found in the system."
 msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el sistema."
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:20
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_state
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_state
+msgid "State"
+msgstr "Estado"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_status
+msgid "Status"
+msgstr "Estado"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_stock_move
+msgid "Stock Move"
+msgstr "Moviemiento de stock"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.sim_export_wizard_view
+msgid "Sync"
+msgstr "Sync"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+msgid "Sync web"
+msgstr "Sync web"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "Tarjetas"
+msgstr "Tarjetas"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:44
+#, python-format
+msgid "The serial numbers cannot be found in the system. Check the serials and the format."
+msgstr "Los números de serie no se encuentran en el sistema. Comprueba los números y el formato."
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+#: model:ir.model.fields,field_description:sim_manager.field_sim_service_type
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: selection:sim.serial,state:0
+msgid "Unsuscribed"
+msgstr "Desactivada"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "VIP"
+msgstr "VIP"
+
+#. module: sim_manager
+#: selection:sim.service,type:0
+msgid "Voice"
+msgstr "Voz"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_claim_make_picking_wizard
+msgid "Wizard to create pickings from claim lines"
+msgstr "Asistente para crear envíos desde la línea de reclamación"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_claim_make_picking_from_picking_wizard
+msgid "Wizard to create pickings from picking lines"
+msgstr "Asistente para crear albaranes desde lineas de albarán"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:25
 #, python-format
 msgid "You must specify the serial number of the serial products"
 msgstr "Debes especificar el número de serie de los productos con tracking"
@@ -205,30 +626,38 @@ msgid "[Odoo] Missing Bank Account on SIM invoice"
 msgstr "[Odoo] Faltan cuentas bancarias en facturas SIM"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/res_partner.py:82
-#, python-format
-msgid "Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n"
-msgstr "El cliente %s no tiene cuenta o un mandato válido. La factura %s no se ha cambiado. \n"
+#: model:mail.template,subject:sim_manager.email_template_sim_error
+msgid "[Odoo] SIM card not found"
+msgstr "[Odoo] Tarjeta SIM no encontrada"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:37
-#, python-format
-msgid "The serial numbers cannot be found in the system. Check the serials and the format."
-msgstr "Los números de serie no se encuentran en el sistema. Comprueba los números y el formato."
+#: model:ir.model,name:sim_manager.model_sim_export_wzd
+msgid "sim.export.wzd"
+msgstr "sim.export.wzd"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:41
-#, python-format
-msgid "Some introduced SIMs are not assigned to %s"
-msgstr "Algunas SIMs no están asignadas a %s"
+#: model:ir.model,name:sim_manager.model_sim_package_create_wizard
+msgid "sim.package.create.wizard"
+msgstr "sim.package.create.wizard"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sale_order.py:34
-#, python-format
-msgid "Order block, the client has too many sims inactive. {}% Active"
-msgstr "Pedido bloqueado, el cliente tiene demasiadas SIM inactivas. {}% Activo"
+#: model:ir.model,name:sim_manager.model_sim_package
+msgid "simPackage"
+msgstr "simPackage"
 
 #. module: sim_manager
-#: model:ir.model.fields,field_description:sim_manager.field_sale_order_allow_sale_sim
-msgid "Allow SIM"
-msgstr "Permitir SIM"
+#: model:ir.model,name:sim_manager.model_sim_serial
+msgid "simSerial"
+msgstr "simSerial"
+
+#. module: sim_manager
+#: model:ir.model,name:sim_manager.model_sim_type
+msgid "simType"
+msgstr "simType"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:70
+#: code:addons/sim_manager/models/sim.py:104
+#, python-format
+msgid "{} created"
+msgstr "{} creado"
