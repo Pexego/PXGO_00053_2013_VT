@@ -129,8 +129,8 @@ class ShippingCostFee(models.Model):
 
     shipping_cost_id = fields.Many2one("shipping.cost", string="Shipping cost")
     type = fields.Selection(string="Type", selection=[
-        ("pallet", "Pallet"), ("package", "Package"),
-        ("total_weight", "Total weight"), ("palletized", "Palletized service")
+        ("pallet", "Pallet"),  # ("package", "Package"),
+        ("total_weight", "Total weight")  # , ("palletized", "Palletized service")
     ])
     max_qty = fields.Float(string="Quantity Max")
     price = fields.Float(string="Price")
