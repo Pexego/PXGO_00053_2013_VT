@@ -27,7 +27,7 @@ class SaleOrder(models.Model):
         number_product_without_volume = len(products_without_volume)
         product_names_without_weight = ", ".join(products_without_weight.mapped('default_code'))
         product_names_without_volume = ", ".join(products_without_volume.mapped('default_code'))
-        # calculate pallet shipping costs
+        # calculate pallet & weight shipping costs
         for shipping_cost in available_shipping_costs:
             new_so_sc = self.env['sale.order.shipping.cost'].create({
                 'sale_order_id': self.id,
@@ -35,6 +35,7 @@ class SaleOrder(models.Model):
             })
 
             pallet_service_cost_list = new_so_sc.calculate_shipping_cost()
+            pallet_service_cost_list += new_so_sc.calculate_shipping_cost(pallet_mode=False)
             pallet_services_to_add = [
                 (0, 0, {
                     'currency': 'EUR',
@@ -45,7 +46,7 @@ class SaleOrder(models.Model):
                     'wizard_id': picking_rated.id
                 }) for service in pallet_service_cost_list
             ]
-        # if we have special shipping costs we only need pallet service costs
+        # if we have special shipping costs we only need pallet & weight service costs
         if self.is_special_shipping_costs:
             message_products_weight = ''
             message_products_volume = ''
@@ -85,23 +86,6 @@ class SaleOrder(models.Model):
         new_id = response['res_id']
         picking_rated = self.env['picking.rated.wizard'].browse(new_id)
         picking_rated.write({'data': pallet_services_to_add})
-
-        # we get the rest service costs
-        for shipping_cost in available_shipping_costs:
-            new_so_sc = self.env['sale.order.shipping.cost'].create({
-                'sale_order_id': self.id,
-                'shipping_cost_id': shipping_cost.id
-            })
-            for service in new_so_sc.calculate_shipping_cost(pallet_mode=False):
-                rated_status = {
-                    'currency': 'EUR',
-                    'transit_time': '',
-                    'amount': service['price'],
-                    'service': service['service_name'],
-                    'order_id': self.id,
-                    'wizard_id': picking_rated.id
-                }
-                picking_rated.write({'data': [(0, 0, rated_status)]})
 
         return {
             'name': 'Shipping Data Information',
