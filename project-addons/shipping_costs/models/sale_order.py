@@ -103,7 +103,7 @@ class SaleOrder(models.Model):
         """
         Returns a list of all shipping_cost that fit with the sale_order
         """
-        shipping_cost_list = self.env['shipping.cost'].search([])
+        shipping_cost_list = self.env['shipping.cost'].search([('is_active', '=', 'True')])
         shipping_cost_available = []
         # we get shipping_cost that verifies shipping_conditions - empty conditions are included
         for shipping_cost in shipping_cost_list:
