@@ -715,3 +715,15 @@ msgstr "Marca"
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.product_add_incidences
 msgid "Incidences"
 msgstr "Incidencias"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:86
+#, python-format
+msgid "<ul><li> Officer: %s</il><li> Final Received Date: %s <b>&rarr;</b> %s</il></ul>"
+msgstr "<ul><li> Responsable: %s</il><li> Fecha Recepción Final: %s <b>&rarr;</b> %s</il></ul>"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:80
+#, python-format
+msgid "<ul><li> Officer: %s</il><li> Received Date: %s <b>&rarr;</b> %s</il></ul>"
+msgstr "<ul><li> Responsable: %s</il><li> Fecha Recepción: %s <b>&rarr;</b> %s</il></ul>"

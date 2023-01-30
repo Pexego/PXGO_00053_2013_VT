@@ -4,7 +4,7 @@ from odoo import _, api, fields, models
 class CancelCustomizationsWiz(models.TransientModel):
     _name = 'cancel.customizations.wiz'
 
-    picking_id = fields.Many2one("sale.order", readonly=True, string='Sale')
+    picking_id = fields.Many2one("stock.picking", readonly=True, string='Picking')
     origin_reference = fields.Reference(
         lambda self: [
             (m.model, m.name) for m in self.env['ir.model'].search([])],
