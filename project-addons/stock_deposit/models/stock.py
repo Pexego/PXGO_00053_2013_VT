@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import models, api
+from odoo import models, api, fields
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 from datetime import datetime, timedelta

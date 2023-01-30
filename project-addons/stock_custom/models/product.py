@@ -49,7 +49,7 @@ class ProductProduct(models.Model):
 
     ref_visiotech = fields.Char('Visiotech reference')
     is_pack = fields.Boolean()
-
+        
 
     def action_view_moves(self):
         return {
@@ -162,6 +162,15 @@ class ProductProduct(models.Model):
                 product.invoice_policy = 'order'
             elif product.type=='product':
                 product.invoice_policy = 'delivery'
+
+    
+    @api.onchange('name')
+    def onchange_product_default_code(self):
+        for product in self:
+            if product.name:
+                product.default_code = product.name
+            elif not product.name:
+                product.default_code = ''
 
     @api.model
     def create(self, vals):

@@ -97,6 +97,12 @@ class StockPicking(models.Model):
         res = super(StockPicking, self).check_send_email_extended(vals)
         return res and (not self.customization_ids or not self.customization_ids.filtered(lambda c: c.state != 'cancel'))
 
+    @api.onchange("not_sync")
+    def onchange_not_sync(self):
+        if self.customization_ids.filtered(lambda c: c.state not in ['done','cancel']):
+            raise exceptions.UserError(_("This picking cannot be released as it has a customization assigned to it"))
+        
+
 
 class StockMove(models.Model):
     _inherit = 'stock.move'

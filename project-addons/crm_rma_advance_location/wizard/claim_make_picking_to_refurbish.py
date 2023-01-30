@@ -10,6 +10,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
     def _get_picking_lines(self):
         wiz_lines = []
         for move in self.env['stock.picking'].browse(self.env.context['active_id']).move_lines:
+            if move.qty_used >= move.product_uom_qty:
+                continue
             new_line = {'product_id': move.product_id.id,
                         'move_id': move.id,
                         'product_qty': 1}
@@ -24,8 +26,11 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             claim_id = self.env['crm.claim'].search(domain)
             if claim_id and len(claim_id) == 1:
                 new_line.update({'claim_id': claim_id.id})
-            for __ in range(int(move.product_uom_qty)):
+            qty = move.product_uom_qty - move.qty_used
+            for __ in range(int(qty)):
                 wiz_lines.append(new_line)
+        if not wiz_lines:
+            raise exceptions.UserError(_("All units are already processed"))
         return wiz_lines
 
     @api.model
@@ -78,7 +83,13 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             'partner_id': partner_id
         }
         picking_id = prev_picking.copy(default_picking_data)
+        moves_qty = {}
         for wizard_picking_line in self.picking_line_ids:
+            wizard_move = wizard_picking_line.move_id
+            if wizard_picking_line.product_qty > (wizard_move.product_uom_qty - wizard_move.qty_used):
+                raise exceptions.UserError(_("You cannot send more than %i of this product %s")
+                                           % (int(wizard_move.product_uom_qty - wizard_move.qty_used),
+                                              wizard_move.product_id.default_code))
             default_move_data = {
                 'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
@@ -89,12 +100,31 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'location_dest_id': self.picking_line_dest_location.id,
                 'note': note,
                 'picking_type_id': type_ids and type_ids[0].id,
-                'product_uom_qty': 1
+                'product_uom_qty': 1,
+                'origin_move_id': wizard_move.id
             }
-            wizard_picking_line.move_id.copy(default_move_data)
+            new_move = wizard_picking_line.move_id.copy(default_move_data)
+            if wizard_move in moves_qty:
+                new_moves, qty = moves_qty[wizard_move]
+                new_moves += new_move
+                moves_qty[wizard_move] = (new_moves, qty+1)
+            else:
+                moves_qty[wizard_move] = (new_move, 1)
+
         if picking_id:
-            picking_id.action_assign()
+            picking_id.with_context({'claim_mode': True}).action_assign()
             picking_id.action_done()
+        for n_moves, qty in moves_qty.values():
+            deposit = n_moves[0].origin_move_id.claim_line_id.deposit_id
+            if deposit:
+                if qty < deposit.product_uom_qty:
+                    new_deposit = deposit.copy()
+                    new_deposit.write({'product_uom_qty': qty})
+                    deposit.write({'product_uom_qty': deposit.product_uom_qty - qty})
+                    new_deposit.set_damaged(picking_id)
+                else:
+                    deposit.set_damaged(picking_id)
+
         rmps = self.env['crm.claim']
         for l in self.picking_line_ids:
             product = l.move_id.product_id
@@ -107,10 +137,16 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                           ('stage_id', '=', self.env.ref('crm_claim.stage_claim5').id)]
                 if product.product_brand_id.code in eval(
                         self.env['ir.config_parameter'].sudo().get_param('brands_seller_ids_rmp')):
-                    suppliers += product.seller_ids.mapped('name')
+                    if product.normal_product_id:
+                        suppliers += product.normal_product_id.seller_ids.mapped('name')
+                    else:
+                        suppliers += product.seller_ids.mapped('name')
                     domain_p = domain + [('partner_id', 'in', suppliers.ids)]
                 else:
-                    suppliers += product.last_supplier_id
+                    if product.normal_product_id:
+                        suppliers += product.normal_product_id.last_supplier_id
+                    else:
+                        suppliers += product.last_supplier_id
                     domain_p = domain + [('partner_id', '=', suppliers.id)]
                 rmp_id = self.env['crm.claim'].search(domain_p)
                 suppliers_p = suppliers.mapped('rmp_partner')
@@ -130,13 +166,15 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'product_id': product.id,
                 'name': l.problem_description,
                 'claim_origine': 'broken_down',
-                'product_returned_qty': 1,
+                'product_returned_quantity': 1,
                 'claim_id': rmp_id.id,
                 'prodlot_id': l.prodlot_id,
                 'printed': False,
                 'supplier_id': rmp_id.partner_id.id,
                 'substate_id': self.env.ref('crm_claim_rma_custom.substate_checked').id
             }
+            if product.normal_product_id:
+                line_domain['product_id'] = product.normal_product_id.id
             if not l.prodlot_id:
                 sec_list = self.env['crm.claim'].browse(rmp_id.id).claim_line_ids.mapped('sequence')
                 if sec_list:

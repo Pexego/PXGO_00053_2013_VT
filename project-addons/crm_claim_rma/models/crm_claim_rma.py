@@ -20,13 +20,7 @@
 #
 ##############################################################################
 
-import calendar
-import math
 from odoo import fields, models, exceptions, _
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from odoo.tools import (DEFAULT_SERVER_DATE_FORMAT,
-                           DEFAULT_SERVER_DATETIME_FORMAT)
 from odoo import SUPERUSER_ID, api
 
 REPAIR_SELECTION = [
@@ -43,6 +37,8 @@ REPAIR_SELECTION = [
 MOVE_STATE_SELECTION = [('draft', _('New')), ('cancel', _('Cancelled')),
                         ('waiting', _('Waiting Another Move')),
                         ('confirmed', _('Waiting Availability')),
+                        ('partially_available', _('Partially Available')),
+                        ('partially_sent', _('Partially Sent')),
                         ('assigned', _('Available')), ('done', _('Done'))]
 
 
@@ -105,9 +101,7 @@ class ClaimLine(models.Model):
              ('description_error', 'Does not correspond with web description'),
              ('missing_parts', 'Missing parts'),
              ('error', 'Shipping error'),
-             ('exchange', 'Exchange request'),
-             ('lost', 'Lost during transport'),
-             ('other', 'Other')
+             ('lost', 'Lost during transport')
              ],
             'Claim Subject', default='broken_down',
             required=True,
@@ -200,12 +194,46 @@ class ClaimLine(models.Model):
             string='Move Line from customer picking out',
             help='The move line related to the returned product')
 
+    move_ids = fields.One2many('stock.move', 'claim_line_id')
+
+    def _compute_move_ids_customer_state(self, move_ids):
+        dict_moves_states = {'draft': 1, 'waiting': 2, 'confirmed': 3, 'partially_available': 4, 'assigned': 5, 'done': 6,
+                             'cancel': 7}
+        if move_ids:
+            if len(move_ids) == 1:
+                more_restrictive_state = move_ids.state
+                if move_ids.product_uom_qty < self.product_returned_quantity:
+                    more_restrictive_state = 'partially_sent'
+            else:
+                more_restrictive_state = 'cancel'
+                for state in move_ids.mapped('state'):
+                    if dict_moves_states.get(state) < dict_moves_states.get(more_restrictive_state):
+                        more_restrictive_state = state
+                if sum(move_ids.mapped('product_uom_qty')) < self.product_returned_quantity:
+                    more_restrictive_state = 'partially_sent'
+            return more_restrictive_state
+
+    @api.multi
+    def _compute_move_in_customer_state(self):
+        for line in self:
+            moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
+                'crm_rma_advance_location.stock_location_rma'))
+            line.move_in_customer_state = line._compute_move_ids_customer_state(moves)
+
+    @api.multi
+    def _compute_move_out_customer_state(self):
+        for line in self:
+            moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier', 'customer'])
+            line.move_out_customer_state = line._compute_move_ids_customer_state(moves)
+
     move_in_customer_state = fields.Selection(
-            related='move_in_customer_id.state',
+            compute='_compute_move_in_customer_state',
             string='picking in state', readonly=True,
             selection=MOVE_STATE_SELECTION)
     move_out_customer_state = fields.Selection(
-            related="move_out_customer_id.state",
+            compute='_compute_move_out_customer_state',
             string='picking out state', readonly=True,
             selection=MOVE_STATE_SELECTION)
     repair_id = fields.Many2one('mrp.repair', 'Repair')
@@ -257,20 +285,7 @@ class ClaimLine(models.Model):
             partners = self.env['res.partner'].search([('supplier', '=', True)])
         return {'domain': {'partner_id': [('id', 'in', [x.id for x in partners])]}}
 
-    @api.multi
-    def auto_set_warranty(self):
-        """ Set warranty automatically
-        if the user has not himself pressed on 'Calculate warranty state'
-        button, it sets warranty for him"""
-        for line in self:
-            if not line.warning:
-                line.set_warranty()
-        return True
 
-    @api.multi
-    def set_warranty(self):
-        """ Calculate warranty limit and address """
-        return True
 
     @api.multi
     def equivalent_products(self):

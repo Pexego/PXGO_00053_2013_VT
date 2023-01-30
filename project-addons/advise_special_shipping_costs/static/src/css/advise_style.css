@@ -1,0 +1,15 @@
+.warning-advise {
+    color: #99670d;
+    font-size: 12px;
+    max-width: 250px;
+    margin: 8px 0;
+    background-color: #fdecce;
+    border-radius: 3px;
+    padding: 12px;
+    line-height: 18px;
+}
+.center_elements{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

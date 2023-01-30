@@ -107,7 +107,7 @@ class HrExpense(models.Model):
                                 exp_date_year = (datetime.now() - timedelta(days=30)).year
                                 exp_date_month = (datetime.now() - timedelta(days=30)).month
                                 exp_date_day = calendar.monthrange(exp_date_year, exp_date_month)[1]
-                                exp_date = "%i-%i-%i" % (exp_date_year, exp_date_month, exp_date_day)         
+                                exp_date = "%i-%i-%i" % (exp_date_year, exp_date_month, exp_date_day)
 
                             # Create the move
                             move = self.env['account.move'].create({
@@ -126,8 +126,12 @@ class HrExpense(models.Model):
                                         # Italy Supplier Account
                                         account_id = self.env['account.account'].search([('code', '=', '250100')])
                                         if expense["Merchant"]:
-                                            partner_id = self.env['res.partner'].search([('name', 'ilike', expense["Merchant"].split(' ')[0]),
-                                                                                         ('supplier', '=', True)])
+                                            array_partner = expense["Merchant"].split(' ')
+                                            del array_partner[-1]
+                                            partial_name = " ".join(array_partner)
+                                            partner_id = self.env['res.partner'].search(
+                                                [('name', 'ilike', partial_name),
+                                                 ('supplier', '=', True)], limit=1)
 
                             exp_vals.append({'name': line_name,
                                              'move_id': move.id,
