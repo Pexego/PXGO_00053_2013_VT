@@ -8,12 +8,12 @@
                 <group>
                     <field name="total_weight"/>
                     <t>
-                        <b><field name="products_wo_weight" style="color:red"/></b>
-                        <field name="products_without_weight" style="color:red"/>
+                        <b><field name="message_products_weight" style="color:red"/></b>
+                        <field name="product_names_without_weight" style="color:red"/>
                     </t>
                     <field name="total_volume"/>
                     <t>
-                        <b><field name="products_wo_volume" style="color:red"/></b>
+                        <b><field name="message_products_volume" style="color:red"/></b>
                         <field name="product_names_without_volume" style="color:red"/>
                     </t>
                 </group>

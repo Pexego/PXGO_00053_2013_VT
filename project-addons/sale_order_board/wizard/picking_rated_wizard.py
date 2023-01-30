@@ -28,10 +28,10 @@ class PickingRatedWizard(models.TransientModel):
     sale_order_id = fields.Many2one('sale.order', string='Sale order', required=True)
 
     total_weight = fields.Char('Total Weight (Kgs)', readonly=True, digits=dp.get_precision('Stock Weight'))
-    products_wo_weight = fields.Char('', readonly=True)
-    products_without_weight = fields.Char('', readonly=True)
+    message_products_weight = fields.Char('', readonly=True)
+    product_names_without_weight = fields.Char('', readonly=True)
     total_volume = fields.Char('Total Volume (Cbm)', readonly=True, digits=dp.get_precision('Stock Weight'))
-    products_wo_volume = fields.Char('', readonly=True)
+    message_products_volume = fields.Char('', readonly=True)
     product_names_without_volume = fields.Char('', readonly=True)
     message_error = fields.Text('', readonly=True)
 
@@ -61,10 +61,10 @@ class PickingRatedWizard(models.TransientModel):
         return super().create({
             'sale_order_id': order.id,
             'total_weight': order.get_sale_order_weight(),
-            'products_wo_weight': message_products_weight,
-            'products_without_weight': product_names_without_weight,
+            'message_products_weight': message_products_weight,
+            'product_names_without_weight': product_names_without_weight,
             'total_volume': order.get_sale_order_volume(),
-            'products_wo_volume': message_products_volume,
+            'message_products_volume': message_products_volume,
             'product_names_without_volume': product_names_without_volume
         })
 
