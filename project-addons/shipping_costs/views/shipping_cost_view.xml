@@ -58,7 +58,7 @@
                 <field name="cost_name"/>
                 <field name="is_active"/>
                 <field name="transporter_id"/>
-                <!--field name="fuel"/-->
+                <field name="fuel"/>
                 <field name="sequence"/>
                 <field name="volume"/>
             </tree>
