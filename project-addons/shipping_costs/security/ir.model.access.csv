@@ -3,3 +3,5 @@ access_shipping_cost,access_shipping_cost,model_shipping_cost,base.group_system,
 access_shipping_cost_condition,access_shipping_cost_condition,model_shipping_cost_condition,base.group_system,1,1,1,1
 access_shipping_cost_fee,access_shipping_cost_fee,model_shipping_cost_fee,base.group_system,1,1,1,1
 access_shipping_cost_supplement,access_shipping_cost_supplement,model_shipping_cost_supplement,base.group_system,1,1,1,1
+access_location_zone,access_location_zone,model_location_zone,base.group_system,1,1,1,1
+access_postal_code_range,access_postal_code_range,model_postal_code_range,base.group_system,1,1,1,1
