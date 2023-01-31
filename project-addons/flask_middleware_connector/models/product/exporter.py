@@ -15,20 +15,9 @@ class ProductProductExporter(Component):
             'code': binding.default_code,
             'odoo_id': binding.id,
             'categ_id': binding.categ_id.id,
-            'pvi_1': binding.get_product_price_with_pricelist('PVIIberia'),
-            'pvi_2': binding.get_product_price_with_pricelist('PVIEuropa'),
-            'pvi_3': binding.get_product_price_with_pricelist('PVIItalia'),
-            'pvi_4': binding.get_product_price_with_pricelist('PVIFrancia'),
             'uom_name': binding.uom_id.name,
             'last_sixty_days_sales': binding.last_sixty_days_sales,
             'brand_id': binding.product_brand_id.id,
-            'pvd_1': binding.get_product_price_with_pricelist('PVDIberia'),
-            'pvd_2': binding.get_product_price_with_pricelist('PVDEuropa'),
-            'pvd_3': binding.get_product_price_with_pricelist('PVDItalia'),
-            'pvd_4': binding.get_product_price_with_pricelist('PVDFrancia'),
-            'pvm_1': binding.get_product_price_with_pricelist('PVMA'),
-            'pvm_2': binding.get_product_price_with_pricelist('PVMB'),
-            'pvm_3': binding.get_product_price_with_pricelist('PVMC'),
             'joking_index': binding.joking_index,
             'sale_ok': binding.sale_ok,
             'ean13': binding.barcode,
@@ -191,3 +180,29 @@ class ProductTagAdapter(Component):
     _inherit = 'middleware.adapter'
     _apply_on = 'product.tag'
     _middleware_model = 'producttag'
+
+class ProductBrandGroupExporter(Component):
+    _name = 'product.brand.group.exporter'
+    _inherit = ['base.exporter']
+    _apply_on = ['brand.group']
+    _usage = 'record.exporter'
+
+    def update(self, binding, mode):
+        vals = {"name": binding.name,
+                "brand_ids": binding.brand_ids.ids,
+                "odoo_id": binding.id
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(binding.id, vals)
+
+    def delete(self, binding):
+        return self.backend_adapter.remove(binding.id)
+
+
+class ProductBrandGroupAdapter(Component):
+    _name = 'productbrandgroup.general.adapter'
+    _inherit = 'middleware.adapter'
+    _apply_on = 'brand.group'
+    _middleware_model = 'productbrandgroup'

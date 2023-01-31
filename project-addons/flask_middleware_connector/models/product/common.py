@@ -87,7 +87,7 @@ class ProductListener(Component):
             "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
-            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
+            "discontinued", "state", "sale_in_groups_of", "replacement_id",
             "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
         ]
 
@@ -391,3 +391,20 @@ class ProductTag(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete(self)
         return True
+
+class ProductBrandGroupListener(Component):
+    _name = 'product.brand.group.event.listener'
+    _inherit = 'base.event.listener'
+    _apply_on = ['brand.group']
+
+    def on_record_create(self, record, fields=None):
+        record.with_delay(priority=11, eta=60).export_brand_group()
+
+    def on_record_write(self, record, fields=None):
+        up_fields = ["name", "brand_ids"]
+        for field in up_fields:
+            if field in fields:
+                record.with_delay(priority=11, eta=120).update_brand_group(fields=fields)
+
+    def on_record_unlink(self, record):
+        record.with_delay(priority=11, eta=120).unlink_brand_group()
