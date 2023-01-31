@@ -133,4 +133,14 @@
             </div>
         </field>
     </record>
+    <record id="product_brand_add_group" model="ir.ui.view">
+        <field name="name">product.brand.add.group.form</field>
+        <field name="model">product.brand</field>
+        <field name="inherit_id" ref="product_brand.view_product_brand_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="group_brand_id"/>
+            </field>
+        </field>
+    </record>
 </odoo>

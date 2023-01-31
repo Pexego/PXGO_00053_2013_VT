@@ -41,8 +41,8 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                        <separator string="Pricelist Items"/>
-                        <field name="brand_ids" nolabel="1"/>
+                    <separator string="Brands"/>
+                    <field name="brand_ids"/>
                 </sheet>
             </form>
         </field>

@@ -14,7 +14,8 @@ class ResPartner(models.Model):
             brand_ids = set()
             for pricelist in partner.pricelist_brand_ids:
                 if pricelist.brand_group_id.id in brand_ids:
-                    raise ValidationError(_("Ya existe 1"))
+                    raise ValidationError(
+                        _("There is already a pricelist for %s in this partner." % pricelist.brand_group_id.name))
                 else:
                     brand_ids.add(pricelist.brand_group_id.id)
 

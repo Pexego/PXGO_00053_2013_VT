@@ -125,8 +125,8 @@ class ProductPricelistItem(models.Model):
                 discounts = eval(item.price_extra_discounts)
                 if isinstance(discounts,(int,float)) or all([x for x in discounts if (isinstance(x,(int,float)))]):
                     return
-            raise ValidationError(_("El elemento de la tarida %s No cumple con el formato de los descuentos extras."
-                                    "Debría ser un número(entero o decimal) o una lista de ellos separados por comas.")
+            raise ValidationError(_("The pricelist item %s does not comply with the format of extra discounts."
+                                    "It should be a number (integer or float) or a list of them separated by commas.")
                                   %item.name)
 
     @api.onchange('applied_on')
@@ -376,3 +376,8 @@ class ProductTemplate(models.Model):
 
     item_brand_ids = fields.One2many('product.pricelist.item', 'product_tmpl_id',
                                          domain=[('brand_group_id', '!=', False),('pricelist_calculated', '!=', False)])
+
+class ProductBrand(models.Model):
+    _inherit = 'product.brand'
+
+    group_brand_id = fields.Many2one('brand.group', string='Brand Group')
