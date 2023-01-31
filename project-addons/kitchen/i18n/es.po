@@ -688,8 +688,8 @@ msgstr "Regla"
 #. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_cancel_customizations_wiz_picking_id
 #: model:ir.model.fields,field_description:kitchen.field_retrieve_customizations_wiz_sale_id
-msgid "Sale"
-msgstr "Venta"
+msgid "Picking"
+msgstr "Albarán"
 
 #. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_customization_line_sale_line_id

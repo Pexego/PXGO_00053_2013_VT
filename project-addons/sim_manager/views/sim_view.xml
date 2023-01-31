@@ -68,7 +68,8 @@
                     </group>
                     <field name="serial_ids" nolabel="1">
                         <tree editable="top">
-                            <field name="code"/>
+                            <field name="code" style="pointer-events:none;"/>
+                            <button name="action_open_sim_serial" type="object" icon="fa-external-link"/>
                         </tree>
                     </field>
                 </sheet>
@@ -185,6 +186,57 @@
                 </sheet>
             </form>
         </field>
+    </record>
+
+    <record id="view_sim_serial_form" model="ir.ui.view">
+        <field name="name">sim.serial.view</field>
+        <field name="model">sim.serial</field>
+        <field name="arch" type="xml">
+            <form string="Sim Serial">
+                 <group colspan="2">
+                     <field name="code" readonly="1"/>
+                     <field name="package_id" readonly="1"/>
+                     <field name="state"/>
+                </group>
+                <field name="sim_service_ids">
+                    <tree string="SIM Services" default_order="type asc" create="false" delete="false" editable="bottom">
+                        <field name="type" string="Service" readonly="1"/>
+                        <field name="status" string="Status" readonly="0"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="update_sim_services" string="Save" type="object"
+                            class="btn-primary"/>
+                    <button name="activate_sim" string="Activate" type="object"
+                            attrs="{'invisible': [('state','!=','unsuscribed')]}"/>
+                    <button name="deactivate_sim" string="Deactivate" type="object"
+                            class="btn-danger" attrs="{'invisible': [('state','=','unsuscribed')]}"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sim_service_form" model="ir.ui.view">
+        <field name="name">sim.service.view</field>
+        <field name="model">sim.service</field>
+        <field name="arch" type="xml">
+            <form string="SIM Service">
+                <group col="1" colspan="2">
+                    <field name="sim_serial_id" readonly="1"/>
+                    <field name="type" readonly="1"/>
+                    <field name="status"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_open_sim_serial" model="ir.actions.act_window">
+        <field name="name">Open SIM Serial</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.serial</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sim_serial_form"/>
+        <field name="target">new</field>
     </record>
 
     <record id="action_sim_package_creator" model="ir.actions.act_window">
