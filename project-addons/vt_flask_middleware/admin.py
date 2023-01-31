@@ -11,6 +11,9 @@ from user import User
 from sync_log import SyncLog
 from implemented_models import MODELS_CLASS, MASTER_CLASSES, DEPENDENT_CLASSES, SECOND_LEVEL_CLASSES, LAST_CLASSES, FOUR_LEVEL_CLASSES
 from flask_peewee.utils import make_password
+from flask_peewee.admin import AdminModelConverter,ModelAdmin
+from playhouse.postgres_ext import ArrayField
+from wtforms import fields as f
 
 #
 # Setup the admin interface.
@@ -47,12 +50,21 @@ def init_db():
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
 
+class AdminModelConverterAdd(AdminModelConverter):
+    def __init__(self, *args, **kwargs):
+        super(AdminModelConverterAdd, self).__init__(*args, **kwargs)
+        self.defaults.update({(ArrayField,f.StringField)})
+
+    def handle_array_field(self, model, field, **kwargs):
+        return field.name, self.defaults[ArrayField](**kwargs)
+class ArrayModel(ModelAdmin):
+    form_converter = AdminModelConverterAdd
 
 init_db()
 
 
 for mod_class in MODELS_CLASS:
-    admin.register(MODELS_CLASS[mod_class])
+    admin.register(MODELS_CLASS[mod_class], ArrayModel)
 
 admin.register(User)
 

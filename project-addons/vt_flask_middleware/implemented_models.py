@@ -1,6 +1,6 @@
 from country import Country, CountryState
 from product import Product, ProductCategory, ProductBrand, \
-    ProductBrandCountryRel, ProductTag, ProductTagProductRel
+    ProductBrandCountryRel, ProductTag, ProductTagProductRel, ProductBrandGroup
 from customer import Customer, CustomerTag, CustomerTagCustomerRel
 from invoice import Invoice
 from order import Order, OrderProduct
@@ -11,6 +11,7 @@ from rappel import Rappel, RappelCustomerInfo, RappelSection
 from translation import Translation
 from payment import PaymentLine
 from point_programme import CustomerSalePointProgrammeRule, CustomerSalePointProgramme
+from pricelist import ProductPricelist,ProductPricelistItem
 
 #from post import Post
 MODELS_CLASS = {
@@ -22,12 +23,13 @@ MODELS_CLASS = {
     'order': Order, 'orderproduct': OrderProduct, 'rappel': Rappel, 'rappelcustomerinfo': RappelCustomerInfo,
     'rappelsection': RappelSection, 'countrystate': CountryState, 'producttag': ProductTag, 'producttagproductrel': ProductTagProductRel,
     'translation': Translation, 'paymentline': PaymentLine, 'Customersalepointprogrammerule': CustomerSalePointProgrammeRule,
-    'Customersalepointprogramme':CustomerSalePointProgramme}#, 'post': Post}
+    'Customersalepointprogramme':CustomerSalePointProgramme, 'productbrandgroup': ProductBrandGroup,
+    'productpricelist':ProductPricelist,'productpricelistitem':ProductPricelistItem}#, 'post': Post}
 
 MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
                   'rmastatus': RmaStatus, 'rmastage': RmaStage,
                   'country': Country, 'productbrand': ProductBrand, 'rappel': Rappel,
-                  'translation': Translation, 'paymentline': PaymentLine}
+                  'translation': Translation, 'paymentline': PaymentLine, 'productbrandgroup': ProductBrandGroup}
 
 SECOND_LEVEL_CLASSES = {'customer': Customer, 'product': Product}
 
@@ -35,10 +37,10 @@ DEPENDENT_CLASSES = {'customertag': CustomerTag,'invoice': Invoice,
                      'picking': Picking, 'pickingproduct': PickingProduct,
                      'rma': Rma, 'rmaproduct': RmaProduct,
                      'productbrandcountryrel': ProductBrandCountryRel, 'order': Order, 'producttag': ProductTag, 'producttagproductrel': ProductTagProductRel,
-                     'orderproduct': OrderProduct, 'rappelcustomerinfo': RappelCustomerInfo, 'countrystate': CountryState,
+                     'orderproduct': OrderProduct, 'rappelcustomerinfo': RappelCustomerInfo, 'countrystate': CountryState,'productpricelist':ProductPricelist
                      }
 
-FOUR_LEVEL_CLASSES = {'Customersalepointprogrammerule': CustomerSalePointProgrammeRule}
+FOUR_LEVEL_CLASSES = {'Customersalepointprogrammerule': CustomerSalePointProgrammeRule, 'productpricelistitem':ProductPricelistItem}
 
 LAST_CLASSES = {'Customersalepointprogramme': CustomerSalePointProgramme,
                 'customertagcustomerrel': CustomerTagCustomerRel}

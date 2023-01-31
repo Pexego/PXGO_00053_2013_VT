@@ -25,9 +25,12 @@ class ApiResource(RestResource):
         for field in data:
             if isinstance(data[field], Decimal):
                 data[field] = str(data[field])
+            # This is to solve this issue https://github.com/coleifer/flask-peewee/issues/146
+            elif isinstance(data[field], map):
+                data[field] = getattr(obj, field)
         return data
 
-for mod_class in list(MODELS_CLASS.keys()):
+for mod_class in MODELS_CLASS:
     api.register(MODELS_CLASS[mod_class], ApiResource)
 
 api.register(SyncLog, ApiResource)
