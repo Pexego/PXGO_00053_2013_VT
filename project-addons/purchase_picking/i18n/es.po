@@ -479,9 +479,29 @@ msgid "Sea shipping"
 msgstr "Envío marítimo"
 
 #. module: purchase_picking
-#: selection:stock.container,type:0
+#: selection:stock.container,customs_channel:0
 msgid "Road"
 msgstr "Terrestre"
+
+#. module: purchase_picking
+#: selection:stock.container,customs_channel:0
+msgid "🔴 - Red"
+msgstr "🔴 - Rojo"
+
+#. module: purchase_picking
+#: selection:stock.container,customs_channel:0
+msgid "🟠 - Orange"
+msgstr "🟠 - Naranja"
+
+#. module: purchase_picking
+#: selection:stock.container,customs_channel:0
+msgid "🟡 - Yellow"
+msgstr "🟡 - Amarillo"
+
+#. module: purchase_picking
+#: selection:stock.container,customs_channel:0
+msgid "🟢 - Green"
+msgstr "🟢 - Verde"
 
 #. module: purchase_picking
 #: model:ir.actions.act_window,name:purchase_picking.action_stock_container_road
@@ -591,9 +611,9 @@ msgstr "Sin incidencias"
 msgid "Ref. Manufacturer"
 msgstr "Referencia Proveedor"
 
-
 #. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
-#: model:ir.model.fields,help:purchase_picking.field_stock_container_container_type
-msgid "Container type"
-msgstr "Tipo de contenedor"
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_customs_channel
+msgid "Customs Channel"
+msgstr "Canal"
+
+
