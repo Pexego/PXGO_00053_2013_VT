@@ -28,10 +28,10 @@ MODELS_CLASS = {
 
 MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
                   'rmastatus': RmaStatus, 'rmastage': RmaStage,
-                  'country': Country, 'productbrand': ProductBrand, 'rappel': Rappel,
+                  'country': Country,  'rappel': Rappel,
                   'translation': Translation, 'paymentline': PaymentLine, 'productbrandgroup': ProductBrandGroup}
 
-SECOND_LEVEL_CLASSES = {'customer': Customer, 'product': Product}
+SECOND_LEVEL_CLASSES = {'productbrand': ProductBrand, 'customer': Customer, 'product': Product}
 
 DEPENDENT_CLASSES = {'customertag': CustomerTag,'invoice': Invoice,
                      'picking': Picking, 'pickingproduct': PickingProduct,

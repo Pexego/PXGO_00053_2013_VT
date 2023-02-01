@@ -59,7 +59,7 @@ class Customer(SyncModel):
     is_prepaid_payment_term = BooleanField(default=False)
     last_sale_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     csv_connector_access = BooleanField(default=False)
-    brand_pricelist_ids = ArrayField(IntegerField)
+    brand_pricelist_ids = CharField(null=True)
 
     MOD_NAME = 'customer'
 

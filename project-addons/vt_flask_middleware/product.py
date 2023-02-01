@@ -6,8 +6,6 @@ if they don't exist.
 """
 
 from peewee import CharField, FloatField, IntegerField, ForeignKeyField, BooleanField, TextField, DateTimeField
-from playhouse.postgres_ext import ArrayField
-from app import app
 from database import SyncModel
 from country import Country
 
@@ -22,25 +20,22 @@ class ProductCategory(SyncModel):
     def __unicode__(self):
         return self.name
 
+class ProductBrandGroup(SyncModel):
+    MOD_NAME = 'productbrandgroup'
+    odoo_id = IntegerField(unique=True)
+    name = CharField(max_length=150)
+    def __unicode__(self):
+        return self.name
 
 class ProductBrand(SyncModel):
     MOD_NAME = 'productbrand'
     odoo_id = IntegerField(unique=True)
     name = CharField(max_length=150)
     no_csv = BooleanField()
+    group_id = ForeignKeyField(ProductBrandGroup, on_delete='CASCADE', null=True)
 
     def __unicode__(self):
         return self.name
-
-class ProductBrandGroup(SyncModel):
-    MOD_NAME = 'productbrandgroup'
-    odoo_id = IntegerField(unique=True)
-    name = CharField(max_length=150)
-    brand_ids = ArrayField(IntegerField)
-
-    def __unicode__(self):
-        return self.name
-
 
 class ProductBrandCountryRel(SyncModel):
     MOD_NAME = 'productbrandcountryrel'

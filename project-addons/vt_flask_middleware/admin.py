@@ -50,21 +50,12 @@ def init_db():
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
 
-class AdminModelConverterAdd(AdminModelConverter):
-    def __init__(self, *args, **kwargs):
-        super(AdminModelConverterAdd, self).__init__(*args, **kwargs)
-        self.defaults.update({(ArrayField,f.StringField)})
-
-    def handle_array_field(self, model, field, **kwargs):
-        return field.name, self.defaults[ArrayField](**kwargs)
-class ArrayModel(ModelAdmin):
-    form_converter = AdminModelConverterAdd
 
 init_db()
 
 
 for mod_class in MODELS_CLASS:
-    admin.register(MODELS_CLASS[mod_class], ArrayModel)
+    admin.register(MODELS_CLASS[mod_class])
 
 admin.register(User)
 
