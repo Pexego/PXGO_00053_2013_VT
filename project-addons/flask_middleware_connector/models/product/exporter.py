@@ -110,7 +110,8 @@ class ProductBrandExporter(Component):
     def update(self, binding, mode):
         vals = {"name": binding.name,
                 "odoo_id": binding.id,
-                "no_csv": binding.no_csv, }
+                "no_csv": binding.no_csv,
+                "group_id": binding.group_brand_id.id}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
@@ -189,7 +190,6 @@ class ProductBrandGroupExporter(Component):
 
     def update(self, binding, mode):
         vals = {"name": binding.name,
-                "brand_ids": binding.brand_ids.ids,
                 "odoo_id": binding.id
                 }
         if mode == "insert":
