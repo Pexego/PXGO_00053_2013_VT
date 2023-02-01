@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-import ftplib
+import pysftp
 import io
 import base64
 
@@ -26,15 +26,18 @@ class AccountInvoice(models.Model):
             ftp_pass = self.env['ir.config_parameter'].sudo().get_param('ftp_edi_pass')
             ftp_folder_out = self.env['ir.config_parameter'].sudo().get_param('ftp_edi_folder_out')
 
-            ftp = ftplib.FTP(ftp_dir)
-            ftp.login(user=ftp_user, passwd=ftp_pass)
-            ftp.cwd(ftp_folder_out)
+            # FTP login and place
+            cnopts = pysftp.CnOpts()
+            cnopts.hostkeys = None
+            sftp = pysftp.Connection(ftp_dir, username=ftp_user, password=ftp_pass, cnopts=cnopts)
+            sftp.chdir(ftp_folder_out)
+
             try:
-                ftp.storbinary("STOR %s" % filename, fileb)
-            except ftplib.error_perm:
+                sftp.putfo(fileb, remotepath=ftp_folder_out+filename)
+            except:
                 self.send_edi_error_mail()
 
-            ftp.quit()
+            sftp.close()
 
             ctx = {}
             self.env['ir.attachment'].with_context(ctx).create({
