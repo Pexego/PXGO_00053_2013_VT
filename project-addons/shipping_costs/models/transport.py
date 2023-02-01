@@ -5,7 +5,7 @@ class Transporter(models.Model):
     _inherit = "transportation.transporter"
 
     shipping_cost_id = fields.One2many("shipping.cost", "transporter_id")
-    zone_id = fields.One2many("location.zone", "transporter_id")
+    zone_id = fields.One2many("shipping.zone", "transporter_id")
 
 
 class TransportService(models.Model):

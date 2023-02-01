@@ -29,29 +29,13 @@ import ast
 import base64
 import unidecode
 import collections
-
+import math
 import time
 
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    number_product_without_weight = fields.Integer(
-        string="Nº products without weight",
-        compute="_get_number_of_products_without_weight"
-    )
-    product_names_without_weight = fields.Char(
-        string="Products without weight",
-        compute="_get_product_names_without_weight"
-    )
-    number_product_without_volume = fields.Integer(
-        string="Nº products without volume",
-        compute="_get_number_of_products_without_volume"
-    )
-    product_names_without_volume = fields.Char(
-        string="Products without volume",
-        compute="_get_product_names_without_volume"
-    )
     picking_rated_id = fields.One2many("picking.rated.wizard", "sale_order_id", string="Picking rated")
 
     @api.multi
@@ -80,7 +64,7 @@ class SaleOrder(models.Model):
                         getattr(order, call_method)(
                             new,
                             package_weight=sale_order_weight,
-                            num_pieces=int((sale_order_weight / 20) + 1),
+                            num_pieces=math.ceil(sale_order_weight / 20),
                             package_pieces=sum(order.order_line.mapped('product_uom_qty'))
                         )
                     except(requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:

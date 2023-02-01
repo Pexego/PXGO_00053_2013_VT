@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="location_zone_form_view" model="ir.ui.view">
-        <field name="name">location.zone.form.view</field>
-        <field name="model">location.zone</field>
+    <record id="shipping_zone_form_view" model="ir.ui.view">
+        <field name="name">shipping.zone.form.view</field>
+        <field name="model">shipping.zone</field>
         <field name="arch" type="xml">
             <form>
                 <group col="2">
@@ -24,9 +24,9 @@
         </field>
     </record>
 
-    <record id="location_zone_tree_view" model="ir.ui.view">
-        <field name="name">location.zone.tree.view</field>
-        <field name="model">location.zone</field>
+    <record id="shipping_zone_tree_view" model="ir.ui.view">
+        <field name="name">shipping.zone.tree.view</field>
+        <field name="model">shipping.zone</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
@@ -36,19 +36,19 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_open_location_zone_view">
+    <record model="ir.actions.act_window" id="action_open_shipping_zone_view">
         <field name="name">Zones</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">location.zone</field>
+        <field name="res_model">shipping.zone</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_ids"
                eval="[(5, 0, 0),
-                              (0, 0, {'view_mode': 'tree', 'view_id': ref('location_zone_tree_view')}),
-                              (0, 0, {'view_mode': 'form', 'view_id': ref('location_zone_form_view')})]"
+                              (0, 0, {'view_mode': 'tree', 'view_id': ref('shipping_zone_tree_view')}),
+                              (0, 0, {'view_mode': 'form', 'view_id': ref('shipping_zone_form_view')})]"
         />
     </record>
 
-    <menuitem id="location_zone_item" name="Zone item" action="action_open_location_zone_view"
+    <menuitem id="shipping_zone_item" name="Shipping Zone" action="action_open_shipping_zone_view"
               parent="transportation.menu_transportation_sale" sequence="13"/>
 </odoo>

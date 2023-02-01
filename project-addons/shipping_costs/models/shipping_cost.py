@@ -1,5 +1,4 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 import math
 
 
@@ -28,7 +27,7 @@ class ShippingCost(models.Model):
     transporter_id = fields.Many2one("transportation.transporter", string="Transporter")
     fuel = fields.Float(string="Fuel", related="transporter_id.fuel", readonly=True)
     sequence = fields.Integer(string="Sequence")
-    volume = fields.Float(string="Max volume/palet")
+    volume = fields.Float(string="Max volume/pallet")
 
     condition_ids = fields.One2many(
         "shipping.cost.condition",
@@ -41,58 +40,28 @@ class ShippingCost(models.Model):
         "shipping_cost_id",
         string="Supplements"
     )
+    shipping_zone_id = fields.Many2one("shipping.zone", string="Shipping zone")
 
     note = fields.Text("Notes", copy=False)
 
-    @api.model
-    def create(self, vals):
-        # don't allow to save if services are not from transporter selected
-        transporter_id = vals.get('transporter_id', False)
-        supplements = vals.get('supplement_ids', False)
-
-        if not transporter_id or not supplements:
-            return super().create(vals)
-
-        transporter_services = self.env['transportation.transporter'].browse(
-            transporter_id
-        ).service_ids.ids
-
-        for supplement_list in supplements:
-            supplement_service = supplement_list[2]['service_id']
-            if supplement_service not in transporter_services:
-                raise UserError(_("Cannot save with Services that doesn't belong to the transporter. "
-                                  "Please, check the services chosen."))
-        return super().create(vals)
-
     @api.multi
-    def write(self, vals):
-        # don't allow to save if services are not from transporter selected
+    @api.constrains('transporter_id', 'supplement_ids', 'shipping_zone_id')
+    def check_transporter_services(self):
+        """
+        Checks if the services are from the transporter selected and if the shipping_zone
+        matches with the transporter selected.
+        """
         for shipping_cost in self:
-            old_service_list = []
-            transporter_id = shipping_cost.transporter_id.id
-            # case new transporter, we get old services
-            if 'transporter_id' in vals:
-                transporter_id = vals['transporter_id']
-                supplement_id_list = shipping_cost.supplement_ids
-                supplement_id_to_rm = [
-                    elem[1] for elem in vals.get('supplement_ids', []) if elem[0] in [2, 1]
-                ]
-                supplement_id_list = supplement_id_list.filtered(lambda supp: supp.id not in supplement_id_to_rm)
-                old_service_list = supplement_id_list.mapped('service_id').ids
-            # we add new services
-            service_list = old_service_list + [
-                elem[2]['service_id'] for elem in vals.get('supplement_ids', []) if elem[0] in [0, 1]
-            ]
-            transporter_services = self.env['transportation.transporter'].browse(
-                transporter_id
-            ).service_ids.ids
-
-            for service_id in service_list:
-                if service_id not in transporter_services:
-                    raise UserError(_("Cannot save with Services that doesn't belong to the transporter. "
-                                      "Please, check the services chosen."))
-
-        return super().write(vals)
+            if shipping_cost.shipping_zone_id.transporter_id.id != shipping_cost.transporter_id.id:
+                raise Warning(
+                    _('Error!:: Shipping zone assigned is not for the transporter selected.')
+                )
+            transporter_services = shipping_cost.transporter_id.service_ids.ids
+            for supplement in shipping_cost.supplement_ids:
+                if supplement.service_id.id not in transporter_services:
+                    raise Warning(
+                        _('Error!:: Services must be offered by the transporter selected.')
+                    )
 
 
 class ShippingCostCondition(models.Model):
@@ -111,7 +80,7 @@ class ShippingCostCondition(models.Model):
 
     def _get_filter_by_fields(self):
         """
-        Returns a list of tuples containing sale.order fields and the name of that field.
+        Returns a list of tuples containing sale_order fields and the name of that field.
         Tuple shape: (field, field_string_name)
         """
         # we get all fields with no context in order to get the field string with the user language

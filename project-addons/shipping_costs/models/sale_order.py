@@ -66,11 +66,26 @@ class SaleOrder(models.Model):
 
         return action_to_return
 
+    def get_sale_order_zone(self):
+        """
+        Returns shipping_zone(s) where the sale_order is going to be delivered
+        """
+        shipping_zones = self.env['shipping.zone'].search([
+            ('transporter_id', '=', self.transporter_id.id),
+            ('country_id', '=', self.partner_shipping_id.country_id.id)
+        ])
+        filtered_shipping_zones = shipping_zones.filtered(
+            lambda zone: zone.is_postal_code_in_zone(self.partner_shipping_id.zip)
+        )
+        return filtered_shipping_zones
+
     def _get_available_shipping_costs(self):
         """
         Returns a list of all shipping_cost that fit with the sale_order
         """
-        shipping_cost_list = self.env['shipping.cost'].search([('is_active', '=', 'True')])
+        shipping_cost_list = self.env['shipping.cost'].search(
+            [('is_active', '=', 'True'), ('shipping_zone_id.id', 'in', self.get_sale_order_zone().ids)]
+        )
         shipping_cost_available = []
         # we get shipping_cost that verifies shipping_conditions - empty conditions are included
         for shipping_cost in shipping_cost_list:
