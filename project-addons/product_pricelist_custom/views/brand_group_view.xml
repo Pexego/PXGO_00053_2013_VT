@@ -42,7 +42,7 @@
                         </h1>
                     </div>
                     <separator string="Brands"/>
-                    <field name="brand_ids"/>
+                    <field name="brand_ids" widget="many2many_tags"/>
                 </sheet>
             </form>
         </field>

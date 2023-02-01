@@ -5,6 +5,10 @@ class SaleOrderLine(models.Model):
 
     @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
     def _onchange_discount(self):
+        """ This method extend _onchange_discount to calculate the discount of a product which has special pricelist
+            instead of normal partner pricelist
+            :return: discount of a pricelist product
+        """
         pricelists = self.order_id.partner_id.pricelist_brand_ids.filtered(
             lambda p: self.product_id.product_brand_id in p.brand_group_id.brand_ids)
         if not pricelists:
@@ -46,6 +50,11 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def _get_display_price(self, product):
+        """ This method extend _get_display_price to calculate the price of a product which has special pricelist
+            instead of normal partner pricelist
+            :param product: product.product
+            :return: price of a pricelist product
+        """
         pricelists = self.order_id.partner_id.pricelist_brand_ids.filtered(lambda p:product.product_brand_id in p.brand_group_id.brand_ids)
         if pricelists:
             product_context = dict(self.env.context, partner_id=self.order_id.partner_id.id, date=self.order_id.date_order,
@@ -60,6 +69,6 @@ class SaleOrderLine(models.Model):
                 if currency_id != self.order_id.pricelist_id.currency_id.id:
                     base_price = self.env['res.currency'].browse(currency_id).with_context(product_context).compute(base_price,
                                                                                                                     pricelists.currency_id)
-                return max(final_price,base_price)
+                return max(final_price, base_price)
             return final_price
         return super()._get_display_price(product)

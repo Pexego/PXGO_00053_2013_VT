@@ -79,3 +79,162 @@ msgstr "Tariffa relazionata (por defecto)"
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_base_pricelist
 msgid "Pricelist base"
 msgstr "Tariffa base"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_active
+msgid "Active"
+msgstr "Attivo"
+
+#. module: product_pricelist_custom
+#: model:ir.ui.view,arch_db:product_pricelist_custom.brand_group_view_search
+msgid "Archived"
+msgstr "Archiviato"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_item_ids
+msgid "Associated Items"
+msgstr "Items associati"
+
+#. module: product_pricelist_custom
+#: model:ir.actions.act_window,name:product_pricelist_custom.brand_group_action
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_brand_group_brand_id
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_brand_group_id
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_brand_group_id
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_calculated_brand_group_id
+#: model:ir.ui.menu,name:product_pricelist_custom.menu_brand_group
+#: model:ir.ui.view,arch_db:product_pricelist_custom.brand_group_view
+#: model:ir.ui.view,arch_db:product_pricelist_custom.brand_group_view_tree
+msgid "Brand Group"
+msgstr "Agrupación de Marcas"
+
+#. module: product_pricelist_custom
+#: model:ir.ui.view,arch_db:product_pricelist_custom.brand_group_view_search
+msgid "Brand Group Search"
+msgstr "Raggruppamento di marchi"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:177
+#, python-format
+msgid "Brand: %s"
+msgstr "Marca: %s"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_brand_ids
+#: model:ir.ui.view,arch_db:product_pricelist_custom.brand_group_view
+msgid "Brands"
+msgstr "Marca"
+
+#. module: product_pricelist_custom
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
+msgid "Brands Pricing"
+msgstr "Tariffe speciali per Marca"
+
+#. module: product_pricelist_custom
+#: model:ir.actions.act_window,help:product_pricelist_custom.brand_group_action
+msgid "Click to create a brand group."
+msgstr "Fare clic qui per creare un raggruppamento di marchi"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_create_date
+msgid "Created on"
+msgstr "Creato da"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_display_name
+msgid "Display Name"
+msgstr "Nome da visualizzare"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_item_id
+msgid "Item"
+msgstr "Origine Item"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_item_brand_ids
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_template_item_brand_ids
+msgid "Item Brand"
+msgstr "Marchio dell'Items"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group___last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_write_date
+msgid "Last Updated on"
+msgstr "Ultima modifica di"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_brand_group_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,help:product_pricelist_custom.field_brand_group_active
+msgid "Set active to false to hide the Brand Group without removing it."
+msgstr "Mark su false per nascondere il raggruppamento dei segni senza rimuoverlo."
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,help:product_pricelist_custom.field_product_pricelist_item_product_brand_id
+msgid "Specify a brand if this rule only applies to productsbelonging to this brand. Keep empty otherwise."
+msgstr "Specifica un marchio se il prodotto si applica solo a un determinato marchio. Mantenere vuoto in ogni altro caso."
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:155
+#, python-format
+msgid "The pricelist item %s does not comply with the format of extra discounts.It should be a number (integer or float) or a list of them separated by commas."
+msgstr "L'elemento tariffario %s non è conforme al formato degli sconti extra. Dovrebbe essere un numero (intero o reale) o un elenco di numeri separati da virgole."
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/res_partner.py:18
+#, python-format
+msgid "There is already a pricelist for %s in this partner."
+msgstr "C'è già una commissione per %s su questo cliente"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_price_extra_discounts
+msgid "Price Extra Discounts"
+msgstr "Ulteriori sconti"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_res_partner_pricelist_brand_ids
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_res_users_pricelist_brand_ids
+msgid "Pricelist Brand"
+msgstr "Marca di listino"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,help:product_pricelist_custom.field_product_pricelist_item_price_extra_discounts
+msgid "This field can be a number(int or float) or a list of them separated by commas."
+msgstr "Questo campo deve essere un numero (entero o reale) o una lista di numeri separati da virgole"
+
+#. module: product_pricelist_custom
+#: selection:product.pricelist.item,applied_on:0
+msgid "Product Brand"
+msgstr "Marca di prodotto"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_product_brand_id
+msgid "Brand"
+msgstr "Marca"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:184
+#, python-format
+msgid "%s; %s of extra discounts"
+msgstr "%s; %s  sconto extra"

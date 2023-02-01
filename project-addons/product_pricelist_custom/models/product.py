@@ -25,11 +25,33 @@ class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
 
     pricelist_related_default = fields.Many2one('product.pricelist', "Default Related Pricelist")
-    base_pricelist = fields.Boolean("Pricelist base")  # Marcar en tarifas PVD's y PVI's
+    # This check allows you to add pricelist to product item_ids field(Check on PVD's y PVI's and Brand pricelists base)
+    base_pricelist = fields.Boolean("Pricelist base")
     brand_group_id = fields.Many2one("brand.group")
 
+    display_name = fields.Char(
+        compute='_compute_display_name',
+        string='Display Name', store=True, readonly=True)
+
+    @api.multi
+    @api.depends('name', 'brand_group_id')
+    def _compute_display_name(self):
+        for pricelist in self:
+            display_name = pricelist.name
+            if pricelist.brand_group_id:
+                display_name = f"{pricelist.brand_group_id.name} / {pricelist.name}"
+            pricelist.display_name = display_name
+
     def _compute_price_rule_get_items(self, products_qty_partner, date, uom_id, prod_tmpl_ids, prod_ids, categ_ids):
-        # Load all rules
+        """ This method overwrite _compute_price_rule_get_items of product module to add brand filtering
+            :param products_qty_partner: list of tuples products, quantity, partner
+            :param date: validity date
+            :param uom_id: intermediate unit of measure (ID)
+            :param prod_tmpl_ids: list of product.template
+            :param prod_ids: list of product.product
+            :param categ_ids: list of product.category
+            :return: suitable product.pricelist.items for params conditions
+        """
         self.ensure_one()
         product_tmpls = self.env["product.template"].browse(prod_tmpl_ids)
         brand_ids = product_tmpls.mapped("product_brand_id").ids
@@ -59,26 +81,39 @@ class ProductPricelist(models.Model):
 
     @api.multi
     def _compute_price_rule(self, products_qty_partner, date=False, uom_id=False):
-        res = super()._compute_price_rule(products_qty_partner,date,uom_id)
-        for product_id,(price,rule_id) in res.items():
+        """ This method extends _compute_price_rule of product module to add extra discounts
+            :param products_qty_partner: list of tuples products, quantity, partner
+            :param date: validity date
+            :param uom_id: intermediate unit of measure (ID)
+            :return: dict{product_id: (price, suitable_rule) for the given pricelist}
+        """
+        res = super()._compute_price_rule(products_qty_partner, date, uom_id)
+        for product_id, (price, rule_id) in res.items():
             rule = self.env['product.pricelist.item'].browse(rule_id)
             if price is not False and rule.price_extra_discounts:
                 discounts = eval(rule.price_extra_discounts)
-                if isinstance(discounts,(int,float)):
+                if isinstance(discounts, (int, float)):
                     new_price = price - (price * (discounts / 100))
                 else:
                     new_price = price
                     for discount in discounts:
                         new_price = new_price - (new_price * (discount / 100))
-                res[product_id] = (new_price,rule_id)
+                res[product_id] = (new_price, rule_id)
         return res
     def get_base_brand_pricelists(self, product_brand_id):
+        """ This method allows to search base pricelists of a specified brand
+            :param product_brand_id: brand of a product (ID)
+            :return: list of product.pricelist
+        """
         return self.env['product.pricelist'].search([('base_pricelist', '=', True),
                 ('brand_group_id', '!=', False),
                 ('brand_group_id.brand_ids', '=',
                  product_brand_id)],
                order='sequence asc, id asc')
     def create_base_pricelist_items(self, product_id):
+        """ This method allows to create pricelists for a specified product
+            :param product_id:product.product (object)
+        """
         items = []
         for pricelist in self:
             items.append((0, 0, {'pricelist_id': pricelist.id,
@@ -115,36 +150,59 @@ class ProductPricelistItem(models.Model):
         help="Specify a brand if this rule only applies to products"
         "belonging to this brand. Keep empty otherwise.",
     )
-    price_extra_discounts = fields.Char('Price Extra Discounts')
+    price_extra_discounts = fields.Char('Price Extra Discounts',
+                                        help="This field can be a number(int or float) or a list of them separated by commas.")
 
     @api.constrains('price_extra_discounts')
     def _check_price_extra_discounts(self):
+        """ This method check if the values in price_extra_discounts field have right format
+            (number(float or int) or list of numbers)
+        :return: ValidationError if the format is not correct
+        """
         for item in self:
-            matched = re.match('^[0-9]+(\.[0-9]+)?(,[0-9]+)*$',item.price_extra_discounts)
+            matched = re.match('^[0-9]+(\.[0-9]+)?(,[0-9]+)*$', item.price_extra_discounts)
             if matched:
                 discounts = eval(item.price_extra_discounts)
-                if isinstance(discounts,(int,float)) or all([x for x in discounts if (isinstance(x,(int,float)))]):
+                if isinstance(discounts, (int, float)) or all([x for x in discounts if (isinstance(x, (int, float)))]):
                     return
             raise ValidationError(_("The pricelist item %s does not comply with the format of extra discounts."
                                     "It should be a number (integer or float) or a list of them separated by commas.")
-                                  %item.name)
+                                  % item.name)
 
     @api.onchange('applied_on')
     def _onchange_applied_on(self):
+        """ This method extend original method to restore state
+            of product_brand_id field when applied_on change to another value
+        """
         super()._onchange_applied_on()
         if self.applied_on != '25_product_brand':
             self.product_brand_id = False
 
-    @api.depends('categ_id', 'product_tmpl_id', 'product_id', 'compute_price', 'fixed_price', \
-                 'pricelist_id', 'percent_price', 'price_discount', 'price_surcharge','product_brand_id')
+    @api.depends('categ_id', 'product_tmpl_id', 'product_id', 'compute_price', 'fixed_price',
+                 'pricelist_id', 'percent_price', 'price_discount', 'price_surcharge','product_brand_id',
+                 'price_extra_discounts')
     def _get_pricelist_item_name_price(self):
+        """ This method extend original method to assign brand name in the name of the item and formatting
+        the price name when it has extra discounts"""
         super()._get_pricelist_item_name_price()
         for item in self:
             if item.product_brand_id:
                 item.name = _("Brand: %s") % item.product_brand_id.name
+            if item.price_extra_discounts:
+                discounts = eval(item.price_extra_discounts)
+                if isinstance(discounts, (int, float)):
+                    discounts_formatted = discounts
+                else:
+                    discounts_formatted = ','.join(f' {discount} %' for discount in discounts)
+                item.price = _("%s; %s of extra discounts") %(item.price,discounts_formatted)
+
 
     @api.multi
     def _write(self, vals):
+        """ This method writes on items associated same values.
+        :param vals: values to change
+        :return: super()
+        """
         res = super()._write(vals)
         for item in self:
             if item.item_ids:
@@ -154,6 +212,7 @@ class ProductPricelistItem(models.Model):
     @api.multi
     @api.depends('fixed_price')
     def _get_pricelist_calculated_price(self):
+        """ This method compute the calculated price of a pricelist item."""
         for item in self:
             product_id = item.product_tmpl_id or item.product_id.product_tmpl_id
             if product_id and item.pricelist_calculated and not item.pricelist_calculated.base_pricelist:
@@ -289,7 +348,10 @@ class ProductProduct(models.Model):
                                       string='PVD/PVI France relation',
                                       digits=(5, 2), readonly=True)
 
-    def create_brand_pricelist_items(self,brand_id):
+    def create_brand_pricelist_items(self, brand_id):
+        """ This method allows to create pricelists of a specified brand
+            :param brand_id: brand of a product (ID)
+        """
         for product_id in self:
             brand_pricelist_items = self.env['product.pricelist.item'].search([('brand_group_id', '!=', False),
                                                                                ('base', '=', 'pricelist'),
@@ -309,6 +371,9 @@ class ProductProduct(models.Model):
             product_id.write({'item_ids': items})
 
     def create_product_pricelist_items(self,brand_id):
+        """ This method allows to create pricelists of products
+            :param brand_id: brand of products (ID)
+        """
         for product_id in self:
             base_brand_pricelists = self.env['product.pricelist'].get_base_brand_pricelists(brand_id)
             if base_brand_pricelists:
@@ -321,6 +386,10 @@ class ProductProduct(models.Model):
                 base_pricelists.create_base_pricelist_items(product_id)
     @api.model
     def create(self, vals):
+        """ This method create product pricelist if it has brand.
+        :param vals: values to create product
+        :return: super()
+        """
         product_id = super().create(vals)
         if not self.env.context.get('sync_db', False):
             if product_id.product_brand_id:
@@ -329,6 +398,10 @@ class ProductProduct(models.Model):
 
     @api.multi
     def write(self, vals):
+        """ This method create/unlink product pricelists if the brand changes.
+        :param vals: values to write product
+        :return: super()
+        """
         brand = vals.get('product_brand_id', False)
         for product in self:
             if brand and product.product_brand_id.id != brand:
