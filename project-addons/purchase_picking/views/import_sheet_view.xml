@@ -19,6 +19,7 @@
                     <field name="destination_port"/>
                     <field name="forwarder_comercial"/>
                     <field name="container_type"/>
+                    <field name="channel"/>
                 </group>
                 <group col="4" string="Costs">
                     <field name="freight"/>

@@ -40,6 +40,7 @@ class ImportSheet(models.Model):
         related="container_id.container_type",
         readonly=True
     )
+    channel = fields.Selection("Channel", related="container_id.customs_channel", readonly=True)
 
     treasury = fields.Char(string="Treasury")
     freight = fields.Float(string="Freight")

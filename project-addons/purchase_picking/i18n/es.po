@@ -669,6 +669,11 @@ msgid "Container Type"
 msgstr "Contenedor"
 
 #. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_channel
+msgid "Channel"
+msgstr "Canal"
+
+#. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Import Sheets"
 msgstr "Hojas de Importación"
