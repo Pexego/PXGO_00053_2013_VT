@@ -44,12 +44,12 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _get_containers(self):
         for order in self:
-            res = []
+            res = self.env['stock.container']
             for line in order.order_line:
                 for move in line.move_ids:
                     if move.state != 'cancel':
-                        res.append(move.container_id.id)
-            order.container_ids = res
+                        res |= move.container_id
+            order.container_ids = [(6, 0, res.ids)]
 
     @api.multi
     @api.depends('order_line.price_subtotal')

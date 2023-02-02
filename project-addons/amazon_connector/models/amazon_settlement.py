@@ -650,6 +650,7 @@ class AmazonSettlementLine(models.Model):
                                         'cost_unit': invoice_line[0].cost_unit,
                                         'discount': invoice_line[0].discount,
                                         'account_analytic_id': False,
+                                        'uom_id': invoice_line.uom_id.id,
                                         'invoice_line_tax_ids': [(6, 0, invoice_line[0].invoice_line_tax_ids.ids)]
                                     }
                                     self.env['account.invoice.line'].create(vals)

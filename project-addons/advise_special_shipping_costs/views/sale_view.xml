@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_add_advise_special_shipping_costs" model="ir.ui.view">
+        <field name="name">sale.order.add.advise.special.shipping.costs</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_order_board.view_price_calc"/>
+        <field name="arch" type="xml">
+            <button name="compute_variables" position="after">
+                <field name="is_special_shipping_costs" invisible="1"/>
+                <div class="warning-advise" attrs="{'invisible':[('is_special_shipping_costs','=',False)]}">
+                    <tr class="center_elements">
+                        <td><i class="fa fa-exclamation-triangle fa-2x" style="margin-right:10px"/></td>
+                        <td><span>There are products with special shipping costs.</span><span><br/>Please contact <field name="advise_email"/></span></td>
+                    </tr>
+                </div>
+            </button>
+        </field>
+    </record>
+
+    <record id="sale_order_make_invisible_carrier_id" model="ir.ui.view">
+        <field name="name">sale.order.make_invisible_carrier_id</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
+        <field name="arch" type="xml">
+            <div name="carrier_selection" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </div>
+            <label for="carrier_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </label>
+        </field>
+    </record>
+</odoo>

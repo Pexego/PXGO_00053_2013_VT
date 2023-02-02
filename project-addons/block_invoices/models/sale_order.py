@@ -69,7 +69,7 @@ class SaleOrder(models.Model):
                 raise exceptions.Warning(_('Order blocked. Approve pending'))
             if not order.pricelist_id.name.startswith('PVI'):
                 margin_adj = float(order.get_margin_adjustment())
-                if margin_adj <= 0.0:
+                if margin_adj < int(margin_limit):
                     margin_adj = order.margin_rappel
                 if margin_adj < int(margin_limit) and not self.allow_confirm_blocked_magreb:
                     # we use the same check to aprove that magreb

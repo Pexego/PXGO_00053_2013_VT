@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, exceptions
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime
 from odoo.exceptions import except_orm
 from odoo.tools.translate import translate, _
@@ -75,6 +75,14 @@ class CrmClaimRma(models.Model):
 
     @api.multi
     def write(self, vals):
+        if 'date_received' in vals:
+            self.message_post(body=_(
+                "<ul><li> Officer: %s</il><li> Received Date: %s <b>&rarr;</b> %s</il></ul>"
+            ) % (self.env.user.partner_id.name, self.date_received, vals['date_received']))
+        if 'warehouse_date' in vals:
+            self.message_post(body=_(
+                "<ul><li> Officer: %s</il><li> Final Received Date: %s <b>&rarr;</b> %s</il></ul>"
+            ) % (self.env.user.partner_id.name, self.warehouse_date, vals['warehouse_date']))
         if 'stage_id' in vals:
             stage_ids = []
             stage_repaired_id = self.env.ref('crm_claim.stage_claim2').id
@@ -155,7 +163,7 @@ class CrmClaimRma(models.Model):
                                     break
                             if not found:
                                 invoce_product_ids[line.invoice_id.id][line.product_id.id] = line.quantity
-                                
+
                         else:
                             invoce_product_ids[line.invoice_id.id] = {line.product_id.id: line.quantity}
             message = ""
@@ -291,7 +299,7 @@ class CrmClaimRma(models.Model):
                     prop = self.env['ir.property'].get('property_account_income_categ_id', 'product.category')
                     account_id = prop and prop.id or False
                 account_id = fp_obj.map_account(account_id)
-                
+
                 vals = {
                     'invoice_id': invoice_id.id,
                     'name': line.product_description,
