@@ -46,7 +46,7 @@ class ProductPricelistItemExporter(Component):
         vals = {
             'name': f'{product.default_code}-{pricelist.name}',
             'product_id': product.id,
-            'pricelist_id': binding.pricelist_id.id ,
+            'pricelist_id': pricelist.id,
             'odoo_id':id,
             'price': pricelist._compute_price_rule([(product,1,False)], date=False, uom_id=False)[product.id][0]
         }

@@ -131,7 +131,7 @@ class ProductPricelistItemListener(Component):
             'fixed_price',
             'calculated_price'
         ]
-        if record.pricelist_id and record.pricelist_id.web:
+        if record.pricelist_id and record.pricelist_id.web and record.product_id:
             for field in up_fields:
                 if field in fields:
                     record.with_delay(priority=11, eta=80).export_pricelist_item(record.product_id)
