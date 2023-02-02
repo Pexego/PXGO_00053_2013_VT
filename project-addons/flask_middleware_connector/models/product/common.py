@@ -247,7 +247,7 @@ class ProductBrandListener(Component):
         record.with_delay(priority=11).export_product_brand()
 
     def on_record_write(self, record, fields=None):
-        up_fields = ["name", "no_csv"]
+        up_fields = ["name", "no_csv", "group_brand_id"]
         for field in up_fields:
             if field in fields:
                 record.with_delay().update_product_brand(fields)
@@ -391,6 +391,35 @@ class ProductTag(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete(self)
         return True
+
+
+class BrandGroup(models.Model):
+    _inherit = 'brand.group'
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
+    def export_brand_group(self):
+        backend = self.env["middleware.backend"].search([])[0]
+        with backend.work_on(self._name) as work:
+            exporter = work.component(usage='record.exporter')
+            return exporter.update(self, 'insert')
+        return True
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
+    def update_brand_group(self, fields=None):
+        backend = self.env["middleware.backend"].search([])[0]
+        with backend.work_on(self._name) as work:
+            exporter = work.component(usage='record.exporter')
+            return exporter.update(self, 'update')
+        return True
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
+    def unlink_brand_group(self):
+        backend = self.env["middleware.backend"].search([])[0]
+        with backend.work_on(self._name) as work:
+            exporter = work.component(usage='record.exporter')
+            return exporter.delete(self)
+        return True
+
 
 class ProductBrandGroupListener(Component):
     _name = 'product.brand.group.event.listener'
