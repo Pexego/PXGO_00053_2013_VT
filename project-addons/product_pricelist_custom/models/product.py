@@ -151,7 +151,8 @@ class ProductPricelistItem(models.Model):
         "belonging to this brand. Keep empty otherwise.",
     )
     price_extra_discounts = fields.Char('Price Extra Discounts',
-                                        help="This field can be a number(int or float) or a list of them separated by commas.")
+                                        help="This field can be a number(int or float) or a list of them separated by commas.",
+                                        default="0")
 
     @api.constrains('price_extra_discounts')
     def _check_price_extra_discounts(self):
