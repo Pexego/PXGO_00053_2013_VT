@@ -110,6 +110,7 @@ class ProductPricelist(models.Model):
                 ('brand_group_id.brand_ids', '=',
                  product_brand_id)],
                order='sequence asc, id asc')
+
     def create_base_pricelist_items(self, product_id):
         """ This method allows to create pricelists for a specified product
             :param product_id:product.product (object)
@@ -197,17 +198,19 @@ class ProductPricelistItem(models.Model):
                     discounts_formatted = ','.join(f' {discount} %' for discount in discounts)
                 item.price = _("%s; %s of extra discounts") %(item.price,discounts_formatted)
 
-
     @api.multi
-    def _write(self, vals):
-        """ This method writes on items associated same values.
+    def write(self, vals):
+        """ This method writes the same values to the associated items and writes its calculated price
+         to fixed_price in case it does not have a fixed price and is a calculated item without a base pricelist.
         :param vals: values to change
         :return: super()
         """
-        res = super()._write(vals)
+        res = super().write(vals)
         for item in self:
             if item.item_ids:
                 item.item_ids.write(vals)
+            elif 'fixed_price' not in vals and not item.base_pricelist_id and item.pricelist_calculated == item.pricelist_id:
+                item.fixed_price = item.pricelist_calculated_price
         return res
 
     @api.multi
@@ -253,6 +256,12 @@ class ProductPricelistItem(models.Model):
                 else:
                     item.margin = 0
 
+    def get_brand_pricelist_items(self,brand_id):
+        return self.env['product.pricelist.item'].search([('brand_group_id', '!=', False),
+                                                          ('brand_group_id.brand_ids', '=', brand_id),
+                                                          ('compute_price', '=', 'formula'),
+                                                          ('product_brand_id', '=',brand_id)],
+                                                         order='id asc')
 
 class ProductProduct(models.Model):
 
@@ -354,17 +363,11 @@ class ProductProduct(models.Model):
             :param brand_id: brand of a product (ID)
         """
         for product_id in self:
-            brand_pricelist_items = self.env['product.pricelist.item'].search([('brand_group_id', '!=', False),
-                                                                               ('base', '=', 'pricelist'),
-                                                                               ('brand_group_id.brand_ids', '=',
-                                                                                brand_id),
-                                                                               ('product_brand_id', '=',
-                                                                                brand_id)],
-                                                                              order='id asc')
+            brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand_id)
             items = []
             for item in brand_pricelist_items:
                 real_item = product_id.item_ids.filtered(lambda i: i.pricelist_id == item.base_pricelist_id)
-                items.append((0, 0, {'pricelist_id': item.base_pricelist_id.id,
+                items.append((0, 0, {'pricelist_id': item.base_pricelist_id.id or item.pricelist_id.id,
                                                            'pricelist_calculated': item.pricelist_id.id,
                                                            'product_id': product_id.id,
                                                            'applied_on': '1_product',
@@ -411,8 +414,8 @@ class ProductProduct(models.Model):
                     product.item_brand_ids.unlink()
                     product.create_product_pricelist_items(brand)
                 else:
-                    base_brand_pricelists = self.env['product.pricelist'].get_base_brand_pricelists(brand)
-                    if base_brand_pricelists:
+                    brand_pricelist_items =self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
+                    if brand_pricelist_items:
                         product.item_ids.unlink()
                         product.create_product_pricelist_items(brand)
         res = super().write(vals)
