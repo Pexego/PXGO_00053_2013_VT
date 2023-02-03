@@ -209,7 +209,7 @@ class ProductPricelistItem(models.Model):
         for item in self:
             if item.item_ids:
                 item.item_ids.write(vals)
-            elif 'fixed_price' not in vals and not item.base_pricelist_id and item.pricelist_calculated == item.pricelist_id:
+            elif 'fixed_price' not in vals and not item.base_pricelist_id and not item.pricelist_id and item.pricelist_calculated:
                 item.fixed_price = item.pricelist_calculated_price
         return res
 
@@ -367,7 +367,7 @@ class ProductProduct(models.Model):
             items = []
             for item in brand_pricelist_items:
                 real_item = product_id.item_ids.filtered(lambda i: i.pricelist_id == item.base_pricelist_id)
-                items.append((0, 0, {'pricelist_id': item.base_pricelist_id.id or item.pricelist_id.id,
+                items.append((0, 0, {'pricelist_id': item.base_pricelist_id.id,
                                                            'pricelist_calculated': item.pricelist_id.id,
                                                            'product_id': product_id.id,
                                                            'applied_on': '1_product',
@@ -414,7 +414,7 @@ class ProductProduct(models.Model):
                     product.item_brand_ids.unlink()
                     product.create_product_pricelist_items(brand)
                 else:
-                    brand_pricelist_items =self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
+                    brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
                     if brand_pricelist_items:
                         product.item_ids.unlink()
                         product.create_product_pricelist_items(brand)
@@ -450,9 +450,10 @@ class ProductTemplate(models.Model):
                            domain=[('pricelist_id.active', '=', True),('pricelist_id.base_pricelist', '=', True),
                                    '|',('pricelist_calculated', '=', False),('pricelist_calculated.brand_group_id','=',False)])
 
-
     item_brand_ids = fields.One2many('product.pricelist.item', 'product_tmpl_id',
-                                         domain=[('brand_group_id', '!=', False),('pricelist_calculated', '!=', False)])
+                                     domain=['&', '|', '&', ('pricelist_id', '=', False),
+                                             ('pricelist_calculated.brand_group_id', '!=', False),
+                                             ('brand_group_id', '!=', False), ('pricelist_calculated', '!=', False)])
 
 class ProductBrand(models.Model):
     _inherit = 'product.brand'
