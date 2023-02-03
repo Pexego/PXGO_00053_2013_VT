@@ -111,7 +111,7 @@ class ProductPricelistItemListener(Component):
     _apply_on = ['product.pricelist.item']
 
     def on_record_write(self, record, fields=None):
-        up_fields = ["fixed_price","calculated_price"]
+        up_fields = ["fixed_price"]
         if record.pricelist_id.web:
             for field in up_fields:
                 if field in fields:
