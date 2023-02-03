@@ -146,7 +146,7 @@ class SaleOrderShippingCost(models.TransientModel):
         fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.fuel / 100)
         service_price_list = [
             {
-                'price': fuel_added_price * (1 + supplement.added_percentage / 100),
+                'price': round(fuel_added_price * (1 + supplement.added_percentage / 100), 2),
                 'service_name': f'{supplement.service_id.name}',
                 'sale_order_shipping_cost_id': self.id
             }
