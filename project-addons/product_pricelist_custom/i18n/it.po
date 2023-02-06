@@ -215,6 +215,7 @@ msgstr "Ulteriori sconti"
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_res_partner_pricelist_brand_ids
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_res_users_pricelist_brand_ids
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_sale_order_pricelist_brand_ids
 msgid "Pricelist Brand"
 msgstr "Marca di listino"
 

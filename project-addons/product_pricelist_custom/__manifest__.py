@@ -15,7 +15,8 @@
         "views/brand_group_view.xml",
         "views/product_view.xml",
         "views/partner_view.xml",
-        "security/product_pricelist_custom.xml"
+        "security/product_pricelist_custom.xml",
+        "views/sale_view.xml"
     ],
     "demo": [],
     'auto_install': False,

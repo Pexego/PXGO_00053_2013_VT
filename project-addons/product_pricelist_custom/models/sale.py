@@ -1,4 +1,9 @@
-from odoo import models,api
+from odoo import models,api, fields
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    pricelist_brand_ids = fields.Many2many(related="partner_id.pricelist_brand_ids", readonly=1)
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
