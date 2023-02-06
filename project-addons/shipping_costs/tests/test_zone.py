@@ -26,10 +26,10 @@ class TestPostalCodeRange(SavepointCase):
             'first_code': '1',
             'last_code': '10'
         })
-        self.assertFalse(range_not_full_at_creation.first_code == '1')
-        self.assertTrue(range_not_full_at_creation.first_code == '00001')
-        self.assertFalse(range_not_full_at_creation.last_code == '10')
-        self.assertTrue(range_not_full_at_creation.last_code == '00010')
+        self.assertNotEqual(range_not_full_at_creation.first_code, '1')
+        self.assertEqual(range_not_full_at_creation.first_code, '00001')
+        self.assertNotEqual(range_not_full_at_creation.last_code, '10')
+        self.assertEqual(range_not_full_at_creation.last_code, '00010')
 
     def test_check_postal_code_is_in_range(self):
         self.assertTrue(self.postal_code_range.is_postal_code_in_range('10023'))

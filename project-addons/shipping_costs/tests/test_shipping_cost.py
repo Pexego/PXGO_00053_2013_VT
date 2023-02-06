@@ -225,5 +225,5 @@ class TestSaleOrderShippingCost(SavepointCase):
         weight_result = self.sale_order_shipping_cost.calculate_shipping_cost(pallet_mode=False)
         pallet_prices_obtained = [elem['price'] for elem in pallet_result]
         weight_prices_obtained = [elem['price'] for elem in weight_result]
-        self.assertTrue(pallet_prices_expected == pallet_prices_obtained)
-        self.assertTrue(weight_prices_expected == weight_prices_obtained)
+        self.assertEqual(pallet_prices_expected, pallet_prices_obtained)
+        self.assertEqual(weight_prices_expected, weight_prices_obtained)
