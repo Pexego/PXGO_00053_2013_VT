@@ -84,20 +84,17 @@
                     </group>
                 </group>
                 <group name="pricing_brands" attrs="{'invisible':[('item_brand_ids','=',[])]}">
-                    <separator string="Brands Pricing"/>
-                    <group colspan="8" col="8">
-                        <group>
-                            <field name="item_brand_ids" nolabel="1">
-                                <tree string="Pricelist Items 2" editable="bottom" create="false" delete="false"
-                                      default_order="pricelist_sequence">
-                                    <field name="pricelist_id" invisible="1"/>
-
-                                    <field name="pricelist_sequence" invisible="1"/>
-                                    <field name="pricelist_calculated" readonly="True"/>
-                                    <field name="pricelist_calculated_price" readonly="True"/>
-                                </tree>
-                            </field>
-                        </group>
+                    <separator string="Brands Pricing" colspan="8"/>
+                    <group>
+                        <field name="item_brand_ids" nolabel="1" colspan="4">
+                            <tree string="Pricelist Items 2" editable="bottom" create="false" delete="false"
+                                  default_order="pricelist_calculated_sequence">
+                                <field name="pricelist_id" invisible="1"/>
+                                <field name="pricelist_calculated_sequence" invisible="1"/>
+                                <field name="pricelist_calculated" readonly="True"/>
+                                <field name="pricelist_calculated_price" readonly="True"/>
+                            </tree>
+                        </field>
                     </group>
                 </group>
                 <group name="relations">

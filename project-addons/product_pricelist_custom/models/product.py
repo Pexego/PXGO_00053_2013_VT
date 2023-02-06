@@ -135,6 +135,7 @@ class ProductPricelistItem(models.Model):
     name_pricelist = fields.Char(related='pricelist_id.name', readonly=True)
     base = fields.Selection(selection_add=[('standard_price_2_inc', 'Cost 2')])
     pricelist_sequence = fields.Integer(related='pricelist_id.sequence', readonly=True)
+    pricelist_calculated_sequence = fields.Integer(related='pricelist_calculated.sequence', readonly=True)
     calculated_brand_group_id = fields.Many2one(related="pricelist_calculated.brand_group_id")
     brand_group_id = fields.Many2one(related="pricelist_id.brand_group_id")
     item_id = fields.Many2one('product.pricelist.item')
