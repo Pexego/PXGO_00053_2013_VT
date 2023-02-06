@@ -87,7 +87,7 @@ class ProductListener(Component):
             "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
-            "discontinued", "state", "sale_in_groups_of", "replacement_id",
+            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
             "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
         ]
 
