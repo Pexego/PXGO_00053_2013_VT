@@ -55,7 +55,7 @@ class PickingRatedWizard(models.TransientModel):
             ) % number_product_without_weight
         if number_product_without_volume != 0:
             message_products_volume = (
-                "%s of the product(s) of the order don't have set the weights,"
+                "%s of the product(s) of the order don't have set the volumes,"
                 " please take the shipping cost as an approximation"
             ) % number_product_without_volume
         return super().create({
