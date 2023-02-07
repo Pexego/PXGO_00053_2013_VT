@@ -8,6 +8,10 @@
         <field name="arch" type="xml">
             <field name="currency_id" position="before">
                 <field name="brand_group_id"/>
+                <field name="default_brand_pricelist" attrs="{'invisible': ['|',('brand_group_id', '=', False),
+                                                        ('base_pricelist', '=', True)]}"/>
+                <field name="team_id" attrs="{'invisible': ['|',('brand_group_id', '=', False),
+                                                 ('base_pricelist', '=', True)]}"/>
             </field>
             <field name="company_id" position="after">
                 <field name="sequence"/>

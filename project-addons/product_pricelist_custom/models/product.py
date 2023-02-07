@@ -28,10 +28,55 @@ class ProductPricelist(models.Model):
     # This check allows you to add pricelist to product item_ids field(Check on PVD's y PVI's and Brand pricelists base)
     base_pricelist = fields.Boolean("Pricelist base")
     brand_group_id = fields.Many2one("brand.group")
+    default_brand_pricelist = fields.Boolean("Default Brand Pricelist", copy=False)
+    team_id = fields.Many2one('crm.team', copy=False)
 
     display_name = fields.Char(
         compute='_compute_display_name',
         string='Display Name', store=True, readonly=True)
+    @api.multi
+    def set_default_brand_pricelists(self, partners):
+        """ This method search all pending default_brand_pricelists for partners and assign them to them
+            :param partners: list of res.partner object
+        """
+        for partner in partners:
+            domain = [('brand_group_id', '!=', False),
+                      ('base_pricelist', '=', False),
+                      ('default_brand_pricelist', '=', True)]
+            if partner.pricelist_brand_ids:
+                domain += [('brand_group_id', 'not in', partner.pricelist_brand_ids.mapped('brand_group_id').ids)]
+                if partner.team_id:
+                    domain += ['|', ('team_id', '=', False), ('team_id', '=', partner.team_id.id)]
+                else:
+                    domain += [('team_id', '=', False)]
+            default_brand_pricelists = self.env['product.pricelist'].search(domain)
+            if default_brand_pricelists:
+                brand_pricelists = partner.pricelist_brand_ids + default_brand_pricelists
+                partner.pricelist_brand_ids = [(6, 0, brand_pricelists.ids)]
+
+
+
+    @api.constrains('default_brand_pricelist', 'brand_group_id', 'team_id')
+    def _check_only_one_default_pricelist(self):
+        """ This method checks if there is default_brand_pricelist and no brand_group_id or
+                there are another default pricelist for this brand_group_id and team_id
+                (If no team_id is defined applied to all)
+        :return: ValidationError
+        """
+        for pricelist in self:
+            if pricelist.default_brand_pricelist:
+                if not pricelist.brand_group_id:
+                    raise ValidationError(_("You cannot check Default Pricelist if there is no Brand group defined."))
+                else:
+                    domain = ['&', '&', ('id', '!=', pricelist.id), ('default_brand_pricelist', '=', True),
+                              ('brand_group_id', '=', pricelist.brand_group_id.id)]
+                    if pricelist.team_id:
+                        domain += ['|', ('team_id', '=', False), ('team_id', '=', pricelist.team_id.id)]
+                    pricelists = self.env['product.pricelist'].search(domain)
+                    if pricelists:
+                        raise ValidationError(
+                            _("You cannot set more than one default brand pricelist for this sales team. %s --> %s")
+                            %(pricelist.brand_group_id.name, pricelists.mapped("name")))
 
     @api.multi
     @api.depends('name', 'brand_group_id')
@@ -163,14 +208,15 @@ class ProductPricelistItem(models.Model):
         :return: ValidationError if the format is not correct
         """
         for item in self:
-            matched = re.match('^[0-9]+(\.[0-9]+)?(,[0-9]+)*$', item.price_extra_discounts)
-            if matched:
-                discounts = eval(item.price_extra_discounts)
-                if isinstance(discounts, (int, float)) or all([x for x in discounts if (isinstance(x, (int, float)))]):
-                    return
-            raise ValidationError(_("The pricelist item %s does not comply with the format of extra discounts."
-                                    "It should be a number (integer or float) or a list of them separated by commas.")
-                                  % item.name)
+            if item.price_extra_discounts:
+                matched = re.match('^[0-9]+(\.[0-9]+)?(,[0-9]+)*$', item.price_extra_discounts)
+                if matched:
+                    discounts = eval(item.price_extra_discounts)
+                    if isinstance(discounts, (int, float)) or all([x for x in discounts if (isinstance(x, (int, float)))]):
+                        return
+                raise ValidationError(_("The pricelist item %s does not comply with the format of extra discounts."
+                                        "It should be a number (integer or float) or a list of them separated by commas.")
+                                      % item.name)
 
     @api.onchange('applied_on')
     def _onchange_applied_on(self):
@@ -191,10 +237,10 @@ class ProductPricelistItem(models.Model):
         for item in self:
             if item.product_brand_id:
                 item.name = _("Brand: %s") % item.product_brand_id.name
-            if item.price_extra_discounts:
+            if item.compute_price == 'formula' and item.price_extra_discounts:
                 discounts = eval(item.price_extra_discounts)
                 if isinstance(discounts, (int, float)):
-                    discounts_formatted = discounts
+                    discounts_formatted = f'{discounts} %'
                 else:
                     discounts_formatted = ','.join(f' {discount} %' for discount in discounts)
                 item.price = _("%s; %s of extra discounts") %(item.price,discounts_formatted)

@@ -200,7 +200,7 @@ msgid "Specify a brand if this rule only applies to productsbelonging to this br
 msgstr "Especifica una marca si el producto solo aplica a una determinada marca. Mantener vacío en cualquier otro caso."
 
 #. module: product_pricelist_custom
-#: code:addons/product_pricelist_custom/models/product.py:155
+#: code:addons/product_pricelist_custom/models/product.py:217
 #, python-format
 msgid "The pricelist item %s does not comply with the format of extra discounts.It should be a number (integer or float) or a list of them separated by commas."
 msgstr "El elemento de la tarifa %s no cumple con el formato de los descuentos extras. Debería ser un número (entero o real) o una lista de números separados por comas."
@@ -243,3 +243,31 @@ msgstr "Marca"
 #, python-format
 msgid "%s; %s of extra discounts"
 msgstr "%s; %s de descuento extra"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_default_brand_pricelist
+msgid "Default Brand Pricelist"
+msgstr "Tarifa especial de marca por defecto"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_team_id
+msgid "Team"
+msgstr "Equipo de Ventas"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:69
+#, python-format
+msgid "You cannot check Default Pricelist if there is no Brand group defined."
+msgstr "No se puede marcar una tarifa especial de marca por defecto si no hay una agrupación de marcas definida"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:78
+#, python-format
+msgid "You cannot set more than one default brand pricelist for this sales team. %s --> %s"
+msgstr "No se puede marcar más de una tarifa especial de marca por defecto para este equipo de ventas. %s --> %s"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/res_partner.py:23
+#, python-format
+msgid "You cannot add a pricelist (%s) which sales team (%s) != partner sales team (%s)"
+msgstr "No puedes añadir una tarifa (%s) cuyo equipo de ventas (%s)  sea distinto del equipo de ventas del cliente (%s)"

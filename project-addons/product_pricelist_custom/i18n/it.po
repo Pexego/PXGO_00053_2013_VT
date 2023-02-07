@@ -196,7 +196,7 @@ msgid "Specify a brand if this rule only applies to productsbelonging to this br
 msgstr "Specifica un marchio se il prodotto si applica solo a un determinato marchio. Mantenere vuoto in ogni altro caso."
 
 #. module: product_pricelist_custom
-#: code:addons/product_pricelist_custom/models/product.py:155
+#: code:addons/product_pricelist_custom/models/product.py:217
 #, python-format
 msgid "The pricelist item %s does not comply with the format of extra discounts.It should be a number (integer or float) or a list of them separated by commas."
 msgstr "L'elemento tariffario %s non è conforme al formato degli sconti extra. Dovrebbe essere un numero (intero o reale) o un elenco di numeri separati da virgole."
@@ -239,3 +239,31 @@ msgstr "Marca"
 #, python-format
 msgid "%s; %s of extra discounts"
 msgstr "%s; %s  sconto extra"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_default_brand_pricelist
+msgid "Default Brand Pricelist"
+msgstr "Tariffa speciale di marca predefinita"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_team_id
+msgid "Team"
+msgstr "Gruppo Vendite"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:69
+#, python-format
+msgid "You cannot check Default Pricelist if there is no Brand group defined."
+msgstr "Non è possibile contrassegnare una tariffa brand predefinita speciale se non esiste un raggruppamento brand definito"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/product.py:78
+#, python-format
+msgid "You cannot set more than one default brand pricelist for this sales team. %s --> %s"
+msgstr "Per questo team di vendita non è possibile contrassegnare più di una tariffa speciale predefinita per il marchio. %s --> %s"
+
+#. module: product_pricelist_custom
+#: code:addons/product_pricelist_custom/models/res_partner.py:23
+#, python-format
+msgid "You cannot add a pricelist (%s) which sales team (%s) != partner sales team (%s)"
+msgstr "Non puoi aggiungere una tariffa (%s) il cui team di vendita (%s) è diverso dal team di vendita del cliente (%s)"
