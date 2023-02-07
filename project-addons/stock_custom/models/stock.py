@@ -102,6 +102,11 @@ class StockPicking(models.Model):
         ):
             raise exceptions.Warning(_("You can not modify the shipping address"))
 
+    def action_prueba(self):
+        action = self.env.ref('stock.stock_move_action').read()[0]
+        action['domain'] = [('picking_id', '=', self.id)]
+        return action
+
 
 class StockMoveLine(models.Model):
 
@@ -141,7 +146,7 @@ class StockMove(models.Model):
 
     date_done = fields.Datetime(related='picking_id.date_done', store=True)
     date_expected_conf = fields.Boolean(related='container_id.conf', store=False)
-
+    picking_state = fields.Selection(related='picking_id.state')
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
         for move in self:

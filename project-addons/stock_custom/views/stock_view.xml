@@ -159,7 +159,71 @@
         </field>
     </record>
 
+    <record id="view_move_tree_add_serial_number" model="ir.ui.view">
+        <field name="name">stock.move.tree.add.serial.number</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_tree"/>
+        <field name="arch" type="xml">
+            <field name="date" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="sale_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="picking_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="reference" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="location_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="location_dest_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="user_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="parent_partner" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="string_availability_info" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="real_stock" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="state" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <tree>
+                <field name="picking_state" invisible="1"/>
+                <field name="reserved_availability" attrs="{'invisible':[('picking_state','=','done')]}"/>
+                <field name="quantity_done" attrs="{'invisible':[('picking_state','=','done')]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_picking_form_add_button_lots" model="ir.ui.view">
+        <field name="name">stock.picking.form.add.button.lots</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_picking_move_tree']" position="after">
+                <div name="button_box" position="inside">
+                    <button type="object" name="action_prueba"
+                            class="oe_stat_button"
+                            icon="fa-paint-brush"
+                            string="Lots"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
     <record id="stock.stock_move_action" model="ir.actions.act_window">
+        <field name="view_id" ref="view_move_tree_add_serial_number"/>
         <field name="search_view_id" ref="view_move_review_search"/>
     </record>
 
@@ -308,6 +372,7 @@
             </field>
         </field>
     </record>
+
     <record id="view_carrier_racking_ref_no_readonly" model="ir.ui.view">
             <field name="name">view.carrier.racking.ref.no.readonly</field>
             <field name="model">stock.picking</field>
