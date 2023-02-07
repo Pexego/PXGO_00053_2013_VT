@@ -285,3 +285,28 @@ msgstr "purchase.suggestions.statistics"
 #: model:ir.model,name:purchase_suggestions.model_purchase_suggestions_wizard
 msgid "purchase.suggestions.wizard"
 msgstr "purchase.suggestions.wizard"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_report_file_name
+msgid "Report name"
+msgstr "Nombre del Informe"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard_report_form
+msgid "Export (XLS)"
+msgstr "Exportar (XLS)"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard_report_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_form
+msgid "Export"
+msgstr "Exportar"
+
+#. module: purchase_suggestions
+#: model:ir.actions.act_window,name:purchase_suggestions.action_open_purchase_suggestions_wizard_report
+msgid "Purchase Suggestions Report"
+msgstr "Informe de sugerencias de compras"
