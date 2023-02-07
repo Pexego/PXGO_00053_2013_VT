@@ -14,7 +14,7 @@
                         <tr style="font-size:12px; background-color:#da1f2e; color:white;">
                             <t t-if="not print_hs_code">
                                 <th width="22%" style="vertical-align:middle;"><strong>Reference</strong></th>
-                                <th width="40%" style="vertical-align:middle;"><strong>Description</strong></th>
+                                <th width="39%" style="vertical-align:middle;"><strong>Description</strong></th>
                                 <th width="4%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
                                 <t t-if="country_code == 'ES'"> <!-- Esto es para Odoo España (Amazon) -->
                                     <t t-if="o.tax_in_price_unit">
@@ -23,7 +23,7 @@
                                     <t t-if="not o.tax_in_price_unit">
                                         <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
                                     </t>
-                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
+                                    <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
                                     <t t-if="o.tax_in_price_unit">
                                         <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount (VAT excluded)</strong></th>
                                     </t>
@@ -33,7 +33,7 @@
                                 </t>
                                 <t t-if="country_code != 'ES'">
                                     <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
-                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
+                                    <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
                                     <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
                                 </t>
                                 <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Delivery Note</strong></th>
@@ -72,7 +72,7 @@
                             <t t-set="aux" t-value="0"/>
                             <t t-foreach="o.sale_order_ids" t-as="p">
                                 <t t-set="control" t-value="0"/>
-                                <tr style="font-size:14px">
+                                <tr style="font-size:14px; background-color:#DCDCDC;">
                                     <t t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
 
                                         <t t-if="l1.sale_order_id.name == p.name">
@@ -147,10 +147,10 @@
                                                 <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                             </t>
                                             <t t-if="l1.product_id.description_editable">
-                                                <td style="font-size:10px"><span t-field="l1.name"/></td>
+                                                <td style="font-size:11px"><span t-field="l1.name"/></td>
                                             </t>
                                             <t t-if="not l1.product_id.description_editable">
-                                                <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
+                                                <td style="font-size:11px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                             </t>
                                             <t t-set="decimal" t-value="l1.quantity % 1"/>
                                             <t t-if="not decimal == 0">
@@ -173,7 +173,7 @@
                                                 <td class="text-center"/>
                                             </t>
                                         </tr>
-                                        <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                        <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:10px">
                                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
                                                 <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
                                                 <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
@@ -234,10 +234,10 @@
                                                 <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                             </t>
                                             <t t-if="l1.product_id.description_editable">
-                                                <td style="font-size:10px"><span t-field="l1.name"/></td>
+                                                <td style="font-size:11px"><span t-field="l1.name"/></td>
                                             </t>
                                             <t t-if="not l1.product_id.description_editable">
-                                                <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
+                                                <td style="font-size:11px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                             </t>
                                             <t t-set="decimal" t-value="l1.quantity % 1"/>
                                             <t t-if="not decimal == 0">
@@ -260,7 +260,7 @@
                                             <t t-if="l1.product_id.type == 'service'">
                                                 <td class="text-center"/>
                                             </t>
-                                             <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                             <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:10px">
                                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
                                                 <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
                                                 <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
@@ -299,10 +299,10 @@
                                         <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                     </t>
                                     <t t-if="l1.product_id.description_editable">
-                                          <td style="font-size:10px"><span t-field="l1.name"/></td>
+                                          <td style="font-size:11px"><span t-field="l1.name"/></td>
                                     </t>
                                     <t t-if="not l1.product_id.description_editable">
-                                          <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
+                                          <td style="font-size:11px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                     </t>
                                     <t t-set="decimal" t-value="l1.quantity % 1"/>
                                     <t t-if="not decimal == 0">
@@ -325,7 +325,7 @@
                                     <t t-if="l1.product_id.type == 'service'">
                                         <td class="text-center"/>
                                     </t>
-                                     <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:8px">
+                                     <tr t-if="pack and o.partner_id.commercial_partner_id.explode_kits_in_pdf" t-foreach="pack.bom_line_ids" t-as="p_line" style="font-size:10px">
                                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==p_line.product_id)"/>
                                                 <td t-if="len(product_reference)==1">(<span t-field="product_reference.customer_reference"/>) <span t-field="p_line.product_id"/></td>
                                                 <td t-if="len(product_reference)!=1"><span t-field="p_line.product_id"/></td>
