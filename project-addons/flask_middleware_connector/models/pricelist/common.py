@@ -60,7 +60,7 @@ class ProductPricelistListener(Component):
 
     def on_record_unlink(self, record):
         if record.web:
-            record.with_delay(priority=11, eta=80).unlink_pricelist(fields=fields)
+            record.with_delay(priority=11, eta=80).unlink_pricelist()
 
 class ProductPricelistItem(models.Model):
     _inherit = 'product.pricelist.item'
