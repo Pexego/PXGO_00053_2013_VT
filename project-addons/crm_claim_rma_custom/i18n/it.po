@@ -562,6 +562,7 @@ msgstr "Ordine Aggiunto"
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_sequence
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_sequence
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_sequence
 msgid "Sequence"
 msgstr "Sequenza"
 
@@ -614,3 +615,15 @@ msgstr "Marca"
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.product_add_incidences
 msgid "Incidences"
 msgstr "Incidenza"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:86
+#, python-format
+msgid "<ul><li> Officer: %s</il><li> Final Received Date: %s <b>&rarr;</b> %s</il></ul>"
+msgstr "<ul><li> Responsabile: %s</il><li> Data di ricezione finale: %s <b>&rarr;</b> %s</il></ul>"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:80
+#, python-format
+msgid "<ul><li> Officer: %s</il><li> Received Date: %s <b>&rarr;</b> %s</il></ul>"
+msgstr "<ul><li> Responsabile: %s</il><li> Data di ricezione: %s <b>&rarr;</b> %s</il></ul>"

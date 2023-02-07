@@ -31,6 +31,9 @@ class StockContainer(models.Model):
         ('road', 'Road'),
     ])
     dimensions = fields.Char(string="CBM/KG", help="Dimensions")
+    container_type = fields.Char(string="Container type", help="Container type")
+    cubic_meters = fields.Float(string="CBM", help="Cubic Meters")
+    kilograms = fields.Float(string="KG", help="Kilograms")
     ready = fields.Date(string="Ready", help="Ready merchandise date")
     etd = fields.Date(string="ETD", help="Date of departure of transport")
     eta = fields.Date(string="ETA", help="Arrival date at port / destination")
@@ -51,6 +54,12 @@ class StockContainer(models.Model):
     incoterm = fields.Many2one('stock.incoterms', string='Incoterm', ondelete="restrict")
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
+    customs_channel = fields.Selection([
+        ('red', '🔴 - Red'),
+        ('orange', '🟠 - Orange'),
+        ('yellow', '🟡 - Yellow'),
+        ('green', '🟢 - Green')
+    ],string="Customs Channel")
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(string="Departure", help="Transport departure")
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")

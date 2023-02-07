@@ -349,6 +349,33 @@ msgid "RMP partner"
 msgstr "Empresa RMP"
 
 #. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_line_product_qty
+msgid "Product Qty"
+msgstr "Cantidad"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_line_partner_id
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:49
+#: code:addons/crm_rma_advance_location/claim_make_picking_to_refurbish.py:33
+msgid "All units are already processed"
+msgstr "Todas las unidades han sido procesadas"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:130
+#: code:addons/crm_rma_advance_location/claim_make_picking_to_refurbish.py:89
+msgid "You cannot send more than %i of this product %s"
+msgstr "No puedes mandar más de %i uds de este produto %s"
+
+#. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to refurbish stock"
 msgstr "Producto a reacondicionamiento"

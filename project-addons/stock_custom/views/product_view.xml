@@ -136,7 +136,8 @@
                 <attribute name="filter_domain"></attribute>
             </field>
             <filter name="services" position="after">
-                <filter string="Main supplier not contains outlet" name="main_supplier_outlet" domain="[('seller_id.name','not ilike','outlet')]"/>
+                <filter string="Main supplier not contains outlet" name="main_supplier_outlet"
+                        domain="[('categ_id.name', 'not in', ['Outlet', 'O1', 'O2' , 'Descatalogados'])]" context="{'lang': 'es_ES'}" />
                 <filter string="New Category" name="categ_new" domain="[('categ_id.name','like','NUEVOS')]"/>
                 <filter string="One month ago" name="one_month_ago" domain="[('date_first_incoming','>=',(datetime.datetime.now() - datetime.timedelta(days=31)).strftime('%Y-%m-%d'))]"/>
             </filter>
@@ -167,6 +168,31 @@
             </field>
         </field>
     </record>
+
+    <record id="product_normal_form_view_custom" model="ir.ui.view">
+        <field name="name">product.normal.form.view.custom</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </field>
+        </field>
+    </record>
+     
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="name">product.normal.form.view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record>
+ 
 
     <record id="product_product_last_purchase_info_form_view" model="ir.ui.view">
         <field name="name">product.product.last.purchase.info.form</field>

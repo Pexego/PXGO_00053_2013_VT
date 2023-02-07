@@ -232,6 +232,12 @@ msgid "Please add some products before confirming the customization request"
 msgstr "Veuillez ajouter un produit avant de confirmer la demande de personnalisation"
 
 #. module: kitchen
+#: code:addons/kitchen/models/picking.py:103
+#, python-format
+msgid "This picking cannot be released as it has a customization assigned to it"
+msgstr "Le bon de livraison ne peut être libéré car il est associé à une personnalisation"
+
+#. module: kitchen
 #: code:addons/kitchen/models/kitchen_customization.py:69
 msgid "You can't create a customization with a quantity of less than one of a product"
 msgstr "Vous ne pouvez pas créer une personnalisation de ce produit avec une quantité inférieure à un"

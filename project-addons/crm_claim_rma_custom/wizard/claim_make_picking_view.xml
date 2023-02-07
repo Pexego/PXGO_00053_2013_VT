@@ -5,12 +5,15 @@
         <field name="model">claim_make_picking.wizard</field>
         <field name="inherit_id" ref="crm_claim_rma.view_claim_picking"/>
         <field name="arch" type="xml">
-            <field name="claim_line_dest_location" position="after">
-                <group>
+            <group name="locations" position="after">
+                <group readonly="1" invisible="context.get('product_return', False)">
                     <field name="odoo_management"/>
                     <field name="not_sync"/>
                 </group>
-            </field>
+            </group>
+            <xpath expr="//field[@name='claim_line_ids']/tree/field[@name='claim_line_id']" position="after">
+                <field name="sequence" readonly="1"/>
+          </xpath>
         </field>
     </record>
 </odoo>

@@ -707,11 +707,6 @@ msgid "Merchandise Not As Described"
 msgstr ""
 
 #. module: crm_claim_rma
-#: selection:claim.line,claim_origine:0
-msgid "Exchange request"
-msgstr ""
-
-#. module: crm_claim_rma
 #: model:ir.model,name:crm_claim_rma.model_substate_substate
 msgid "substate that precise a given state"
 msgstr ""
@@ -730,12 +725,6 @@ msgstr ""
 #. module: crm_claim_rma
 #: view:claim.line:0
 msgid "Current"
-msgstr ""
-
-#. module: crm_claim_rma
-#: selection:claim.line,claim_origine:0
-#: selection:crm.claim,claim_type:0
-msgid "Other"
 msgstr ""
 
 #. module: crm_claim_rma
