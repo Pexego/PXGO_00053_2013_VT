@@ -199,7 +199,7 @@
             </field>
             <tree>
                 <field name="picking_state" invisible="1"/>
-                <field name="reserved_availability" attrs="{'invisible':[('picking_state','=','done')]}"/>
+                <field name="reserved_availability" attrs="{'invisible':[('picking_state','=','done')]}" string="Quantity Reserved"/>
                 <field name="quantity_done" attrs="{'invisible':[('picking_state','=','done')]}"/>
             </tree>
         </field>
