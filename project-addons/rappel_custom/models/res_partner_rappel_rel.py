@@ -68,14 +68,19 @@ class ResPartnerRappelRel(models.Model):
 
         return invoice_lines, refund_lines
 
+    def get_orders(self):
+        return self.env['sale.order'].search(
+            [('partner_id', 'child_of', self.partner_id.id),
+             ('state', 'in', ('done', 'sale'))])
+
     def _calculate_pending_to_invoice(self):
         products = self.rappel_id.get_products()
+        orders = self.get_orders()
         order_lines = self.env['sale.order.line'].search(
-            [('order_id.partner_id', 'child_of', self.partner_id.id),
-             ('order_id.state', 'in', ('done', 'sale')),
+            [('order_id', 'in', orders.ids),
              ('product_id', 'in', products),
              ('invoice_status', '=', 'to invoice')])
-        return sum([x.qty_to_invoice * (x.price_subtotal / x.product_uom_qty) for x in order_lines])
+        return sum([x.qty_to_invoice * (x.price_subtotal / (x.product_uom_qty or 1)) for x in order_lines])
 
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
