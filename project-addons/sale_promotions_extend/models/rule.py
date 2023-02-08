@@ -23,6 +23,8 @@ from odoo.tools.misc import ustr
 from odoo.exceptions import except_orm, UserError
 import re
 
+PRODUCT_UOM_ID = 1
+
 
 class PromotionsRulesConditionsExprs(models.Model):
     _inherit = 'promos.rules.conditions.exps'
@@ -185,7 +187,9 @@ class PromotionsRulesActions(models.Model):
             ('prod_disc_per_qty',
              _('Discount % on one product based on the quantity of another')),
             ('limit_product_units',
-             _('Limit quantity of a product in an order'))
+             _('Limit quantity of a product in an order')),
+            ('cart_disc_perc_exclude_brands',
+             _('Discount % on Sub Total excluding brands')),
             ])
 
     @api.onchange('action_type')
@@ -236,12 +240,19 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'disc_per_product':
             self.product_code = '["tag_product","reg_exp_product_code",quantity(optional)]'
             self.arguments = '0.00'
+
         elif self.action_type == 'prod_disc_per_qty':
             self.product_code = '"product_reference",..."'
             self.arguments = '{"product":discount, ...}'
+
         elif self.action_type == 'limit_product_units':
             self.product_code = '"product_reference",..."'
             self.arguments = '{"product":qty, ...}'
+
+        elif self.action_type == 'cart_disc_perc_exclude_brands':
+            self.product_code = '("brand",...)'
+            self.arguments = '0.00'
+
         return super().on_change()
 
     def create_line(self, vals):
@@ -699,6 +710,25 @@ class PromotionsRulesActions(models.Model):
 
     def action_cart_disc_perc(self, order):
         return super(PromotionsRulesActions, self.with_context({'end_line': True})).action_cart_disc_perc(order)
+
+    def action_cart_disc_perc_exclude_brands(self, order):
+        """
+        Discount % on Sub Total excluding brands
+        """
+
+        amt_untaxed_filtered = sum([line.price_subtotal for line in order.order_line.filtered(lambda l: l.product_id.product_brand_id.name not in eval(self.product_code))])
+
+        args = {
+            'order_id': order.id,
+            'name': self.promotion.name,
+            'price_unit': -(amt_untaxed_filtered * eval(self.arguments) / 100),
+            'product_uom_qty': 1,
+            'promotion_line': True,
+            'product_uom': PRODUCT_UOM_ID,
+            'product_id': self.env.ref('commercial_rules.product_discount').id
+        }
+        self.create_line(args)
+        return True
 
 
 class PromotionsRules(models.Model):

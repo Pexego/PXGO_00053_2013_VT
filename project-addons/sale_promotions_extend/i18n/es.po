@@ -702,6 +702,12 @@ msgstr "Descuento % en un producto basado en la cantidad de otro"
 msgid "Limit quantity of a product in an order"
 msgstr "Limitar cantidad de un producto en un pedido"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount % on Sub Total excluding brands"
+msgstr "Descuento % en Sub total excluyendo marcas"
+
 #. module: openerp_sale_promotions
 #: code:addons/sale_promotions_extend/models/rules.py:257
 #: code:addons/sale_promotions_extend/models/rules.py:282
