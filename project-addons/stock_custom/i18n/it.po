@@ -37,16 +37,6 @@ msgid "Brand"
 msgstr "Marca"
 
 #. module: stock_custom
-#: model:ir.ui.view,arch_db:stock_custom.stock_picking_form_add_button_lots
-msgid "Lots"
-msgstr "Nº Serie"
-
-#. module: stock_custom
-#:model:ir.ui.view,arch_db:stock_custom.view_move_tree_add_serial_number
-msgid "Quantity Reserved"
-msgstr "Quantità riservata"
-
-#. module: stock_custom
 #: model:ir.ui.view,arch_db:stock_custom.view_stock_history_report_search_group_by_brand
 msgid "Brand"
 msgstr "Marca"
