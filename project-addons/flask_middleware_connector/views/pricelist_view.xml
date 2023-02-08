@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_pricelist_view_add_web" model="ir.ui.view">
+        <field name="name">product.pricelist.add.web</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="before">
+                <field name="web"/>
+            </field>
+        </field>
+    </record>
+</odoo>
