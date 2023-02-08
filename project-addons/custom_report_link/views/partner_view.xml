@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_add_explode_kits_in_pdf" model="ir.ui.view">
+        <field name="name">view.partner.form.add.explode.kits.in.pdf</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="stock_picking_report_valued.view_partner_valued_picking"/>
+        <field name="arch" type="xml">
+            <field name="valued_picking" position="after">
+                <field name="explode_kits_in_pdf"/>
+            </field>
+        </field>
+    </record>
+</odoo>

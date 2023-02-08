@@ -33,7 +33,3 @@ class SaleOrder(models.Model):
                     if not info['access'] and not sale.allow_sale_sim:
                         raise exceptions.UserError(_("Order block, the client has too many sims inactive. {}% Active").format(int(info['percentage'])))
         return res
-
-
-
-
