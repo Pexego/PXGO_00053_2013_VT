@@ -455,16 +455,20 @@ class ProductProduct(models.Model):
         """
         brand = vals.get('product_brand_id', False)
         for product in self:
+            if 'product_brand_id' in vals and not brand:
+                product.item_ids.unlink()
+                product.item_brand_ids.unlink()
+                continue
             if brand and product.product_brand_id.id != brand:
-                if product.item_brand_ids:
+                if product.item_brand_ids or not product.product_brand_id.id:
                     product.item_ids.unlink()
                     product.item_brand_ids.unlink()
                     product.create_product_pricelist_items(brand)
-                else:
-                    brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
-                    if brand_pricelist_items:
-                        product.item_ids.unlink()
-                        product.create_product_pricelist_items(brand)
+                    continue
+                brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
+                if brand_pricelist_items:
+                    product.item_ids.unlink()
+                    product.create_product_pricelist_items(brand)
         res = super().write(vals)
         if 'item_ids' in vals:
             prices_to_update = self.get_list_updated_prices()
