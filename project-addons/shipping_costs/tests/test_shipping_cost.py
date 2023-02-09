@@ -9,7 +9,15 @@ class TestShippingCost(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.country = cls.env['res.country'].create({'name': 'Test Country'})
+        cls.postal_code_format = cls.env['postal.code.format'].create({
+            'name': 'Test format',
+            'regex': r'\A(\d{5})$',
+            'postal_code_sample': '12345'
+        })
+        cls.country = cls.env['res.country'].create({
+            'name': 'Test Country',
+            'postal_code_format_id': cls.postal_code_format.id
+        })
         cls.partner = cls.env['res.partner'].create({
             'company_type': 'person',
             'name': 'Test partner',
@@ -106,7 +114,15 @@ class TestSaleOrderShippingCost(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.country = cls.env['res.country'].create({'name': 'Test Country'})
+        cls.postal_code_format = cls.env['postal.code.format'].create({
+            'name': 'Test format',
+            'regex': r'\A(\d{5})$',
+            'postal_code_sample': '12345'
+        })
+        cls.country = cls.env['res.country'].create({
+            'name': 'Test Country',
+            'postal_code_format_id': cls.postal_code_format.id
+        })
         cls.partner = cls.env['res.partner'].create({
             'company_type': 'person',
             'name': 'Test partner',

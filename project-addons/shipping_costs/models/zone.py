@@ -18,6 +18,7 @@ class ShippingZone(models.Model):
     def is_postal_code_in_zone(self, code_to_check):
         """
         Checks if the given postal code is in this zone.
+        NOTE: We assume code_to_check fts with postal code's format
 
         Parameters
         ----------
@@ -40,9 +41,13 @@ class PostalCodeRange(models.Model):
     """
     _name = 'postal.code.range'
 
-    first_code = fields.Char(string='First', size=5, required=True)
-    last_code = fields.Char(string='Last', size=5, required=True)
+    first_code = fields.Char(string='First', size=10, required=True)
+    last_code = fields.Char(string='Last', size=10, required=True)
     shipping_zone_id = fields.Many2one('shipping.zone', string='Zone')
+    postal_code_format_id = fields.Many2one(
+        str='Postal code format',
+        related='shipping_zone_id.country_id.postal_code_format_id'
+    )
 
     def is_postal_code_in_range(self, code_to_check):
         """
@@ -57,26 +62,7 @@ class PostalCodeRange(models.Model):
         -------
             If code_to_check in [first_code, last_code]
         """
-        return self.first_code <= f'{code_to_check:0>5}' <= self.last_code
-
-    @api.model
-    def create(self, vals):
-        # we complete with zeros on the left until we have 5 characters on postal_codes
-        if vals.get('first_code', False):
-            vals['first_code'] = f'{vals["first_code"]:0>5}'
-        if vals.get('last_code', False):
-            vals['last_code'] = f'{vals["last_code"]:0>5}'
-
-        return super().create(vals)
-
-    @api.multi
-    def write(self, vals):
-        # we complete with zeros on the left until we have 5 characters on postal_codes
-        if vals.get('first_code', False):
-            vals['first_code'] = f'{vals["first_code"]:0>5}'
-        if vals.get('last_code', False):
-            vals['last_code'] = f'{vals["last_code"]:0>5}'
-        return super().write(vals)
+        return self.first_code <= code_to_check <= self.last_code
 
     @api.multi
     @api.constrains('first_code', 'last_code')
@@ -86,21 +72,56 @@ class PostalCodeRange(models.Model):
         - code is a numerical str
         - first_code <= last_code
         """
-        regex = r'\A(\d{1,5})'
         for postal_code_range in self:
-            if not re.match(regex, postal_code_range.first_code):
+            if not re.match(self.postal_code_format_id.regex, postal_code_range.first_code):
                 raise UserError(_(
-                    'Not valid postal code value: "%s". Please, use only numbers') % postal_code_range.first_code
-                                )
-            if not re.match(regex, postal_code_range.last_code):
+                    'Not valid postal code value: "%s". Please, try using one like this "%s"') % (
+                    postal_code_range.first_code, self.postal_code_format_id.postal_code_sample
+                ))
+            if not re.match(self.postal_code_format_id.regex, postal_code_range.last_code):
                 raise UserError(_(
-                    'Not valid postal code value: "%s". Please, use only numbers') % postal_code_range.last_code
-                                )
+                    'Not valid postal code value: "%s". Please, try using one like this "%s"') % (
+                    postal_code_range.last_code, self.postal_code_format_id.postal_code_sample
+                ))
             if postal_code_range.first_code > postal_code_range.last_code:
                 raise Warning(_('Error!:: End code is lower than first code.'))
+
+
+class PostalCodeFormat(models.Model):
+    """
+    Models the format that a Postal Code must have
+    """
+    _name = 'postal.code.format'
+
+    name = fields.Char(string='Name')
+    country_ids = fields.One2many('res.country', 'postal_code_format_id', string='Country')
+    regex = fields.Char(
+        string='Regular expression',
+        help='With this regular expression you will tell how is the format of the postal code.'
+    )
+    postal_code_sample = fields.Char(
+        string='Code Sample',
+        help='An example of how the postal code format must be.'
+    )
+
+    @api.multi
+    @api.constrains('regex', 'postal_code_sample')
+    def check_postal_code_sample(self):
+        """
+        Checks if the postal_code_sample chosen fits with the regex
+        """
+        for code_format in self:
+            if not re.match(code_format.regex, code_format.postal_code_sample):
+                raise UserError(_(
+                    'Not valid postal code sample: "%s"') % code_format.postal_code_sample)
 
 
 class Country(models.Model):
     _inherit = 'res.country'
 
     shipping_zone_ids = fields.One2many('shipping.zone', 'country_id', string='Zone')
+    postal_code_format_id = fields.Many2one(
+        'postal.code.format',
+        string='Postal Code Format'
+    )
+

@@ -2,6 +2,36 @@ from odoo.tests.common import SavepointCase
 from odoo.exceptions import ValidationError
 
 
+class TestPostalCodeFormat(SavepointCase):
+    post_install = True
+    at_install = True
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.postal_code_format = cls.env['postal.code.format'].create({
+            'name': 'Test format',
+            'regex': r'\A(\d{5})$',
+            'postal_code_sample': '12345'
+        })
+
+    def test_create_format_with_bad_sample(self):
+        with self.assertRaises(ValidationError):
+            self.env['postal.code.format'].create({
+                'name': 'Test format',
+                'regex': r'\A(\d{5})$',
+                'postal_code_sample': '1345'
+            })
+
+    def test_update_format_with_bad_sample(self):
+        with self.assertRaises(ValidationError):
+            self.postal_code_format.write({'postal_code_sample': '1345'})
+
+    def test_update_format_with_bad_regex(self):
+        with self.assertRaises(ValidationError):
+            self.postal_code_format.write({'regex': 'Bad regex'})
+
+
 class TestPostalCodeRange(SavepointCase):
     post_install = True
     at_install = True
@@ -9,32 +39,53 @@ class TestPostalCodeRange(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.postal_code_format = cls.env['postal.code.format'].create({
+            'name': 'Test format',
+            'regex': r'\A(\d{5})$',
+            'postal_code_sample': '12345'
+        })
+        cls.country = cls.env['res.country'].create({
+            'name': 'Test Country',
+            'postal_code_format_id': cls.postal_code_format.id
+        })
+        cls.shipping_zone = cls.env['shipping.zone'].create({
+            'name': 'Test zone',
+            'country_id': cls.country.id
+        })
         cls.postal_code_range = cls.env['postal.code.range'].create({
             'first_code': '01234',
-            'last_code': '10234'
+            'last_code': '10234',
+            'shipping_zone_id': cls.shipping_zone.id
         })
 
     def test_bad_range_construction(self):
         with self.assertRaises(ValidationError):
             self.env['postal.code.range'].create({
                 'first_code': '99999',
-                'last_code': '00001'
+                'last_code': '00001',
+                'shipping_zone_id': self.shipping_zone.id
             })
 
-    def test_range_with_not_full_postal_code_at_creation_is_created_fully_filled(self):
-        range_not_full_at_creation = self.env['postal.code.range'].create({
-            'first_code': '1',
-            'last_code': '10'
-        })
-        self.assertNotEqual(range_not_full_at_creation.first_code, '1')
-        self.assertEqual(range_not_full_at_creation.first_code, '00001')
-        self.assertNotEqual(range_not_full_at_creation.last_code, '10')
-        self.assertEqual(range_not_full_at_creation.last_code, '00010')
+    def test_first_code_not_fitted_with_the_format(self):
+        with self.assertRaises(ValidationError):
+            self.env['postal.code.range'].create({
+                'first_code': '1',
+                'last_code': '00010',
+                'shipping_zone_id': self.shipping_zone.id
+            })
+
+    def test_last_code_not_fitted_with_the_format(self):
+        with self.assertRaises(ValidationError):
+            self.env['postal.code.range'].create({
+                'first_code': '00001',
+                'last_code': '10',
+                'shipping_zone_id': self.shipping_zone.id
+            })
 
     def test_check_postal_code_is_in_range(self):
         self.assertTrue(self.postal_code_range.is_postal_code_in_range('10023'))
-        self.assertTrue(self.postal_code_range.is_postal_code_in_range('1523'))
-        self.assertFalse(self.postal_code_range.is_postal_code_in_range('13'))
+        self.assertTrue(self.postal_code_range.is_postal_code_in_range('01523'))
+        self.assertFalse(self.postal_code_range.is_postal_code_in_range('00013'))
         self.assertFalse(self.postal_code_range.is_postal_code_in_range('21523'))
 
 
@@ -45,16 +96,23 @@ class TestShippingZone(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.postal_code_range = cls.env['postal.code.range'].create({
-            'first_code': '00123',
-            'last_code': '00200'
+        cls.postal_code_format = cls.env['postal.code.format'].create({
+            'name': 'Test format',
+            'regex': r'\A(\d{5})$',
+            'postal_code_sample': '12345'
+        })
+        cls.country = cls.env['res.country'].create({
+            'name': 'Test Country',
+            'postal_code_format_id': cls.postal_code_format.id
         })
         cls.shipping_zone = cls.env['shipping.zone'].create({
             'name': 'Zona test',
-            'postal_code_ids': [(0, 0, {
-                'first_code': '00123',
-                'last_code': '00200'
-            })]
+            'country_id': cls.country.id
+        })
+        cls.postal_code_range = cls.env['postal.code.range'].create({
+            'first_code': '00123',
+            'last_code': '00200',
+            'shipping_zone_id': cls.shipping_zone.id
         })
 
     def test_check_postal_code_is_in_zone(self):
