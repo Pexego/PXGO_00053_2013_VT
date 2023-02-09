@@ -52,7 +52,11 @@ class ShippingCost(models.Model):
         matches with the transporter selected.
         """
         for shipping_cost in self:
-            if shipping_cost.shipping_zone_id.transporter_id.id != shipping_cost.transporter_id.id:
+            if (
+                shipping_cost.shipping_zone_id.transporter_id.id and
+                shipping_cost.transporter_id.id and
+                shipping_cost.shipping_zone_id.transporter_id.id != shipping_cost.transporter_id.id
+            ):
                 raise Warning(
                     _('Error!:: Shipping zone assigned is not for the transporter selected.')
                 )
