@@ -715,8 +715,9 @@ class PromotionsRulesActions(models.Model):
         """
         Discount % on Sub Total excluding brands
         """
-
-        amt_untaxed_filtered = sum([line.price_subtotal for line in order.order_line.filtered(lambda l: l.product_id.product_brand_id.name not in eval(self.product_code))])
+        amt_untaxed_filtered = sum([line.price_subtotal for line in order.order_line.filtered(
+            lambda l: l.product_id.product_brand_id.name not in eval(self.product_code)
+        )])
 
         args = {
             'order_id': order.id,
@@ -727,7 +728,7 @@ class PromotionsRulesActions(models.Model):
             'product_uom': PRODUCT_UOM_ID,
             'product_id': self.env.ref('commercial_rules.product_discount').id
         }
-        self.create_line(args)
+        self.with_context({'end_line': True}).create_line(args)
         return True
 
 
