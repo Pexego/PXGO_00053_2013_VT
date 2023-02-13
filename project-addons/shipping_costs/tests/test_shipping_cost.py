@@ -65,8 +65,11 @@ class TestShippingCost(SavepointCase):
         })
 
     def test_shipping_cost_created_with_services_that_are_not_from_the_transporter_raises_exception(self):
-        with self.assertRaises(ValidationError):
-            self.env['shipping.cost'].create({
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Error!:: Services must be offered by the transporter selected.'
+        ):
+            self.env['shipping.cost'].with_context({'lang': 'en'}).create({
                 'cost_name': 'Error shipping cost',
                 'is_active': True,
                 'transporter_id': self.bad_transporter.id,
@@ -74,8 +77,11 @@ class TestShippingCost(SavepointCase):
             })
 
     def test_shipping_cost_created_with_shipping_zone_that_is_not_from_the_transporter_raises_exception(self):
-        with self.assertRaises(ValidationError):
-            self.env['shipping.cost'].create({
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Error!:: Shipping zone assigned is not for the transporter selected.'
+        ):
+            self.env['shipping.cost'].with_context({'lang': 'en'}).create({
                 'cost_name': 'Error shipping cost',
                 'is_active': True,
                 'transporter_id': self.bad_transporter.id,
@@ -83,28 +89,41 @@ class TestShippingCost(SavepointCase):
             })
 
     def test_shipping_cost_updated_with_services_that_are_not_from_the_transporter_raises_exception(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Error!:: Services must be offered by the transporter selected.'
+        ):
             error_shipping_cost = self.env['shipping.cost'].create({
                 'cost_name': 'Error shipping cost',
                 'is_active': True,
                 'transporter_id': self.good_transporter.id,
                 'supplement_ids': [(4, self.supplement_good_service.id)]
             })
-            error_shipping_cost.write({'supplement_ids': [(4, self.supplement_bad_service.id)]})
+            error_shipping_cost.with_context({'lang': 'en'}).write(
+                {'supplement_ids': [(4, self.supplement_bad_service.id)]}
+            )
 
     def test_shipping_cost_updated_with_shipping_zone_that_is_not_from_the_transporter_raises_exception(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Error!:: Shipping zone assigned is not for the transporter selected.'
+        ):
             error_shipping_cost = self.env['shipping.cost'].create({
                 'cost_name': 'Error shipping cost',
                 'is_active': True,
                 'transporter_id': self.good_transporter.id,
                 'shipping_zone_id': self.good_zone.id
             })
-            error_shipping_cost.write({'shipping_zone_id': self.bad_zone.id})
+            error_shipping_cost.with_context({'lang': 'en'}).write(
+                {'shipping_zone_id': self.bad_zone.id}
+            )
 
     def test_shipping_cost_updated_with_transporter_incorrect_raises_exception(self):
-        with self.assertRaises(ValidationError):
-            self.shipping_cost.write({'transporter_id': self.bad_transporter.id})
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Error!:: Shipping zone assigned is not for the transporter selected.'
+        ):
+            self.shipping_cost.with_context({'lang': 'en'}).write({'transporter_id': self.bad_transporter.id})
 
 
 class TestSaleOrderShippingCost(SavepointCase):

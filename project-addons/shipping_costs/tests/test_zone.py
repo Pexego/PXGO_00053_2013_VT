@@ -16,20 +16,20 @@ class TestPostalCodeFormat(SavepointCase):
         })
 
     def test_create_format_with_bad_sample(self):
-        with self.assertRaises(ValidationError):
-            self.env['postal.code.format'].create({
+        with self.assertRaisesRegex(ValidationError, 'Not valid postal code sample: "1345"'):
+            self.env['postal.code.format'].with_context({'lang': 'en'}).create({
                 'name': 'Test format',
                 'regex': r'\A(\d{5})$',
                 'postal_code_sample': '1345'
             })
 
     def test_update_format_with_bad_sample(self):
-        with self.assertRaises(ValidationError):
-            self.postal_code_format.write({'postal_code_sample': '1345'})
+        with self.assertRaisesRegex(ValidationError, 'Not valid postal code sample: "1345"'):
+            self.postal_code_format.with_context({'lang': 'en'}).write({'postal_code_sample': '1345'})
 
     def test_update_format_with_bad_regex(self):
-        with self.assertRaises(ValidationError):
-            self.postal_code_format.write({'regex': 'Bad regex'})
+        with self.assertRaisesRegex(ValidationError, 'Not valid postal code sample: "12345"'):
+            self.postal_code_format.with_context({'lang': 'en'}).write({'regex': 'Bad regex'})
 
 
 class TestPostalCodeRange(SavepointCase):
@@ -59,24 +59,30 @@ class TestPostalCodeRange(SavepointCase):
         })
 
     def test_bad_range_construction(self):
-        with self.assertRaises(ValidationError):
-            self.env['postal.code.range'].create({
+        with self.assertRaisesRegex(ValidationError, 'Error!:: End code is lower than first code.'):
+            self.env['postal.code.range'].with_context({'lang': 'en'}).create({
                 'first_code': '99999',
                 'last_code': '00001',
                 'shipping_zone_id': self.shipping_zone.id
             })
 
     def test_first_code_not_fitted_with_the_format(self):
-        with self.assertRaises(ValidationError):
-            self.env['postal.code.range'].create({
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Not valid postal code value: "1". Please, try using one like this "12345"'
+        ):
+            self.env['postal.code.range'].with_context({'lang': 'en'}).create({
                 'first_code': '1',
                 'last_code': '00010',
                 'shipping_zone_id': self.shipping_zone.id
             })
 
     def test_last_code_not_fitted_with_the_format(self):
-        with self.assertRaises(ValidationError):
-            self.env['postal.code.range'].create({
+        with self.assertRaisesRegex(
+            ValidationError,
+            'Not valid postal code value: "10". Please, try using one like this "12345"'
+        ):
+            self.env['postal.code.range'].with_context({'lang': 'en'}).create({
                 'first_code': '00001',
                 'last_code': '10',
                 'shipping_zone_id': self.shipping_zone.id
