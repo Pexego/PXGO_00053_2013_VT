@@ -96,7 +96,8 @@ Contributors:
              'views/stock_reserve_view.xml',
              'views/mrp_repair_view.xml',
              'wizard/equivalent_products_wizard_view.xml',
-             'data/emails.xml'
+             'data/emails.xml',
+             'data/groups.xml'
              ],
     'test': ['test/test_invoice_refund.yml'],
     'images': ['images/product_return.png',
