@@ -30,11 +30,10 @@ class ResPartner(models.Model):
 
     @api.multi
     def _get_points(self):
+        read_group_res = self.env['res.partner.point.programme.bag'].read_group(
+            [('partner_id', 'in', self.ids)],
+            ['partner_id','points'],
+            ['partner_id'])
+        mapped_data = dict([(data['partner_id'][0], data['points']) for data in read_group_res])
         for partner in self:
-            if partner.id:
-                partner.points_in_bag = \
-                    sum([x.points for x in
-                         self.env['res.partner.point.programme.bag'].
-                         search([('partner_id', 'child_of', partner.id)])])
-            else:
-                partner.points_in_bag = 0
+            partner.points_in_bag = mapped_data.get(partner.id, 0)

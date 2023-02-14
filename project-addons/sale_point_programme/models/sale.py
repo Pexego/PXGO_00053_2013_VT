@@ -26,78 +26,42 @@ class SaleOrder(models.Model):
 
     def compute_points_programme_bag(self, lines, rules, mode="order"):
         total_product_qty = 0.0
-        categories = {}
-        products = {}
-        brands = {}
-
+        products = lines.mapped('product_id')
+        categories = products.mapped('categ_id.id')
+        brands = products.mapped('product_brand_id.id')
+        products = products.ids
         rules_with_points = {}
+        categories_dict = dict.fromkeys(categories, {'qty': 0, 'amount': 0})
+        products_dict = dict.fromkeys(products, {'qty': 0, 'amount': 0})
+        brands_dict = dict.fromkeys(brands, {'qty': 0, 'amount': 0})
 
-        if rules:
-            for line in lines:
-                if line.product_id:
-                    pkey = line.product_id.id
-                    ckey = line.product_id.categ_id.id
-                    bkey = line.product_id.product_brand_id.id
-                    if mode == "claim":
-                        qty = line.qty
-                    else:
-                        qty = line.product_uom_qty
-                    if mode == "move":
-                        amount = line.sale_line_id.price_subtotal / line.sale_line_id.product_uom_qty * line.product_uom_qty
-                    else:
-                        amount = line.price_subtotal
-                    if products.get(pkey):
-                        products[pkey]['qty'] += qty
-                        products[pkey]['amount'] += amount
-                    else:
-                        products[pkey] = {'qty': qty,
-                                          'amount': amount}
-                    if categories.get(ckey):
-                        categories[ckey]['qty'] += qty
-                        categories[ckey]['amount'] += amount
-                    else:
-                        categories[ckey] = {'qty': qty,
-                                            'amount': amount}
-                    if brands.get(bkey):
-                        brands[bkey]['qty'] += qty
-                        brands[bkey]['amount'] += amount
-                    else:
-                        brands[bkey] = {'qty': qty,
-                                        'amount': amount}
-                    total_product_qty += qty
-
-            for rule in rules:
-                apply_rule = True
-                if rule.partner_category_id:
-                    apply_rule = rule.partner_category_id in self.partner_id.category_id
-                if apply_rule:
-                    points = False
-                    if rule.product_id:
-                        if rule.product_id.id in products:
-                            record = products[rule.product_id.id]
-                            if rule.attribute == 'product_qty':
-                                points = rule.evaluate(record['qty'])
-                            else:
-                                points = rule.evaluate(record['amount'])
-                    elif rule.category_id:
-                        if rule.category_id.id in categories:
-                            record = categories[rule.category_id.id]
-                            if rule.attribute == 'product_qty':
-                                points = rule.evaluate(record['qty'])
-                            else:
-                                points = rule.evaluate(record['amount'])
-                    elif rule.product_brand_id:
-                        if rule.product_brand_id.id in brands:
-                            record = brands[rule.product_brand_id.id]
-                            if rule.attribute == 'product_qty':
-                                points = rule.evaluate(record['qty'])
-                            else:
-                                points = rule.evaluate(record['amount'])
-                    elif rule.attribute == 'amount_untaxed':
-                        points = rule.evaluate(self.amount_untaxed)
-                    else:
-                        points = rule.evaluate(total_product_qty)
-                    rules_with_points[rule] = points
+        for line in lines:
+            qty = line.qty if mode == "claim" else line.product_uom_qty
+            amount = line.sale_line_id.price_subtotal / line.sale_line_id.product_uom_qty * line.product_uom_qty \
+                if mode == "move" else line.price_subtotal
+            categ = line.product_id.categ_id.id
+            product = line.product_id.id
+            brand = line.product_id.product_brand_id.id
+            products_dict[product]['qty'] += qty
+            products_dict[product]['amount'] += amount
+            categories_dict[categ]['qty'] += qty
+            categories_dict[categ]['amount'] += amount
+            brands_dict[brand]['qty'] += qty
+            brands_dict[brand]['amount'] += amount
+            total_product_qty += qty
+        for rule in rules.filtered(
+            lambda r: not r.partner_category_id or r.partner_category_id in self.partner_id.category_id):
+            if rule.product_id:
+                points = rule.evaluate_rule_dict(rule.product_id, products_dict)
+            elif rule.category_id:
+                points = rule.evaluate_rule_dict(rule.category_id, categories_dict)
+            elif rule.product_brand_id:
+                points = rule.evaluate_rule_dict(rule.product_brand_id, brands_dict)
+            elif rule.attribute == 'amount_untaxed':
+                points = rule.evaluate(self.amount_untaxed)
+            else:
+                points = rule.evaluate(total_product_qty)
+            rules_with_points[rule] = points
         return rules_with_points, brands, products, categories
 
     @api.multi
@@ -116,42 +80,13 @@ class SaleOrder(models.Model):
                 for rule, points in rules_with_points.items():
                     modality_type = rule.modality
                     if modality_type == 'participation':
-                        reg = bag_obj.search_read([('point_rule_id', '=', rule.id)], ['points'],
-                                                  order='id desc', limit=1)
-                        if not reg:
-                            last_number = 0
-                        else:
-                            last_number = reg[0]['points']
-
-                        control = 0
-                        while points > control:
-                            participation = last_number + 1
-
-                            if order.partner_id.is_company or not order.partner_id.parent_id:
-                                partner_id = order.partner_id.id
-                            else:
-                                partner_id = order.partner_id.parent_id.id
-
-                            bag_obj.create({'name': rule.name,
-                                            'point_rule_id': rule.id,
-                                            'order_id': order.id,
-                                            'points': participation,
-                                            'partner_id': partner_id})
-                            last_number = participation
-                            control += 1
-                    elif modality_type == 'point':
-                        if points:
-                            if order.partner_id.is_company or not order.partner_id.parent_id:
-                                partner_id = order.partner_id.id
-                            else:
-                                partner_id = order.partner_id.parent_id.id
-
-                            bag_obj.create({'name': rule.name,
-                                            'point_rule_id': rule.id,
-                                            'order_id': order.id,
-                                            'points': points,
-                                            'partner_id': partner_id})
-
+                        bag_obj.create_participations(rule, points, order)
+                    elif modality_type == 'point' and points:
+                        bag_obj.create({'name': rule.name,
+                                        'point_rule_id': rule.id,
+                                        'order_id': order.id,
+                                        'points': points,
+                                        'partner_id': order.partner_id.commercial_partner_id.id})
         return res
 
     @api.multi

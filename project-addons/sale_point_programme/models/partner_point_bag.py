@@ -58,6 +58,21 @@ class PartnerPointProgrammeBag(models.Model):
                                                       'partner_id': partner_id})
         return True
 
+    def get_sequence_number(self, rule_id):
+        reg = self.env['res.partner.point.programme.bag'].search_read([('point_rule_id', '=', rule_id)],
+                                                                      ['points'], order='id desc', limit=1)
+        return reg[0]['points'] if reg else 0
+
+    def create_participations(self, rule, points, order):
+        last_number = self.env['res.partner.point.programme.bag'].get_sequence_number(rule.id)
+        for _ in range(points):
+            last_number += 1
+            self.env['res.partner.point.programme.bag'].create({'name': rule.name,
+                                                                'point_rule_id': rule.id,
+                                                                'order_id': order.id,
+                                                                'points': last_number,
+                                                                'partner_id': order.partner_id.commercial_partner_id.id})
+
 
 class PartnerPointProgrammeBagAccumulated(models.Model):
 
