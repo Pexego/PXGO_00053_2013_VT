@@ -483,8 +483,7 @@ class PromotionsRulesActions(models.Model):
             'promotion_line': True,
             'product_uom_qty': 1,
             'product_uom': product_id.uom_id.id,
-            'bag_ids': [(6, 0, [x.id for x in bags_ids])]
-
+            'bag_ids': [(6, 0, bags_ids.ids)]
         }
         self.create_line(vals)
         return True
@@ -495,11 +494,10 @@ class PromotionsRulesActions(models.Model):
         """
         bag_obj = self.env['res.partner.point.programme.bag']
         rule_obj = self.env['sale.point.programme.rule']
-        price_subtotal = 0
-        for order_line in order.order_line:
-            if eval(self.product_code) == \
-            order_line.product_id.product_brand_id.code:
-                price_subtotal += order_line.price_subtotal
+        product_code = eval(self.product_code)
+        price_subtotal = sum(
+            order.order_line.filtered(lambda line: product_code == line.product_id.product_brand_id.code).mapped(
+                'price_subtotal'))
         if price_subtotal == 0:
             return True
         rules = rule_obj.search([('name', 'in', eval(self.arguments))])
