@@ -1479,14 +1479,14 @@ BIC: CAIXESBBXXX
                 <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
                     <t t-if="not o.sale_id.partner_shipping_id.dropship">
                         <strong>Client:</strong>
-                    <div t-field="o.sale_id.partner_id"
-                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
+                        <div t-field="o.sale_id.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
                     </t>
                     <t t-if="o.sale_id.partner_shipping_id.dropship">
                         <strong>Dropshipping Address:</strong>
                         <div t-field="o.sale_id.partner_shipping_id"
                          t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
-                    </t>   
+                    </t>
                 </div>
                 <div class="col-xs-4 pull-right text-right row"
                      style="font-size:11px; font-weight: bold; color:#da1f2e">
