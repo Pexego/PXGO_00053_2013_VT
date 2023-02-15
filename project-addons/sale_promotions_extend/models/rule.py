@@ -230,8 +230,8 @@ class PromotionsRulesActions(models.Model):
             self.arguments = '{"product":qty, ...}'
 
         elif self.action_type == 'sale_points_programme_discount_on_brand':
-            self.product_code = 'brand_code'
-            self.arguments = 'sale_point_rule_name'
+            self.product_code = '{brand_1: [categ1,categ2],brand_2: []}'
+            self.arguments = '[sale_point_rule_name1,sale_point_rule_name2]'
 
         elif self.action_type == 'disc_per_product':
             self.product_code = '["tag_product","reg_exp_product_code",quantity(optional)]'
@@ -494,10 +494,21 @@ class PromotionsRulesActions(models.Model):
         """
         bag_obj = self.env['res.partner.point.programme.bag']
         rule_obj = self.env['sale.point.programme.rule']
-        product_code = eval(self.product_code)
-        price_subtotal = sum(
-            order.order_line.filtered(lambda line: product_code == line.product_id.product_brand_id.code).mapped(
-                'price_subtotal'))
+        # product_code is a dictionary of brands as keys and categories as values {'brand_1':['categ_1','categ_2'], 'brand_2':['categ_3','categ_4']}
+        # if values are empty applies to all categories for this brand
+        price_subtotal = 0
+        brand_category_dict = eval(self.product_code)
+        for line in order.order_line:
+            product_brand = line.product_id.product_brand_id.code
+            if product_brand not in brand_category_dict:
+                continue
+            categs = brand_category_dict.get(product_brand)
+            eval_categ = not categs
+            if categs:
+                categ_display_name = line.product_id.categ_id.display_name
+                eval_categ = any([c for c in categs if c in categ_display_name])
+            if eval_categ:
+                price_subtotal += line.price_subtotal
         if price_subtotal == 0:
             return True
         rules = rule_obj.search([('name', 'in', eval(self.arguments))])
