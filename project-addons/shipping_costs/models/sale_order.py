@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
 
             service_cost_list = new_so_sc.calculate_shipping_cost()
             service_cost_list += new_so_sc.calculate_shipping_cost(pallet_mode=False)
-            services_to_add = [
+            services_to_add += [
                 (0, 0, {
                     'currency': 'EUR',
                     'transit_time': '',
