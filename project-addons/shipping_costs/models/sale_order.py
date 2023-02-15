@@ -48,7 +48,8 @@ class SaleOrder(models.Model):
                     'amount': service['price'],
                     'service': service['service_name'],
                     'order_id': self.id,
-                    'wizard_id': picking_rated.id
+                    'wizard_id': picking_rated.id,
+                    'sequence': 0
                 }) for service in service_cost_list
             ]
         # if we have special shipping costs we only need pallet & weight service costs

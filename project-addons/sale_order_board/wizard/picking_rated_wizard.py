@@ -71,10 +71,11 @@ class PickingRatedWizard(models.TransientModel):
 
 class PickingRatedWizardTree(models.TransientModel):
     _name = 'picking.rated.wizard.tree'
-    _order = 'amount asc'
+    _order = 'sequence asc, amount asc'
 
     wizard_id = fields.Many2one('picking.rated.wizard')
     order_id = fields.Many2one('sale.order', 'Order', related='wizard_id.sale_order_id')
+    sequence = fields.Integer('Sequence', default=1)
     currency = fields.Char('Currency')
     amount = fields.Float('Amount')
     service = fields.Char('Service')
