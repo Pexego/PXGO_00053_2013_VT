@@ -348,6 +348,11 @@ msgid "Sale order"
 msgstr "Orden de venta"
 
 #. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_date_order
+msgid "Date order"
+msgstr "Fecha de pedido"
+
+#. module: sale_point_programme
 #: model:ir.actions.server,name:sale_point_programme.points_and_participations_cron_ir_actions_server
 #: model:ir.cron,cron_name:sale_point_programme.points_and_participations_cron
 #: model:ir.cron,name:sale_point_programme.points_and_participations_cron

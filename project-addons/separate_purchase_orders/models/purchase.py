@@ -87,7 +87,7 @@ class PurchaseOrder(models.Model):
     def _prepare_add_missing_fields(self, values):
         """ Deduce missing required fields from the onchange """
         res = {}
-        onchange_fields = ['currency_id']
+        onchange_fields = ['currency_id','fiscal_position_id']
         if values.get('partner_id') and any(f not in values for f in onchange_fields):
             with self.env.do_in_onchange():
                 order = self.new(values)

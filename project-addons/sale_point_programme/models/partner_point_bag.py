@@ -30,6 +30,7 @@ class PartnerPointProgrammeBag(models.Model):
     point_rule_id = fields.Many2one('sale.point.programme.rule', 'Rule', readonly=True)
     order_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
     points = fields.Float('Points', readonly=True)
+    date_order = fields.Datetime(related='order_id.date_order')
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     email_sent = fields.Boolean('Email sent', default=False)
     order_applied_id = fields.Many2one('sale.order', 'Sale order applied', readonly=True)
