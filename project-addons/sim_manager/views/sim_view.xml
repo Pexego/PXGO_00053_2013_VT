@@ -217,7 +217,7 @@
                         <field name="status" string="Status" readonly="0"/>
                     </tree>
                 </field>
-                <footer>
+                <footer groups="base.group_system,crm_claim_rma.sat_group">
                     <button name="update_sim_services" string="Save" type="object"
                             class="btn-primary"/>
                     <button name="activate_sim" string="Activate" type="object"
