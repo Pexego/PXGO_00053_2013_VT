@@ -95,7 +95,11 @@ class StockPicking(models.Model):
 
     @api.onchange('partner_id')
     def change_partner(self):
-        if self.state in ('assigned', 'done', 'cancel') or self.block_picking:
+        if (
+            (self.state in ('assigned', 'done', 'cancel') or self.block_picking)
+            and
+            not (self.state == 'assigned' and self.not_sync)
+        ):
             raise exceptions.Warning(_("You can not modify the shipping address"))
 
 
@@ -137,7 +141,6 @@ class StockMove(models.Model):
 
     date_done = fields.Datetime(related='picking_id.date_done', store=True)
     date_expected_conf = fields.Boolean(related='container_id.conf', store=False)
-
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
         for move in self:

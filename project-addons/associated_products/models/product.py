@@ -29,6 +29,10 @@ class Product(models.Model):
     equivalent_products = fields.One2many('product.product',compute="_compute_equivalent_products",search="_search_equivalent_products")
 
     def _compute_equivalent_products(self):
+        """
+            This method compute equivalent products of a product.
+        :return: products with default_code like value and products equivalents whose product_name like value
+        """
         for product in self:
             prod_equiv = self.env['product.equivalent'].search(['|',('product_id', '=', product.id),('equivalent_id', '=', product.id)])
             if not prod_equiv:
@@ -38,7 +42,11 @@ class Product(models.Model):
             product.equivalent_products = products
 
     def _search_equivalent_products(self, operator, value):
-        prod_equiv = self.env['product.equivalent'].search(['|',('product_id.default_code', operator, value),('equivalent_id.default_code', operator, value)])
+        """
+            This method allows you to search Equivalent Products.
+        :return: products with default_code like value and products equivalents whose product_name like value
+        """
+        prod_equiv = self.env['product.equivalent'].search(['|',('product_id.default_code', operator, value),('product_name', operator, value)])
         if not prod_equiv:
             products = self.env['product.product'].search([('default_code', operator, value)])
         else:
@@ -67,22 +75,36 @@ class EquivalentProduct(models.Model):
     _name = 'product.equivalent'
 
     product_id = fields.Many2one('product.product', "Product", required=True)
-    equivalent_id = fields.Many2one('product.product', "Equivalent product", required=True)
+    equivalent_id = fields.Many2one('product.product', "Equivalent product")
+    product_name = fields.Char()
 
+    _sql_constraints = [
+        ('product_equivalent_uniq', 'unique(product_id, equivalent_id, product_name)',
+         'There is already an equivalent product for this product'),
+    ]
 
     @api.model
     def create(self, vals):
+        """
+            This method create the equivalent product and its inverse relation
+        :return: Super return
+        """
         res = super(EquivalentProduct, self).create(vals)
-        product_id = vals.get('product_id')
+        product = self.env['product.product'].browse(vals.get('product_id'))
         equivalent_id = vals.get('equivalent_id')
-        product_equiv = self.env['product.equivalent'].search([('product_id','=',equivalent_id),('equivalent_id','=',product_id)])
-        if not product_equiv:
-            vals_rev = {'equivalent_id': product_id, 'product_id': equivalent_id}
-            self.env['product.equivalent'].create(vals_rev)
+        if product and equivalent_id:
+            product_equiv = self.env['product.equivalent'].search([('product_id','=',equivalent_id),('equivalent_id','=',product.id)])
+            if not product_equiv:
+                vals_rev = {'equivalent_id': product.id, 'product_id': equivalent_id, 'product_name':product.default_code}
+                self.env['product.equivalent'].create(vals_rev)
         return res
 
     @api.multi
     def unlink(self):
+        """
+            This method allows you to unlink inverse equivalent product
+        :return: Super return
+        """
         products=self
         for product in products:
             product_equiv = self.env['product.equivalent'].search(
@@ -90,3 +112,16 @@ class EquivalentProduct(models.Model):
             if product_equiv:
                 products |= product_equiv
         return super(EquivalentProduct, products).unlink()
+
+    def action_open_product_equivalent(self):
+        """
+            This method allows you to open an Equivalent Product View
+        :return: Action to show the view
+        """
+        action = self.env.ref('product.product_template_action')
+        result = action.read()[0]
+        result['context'] = {}
+        res = self.env.ref('product.product_normal_form_view', False)
+        result['views'] = [(res and res.id or False, 'form')]
+        result['res_id'] = self.equivalent_id.id
+        return result

@@ -265,7 +265,7 @@ msgstr "Operatore"
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_accumulated_partner_id
 msgid "Partner"
-msgstr "Partner"
+msgstr "Azienda"
 
 #. module: sale_point_programme
 #: model:ir.ui.menu,name:sale_point_programme.point_programme_menu
@@ -346,7 +346,23 @@ msgstr "Vendita"
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_order_id
 msgid "Sale order"
+msgstr "Vendita"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_date_order
+msgid "Date Order"
+msgstr "Data dell'Ordine"
+
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_order_applied_id
+msgid "Sale order applied"
 msgstr "Ordine di vendita"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_applied_state
+msgid "State"
+msgstr "Stato"
 
 #. module: sale_point_programme
 #: model:ir.actions.server,name:sale_point_programme.points_and_participations_cron_ir_actions_server
@@ -394,6 +410,26 @@ msgid "Points traceability Accumulated"
 msgstr "Tracciabilità dei punti accumulata"
 
 #. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_points
+msgid "Points"
+msgstr "Punti"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_email_sent
+msgid "Email sent"
+msgstr "Email inviata"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_name
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: sale_point_programme
 #: model:ir.ui.view,arch_db:sale_point_programme.view_partner_form_add_points_widget
 msgid "Points accumulated"
 msgstr "Punti accumulati"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_accumulated_partner_id
+msgid "Partner"
+msgstr "Azienda"

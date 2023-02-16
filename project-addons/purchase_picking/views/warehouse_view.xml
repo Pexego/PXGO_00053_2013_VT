@@ -31,6 +31,7 @@
                 <field name="ctns"/>
                 <field name="dimensions"/>
                 <field name="status"/>
+                <field name="customs_channel" widget="color" options="{'readonly_mode': 'color'}"/>
                 <field name="pickings_warehouse"/>
                 <field name="date_expected"/>
                 <field name="conf"/>

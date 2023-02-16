@@ -150,7 +150,7 @@ class AmazonSaleOrder(models.Model):
             except SellingApiException as e:
                 raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
 
-        report_document = reports_obj.get_report_document(report.get('reportDocumentId'), decrypt=True).payload
+        report_document = reports_obj.get_report_document(report.get('reportDocumentId'), download=True, decrypt=True).payload
         document_lines = report_document.get('document').split("\n")
         headers = document_lines[0].split(',')
         orders = document_lines[1:-1]

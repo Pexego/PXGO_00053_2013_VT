@@ -159,7 +159,31 @@
         </field>
     </record>
 
+    <record id="view_move_tree_add_serial_number" model="ir.ui.view">
+        <field name="name">stock.move.tree.add.serial.number</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_picking_move_tree"/>
+        <field name="arch" type="xml">
+            <field name="product_uom_qty" position="after">
+                <field name="lots_text" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="stock_picking_form_add_button_lots" model="ir.ui.view">
+        <field name="name">stock.picking.form.add.button.lots</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <button name="action_picking_move_tree" position="attributes">
+                <attribute name="attrs">{'invisible': False}</attribute>
+            </button>
+        </field>
+    </record>
+
+
     <record id="stock.stock_move_action" model="ir.actions.act_window">
+        <field name="view_id" ref="view_move_tree_add_serial_number"/>
         <field name="search_view_id" ref="view_move_review_search"/>
     </record>
 
@@ -308,6 +332,7 @@
             </field>
         </field>
     </record>
+
     <record id="view_carrier_racking_ref_no_readonly" model="ir.ui.view">
             <field name="name">view.carrier.racking.ref.no.readonly</field>
             <field name="model">stock.picking</field>

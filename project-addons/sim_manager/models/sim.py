@@ -4,6 +4,9 @@ import json
 import logging
 from odoo.addons.queue_job.job import job
 import requests
+import urllib
+from odoo.exceptions import UserError
+
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +129,7 @@ class SimPackage(models.Model):
                 "partner_name": package.partner_id.name or '',
                 "mode": mode,
                 "codes": [sim.code for sim in package.serial_ids],
+                "sim_package": package.code
             }
             api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
             headers = {'x-api-key': api_key}
@@ -139,6 +143,111 @@ class SimSerial(models.Model):
 
     code = fields.Char(string='Serial')
     package_id = fields.Many2one('sim.package', string='Package')
+    state = fields.Selection(
+        compute='_get_sim_state', string="State", readonly=True,
+        selection=[
+            ('active', 'Active'),
+            ('active_disuse', 'Active disuse'),
+            ('unsuscribed', 'Unsuscribed'),
+            ('blocked', 'Blocked'),
+            ('preactivated', 'Preactivated')
+        ]
+    )
+    sim_service_ids = fields.One2many('sim.service', 'sim_serial_id', string="Services")
+
+    def _get_sim_state(self):
+        """
+        Returns the state of the SimSerial from the web
+        """
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        data = {'iccid': self.code}
+        web_endpoint = (
+            f"{self.env['ir.config_parameter'].sudo().get_param('web.sim.detail.endpoint')}"
+            f"?{urllib.parse.urlencode(data)}"
+        )
+        response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
+        if response.status_code == 200:
+            self.state = json.loads(response.content.decode('utf-8'))['state']
+        else:
+            raise UserError(_('Error while reading SIM state'))
+
+    def _set_state_to_sim(self, new_state):
+        """
+        Given a new state, sets this state to the SIM Serial.
+        """
+        if self.sim_service_ids.filtered(lambda service: service.status == 'blocked'):
+            raise UserError(_('Cannot block a SIM Service'))
+
+        posible_states = ('active', 'active_disuse', 'unsuscribed', 'blocked', 'preactivated')
+        if new_state not in posible_states:
+            raise UserError(_('A SimSerial cannot have state %s') % new_state)
+
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        body = {
+            "iccid": self.code,
+            "simServices": {f"{s['type']}Service": s['status'] for s in self.sim_service_ids},
+            "state": new_state
+        }
+        web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.update.endpoint')
+        response = requests.put(web_endpoint, headers=headers, data=json.dumps(body))
+        if response.status_code != 200:
+            raise UserError(_("An error ocurred while updating the sim state"))
+
+    def activate_sim(self):
+        """
+        Changes the state of the SIM to 'active'
+        """
+        self._set_state_to_sim('active')
+
+    def deactivate_sim(self):
+        """
+        Changes the state of the SIM to 'unsuscribed'
+        """
+        self._set_state_to_sim('unsuscribed')
+
+    def update_sim_services(self):
+        """
+        Synchronizes with web the services' states of the SimSerial
+        """
+        self._set_state_to_sim(self.state)
+
+    def _get_sim_services(self):
+        """
+        Gets SIM details and creates the services of the SimSerial
+        """
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        data = {'iccid': self.code}
+        web_endpoint = (
+            f"{self.env['ir.config_parameter'].sudo().get_param('web.sim.detail.endpoint')}"
+            f"?{urllib.parse.urlencode(data)}"
+        )
+        response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
+        if response.status_code != 200:
+            raise UserError(_('Error while getting SIM services'))
+        services_response = json.loads(response.content.decode('utf-8'))['simServices']
+        service_list = ('data', 'sms', 'voice')
+        services_ids = [
+            self.env['sim.service'].create({
+                'sim_serial_id': self.id,
+                'type': service_name,
+                'status': services_response[f'{service_name}Service']
+            }).id for service_name in service_list
+        ]
+        self.write({'sim_service_ids': [(6, 0, services_ids)]})
+
+    @api.multi
+    def action_open_sim_serial(self):
+        """
+        Returns the action that opens a SimSerial form
+        """
+        self._get_sim_services()
+        action = self.env.ref('sim_manager.action_open_sim_serial').read()[0]
+        action['res_id'] = self.id
+        action['domain'] = [('id', 'in', self.sim_service_ids.ids)]
+        return action
 
 
 class SimType(models.Model):
@@ -162,3 +271,19 @@ class SimExport(models.TransientModel):
     def sync_sim_web(self):
         pkg = self.env['sim.package'].browse(self.env.context["active_ids"])
         pkg.with_delay(priority=10).notify_sale_web(self.mode)
+
+
+class SimService(models.TransientModel):
+    """
+    Models the different services that a SimSerial has
+    """
+    _name = "sim.service"
+    _description = "Sim Service"
+
+    sim_serial_id = fields.Many2one('sim.serial', string="Code")
+    type = fields.Selection(string="Type", selection=[
+        ("data", "Data"), ("sms", "SMS"), ("voice", "Voice")
+    ])
+    status = fields.Selection(string="Status", selection=[
+        ("activated", "Activated"), ("deactivated", "Deactivated"), ("blocked", "Blocked")
+    ])

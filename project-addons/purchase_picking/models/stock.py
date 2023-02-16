@@ -54,6 +54,12 @@ class StockContainer(models.Model):
     incoterm = fields.Many2one('stock.incoterms', string='Incoterm', ondelete="restrict")
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
+    customs_channel = fields.Selection([
+        ('red', '🔴 - Red'),
+        ('orange', '🟠 - Orange'),
+        ('yellow', '🟡 - Yellow'),
+        ('green', '🟢 - Green')
+    ],string="Customs Channel")
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(string="Departure", help="Transport departure")
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")
@@ -160,11 +166,35 @@ class StockContainer(models.Model):
     company_id = fields.Many2one("res.company", "Company", required=True,
                                  default=lambda self: self.env['res.company']._company_default_get('stock.container'))
 
+    import_sheet_ids = fields.One2many(
+        "import.sheet",
+        "container_id",
+        string="Import Sheets",
+        required=True
+    )
+    import_sheet_count = fields.Integer(compute='_get_import_sheet_count', default=0)
+
     date_to_order = fields.Date(compute='_get_order_date', store=True)
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Container name must be unique')
     ]
+
+    def _get_import_sheet_count(self):
+        """
+        Gets the list of import_sheet associated with the container and calculates
+        the count of them.
+        """
+        for container in self:
+            container.import_sheet_count = len(container.import_sheet_ids)
+
+    def action_view_sheets(self):
+
+        action = self.env.ref('purchase_picking.action_stock_container_import_sheets').read()[0]
+
+        action['domain'] = [('id', 'in', self.import_sheet_ids.ids)]
+
+        return action
 
 
 class StockPicking(models.Model):

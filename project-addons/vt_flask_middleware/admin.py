@@ -11,6 +11,9 @@ from user import User
 from sync_log import SyncLog
 from implemented_models import MODELS_CLASS, MASTER_CLASSES, DEPENDENT_CLASSES, SECOND_LEVEL_CLASSES, LAST_CLASSES, FOUR_LEVEL_CLASSES
 from flask_peewee.utils import make_password
+from flask_peewee.admin import AdminModelConverter,ModelAdmin
+from playhouse.postgres_ext import ArrayField
+from wtforms import fields as f
 
 #
 # Setup the admin interface.
