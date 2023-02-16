@@ -121,7 +121,8 @@ class ProductBrandExporter(Component):
     def update(self, binding, mode):
         vals = {"name": binding.name,
                 "odoo_id": binding.id,
-                "no_csv": binding.no_csv, }
+                "no_csv": binding.no_csv,
+                "group_id": binding.group_brand_id.id}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
@@ -191,3 +192,28 @@ class ProductTagAdapter(Component):
     _inherit = 'middleware.adapter'
     _apply_on = 'product.tag'
     _middleware_model = 'producttag'
+
+class ProductBrandGroupExporter(Component):
+    _name = 'product.brand.group.exporter'
+    _inherit = ['base.exporter']
+    _apply_on = ['brand.group']
+    _usage = 'record.exporter'
+
+    def update(self, binding, mode):
+        vals = {"name": binding.name,
+                "odoo_id": binding.id
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(binding.id, vals)
+
+    def delete(self, binding):
+        return self.backend_adapter.remove(binding.id)
+
+
+class ProductBrandGroupAdapter(Component):
+    _name = 'productbrandgroup.general.adapter'
+    _inherit = 'middleware.adapter'
+    _apply_on = 'brand.group'
+    _middleware_model = 'productbrandgroup'

@@ -129,6 +129,7 @@ class SimPackage(models.Model):
                 "partner_name": package.partner_id.name or '',
                 "mode": mode,
                 "codes": [sim.code for sim in package.serial_ids],
+                "sim_package": package.code
             }
             api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
             headers = {'x-api-key': api_key}

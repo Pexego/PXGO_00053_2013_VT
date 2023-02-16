@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_add_pricelist_brand_ids" model="ir.ui.view">
+        <field name="name">sale.order.form.add.pricelist_brand_ids</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="pricelist_id" position="after">
+                <field name="pricelist_brand_ids" widget="many2many_tags"/>
+            </field>
+        </field>
+    </record>
+</odoo>

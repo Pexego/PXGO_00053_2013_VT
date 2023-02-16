@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="view_import_sheet_form" model="ir.ui.view">
+        <field name="name">import.sheet.form</field>
+        <field name="model">import.sheet</field>
+        <field name="arch" type="xml">
+            <form string="Import Sheet">
+                <group col="2" string="General">
+                    <field name="dua"/>
+                    <field name="container_id" readonly="1"/>
+                    <field name="dua_date"/>
+                    <field name="treasury"/>
+                </group>
+                <group col="4" string="Characteristics">
+                    <field name="kgs"/>
+                    <field name="cbm"/>
+                    <field name="incoterm"/>
+                    <field name="destination_port"/>
+                    <field name="forwarder_comercial"/>
+                    <field name="container_type"/>
+                    <field name="channel"/>
+                </group>
+                <group col="4" string="Costs">
+                    <field name="freight"/>
+                    <field name="fee"/>
+                    <field name="inspection"/>
+                    <field name="arrival_cost"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_container_import_sheets" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Stock Container Import Sheets</field>
+        <field name="res_model">import.sheet</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_import_sheet_form"/>
+    </record>
+</odoo>
