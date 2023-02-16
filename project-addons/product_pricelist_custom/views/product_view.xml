@@ -6,6 +6,13 @@
         <field name="model">product.pricelist</field>
         <field name="inherit_id" ref="product.product_pricelist_view"/>
         <field name="arch" type="xml">
+            <field name="currency_id" position="before">
+                <field name="brand_group_id"/>
+                <field name="default_brand_pricelist" attrs="{'invisible': ['|',('brand_group_id', '=', False),
+                                                        ('base_pricelist', '=', True)]}"/>
+                <field name="team_id" attrs="{'invisible': ['|',('brand_group_id', '=', False),
+                                                 ('base_pricelist', '=', True)]}"/>
+            </field>
             <field name="company_id" position="after">
                 <field name="sequence"/>
                 <field name="pricelist_related_default"/>
@@ -13,6 +20,23 @@
             </field>
         </field>
     </record>
+    <record model="ir.ui.view" id="product_pricelist_item_form_view_add_brand_option">
+        <field name="name">product.pricelist.item.form.add.brand.option</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view" />
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field
+                    name="product_brand_id"
+                    attrs="{
+                    'invisible':[('applied_on', '!=', '25_product_brand')],
+                    'required':[('applied_on', '=', '25_product_brand')]}"
+                    options="{'no_create':1}"
+                />
+            </field>
+        </field>
+    </record>
+
 
     <record id="product_template_form_add_relation_pricelist" model="ir.ui.view">
         <field name="name">product.template.tree.add.relation.pricelist</field>
@@ -63,6 +87,20 @@
                         </field>
                     </group>
                 </group>
+                <group name="pricing_brands" attrs="{'invisible':[('item_brand_ids','=',[])]}">
+                    <separator string="Brands Pricing" colspan="8"/>
+                    <group>
+                        <field name="item_brand_ids" nolabel="1" colspan="4">
+                            <tree string="Pricelist Items 2" editable="bottom" create="false" delete="false"
+                                  default_order="pricelist_calculated_sequence">
+                                <field name="pricelist_id" invisible="1"/>
+                                <field name="pricelist_calculated_sequence" invisible="1"/>
+                                <field name="pricelist_calculated" readonly="True"/>
+                                <field name="pricelist_calculated_price" readonly="True"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
                 <group name="relations">
                     <separator string="Relations"/>
                     <group colspan="8" col="8">
@@ -86,4 +124,24 @@
         </field>
     </record>
 
+    <record id="product_pricelist_item_form_view" model="ir.ui.view">
+        <field name="name">product.pricelist.item.form</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+            <div class="o_row" position="after">
+                <field name="price_extra_discounts"/>
+            </div>
+        </field>
+    </record>
+    <record id="product_brand_add_group" model="ir.ui.view">
+        <field name="name">product.brand.add.group.form</field>
+        <field name="model">product.brand</field>
+        <field name="inherit_id" ref="product_brand.view_product_brand_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="group_brand_id"/>
+            </field>
+        </field>
+    </record>
 </odoo>

@@ -9,6 +9,7 @@ from peewee import CharField, IntegerField, FloatField, ForeignKeyField, Boolean
 from commercial import Commercial
 from app import app
 from database import SyncModel
+from playhouse.postgres_ext import ArrayField
 
 
 class CustomerTag(SyncModel):
@@ -58,6 +59,7 @@ class Customer(SyncModel):
     is_prepaid_payment_term = BooleanField(default=False)
     last_sale_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     csv_connector_access = BooleanField(default=False)
+    brand_pricelist_ids = CharField(null=True)
 
     MOD_NAME = 'customer'
 

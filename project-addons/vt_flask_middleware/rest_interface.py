@@ -27,7 +27,7 @@ class ApiResource(RestResource):
                 data[field] = str(data[field])
         return data
 
-for mod_class in list(MODELS_CLASS.keys()):
+for mod_class in MODELS_CLASS:
     api.register(MODELS_CLASS[mod_class], ApiResource)
 
 api.register(SyncLog, ApiResource)

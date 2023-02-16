@@ -17,5 +17,5 @@ class Config(object):
                 'autorollback': True,
                 'stale_timeout': 600}
     NOTIFY_URL = os.environ.get('FLASK_URL')
-    NOTIFY_HEADER = os.environ.get('FLASK_HEADER') 
+    NOTIFY_HEADER = os.environ.get('FLASK_HEADER')
     NOTIFY_COUNTRY = os.environ.get('FLASK_COUNTRY')  # ES, IT, ... depending on the odoo instance
