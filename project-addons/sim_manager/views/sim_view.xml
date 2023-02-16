@@ -68,12 +68,25 @@
                     </group>
                     <field name="serial_ids" nolabel="1">
                         <tree editable="top">
-                            <field name="code" style="pointer-events:none;"/>
-                            <button name="action_open_sim_serial" type="object" icon="fa-external-link"/>
+                            <field name="code" readonly="True"/>
+                            <button name="action_open_sim_serial" type="object"
+                                    icon="fa-external-link" groups="base.group_system,crm_claim_rma.sat_group"/>
                         </tree>
                     </field>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="view_sim_package_form_iccid_write_access" model="ir.ui.view">
+        <field name="name">sim.package.form.iccid.write.access</field>
+        <field name="model">sim.package</field>
+        <field name="inherit_id" ref="sim_manager.view_sim_package_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('kitchen.group_kitchen')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='serial_ids']/tree/field[@name='code']" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </xpath>
         </field>
     </record>
 
