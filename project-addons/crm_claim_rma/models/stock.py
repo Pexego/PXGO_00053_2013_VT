@@ -40,6 +40,28 @@ class StockPicking(models.Model):
             return self.env.ref('crm_claim_rma.picking_done_template_claim').with_context(lang=self.partner_id.commercial_partner_id.lang)
         return super(StockPicking, self).get_email_template()
 
+    def _show_claim(self):
+        """
+        This method displays the form view of the claim associated with the picking
+        :return: action
+        """
+        action = self.env.ref('crm_claim.crm_case_categ_claim0')
+        result = action.read()[0]
+        result['context'] = {}
+        res = self.env.ref('crm_claim.crm_case_claims_form_view', False)
+        result['views'] = [(res and res.id or False, 'form')]
+        result['res_id'] = self.claim_id.id
+        return result
+
+    def action_open_origin(self):
+        """ This method adds to the super method the possibility of showing the claim associated with the picking
+        :return: action
+        """
+        res = super().action_open_origin()
+        if not res and self.claim_id:
+            return self._show_claim()
+        return res
+
 
 # This part concern the case of a wrong picking out. We need to create a new
 # stock_move in a picking already open.

@@ -80,7 +80,8 @@ Contributors:
                 'stock_deposit',
                 'stock_custom',
                 'sale_display_stock',
-                'crm_claim_type'
+                'crm_claim_type',
+                'sale_product_customize'
                 ],
     'data': ['wizard/claim_make_picking_view.xml',
              'wizard/claim_make_repair_view.xml',

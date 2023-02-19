@@ -24,4 +24,17 @@
             </filter>
         </field>
     </record>
+
+    <record id="stock_picking_add_attrs_action_open_origin_button_form" model="ir.ui.view">
+        <field name="name">stock.picking.add.attrs_action.open.origin.button.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="sale_product_customize.stock_picking_add_action_open_origin_button_form"/>
+        <field name="arch" type="xml">
+            <button name="action_open_origin" position="attributes">
+                <attribute name="attrs">
+                    {'invisible':[('purchase_ids','=',[]),('production_ids','=',[]),('sale_id','=',False),('claim_id','=',False)]}
+                </attribute>
+            </button>
+        </field>
+    </record>
 </odoo>
