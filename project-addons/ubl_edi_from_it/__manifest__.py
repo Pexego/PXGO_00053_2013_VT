@@ -7,7 +7,7 @@
     'webbsite': 'https://www.comunitea.com',
     'description': """""",
     'depends': ['sale_order_import_ubl', 'stock_deposit',
-                'crm_claim_rma_custom', 'sale_stock'],
+                'crm_claim_rma_custom', 'sale_stock', 'vies_timestamp'],
     'category': 'EDI',
     'data': ['data/ubl_edi_from_it_data.xml'],
     'auto_install': False,

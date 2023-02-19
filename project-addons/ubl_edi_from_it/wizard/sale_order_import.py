@@ -20,8 +20,9 @@ class SaleOrderImport(models.TransientModel):
     @api.model
     def _prepare_order(self, parsed_order, price_source):
         so_vals = super()._prepare_order(parsed_order, price_source)
-        so_vals['not_sync'] = True
-        so_vals['allow_confirm_blocked_magreb'] = True
+        so_vals.update({'not_sync': True,
+                        'allow_confirm_blocked_magreb': True,
+                        'force_vies_validation': True})
         return so_vals
 
     def import_order_button(self):
