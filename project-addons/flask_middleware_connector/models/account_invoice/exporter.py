@@ -15,7 +15,7 @@ class AccountInvoiceExporter(Component):
             'custom_report_link.action_report_invoice_custom')
         result = invoice_report_action.render_qweb_pdf(res_ids=binding.id)
         result_encode = base64.b64encode(result[0])
-        if not binding.state_web:
+        if not binding.state_web or binding.state != binding.state_web:
             binding._get_state_web()
 
         vals = {'odoo_id': binding.id,
