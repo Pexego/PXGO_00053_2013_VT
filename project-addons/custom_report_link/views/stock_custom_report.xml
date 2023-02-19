@@ -11,4 +11,11 @@
             </t>
         </t>
     </template>
+
+    <delete model="ir.actions.report" search="[('id','=',ref('stock.action_report_picking'))]"/>
+    <delete model="ir.actions.report" search="[('id','=',ref('stock.action_report_delivery'))]"/>
+    <delete model="ir.actions.report" search="[('id','=',ref('sale.action_report_saleorder'))]"/>
+    <delete model="ir.actions.report" search="[('id','=',ref('account.account_invoices'))]"/>
+    <delete model="ir.actions.report" search="[('id','=',ref('account.account_invoices_without_payment'))]"/>
+
 </odoo>
