@@ -15,6 +15,7 @@ class SimPackage(models.Model):
     _name = 'sim.package'
     _description = 'simPackage'
     _rec_name = 'code'
+    _inherit = 'mail.thread'
 
     code = fields.Char(string='Package')
     serial_ids = fields.One2many('sim.serial', 'package_id', string='Cards')
@@ -38,6 +39,15 @@ class SimPackage(models.Model):
     sim_9 = fields.Char(string="Serie 9", compute='_get_serials')
     sim_10 = fields.Char(string="Serie Fin", compute='_get_serials')
     qty = fields.Char(string="Cantidad", default='10')
+
+    @api.multi
+    def write(self, vals):
+        if 'partner_id' in vals:
+            new_partner_id = self.env['res.partner'].browse(vals['partner_id'])
+            self.message_post(body=_(
+                "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
+            ) % (self.env.user.partner_id.name, self.partner_id.name, new_partner_id.name))
+        return super().write(vals)
 
     def _get_serials(self):
         for pkg in self:

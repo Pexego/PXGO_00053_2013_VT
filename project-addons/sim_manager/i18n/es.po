@@ -661,3 +661,9 @@ msgstr "simType"
 #, python-format
 msgid "{} created"
 msgstr "{} creado"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:49
+#, python-format
+msgid "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
+msgstr "<ul><li> Responsable: %s</il><li> Cliente: %s <b>&rarr;</b> %s</il></ul>"
