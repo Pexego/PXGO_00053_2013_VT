@@ -87,4 +87,76 @@ class StockPicking(models.Model):
                         mail_pool.send([msg_id])
         return res
 
+    @api.multi
+    def _get_purchase_ids(self):
+        for picking in self:
+            picking.purchase_ids = [(6, 0, picking.move_lines.mapped('purchase_line_id.order_id').ids)]
+
+    purchase_ids = fields.Many2many("purchase.order", compute=_get_purchase_ids)
+
+    @api.multi
+    def _get_mrp_productions(self):
+        for picking in self:
+            picking.production_ids = picking.move_lines.mapped(
+                'raw_material_production_id') + picking.move_lines.mapped('production_id')
+
+    production_ids = fields.One2many("mrp.production", compute=_get_mrp_productions)
+
+    def _show_sale(self):
+        """
+        This method displays the form view of the sale associated with the picking
+        :return: action
+        """
+        action = self.env.ref('sale.action_orders')
+        result = action.read()[0]
+        result['context'] = {}
+        res = self.env.ref('sale.view_order_form', False)
+        result['views'] = [(res and res.id or False, 'form')]
+        result['res_id'] = self.sale_id.id
+        return result
+
+    def _show_purchases(self):
+        """
+        This method displays the view(tree or form depending on the quantity) of purchases associated with the picking
+        :return: action
+        """
+        action = self.env.ref('purchase.purchase_form_action')
+        result = action.read()[0]
+        result['context'] = {}
+        purchases = self.purchase_ids
+        if not purchases or len(purchases) > 1:
+            result['domain'] = "[('id', 'in', %s)]" % purchases.ids
+        elif len(purchases) == 1:
+            res = self.env.ref('purchase.purchase_order_form', False)
+            result['views'] = [(res and res.id or False, 'form')]
+            result['res_id'] = purchases.id
+        return result
+
+    def _show_productions(self):
+        """
+        This method displays the view (tree or form depending on the quantity) of productions associated with the picking
+        :return: action
+        """
+        action = self.env.ref('mrp.mrp_production_action')
+        result = action.read()[0]
+        result['context'] = {}
+        if len(self.production_ids) > 1:
+            result['domain'] = [('id', 'in', self.production_ids.ids)]
+        else:
+            result['views'] = [
+                (self.env.ref('mrp.mrp_production_form_view').id, 'form')]
+            result['res_id'] = self.production_ids.id
+        return result
+
+    def action_open_origin(self):
+        """ This method shows the source document(s) of the picking
+        :return: action
+        """
+        if self.sale_id:
+            return self._show_sale()
+        elif self.purchase_ids:
+            return self._show_purchases()
+        elif self.production_ids:
+            return self._show_productions()
+
 

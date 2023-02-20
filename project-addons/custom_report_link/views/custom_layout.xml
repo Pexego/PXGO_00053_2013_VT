@@ -1291,7 +1291,7 @@ BIC: CAIXESBBXXX
                     </span>
                     <div  t-if="not dropship" t-field="o.partner_id"
                          t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
-                    <div t-if="dropship" t-field="o.sale_id.partner_id"
+                    <div t-if="dropship" t-field="o.sale_id.partner_shipping_id"
                          t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
                 </div>
                 <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
@@ -1481,6 +1481,7 @@ BIC: CAIXESBBXXX
                         <strong>Terms and Conditions:</strong>
                         <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2"
                              t-field="o.move_lines[0].sale_line_id.order_id.note"/>
+
                     </t>
                 </div>
 

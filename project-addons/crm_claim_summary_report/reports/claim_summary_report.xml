@@ -211,7 +211,8 @@
             string="Claim Summary Report"
             name="crm_claim_summary_report.report_translated"
             file="crm_claim_summary_report.report_translated"
-            report_type="qweb-pdf"/>
+            report_type="qweb-pdf"
+            menu="False"/>
 
         <record id="claim_summary_report" model="ir.actions.report">
             <field name="paperformat_id" ref="base.paperformat_us"/>
