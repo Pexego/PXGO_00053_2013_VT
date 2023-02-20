@@ -84,23 +84,26 @@ class SalePointProgrammeRule(models.Model):
         bags = self.env['res.partner.point.programme.bag'].read_group(
             [('point_rule_id', 'in', rules.ids), ('applied_state', '=', 'no')],
             ['point_rule_id', 'points', 'partner_id'], ['point_rule_id', 'partner_id'], lazy=False)
-        mapped_data = dict([(data['partner_id'][0], (data['points'], data['point_rule_id'])) for data in bags])
-        for partner_id, (points, rule_id) in mapped_data.items():
+        mapped_data = {data['partner_id'][0]: (data['points'], data['point_rule_id']) for data in bags}
+        for element in mapped_data:
+            partner_id = element['partner_id']
+            points = element['points']
+            rule_id = element['point_rule_id']
             bag_accumulated = bag_accumulated_obj.search(
                 [('partner_id', '=', partner_id), ('point_rule_id', '=', rule_id[0])])
             if bag_accumulated:
                 bag_accumulated.write({'points': points})
-                bags_updated += bag_accumulated
             else:
-                new_bag = bag_accumulated_obj.create({'name': rule_id[1],
+                bag_accumulated = bag_accumulated_obj.create({'name': rule_id[1],
                                                       'point_rule_id': rule_id[0],
                                                       'points': points,
                                                       'partner_id': partner_id})
-                bags_updated += new_bag
-        if rules:
-            domain = [('point_rule_id', 'in', rules.ids)]
-            if bags_updated:
-                domain += [('id', 'not in', bags_updated.ids)]
-            bags_to_unlink = self.env['res.partner.point.programme.bag.accumulated'].search(domain)
-            if bags_to_unlink:
-                bags_to_unlink.unlink()
+            bags_updated |= bag_accumulated
+        if not rules:
+            return
+        domain = [('point_rule_id', 'in', rules.ids)]
+        if bags_updated:
+            domain += [('id', 'not in', bags_updated.ids)]
+        bags_to_unlink = self.env['res.partner.point.programme.bag.accumulated'].search(domain)
+        if bags_to_unlink:
+            bags_to_unlink.unlink()

@@ -34,6 +34,6 @@ class ResPartner(models.Model):
             [('partner_id', 'in', self.ids)],
             ['partner_id','points'],
             ['partner_id'])
-        mapped_data = dict([(data['partner_id'][0], data['points']) for data in read_group_res])
+        mapped_data = {data['partner_id'][0]: data['points'] for data in read_group_res}
         for partner in self:
             partner.points_in_bag = mapped_data.get(partner.id, 0)
