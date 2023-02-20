@@ -42,6 +42,8 @@ class SaleOrder(models.Model):
             categ = line.product_id.categ_id.id
             product = line.product_id.id
             brand = line.product_id.product_brand_id.id
+            if not categ or not brand:
+                continue
             products_dict[product]['qty'] += qty
             products_dict[product]['amount'] += amount
             categories_dict[categ]['qty'] += qty
