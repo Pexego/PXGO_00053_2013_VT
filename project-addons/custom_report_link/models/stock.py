@@ -8,5 +8,6 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     def do_print_picking(self):
-        super().do_print_picking()
+        # no call to 'super' because it calls a removed report
+        self.write({'printed': True})
         return self.env.ref('custom_report_link.report_picking_custom_action').report_action(self)
