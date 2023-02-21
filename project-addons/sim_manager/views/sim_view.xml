@@ -247,6 +247,23 @@
         </field>
     </record>
 
+    <record id="view_sim_partner_changer_wzd_form" model="ir.ui.view">
+        <field name="name">sim.partner.changer.wzd.view</field>
+        <field name="model">sim.partner.changer.wzd</field>
+        <field name="arch" type="xml">
+            <form string="Partner Changer">
+                <group col="1" colspan="2">
+                    <field name="partner_id" domain="[('is_company', '=', True)]"/>
+                </group>
+                <footer>
+                    <button string="Change" name="change_packages_partner" class="btn-primary"
+                            type="object" attrs="{'invisible': [('partner_id','=', False)]}"/>
+                    <button string="Cancel" special="cancel" class="btn-danger"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
     <record id="action_open_sim_serial" model="ir.actions.act_window">
         <field name="name">Open SIM Serial</field>
         <field name="type">ir.actions.act_window</field>

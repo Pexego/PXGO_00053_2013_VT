@@ -12,6 +12,7 @@ class ResPartner(models.Model):
 
     sim_serial_ids = fields.One2many('sim.package', 'partner_id')
     sim_active_perc = fields.Float(compute='_get_active_sims_perc', string='Active SIMs')
+    sim_partner_changer_ids = fields.One2many('sim.partner.changer.wzd', 'partner_id')
 
     def _get_active_sims_perc(self):
         """
