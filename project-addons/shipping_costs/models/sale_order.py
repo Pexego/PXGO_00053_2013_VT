@@ -71,7 +71,7 @@ class SaleOrder(models.Model):
         """
         Returns shipping_zone(s) where the sale_order is going to be delivered
         """
-        shipping_zones = self.env['shipping.zone'].search([
+        shipping_zones = self.env['shipping.zone'].sudo().search([
             ('transporter_id', '=', self.transporter_id.id),
             ('country_id', '=', self.partner_shipping_id.country_id.id)
         ])
@@ -84,7 +84,7 @@ class SaleOrder(models.Model):
         """
         Returns a list of all shipping_cost that fit with the sale_order
         """
-        shipping_cost_list = self.env['shipping.cost'].search(
+        shipping_cost_list = self.env['shipping.cost'].sudo().search(
             [('is_active', '=', 'True'), ('shipping_zone_id.id', 'in', self.get_sale_order_zone().ids)]
         )
         shipping_cost_available = []

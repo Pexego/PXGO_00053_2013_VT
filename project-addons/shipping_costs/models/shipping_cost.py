@@ -154,7 +154,7 @@ class SaleOrderShippingCost(models.TransientModel):
                 'service_name': f'{supplement.service_id.name}',
                 'sale_order_shipping_cost_id': self.id
             }
-            for supplement in self.shipping_cost_id.supplement_ids
+            for supplement in self.sudo().shipping_cost_id.supplement_ids
         ]
 
         return service_price_list
@@ -164,11 +164,11 @@ class SaleOrderShippingCost(models.TransientModel):
         Searches among fees where type is mode and selects the one that fits more to the sale order
         Returns the price of that fee.
         """
-        fee_ids = self.shipping_cost_id.fee_ids.filtered(lambda fee: fee.type == mode)
+        fee_ids = self.sudo().shipping_cost_id.fee_ids.filtered(lambda fee: fee.type == mode)
         if mode == 'pallet':
-            fee_ids = fee_ids.filtered(lambda fee: fee.max_qty >= self.pallet_number)
+            fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sudo().pallet_number)
         if mode == 'total_weight':
-            fee_ids = fee_ids.filtered(lambda fee: fee.max_qty >= self.sale_order_weight)
+            fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sudo().sale_order_weight)
         if len(fee_ids) == 0:
             return None
         fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
