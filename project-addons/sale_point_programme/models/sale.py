@@ -31,9 +31,9 @@ class SaleOrder(models.Model):
         brands = products.mapped('product_brand_id.id')
         products = products.ids
         rules_with_points = {}
-        categories_dict = dict.fromkeys(categories, {'qty': 0, 'amount': 0})
-        products_dict = dict.fromkeys(products, {'qty': 0, 'amount': 0})
-        brands_dict = dict.fromkeys(brands, {'qty': 0, 'amount': 0})
+        categories_dict = {c: {'qty': 0, 'amount': 0} for c in categories}
+        products_dict = {p: {'qty': 0, 'amount': 0} for p in products}
+        brands_dict = {b: {'qty': 0, 'amount': 0} for b in brands}
 
         for line in lines:
             qty = line.qty if mode == "claim" else line.product_uom_qty
