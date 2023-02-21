@@ -58,7 +58,9 @@ class ProductProduct(models.Model):
     @api.multi
     def write(self, vals):
         for product in self:
-            p_type = vals.get('type', '')
+            p_type = vals.get('type', False)
+            if not p_type:
+                continue
             if p_type == 'product' and product.type != 'product':
                 product.add_products_to_orderpoint_template()
             elif p_type != 'product' and product.type == 'product':
@@ -79,7 +81,9 @@ class ProductTemplate(models.Model):
     @api.multi
     def write(self, vals):
         for product in self:
-            p_type = vals.get('type', '')
+            p_type = vals.get('type', False)
+            if not p_type or not product.product_variant_ids:
+                continue
             if p_type == 'product' and product.type != 'product':
                 product.product_variant_ids.add_products_to_orderpoint_template()
             elif p_type != 'product' and product.type == 'product':
