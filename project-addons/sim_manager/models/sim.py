@@ -42,11 +42,13 @@ class SimPackage(models.Model):
 
     @api.multi
     def write(self, vals):
+
         if 'partner_id' in vals:
-            new_partner_id = self.env['res.partner'].browse(vals['partner_id'])
-            self.message_post(body=_(
-                "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
-            ) % (self.env.user.partner_id.name, self.partner_id.name, new_partner_id.name))
+            for package in self:
+                new_partner_id = self.env['res.partner'].browse(vals['partner_id'])
+                package.message_post(body=_(
+                    "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
+                ) % (self.env.user.partner_id.name, package.partner_id.name, new_partner_id.name))
         return super().write(vals)
 
     def _get_serials(self):
