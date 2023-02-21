@@ -300,6 +300,23 @@
         <field name="help">Manage the SIM Types</field>
     </record>
 
+    <record model="ir.actions.server" id="action_change_partner_from_package">
+       <field name="name">Change Partner</field>
+        <field name="model_id" ref="model_sim_package"/>
+        <field name="binding_model_id" ref="model_sim_package"/>
+       <field name="state">code</field>
+       <field name="code">action = records.open_sim_partner_changer_action()</field>
+    </record>
+
+    <record id="action_open_sim_partner_changer_wzd" model="ir.actions.act_window">
+        <field name="name">Sim Partner Changer</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.partner.changer.wzd</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sim_partner_changer_wzd_form"/>
+        <field name="target">new</field>
+    </record>
+
     <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
     <menuitem id="menu_sim_package_creator" action="action_sim_package_creator" name="Scan SIMs"
             parent="mrp.menu_mrp_manufacturing" sequence="50"/>

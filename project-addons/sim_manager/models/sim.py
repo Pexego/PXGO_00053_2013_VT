@@ -148,6 +148,19 @@ class SimPackage(models.Model):
             headers = {'x-api-key': api_key}
             response = requests.post(web_endpoint, headers=headers, data=json.dumps({"data": data}))
 
+    def open_sim_partner_changer_action(self):
+        partner_changer_packages_ids = [self.env['sim.partner.changer.package'].create({
+            'package_id': package_id
+        }).id for package_id in self.ids]
+        changer_wzd = self.env['sim.partner.changer.wzd'].create({
+            'partner_changer_package_ids': [(6, 0, partner_changer_packages_ids)],
+            'partner_id': False
+        })
+
+        action = self.env.ref('sim_manager.action_open_sim_partner_changer_wzd').read()[0]
+        action['res_id'] = changer_wzd.id
+        return action
+
 
 class SimSerial(models.Model):
     _name = 'sim.serial'
