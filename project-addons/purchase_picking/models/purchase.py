@@ -153,6 +153,18 @@ class PurchaseOrder(models.Model):
             context.pop('default_state', False)
         return super(PurchaseOrder, self.with_context(context)).create(vals)
 
+    invoice_status = fields.Selection(selection_add=[('partially', 'Partially Invoiced')])
+
+    @api.depends('state', 'order_line.qty_invoiced', 'order_line.qty_received', 'order_line.product_qty')
+    def _get_invoiced(self):
+        """
+            Extends the original method to add a new invoice_status --> partially
+        """
+        super()._get_invoiced()
+        for order in self:
+            if order.invoice_status == "invoiced" and any(
+                (0 < line.qty_invoiced < line.product_qty) or line.qty_invoiced == 0 for line in order.order_line):
+                order.invoice_status = 'partially'
 
 class PurchaseOrderLine(models.Model):
 
