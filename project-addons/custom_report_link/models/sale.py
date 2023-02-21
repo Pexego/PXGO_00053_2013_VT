@@ -8,6 +8,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     def print_quotation(self):
-        super().print_quotation()
+        # no call to 'super' because it calls a removed report
+        self.filtered(lambda s: s.state == 'draft').write({'state': 'sent'})
         return self.env.ref(
             'custom_report_link.action_report_saleorder').report_action(self)
