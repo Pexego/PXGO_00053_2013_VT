@@ -547,7 +547,7 @@ class PromotionsRulesActions(models.Model):
                     bags_to_change_status += bag
             bags_to_change_status.write({'applied_state': 'applied', 'order_applied_id': order.id})
             self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
-            bag_obj.with_delay(priority=11, eta=10).sudo().recalculate_partner_point_bag_accumulated(
+            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(
                 bags_to_change_status.mapped('point_rule_id'), order.partner_id)
 
         return True
