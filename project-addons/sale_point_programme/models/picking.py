@@ -33,7 +33,7 @@ class StockPicking(models.Model):
             rules_with_points, brands, products, categories = self.sale_id.compute_points_programme_bag(self.move_lines,rules,"move")
             for rule,points in rules_with_points.items():
                 modality_type = rule.modality
-                if ((rule.product_brand_id.id in brands) | (rule.product_id.id in products) |
+                if ((rule.product_brand_id.id in brands) or (rule.product_id.id in products) or
                     (rule.category_id.id in categories)) and modality_type == 'point' and points:
                     obj_bag.create({'name': rule.name,
                                     'point_rule_id': rule.id,

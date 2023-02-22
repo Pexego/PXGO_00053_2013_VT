@@ -230,8 +230,8 @@ class PromotionsRulesActions(models.Model):
             self.arguments = '{"product":qty, ...}'
 
         elif self.action_type == 'sale_points_programme_discount_on_brand':
-            self.product_code = 'brand_code'
-            self.arguments = 'sale_point_rule_name'
+            self.product_code = '{brand_1: [categ1,categ2],brand_2: []}'
+            self.arguments = '[sale_point_rule_name1,sale_point_rule_name2]'
 
         elif self.action_type == 'disc_per_product':
             self.product_code = '["tag_product","reg_exp_product_code",quantity(optional)]'
@@ -483,8 +483,7 @@ class PromotionsRulesActions(models.Model):
             'promotion_line': True,
             'product_uom_qty': 1,
             'product_uom': product_id.uom_id.id,
-            'bag_ids': [(6, 0, [x.id for x in bags_ids])]
-
+            'bag_ids': [(6, 0, bags_ids.ids)]
         }
         self.create_line(vals)
         return True
@@ -492,14 +491,26 @@ class PromotionsRulesActions(models.Model):
     def action_sale_points_programme_discount_on_brand(self, order):
         """
         Action for: Sale points programme discount on a selected brand
+        variables:
+        ------------
+        product_code: dict[str, list[str]]  i.e.  {'brand_1':['categ_1','categ_2'], 'brand_2':['categ_3','categ_4']}
+               if the values for a certain key are empty ([]) it means that it applies to all categories for this brand
         """
         bag_obj = self.env['res.partner.point.programme.bag']
         rule_obj = self.env['sale.point.programme.rule']
         price_subtotal = 0
-        for order_line in order.order_line:
-            if eval(self.product_code) == \
-            order_line.product_id.product_brand_id.code:
-                price_subtotal += order_line.price_subtotal
+        brand_category_dict = eval(self.product_code)
+        for line in order.order_line:
+            product_brand = line.product_id.product_brand_id.code
+            if product_brand not in brand_category_dict:
+                continue
+            categs = brand_category_dict.get(product_brand)
+            eval_categ = not categs
+            if categs:
+                categ_display_name = line.product_id.categ_id.display_name
+                eval_categ = any([c for c in categs if c in categ_display_name])
+            if eval_categ:
+                price_subtotal += line.price_subtotal
         if price_subtotal == 0:
             return True
         rules = rule_obj.search([('name', 'in', eval(self.arguments))])
@@ -511,7 +522,7 @@ class PromotionsRulesActions(models.Model):
         if points <= price_subtotal:
             self.create_y_line_sale_points_programme(order, points,bags)
             bags.write({'applied_state':'applied', 'order_applied_id':order.id})
-            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
+            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
         else:
             bags_to_change_status = self.env['res.partner.point.programme.bag']
             cont_point_applied = 0
@@ -536,7 +547,8 @@ class PromotionsRulesActions(models.Model):
                     bags_to_change_status += bag
             bags_to_change_status.write({'applied_state': 'applied', 'order_applied_id': order.id})
             self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
-            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(bags_to_change_status.mapped('point_rule_id'), order.partner_id)
+            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(
+                bags_to_change_status.mapped('point_rule_id'), order.partner_id)
 
         return True
 
