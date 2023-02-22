@@ -530,6 +530,7 @@ msgstr "Vendido"
 
 #. module: sim_manager
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_partner_id
+#: model:ir.model.fields,field_description:sim_manager.field_sim_partner_changer_wzd_partner_id
 msgid "Sold to"
 msgstr "Vendido a"
 
@@ -667,3 +668,29 @@ msgstr "{} creado"
 #, python-format
 msgid "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
 msgstr "<ul><li> Responsable: %s</il><li> Cliente: %s <b>&rarr;</b> %s</il></ul>"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:49
+#, python-format
+msgid "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
+msgstr "<ul><li> Responsable: %s</il><li> Cliente: %s <b>&rarr;</b> %s</il></ul>"
+
+#. module: sim_manager
+#: model:ir.actions.server,name:sim_manager.action_change_partner_from_package
+msgid "Change Partner"
+msgstr "Cambiar Cliente"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_open_sim_partner_changer_wzd
+msgid "Sim Partner Changer"
+msgstr "Cambio de clientes para paquetes SIM"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_partner_changer_wzd_form
+msgid "Change"
+msgstr "Cambiar"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_partner_changer_wzd_form
+msgid "Cancel"
+msgstr "Cancelar"
