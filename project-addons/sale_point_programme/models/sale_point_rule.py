@@ -84,11 +84,11 @@ class SalePointProgrammeRule(models.Model):
         bags = self.env['res.partner.point.programme.bag'].read_group(
             [('point_rule_id', 'in', rules.ids), ('applied_state', '=', 'no')],
             ['point_rule_id', 'points', 'partner_id'], ['point_rule_id', 'partner_id'], lazy=False)
-        mapped_data = {data['partner_id'][0]: (data['points'], data['point_rule_id']) for data in bags}
-        for element in mapped_data:
-            partner_id = element['partner_id']
-            points = element['points']
-            rule_id = element['point_rule_id']
+        mapped_data = {data['partner_id'][0]:
+                           {'points': data['points'], 'point_rule_id': data['point_rule_id']} for data in bags}
+        for partner_id in mapped_data:
+            points = mapped_data[partner_id]['points']
+            rule_id = mapped_data[partner_id]['point_rule_id']
             bag_accumulated = bag_accumulated_obj.search(
                 [('partner_id', '=', partner_id), ('point_rule_id', '=', rule_id[0])])
             if bag_accumulated:
