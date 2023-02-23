@@ -26,7 +26,6 @@ class SimPackage(models.Model):
                              default='available',
                              selection=[('available', 'Available'),
                                         ('sold', 'Sold')])
-    partner_changer_package_ids = fields.One2many('sim.partner.changer.package', 'package_id')
 
     # Report Fields
     sim_1 = fields.Char(string="Serie Inicio", compute='_get_serials')
@@ -149,16 +148,10 @@ class SimPackage(models.Model):
             response = requests.post(web_endpoint, headers=headers, data=json.dumps(data))
 
     def open_sim_partner_changer_action(self):
-        partner_changer_packages_ids = [self.env['sim.partner.changer.package'].create({
-            'package_id': package_id
-        }).id for package_id in self.ids]
-        changer_wzd = self.env['sim.partner.changer.wzd'].create({
-            'partner_changer_package_ids': [(6, 0, partner_changer_packages_ids)],
-            'partner_id': False
-        })
-
+        changer_wzd = self.env['sim.partner.changer.wzd'].create({'partner_id': False})
         action = self.env.ref('sim_manager.action_open_sim_partner_changer_wzd').read()[0]
         action['res_id'] = changer_wzd.id
+        action['context'] = {'active_ids': self.env.context["active_ids"]}
         return action
 
 
@@ -322,27 +315,12 @@ class SimPartnerChanger(models.TransientModel):
     _name = "sim.partner.changer.wzd"
     _description = "Sim Partner Changer Wizard"
 
-    partner_changer_package_ids = fields.One2many(
-        'sim.partner.changer.package',
-        'partner_changer_id',
-        string="Sim Packages"
-    )
     partner_id = fields.Many2one('res.partner', string="Partner")
 
     def change_packages_partner(self):
         """
         Changes the partner assign on the packages to self.partner_id
         """
-        packages = self.partner_changer_package_ids.mapped('package_id')
+        packages = self.env['sim.package'].browse(self.env.context["active_ids"])
         packages.write({'partner_id': self.partner_id.id})
         packages.with_delay(priority=10).notify_sale_web('sold')
-
-
-class SimPartnerChangerPackage(models.TransientModel):
-    """
-    Models the relationship between sim_package and sim_partner_changer_wzd
-    """
-    _name = "sim.partner.changer.package"
-
-    partner_changer_id = fields.Many2one('sim.partner.changer.wzd', string="Partner changer")
-    package_id = fields.Many2one('sim.package', string="Sim Package")
