@@ -108,6 +108,11 @@ msgid "Purchase Price (Per Unit)"
 msgstr "Prezzo d'aquisto (unità)"
 
 #. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_cost_percentage_variance
+msgid "Variance %"
+msgstr "% Scostamento"
+
+#. module: pmp_landed_costs
 #: code:addons/pmp_landed_costs/models/stock_landed_costs.py:66
 #, python-format
 msgid "Not all the products have HS Code: %s"
