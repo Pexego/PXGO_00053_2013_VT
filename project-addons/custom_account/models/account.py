@@ -162,7 +162,10 @@ class AccountInvoice(models.Model):
                             or partner.commercial_partner_id.invoice_type_id)
             if invoice_type and invoice_type.journal_id:
                 vals['journal_id'] = invoice_type.journal_id.id
-        return super().create(vals)
+        res = super().create(vals)
+        if res.type == "out_refund" and not res.payment_term_id:
+            res.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+        return res
 
     @api.onchange('partner_id', 'company_id')
     def _onchange_partner_id(self):
