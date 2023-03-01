@@ -499,6 +499,11 @@ msgstr "Profitto degli ultimi x mesi"
 msgid "Forwarder"
 msgstr "Spedizioniere"
 
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_no_auto_invoice
+msgid "No auto invoice"
+msgstr "No auto fatturare"
+
 #: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
 msgid "Invoice Pending Sales"
 msgstr "Ordini in attesa di fatturazione"
