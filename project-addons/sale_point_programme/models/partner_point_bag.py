@@ -56,7 +56,7 @@ class PartnerPointProgrammeBag(models.Model):
                 bag_accumulated_obj.create({'name': rule.name,
                                                       'point_rule_id': rule.id,
                                                       'points': points,
-                                                      'partner_id': partner_id})
+                                                      'partner_id': partner_id.id})
         return True
 
     def get_sequence_number(self, rule_id):
