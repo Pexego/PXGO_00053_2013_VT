@@ -25,7 +25,7 @@
     'description': """This module adds associated products""",
     'author': 'Pexego Sistemas Informáticos',
     'website': '',
-    "depends": ['base','product','sale','web',
+    "depends": ['base', 'product', 'sale', 'web', 'stock_custom',
                 'web_ir_actions_act_view_reload',
                 'web_ir_actions_act_multi'
                 ],

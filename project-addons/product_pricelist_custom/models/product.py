@@ -45,10 +45,10 @@ class ProductPricelist(models.Model):
                       ('default_brand_pricelist', '=', True)]
             if partner.pricelist_brand_ids:
                 domain += [('brand_group_id', 'not in', partner.pricelist_brand_ids.mapped('brand_group_id').ids)]
-                if partner.team_id:
-                    domain += ['|', ('team_id', '=', False), ('team_id', '=', partner.team_id.id)]
-                else:
-                    domain += [('team_id', '=', False)]
+            if partner.team_id:
+                domain += ['|', ('team_id', '=', False), ('team_id', '=', partner.team_id.id)]
+            else:
+                domain += [('team_id', '=', False)]
             default_brand_pricelists = self.env['product.pricelist'].search(domain)
             if default_brand_pricelists:
                 brand_pricelists = partner.pricelist_brand_ids + default_brand_pricelists

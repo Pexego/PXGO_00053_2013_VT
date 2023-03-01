@@ -59,45 +59,51 @@ class SalePointProgrammeRule(models.Model):
     def evaluate(self, amount):
         for rule in self:
             if rule.operator == "for_each":
-                mult = amount / (rule.value or 1.0)
-                if rule.integer_points:
-                    return int(mult * rule.points)
-                else:
-                    return mult * rule.points
+                points = (amount / (rule.value or 1.0)) * rule.points
             else:
-                if eval(str(amount) + rule.operator + str(rule.value)):
-                    return rule.points
-                else:
-                    return 0
+                points = rule.points if eval(str(amount) + rule.operator + str(rule.value)) else 0
+            if rule.integer_points:
+                return int(points)
+            return points
+
+    def evaluate_rule_dict(self, record, dicc):
+        if record.id not in dicc:
+            return False
+        record = dicc[record.id]
+        return self.evaluate(record.get('qty',0)) if self.attribute == 'product_qty' else self.evaluate(record.get('amount',0))
 
     @api.model
     def compute_partner_point_bag_accumulated(self):
         now = datetime.now()
         bag_accumulated_obj = self.env['res.partner.point.programme.bag.accumulated']
         rules = self.env['sale.point.programme.rule'].search(['|', ('date_start', '<=', now),
-                                 ('date_start', '=', False),
-                                 '|', ('date_end', '>=', now),
-                                 ('date_end', '=', False)])
+                                                              ('date_start', '=', False),
+                                                              '|', ('date_end', '>=', now),
+                                                              ('date_end', '=', False)])
         bags_updated = self.env['res.partner.point.programme.bag.accumulated']
-        for rule in rules:
-            bags = self.env['res.partner.point.programme.bag'].read_group([('point_rule_id', '=', rule.id),('applied_state', '=', 'no')],
-                                                                        ['points', 'partner_id'], ['partner_id'])
-            for bag in bags:
-                partner_id = bag['partner_id'][0]
-                bag_accumulated = bag_accumulated_obj.search([('partner_id','=',partner_id),('point_rule_id','=',rule.id)])
-                if bag_accumulated:
-                    bag_accumulated.write({'points': bag['points']})
-                    bags_updated += bag_accumulated
-                else:
-                    new_bag = bag_accumulated_obj.create({'name': rule.name,
-                                'point_rule_id': rule.id,
-                                'points': bag['points'],
-                                'partner_id': partner_id})
-                    bags_updated += new_bag
-        if rules:
-            domain = [('point_rule_id','in',rules.ids)]
-            if bags_updated:
-                domain += [('id','not in', bags_updated.ids)]
-            bags_to_unlink = self.env['res.partner.point.programme.bag.accumulated'].search(domain)
-            if bags_to_unlink:
-                bags_to_unlink.unlink()
+        bags = self.env['res.partner.point.programme.bag'].read_group(
+            [('point_rule_id', 'in', rules.ids), ('applied_state', '=', 'no')],
+            ['point_rule_id', 'points', 'partner_id'], ['point_rule_id', 'partner_id'], lazy=False)
+        mapped_data = {data['partner_id'][0]:
+                           {'points': data['points'], 'point_rule_id': data['point_rule_id']} for data in bags}
+        for partner_id in mapped_data:
+            points = mapped_data[partner_id]['points']
+            rule_id = mapped_data[partner_id]['point_rule_id']
+            bag_accumulated = bag_accumulated_obj.search(
+                [('partner_id', '=', partner_id), ('point_rule_id', '=', rule_id[0])])
+            if bag_accumulated:
+                bag_accumulated.write({'points': points})
+            else:
+                bag_accumulated = bag_accumulated_obj.create({'name': rule_id[1],
+                                                      'point_rule_id': rule_id[0],
+                                                      'points': points,
+                                                      'partner_id': partner_id})
+            bags_updated |= bag_accumulated
+        if not rules:
+            return
+        domain = [('point_rule_id', 'in', rules.ids)]
+        if bags_updated:
+            domain += [('id', 'not in', bags_updated.ids)]
+        bags_to_unlink = self.env['res.partner.point.programme.bag.accumulated'].search(domain)
+        if bags_to_unlink:
+            bags_to_unlink.unlink()
