@@ -27,42 +27,33 @@ class CrmClaimRma(models.Model):
     @api.multi
     def make_refund_invoice(self):
         for claim_obj in self:
-            dicc_invoice_product = {}
             dicc_claim_line_invoice = {}
             for line in claim_obj.claim_inv_line_ids:
-                if not line.invoiced:
-                    if dicc_invoice_product.get(line.invoice_id):
-                        dicc_invoice_product[line.invoice_id] += [line.product_id.id]
-                    else:
-                        dicc_invoice_product[line.invoice_id] = [line.product_id.id]
-                    if dicc_claim_line_invoice.get(line.invoice_id):
-                        dicc_claim_line_invoice[line.invoice_id] += [line]
-                    else:
-                        dicc_claim_line_invoice[line.invoice_id] = [line]
-            sale_order = self.env['sale.order']
+                if line.invoiced or not line.invoice_id:
+                    continue
+                dicc_claim_line_invoice[line.invoice_id] = dicc_claim_line_invoice.setdefault(line.invoice_id, self.env[
+                    'claim.invoice.line']) | line
             dicc_claim_line_order = {}
-            for invoice, product_ids in dicc_invoice_product.items():
+            for invoice in dicc_claim_line_invoice:
+                lines = dicc_claim_line_invoice[invoice]
                 for order in invoice.sale_order_ids:
-                    sale_order += order
-                    if dicc_claim_line_order.get(order):
-                        dicc_claim_line_order[order] += dicc_claim_line_invoice[invoice]
-                    else:
-                        dicc_claim_line_order[order] = dicc_claim_line_invoice[invoice]
+                    dicc_claim_line_order[order] = dicc_claim_line_order.setdefault(order, self.env[
+                        'claim.invoice.line']) | lines
             obj_bag = self.env['res.partner.point.programme.bag']
-            for order in sale_order:
+            for order in dicc_claim_line_order:
                 bag_ids = obj_bag.search([('order_id', '=', order.id)])
-                if bag_ids:
-                    rules = bag_ids.mapped('point_rule_id')
-                    rules_with_points, brands, products, categories = order.compute_points_programme_bag(
-                        dicc_claim_line_order.get(order), rules, "claim")
-                    for rule, points in rules_with_points.items():
-                        modality_type = rule.modality
-                        if ((rule.product_brand_id.id in brands) | (rule.product_id.id in products) |
-                            (rule.category_id.id in categories)) and modality_type == 'point' and points:
-                            obj_bag.create({'name': rule.name,
-                                            'point_rule_id': rule.id,
-                                            'order_id': order.id,
-                                            'points': -points,
-                                            'partner_id': order.partner_id.id})
-
+                if not bag_ids:
+                    continue
+                rules = bag_ids.mapped('point_rule_id')
+                rules_with_points, brands, products, categories = order.compute_points_programme_bag(
+                    dicc_claim_line_order.get(order), rules, "claim")
+                for rule, points in rules_with_points.items():
+                    if points and rule.modality == 'point' and (
+                        rule.product_brand_id.id in brands or rule.product_id.id in products or
+                        rule.category_id.id in categories):
+                        obj_bag.create({'name': rule.name,
+                                        'point_rule_id': rule.id,
+                                        'order_id': order.id,
+                                        'points': -points,
+                                        'partner_id': order.partner_id.id})
         return super(CrmClaimRma, self).make_refund_invoice()

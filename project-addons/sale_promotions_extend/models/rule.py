@@ -23,6 +23,8 @@ from odoo.tools.misc import ustr
 from odoo.exceptions import except_orm, UserError
 import re
 
+PRODUCT_UOM_ID = 1
+
 
 class PromotionsRulesConditionsExprs(models.Model):
     _inherit = 'promos.rules.conditions.exps'
@@ -185,7 +187,9 @@ class PromotionsRulesActions(models.Model):
             ('prod_disc_per_qty',
              _('Discount % on one product based on the quantity of another')),
             ('limit_product_units',
-             _('Limit quantity of a product in an order'))
+             _('Limit quantity of a product in an order')),
+            ('cart_disc_perc_exclude_brands',
+             _('Discount % on Sub Total excluding brands')),
             ])
 
     @api.onchange('action_type')
@@ -230,18 +234,25 @@ class PromotionsRulesActions(models.Model):
             self.arguments = '{"product":qty, ...}'
 
         elif self.action_type == 'sale_points_programme_discount_on_brand':
-            self.product_code = 'brand_code'
-            self.arguments = 'sale_point_rule_name'
+            self.product_code = '{brand_1: [categ1,categ2],brand_2: []}'
+            self.arguments = '[sale_point_rule_name1,sale_point_rule_name2]'
 
         elif self.action_type == 'disc_per_product':
             self.product_code = '["tag_product","reg_exp_product_code",quantity(optional)]'
             self.arguments = '0.00'
+
         elif self.action_type == 'prod_disc_per_qty':
             self.product_code = '"product_reference",..."'
             self.arguments = '{"product":discount, ...}'
+
         elif self.action_type == 'limit_product_units':
             self.product_code = '"product_reference",..."'
             self.arguments = '{"product":qty, ...}'
+
+        elif self.action_type == 'cart_disc_perc_exclude_brands':
+            self.product_code = '("brand",...)'
+            self.arguments = '0.00'
+
         return super().on_change()
 
     def create_line(self, vals):
@@ -483,8 +494,7 @@ class PromotionsRulesActions(models.Model):
             'promotion_line': True,
             'product_uom_qty': 1,
             'product_uom': product_id.uom_id.id,
-            'bag_ids': [(6, 0, [x.id for x in bags_ids])]
-
+            'bag_ids': [(6, 0, bags_ids.ids)]
         }
         self.create_line(vals)
         return True
@@ -492,14 +502,26 @@ class PromotionsRulesActions(models.Model):
     def action_sale_points_programme_discount_on_brand(self, order):
         """
         Action for: Sale points programme discount on a selected brand
+        variables:
+        ------------
+        product_code: dict[str, list[str]]  i.e.  {'brand_1':['categ_1','categ_2'], 'brand_2':['categ_3','categ_4']}
+               if the values for a certain key are empty ([]) it means that it applies to all categories for this brand
         """
         bag_obj = self.env['res.partner.point.programme.bag']
         rule_obj = self.env['sale.point.programme.rule']
         price_subtotal = 0
-        for order_line in order.order_line:
-            if eval(self.product_code) == \
-            order_line.product_id.product_brand_id.code:
-                price_subtotal += order_line.price_subtotal
+        brand_category_dict = eval(self.product_code)
+        for line in order.order_line:
+            product_brand = line.product_id.product_brand_id.code
+            if product_brand not in brand_category_dict:
+                continue
+            categs = brand_category_dict.get(product_brand)
+            eval_categ = not categs
+            if categs:
+                categ_display_name = line.product_id.categ_id.display_name
+                eval_categ = any([c for c in categs if c in categ_display_name])
+            if eval_categ:
+                price_subtotal += line.price_subtotal
         if price_subtotal == 0:
             return True
         rules = rule_obj.search([('name', 'in', eval(self.arguments))])
@@ -511,7 +533,7 @@ class PromotionsRulesActions(models.Model):
         if points <= price_subtotal:
             self.create_y_line_sale_points_programme(order, points,bags)
             bags.write({'applied_state':'applied', 'order_applied_id':order.id})
-            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
+            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
         else:
             bags_to_change_status = self.env['res.partner.point.programme.bag']
             cont_point_applied = 0
@@ -536,7 +558,8 @@ class PromotionsRulesActions(models.Model):
                     bags_to_change_status += bag
             bags_to_change_status.write({'applied_state': 'applied', 'order_applied_id': order.id})
             self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
-            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(bags_to_change_status.mapped('point_rule_id'), order.partner_id)
+            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(
+                bags_to_change_status.mapped('point_rule_id'), order.partner_id)
 
         return True
 
@@ -699,6 +722,26 @@ class PromotionsRulesActions(models.Model):
 
     def action_cart_disc_perc(self, order):
         return super(PromotionsRulesActions, self.with_context({'end_line': True})).action_cart_disc_perc(order)
+
+    def action_cart_disc_perc_exclude_brands(self, order):
+        """
+        Discount % on Sub Total excluding brands
+        """
+        amt_untaxed_filtered = sum([line.price_subtotal for line in order.order_line.filtered(
+            lambda l: l.product_id.product_brand_id.name not in eval(self.product_code)
+        )])
+
+        args = {
+            'order_id': order.id,
+            'name': self.promotion.name,
+            'price_unit': -(amt_untaxed_filtered * eval(self.arguments) / 100),
+            'product_uom_qty': 1,
+            'promotion_line': True,
+            'product_uom': PRODUCT_UOM_ID,
+            'product_id': self.env.ref('commercial_rules.product_discount').id
+        }
+        self.with_context({'end_line': True}).create_line(args)
+        return True
 
 
 class PromotionsRules(models.Model):

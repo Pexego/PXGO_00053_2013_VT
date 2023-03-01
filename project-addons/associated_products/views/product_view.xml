@@ -87,6 +87,11 @@
             <field name="name" position="after">
                 <field name="equivalent_products" string="Product Equivalent"/>
             </field>
+            <field name="name" position="attributes">
+                <attribute name="filter_domain">['|', '|', '|', '|', ('default_code', 'ilike', self), ('name','ilike',self),
+                                                                ('ref_manufacturer','ilike',self), ('ref_visiotech','ilike',self),
+                                                                ('equivalent_products','ilike',self)]</attribute>
+            </field>
         </field>
     </record>
 

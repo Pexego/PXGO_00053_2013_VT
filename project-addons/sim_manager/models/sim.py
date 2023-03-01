@@ -15,6 +15,7 @@ class SimPackage(models.Model):
     _name = 'sim.package'
     _description = 'simPackage'
     _rec_name = 'code'
+    _inherit = 'mail.thread'
 
     code = fields.Char(string='Package')
     serial_ids = fields.One2many('sim.serial', 'package_id', string='Cards')
@@ -38,6 +39,17 @@ class SimPackage(models.Model):
     sim_9 = fields.Char(string="Serie 9", compute='_get_serials')
     sim_10 = fields.Char(string="Serie Fin", compute='_get_serials')
     qty = fields.Char(string="Cantidad", default='10')
+
+    @api.multi
+    def write(self, vals):
+
+        if 'partner_id' in vals:
+            for package in self:
+                new_partner_id = self.env['res.partner'].browse(vals['partner_id'])
+                package.message_post(body=_(
+                    "<ul><li> Officer: %s</il><li> Partner: %s <b>&rarr;</b> %s</il></ul>"
+                ) % (self.env.user.partner_id.name, package.partner_id.name, new_partner_id.name))
+        return super().write(vals)
 
     def _get_serials(self):
         for pkg in self:
@@ -122,6 +134,8 @@ class SimPackage(models.Model):
     def notify_sale_web(self, mode):
         web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint')
         c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
+        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
         for package in self:
             data = {
                 "origin": c_code.lower(),
@@ -131,9 +145,14 @@ class SimPackage(models.Model):
                 "codes": [sim.code for sim in package.serial_ids],
                 "sim_package": package.code
             }
-            api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
-            headers = {'x-api-key': api_key}
-            response = requests.post(web_endpoint, headers=headers, data=json.dumps({"data": data}))
+            response = requests.post(web_endpoint, headers=headers, data=json.dumps(data))
+
+    def open_sim_partner_changer_action(self):
+        changer_wzd = self.env['sim.partner.changer.wzd'].create({'partner_id': False})
+        action = self.env.ref('sim_manager.action_open_sim_partner_changer_wzd').read()[0]
+        action['res_id'] = changer_wzd.id
+        action['context'] = {'active_ids': self.env.context["active_ids"]}
+        return action
 
 
 class SimSerial(models.Model):
@@ -287,3 +306,21 @@ class SimService(models.TransientModel):
     status = fields.Selection(string="Status", selection=[
         ("activated", "Activated"), ("deactivated", "Deactivated"), ("blocked", "Blocked")
     ])
+
+
+class SimPartnerChanger(models.TransientModel):
+    """
+    Models the helper to change sim_package partner
+    """
+    _name = "sim.partner.changer.wzd"
+    _description = "Sim Partner Changer Wizard"
+
+    partner_id = fields.Many2one('res.partner', string="Partner")
+
+    def change_packages_partner(self):
+        """
+        Changes the partner assign on the packages to self.partner_id
+        """
+        packages = self.env['sim.package'].browse(self.env.context["active_ids"])
+        packages.write({'partner_id': self.partner_id.id})
+        packages.with_delay(priority=10).notify_sale_web('sold')

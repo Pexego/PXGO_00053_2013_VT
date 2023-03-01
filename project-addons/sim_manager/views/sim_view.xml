@@ -74,6 +74,10 @@
                         </tree>
                     </field>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
@@ -243,6 +247,23 @@
         </field>
     </record>
 
+    <record id="view_sim_partner_changer_wzd_form" model="ir.ui.view">
+        <field name="name">sim.partner.changer.wzd.view</field>
+        <field name="model">sim.partner.changer.wzd</field>
+        <field name="arch" type="xml">
+            <form string="Partner Changer">
+                <group col="1" colspan="2">
+                    <field name="partner_id" domain="[('is_company', '=', True)]"/>
+                </group>
+                <footer>
+                    <button string="Change" name="change_packages_partner" class="btn-primary"
+                            type="object" attrs="{'invisible': [('partner_id','=', False)]}"/>
+                    <button string="Cancel" special="cancel" class="btn-danger"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
     <record id="action_open_sim_serial" model="ir.actions.act_window">
         <field name="name">Open SIM Serial</field>
         <field name="type">ir.actions.act_window</field>
@@ -277,6 +298,23 @@
         <field name="view_mode">tree,form</field>
         <field name="view_type">form</field>
         <field name="help">Manage the SIM Types</field>
+    </record>
+
+    <record model="ir.actions.server" id="action_change_partner_from_package">
+       <field name="name">Change Partner</field>
+        <field name="model_id" ref="model_sim_package"/>
+        <field name="binding_model_id" ref="model_sim_package"/>
+       <field name="state">code</field>
+       <field name="code">action = records.open_sim_partner_changer_action()</field>
+    </record>
+
+    <record id="action_open_sim_partner_changer_wzd" model="ir.actions.act_window">
+        <field name="name">Sim Partner Changer</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.partner.changer.wzd</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sim_partner_changer_wzd_form"/>
+        <field name="target">new</field>
     </record>
 
     <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
