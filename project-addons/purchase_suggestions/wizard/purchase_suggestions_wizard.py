@@ -270,7 +270,7 @@ class PurchaseSuggestionsReportController(http.Controller):
         response = request.make_response(None, headers=[
             ('Content-Type', 'application/vnd.ms-excel'),
             ('Content-Disposition', content_disposition(
-                'purchase_suggestions_report' + '.xlsx'
+                'purchase_suggestions_report' + '.xls'
             ))
         ])
         worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report(wizard)
