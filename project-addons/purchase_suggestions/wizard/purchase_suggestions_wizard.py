@@ -1,10 +1,9 @@
-from odoo import models, fields, api, _, http
+from odoo import models, fields, api, _, http, tools
 from datetime import datetime, timedelta
 from pandas.core.algorithms import quantile
 from numpy import mean
 from dateutil.relativedelta import relativedelta
-from io import BytesIO
-import xlwt
+import xlsxwriter
 from odoo.addons.web.controllers.main import content_disposition
 from odoo.http import request
 
@@ -267,18 +266,20 @@ class PurchaseSuggestionsReportController(http.Controller):
         wizard:
             Purchase Suggestions instance from where we want to create the report
         """
+        file_format = '.xlsx'
         response = request.make_response(None, headers=[
             ('Content-Type', 'application/vnd.ms-excel'),
             ('Content-Disposition', content_disposition(
-                'purchase_suggestions_report' + '.xls'
+                f'purchase_suggestions_report{file_format}'
             ))
         ])
         worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report(wizard)
-        with BytesIO() as output:
-            workbook = xlwt.Workbook(encoding="UTF-8")
-            self.write_on_report_file(workbook, worksheet_row_values, worksheet_headers)
-            workbook.save(output)
-            response.stream.write(output.getvalue())
+        file_name = tools.config["data_dir"] + '/filestore/temp'
+        workbook = xlsxwriter.Workbook(file_name)
+        self.write_on_report_file(workbook, worksheet_row_values, worksheet_headers)
+        workbook.close()
+        with open(file_name, "rb") as file:
+            response.stream.write(file.read())
         return response
 
     @staticmethod
@@ -351,7 +352,7 @@ class PurchaseSuggestionsReportController(http.Controller):
         """
 
         for worksheet_name, headers in worksheet_headers.items():
-            worksheet = workbook.add_sheet(worksheet_name)
+            worksheet = workbook.add_worksheet(worksheet_name)
             row_values = worksheet_row_values[worksheet_name]
             self._write_worksheet(worksheet, headers, row_values)
 
