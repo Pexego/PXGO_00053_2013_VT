@@ -287,26 +287,6 @@ msgid "purchase.suggestions.wizard"
 msgstr "purchase.suggestions.wizard"
 
 #. module: purchase_suggestions
-#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_report_file_name
-msgid "Report name"
-msgstr "Nome del rapporto"
-
-#. module: purchase_suggestions
-#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard_report_form
-msgid "Export (XLS)"
-msgstr "Esportazione (XLS)"
-
-#. module: purchase_suggestions
-#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard_report_form
-msgid "Cancel"
-msgstr "Annullare"
-
-#. module: purchase_suggestions
-#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_form
-msgid "Export"
-msgstr "Esportazione"
-
-#. module: purchase_suggestions
-#: model:ir.actions.act_window,name:purchase_suggestions.action_open_purchase_suggestions_wizard_report
-msgid "Purchase Suggestions Report"
-msgstr "Rapporto sui suggerimenti per gli acquisti"
+#: model:ir.actions.report,name:purchase_suggestions.purchase_suggestions_xlsx
+msgid "Print to XLSX"
+msgstr "Imprimere un XLSX"
