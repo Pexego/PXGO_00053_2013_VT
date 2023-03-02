@@ -135,7 +135,7 @@ class SimPackage(models.Model):
         web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint')
         c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
-        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+        headers = {'x-api-key': api_key}
         for package in self:
             data = {
                 "origin": c_code.lower(),
@@ -145,7 +145,7 @@ class SimPackage(models.Model):
                 "codes": [sim.code for sim in package.serial_ids],
                 "sim_package": package.code
             }
-            response = requests.post(web_endpoint, headers=headers, data=json.dumps(data))
+            response = requests.post(web_endpoint, headers=headers, data=json.dumps({"data": data}))
 
     def open_sim_partner_changer_action(self):
         changer_wzd = self.env['sim.partner.changer.wzd'].create({'partner_id': False})
