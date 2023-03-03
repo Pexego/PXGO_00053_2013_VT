@@ -468,6 +468,11 @@ msgid "Remaining Stock Days"
 msgstr "Giorni de stock restanti"
 
 #. module: product_stock_unsafety
+#: model:ir.model.fields,field_description:product_stock_unsafety.field_product_product_real_remaining_days_sale
+msgid "Remaining Stock Days (real)"
+msgstr "Giorni de stock restanti (reale)"
+
+#. module: product_stock_unsafety
 #: field:product.product,replacement_id:0
 msgid "Replaced by"
 msgstr "Rimpiazzato da"
