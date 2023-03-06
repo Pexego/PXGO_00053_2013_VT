@@ -27,6 +27,7 @@
                 </div>
             </field>
             <field name="product_id" position="after">
+                <field name="exclude_brands_mode" attrs="{'invisible':[('global_application','=', True)]}"/>
                 <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
             </field>
             <field name="global_application" position="before">
