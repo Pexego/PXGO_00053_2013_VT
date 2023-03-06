@@ -401,3 +401,8 @@ msgstr "transportation.service"
 #: model:ir.model,name:shipping_costs.model_transportation_transporter
 msgid "transportation.transporter"
 msgstr "transportation.transporter"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_weight_volume_translation
+msgid "Translation (kg/cbm)"
+msgstr "Conversión (kg/cbm)"

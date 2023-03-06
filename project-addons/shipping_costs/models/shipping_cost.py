@@ -28,6 +28,11 @@ class ShippingCost(models.Model):
     fuel = fields.Float(string="Fuel", related="transporter_id.fuel", readonly=True)
     sequence = fields.Integer(string="Sequence")
     volume = fields.Float(string="Max volume/pallet")
+    weight_volume_translation = fields.Float(
+        string="Translation (kg/cbm)",
+        related="transporter_id.weight_volume_translation",
+        readonly=True
+    )
 
     condition_ids = fields.One2many(
         "shipping.cost.condition",
@@ -168,7 +173,7 @@ class SaleOrderShippingCost(models.TransientModel):
         if mode == 'pallet':
             fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sudo().pallet_number)
         if mode == 'total_weight':
-            fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sudo().sale_order_weight)
+            fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sale_order_id.get_shipping_weight())
         if len(fee_ids) == 0:
             return None
         fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)

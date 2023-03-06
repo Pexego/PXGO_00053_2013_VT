@@ -32,6 +32,7 @@ class SaleOrder(models.Model):
         picking_rated = self.env['picking.rated.wizard'].create({'sale_order_id': self})
         services_to_add = []
         available_shipping_costs = self._get_available_shipping_costs()
+        shipping_weight = self.get_shipping_weight()
         # calculate pallet & weight shipping costs
         for shipping_cost in available_shipping_costs:
             new_so_sc = self.env['sale.order.shipping.cost'].create({
@@ -47,6 +48,7 @@ class SaleOrder(models.Model):
                     'transit_time': '',
                     'amount': service['price'],
                     'service': service['service_name'],
+                    'shipping_weight': shipping_weight,
                     'order_id': self.id,
                     'wizard_id': picking_rated.id,
                     'sequence': 0

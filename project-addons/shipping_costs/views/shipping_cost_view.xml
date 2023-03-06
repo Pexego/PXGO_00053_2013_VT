@@ -11,6 +11,7 @@
                     <field name="transporter_id"/>
                     <field name="fuel"/>
                     <field name="shipping_zone_id" domain="[('transporter_id.id', '=', transporter_id)]"/>
+                    <field name="weight_volume_translation"/>
                 </group>
                 <group>
                     <field name="sequence"/>
