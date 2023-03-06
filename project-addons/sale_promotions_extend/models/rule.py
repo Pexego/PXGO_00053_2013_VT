@@ -35,7 +35,8 @@ class PromotionsRulesConditionsExprs(models.Model):
             ('order_pricelist', _('Order Pricelist')),
             ('web_discount', 'Web Discount'),
             ('comp_sub_total_brand', 'Compute sub total of brand'),
-            ('category_in_order','Product Category in Order')])
+            ('category_in_order','Product Category in Order'),
+            ('order_pricelist_brand', 'Order Pricelist Brand')])
 
     @api.onchange('attribute')
     def on_change_attribute(self):
@@ -44,7 +45,7 @@ class PromotionsRulesConditionsExprs(models.Model):
         if self.attribute == 'prod_tag':
             self.value = 'prod_tag'
 
-        if self.attribute in ['order_pricelist']:
+        if self.attribute == 'order_pricelist':
             self.value = 'pricelist_name'
 
         if self.attribute == 'web_discount':
@@ -55,25 +56,24 @@ class PromotionsRulesConditionsExprs(models.Model):
 
         if self.attribute == 'category_in_order':
             self.value = "['prod_categ_1','prod_categ_2']"
+        if self.attribute == 'order_pricelist_brand':
+            self.value = '(pricelist_name_1, pricelist_name_2)'
         return super().on_change_attribute()
 
-    def validate(self, vals):
-        numerical_comparators = ['==', '!=', '<=', '<', '>', '>=']
-        iterator_comparators = ['in', 'not in']
-        attribute = vals['attribute']
-        comparator = vals['comparator']
-        value = vals['value']
-        if attribute == 'web_discount':
-            if comparator not in numerical_comparators:
-                raise UserError("Only %s can be used with %s"
-                            % (",".join(numerical_comparators), attribute))
-            if type(eval(value)) != bool:
-                raise UserError(
-                    "Value for Web discount is invalid\n"
-                    "Eg for right values: True or False")
+    @api.model
+    def check_operators(self, operator, attribute):
+        operation_list = ['==', '!=', '<=', '<', '>', '>='] if attribute in (
+        'web_discount', 'comp_sub_total_brand') else ['in', 'not in']
+        if operator not in operation_list:
+            raise UserError(f'Only {", ".join(operation_list)} can be used with {attribute}')
+
+    @api.model
+    def check_format(self, value, attribute):
+        if attribute == 'web_discount' and type(eval(value)) != bool:
+            raise UserError(
+                "Value for Web discount is invalid\n"
+                "Eg for right values: True or False")
         if attribute == 'comp_sub_total_brand':
-            if comparator not in numerical_comparators:
-                raise UserError("Only %s can be used with %s" % (",".join(numerical_comparators), attribute))
             if len(value.split("|")) != 2:
                 raise UserError(
                     "Value for computed subtotal combination is invalid\n"
@@ -84,14 +84,22 @@ class PromotionsRulesConditionsExprs(models.Model):
                 raise UserError(
                     "Value for Compute sub total of brand is invalid\n"
                     "Eg for right format is `['brand1,brand2',..]|120.50`")
-        if attribute == 'category_in_order':
-            if not type(eval(value)) in [tuple, list]:
-                raise UserError(
-                    "Value for Product Category in Order is invalid\n"
-                    "Eg for right format is ['prod_categ_1','prod_categ_2',...]")
-            if comparator not in iterator_comparators:
-                raise UserError("Only %s can be used with %s" % (",".join(iterator_comparators), attribute))
+        if attribute == 'category_in_order' and type(eval(value)) in [tuple, list]:
+            raise UserError(
+                "Value for Product Category in Order is invalid\n"
+                "Eg for right format is ['prod_categ_1','prod_categ_2',...]")
+        if attribute == 'order_pricelist_brand' and type(eval(value)) in [tuple, list]:
+            raise UserError(
+                "Value for Order Pricelist Brand in Order is invalid\n"
+                "Eg for right format is ['order_pricelist_brand_1','order_pricelist_brand_2',...]")
 
+    def validate(self, vals):
+        attribute = vals['attribute']
+        comparator = vals['comparator']
+        value = vals['value']
+        if attribute in ('web_discount','comp_sub_total_brand','category_in_order','order_pricelist_brand'):
+            self.check_operators(comparator, attribute)
+            self.check_format(value, attribute)
         return super().validate(vals)
 
     def serialise(self, attribute, comparator, value):
@@ -104,16 +112,19 @@ class PromotionsRulesConditionsExprs(models.Model):
         """
 
         if attribute == 'prod_tag':
-            return '%s %s prod_tag' % (value, comparator)
+            return f'{value} {comparator} prod_tag'
         elif attribute == 'order_pricelist':
-            return """order.pricelist_id.name %s %s""" % (comparator, value)
+            return f'order.pricelist_id.name {comparator} {value}'
         elif attribute == 'web_discount':
             return "web_discount"
         elif attribute == 'comp_sub_total_brand':
             product_brands_iter, quantity = value.split("|")
-            return "sum([brand_sub_total.get(prod_brand,0) for prod_brand in %s]) %s %s" % (eval(product_brands_iter), comparator, quantity)
+            return f'sum([brand_sub_total.get(prod_brand,0) for prod_brand in {product_brands_iter}]) {comparator} {quantity}'
         elif attribute == 'category_in_order':
-            return "all([c %s categories for c in %s])" % (comparator, eval(value))
+            return f'all([c {comparator} categories for c in {value}])'
+        elif attribute == 'order_pricelist_brand':
+            list_operator = 'any' if comparator == 'in' else 'all'
+            return f'{list_operator}([p {comparator} order_pricelist_brand_ids for p in {value}])'
         else:
             return super().serialise(attribute, comparator, value)
 
@@ -135,7 +146,10 @@ class PromotionsRulesConditionsExprs(models.Model):
                     brand_sub_total[brand] = \
                         brand_sub_total.get(brand, 0.00) + \
                         line.price_subtotal
-            return eval(self.serialised_expr,locals())
+            return eval(self.serialised_expr, locals())
+        elif self.attribute == 'order_pricelist_brand':
+            order_pricelist_brand_ids = order.pricelist_brand_ids.mapped('name')
+            return bool(order_pricelist_brand_ids) and eval(self.serialised_expr, locals())
         return super().evaluate(order,**kwargs)
 
 
