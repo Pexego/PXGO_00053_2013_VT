@@ -1,8 +1,9 @@
-from odoo import models
+from odoo import models, api
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
+    @api.model
     def _get_eol_stock_move_domain(self, date):
         """ :returns the super domain adding not dropship picking """
         domain = super()._get_eol_stock_move_domain(date)
