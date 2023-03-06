@@ -186,8 +186,8 @@ class ProductProduct(models.Model):
                         .format(datetime.now().strftime('%m%d')),
                         "cron_stock_catalog.email_template_general_alberto_3")
 
-    @staticmethod
-    def _get_eol_stock_move_domain(date):
+    @api.model
+    def _get_eol_stock_move_domain(self, date):
         """ :param date: date min to search stock_moves
             :returns the domain to search the stock_moves with products in eol
         """
