@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, exceptions, _
+from datetime import date
+from dateutil.relativedelta import relativedelta
 import odoorpc
 
 
@@ -100,8 +102,9 @@ class PurchaseOrder(models.Model):
                     amt_to_invoice += line.qty_to_invoice * line.price_unit
         return amt_to_invoice, es_sale
 
-    def cron_check_qty_to_invoice_lx(self):
-        purchases = self.search([('invoice_status', '=', 'to invoice')])
+    def cron_check_qty_to_invoice_lx(self, months=1):
+        search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
+        purchases = self.search([('invoice_status', '=', 'to invoice'), ('date_order', '>=', search_date)])
 
         if purchases:
             # get the server
