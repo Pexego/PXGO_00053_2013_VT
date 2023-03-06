@@ -24,6 +24,7 @@
                             <field name="amount"/>
                             <field name="currency"/>
                             <field name="transit_time"/>
+                            <field name="shipping_weight"/>
                         </tree>
                     </field>
                 </group>

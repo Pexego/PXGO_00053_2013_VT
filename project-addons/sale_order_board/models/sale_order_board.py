@@ -124,7 +124,8 @@ class SaleOrder(models.Model):
         """
         Calculates DHL service prices and writes them into picking_rated
         """
-        dhl_services = self.env['transportation.transporter'].search([('name', '=', 'DHL')]).service_ids.mapped('name')
+        dhl_transporter = self.env['transportation.transporter'].search([('name', '=', 'DHL')])
+        dhl_services = dhl_transporter.service_ids.mapped('name')
         account_user = self.env['ir.config_parameter'].sudo().get_param('account.user.dhl.api.request')
         account_password = self.env['ir.config_parameter'].sudo().get_param('account.password.dhl.api.request')
         url = self.env['ir.config_parameter'].sudo().get_param('url.prod.dhl.api.request')
@@ -141,6 +142,10 @@ class SaleOrder(models.Model):
         ship_to_city = self.partner_shipping_id.city
         ship_to_postal_code = self.partner_shipping_id.zip
         ship_to_country_code = self.partner_shipping_id.country_id.code
+
+        volume_weight = self.get_sale_order_volume() * dhl_transporter.weight_volume_translation
+        package_weight = max(volume_weight, package_weight)
+
         if self.partner_shipping_id.country_id in self.env['res.country.group'].browse([1]).country_ids:
             content_doc = "DOCUMENTS"  # Just for Europe
         else:
@@ -224,13 +229,14 @@ class SaleOrder(models.Model):
                             amount = service['Charges']['Charge'][0]['ChargeAmount'] + service['Charges']['Charge'][1][
                                 'ChargeAmount']
                             percentage_increase = float(amount) * (
-                                self.env['transportation.transporter'].search([('name', '=', 'DHL')]).fuel / 100
+                                dhl_transporter.fuel / 100
                             )
                             rated_status = {
                                 'transit_time': transit_time,
                                 'currency': currency,
                                 'amount': amount + percentage_increase,
                                 'service': 'DHL ' + dhl_services_dict[service["@type"]],
+                                'shipping_weight': package_weight,
                                 'order_id': self.id,
                                 'wizard_id': picking_rated.id
                             }
@@ -242,7 +248,7 @@ class SaleOrder(models.Model):
                         amount = data['Charges']['Charge'][0]['ChargeAmount'] + data['Charges']['Charge'][1][
                             'ChargeAmount']
                         percentage_increase = float(amount) * (
-                            self.env['transportation.transporter'].search([('name', '=', 'DHL')]).fuel / 100
+                            dhl_transporter.fuel / 100
                         )
                         transit_time = data["DeliveryTime"].replace("T", " ")[:-3]
                         rated_status = {
@@ -250,6 +256,7 @@ class SaleOrder(models.Model):
                             'currency': currency,
                             'amount': amount + percentage_increase,
                             'service': 'DHL ' + dhl_services_dict[data["@type"]],
+                            'shipping_weight': package_weight,
                             'order_id': self.id,
                             'wizard_id': picking_rated.id
                         }
@@ -275,6 +282,10 @@ class SaleOrder(models.Model):
         delivery_town = self.partner_shipping_id.city
         delivery_postcode = self.partner_shipping_id.zip
         delivery_country = self.partner_shipping_id.country_id.code
+
+        tnt_transporter = self.env['transportation.transporter'].search([('name', '=', 'TNT')])
+        volume_weight = self.get_sale_order_volume() * tnt_transporter.weight_volume_translation
+        package_weight = max(volume_weight, package_weight)
 
         auth = str(account_user) + ":" + str(account_password)
         auth = auth.encode("utf-8")
@@ -357,12 +368,13 @@ class SaleOrder(models.Model):
                             services_not_found.append(service_code)
                             continue
                         percentage_increase = shipping_amount * (
-                            self.env['transportation.transporter'].search([('name', '=', 'TNT')]).fuel / 100
+                            tnt_transporter.fuel / 100
                         )
                         rated_status = {
                             'currency': currency,
                             'transit_time': transit_time,
                             'amount': shipping_amount + percentage_increase,
+                            'shipping_weight': package_weight,
                             'service': service_name,
                             'order_id': self.id,
                             'wizard_id': picking_rated.id
@@ -384,6 +396,10 @@ class SaleOrder(models.Model):
         url = self.env['ir.config_parameter'].sudo().get_param('url.seur.api.request')
         list_services = ast.literal_eval(self.env['ir.config_parameter'].sudo().get_param('services.seur.api.request'))
         list_products = self.env['ir.config_parameter'].sudo().get_param('products.seur.api.request')
+
+        seur_transporter = self.env['transportation.transporter'].search([('name', '=', 'SEUR')])
+        volume_weight = self.get_sale_order_volume() * seur_transporter.weight_volume_translation
+        package_weight = max(volume_weight, package_weight)
 
         for service_id, service_name in list_services.items():
             service_code = service_id
@@ -445,12 +461,13 @@ class SaleOrder(models.Model):
             if shipping_amount:
                 currency = "EUR"
                 percentage_increase = shipping_amount * (
-                    self.env['transportation.transporter'].search([('name', '=', 'SEUR')]).fuel / 100
+                    seur_transporter.fuel / 100
                 )
                 rated_status = {
                     'currency': currency,
                     'amount': shipping_amount + percentage_increase,
                     'service': service_name,
+                    'shipping_weight': package_weight,
                     'order_id': self.id,
                     'wizard_id': picking_rated.id
                 }
@@ -460,7 +477,8 @@ class SaleOrder(models.Model):
         """
         Calculates UPS service prices and writes them into picking_rated
         """
-        ups_services = self.env['transportation.transporter'].search([('name', '=', 'UPS')]).service_ids
+        ups_transporter = self.env['transportation.transporter'].search([('name', '=', 'UPS')])
+        ups_services = ups_transporter.service_ids
         service_codes = ast.literal_eval(
             self.env['ir.config_parameter'].sudo().get_param('service.codes.ups.api.request')
         )
@@ -468,6 +486,9 @@ class SaleOrder(models.Model):
         password_id = self.env['ir.config_parameter'].sudo().get_param('password.ups.api.request')
         access_id = self.env['ir.config_parameter'].sudo().get_param('access.ups.api.request')
         shipper_number = self.env['ir.config_parameter'].sudo().get_param('shipper.number.ups.api.request')
+
+        volume_weight = self.get_sale_order_volume() * ups_transporter.weight_volume_translation
+        package_weight = max(volume_weight, package_weight)
 
         shipper_name = "Visiotech"
         shipper = self.env['res.company'].browse(1).partner_id
@@ -604,12 +625,13 @@ class SaleOrder(models.Model):
                     currency = data['TotalCharge']['CurrencyCode']
                     amount = float(data['TotalCharge']['MonetaryValue'])
                     percentage_increase = amount * (
-                        self.env['transportation.transporter'].search([('name', '=', 'UPS')]).fuel / 100
+                        ups_transporter.fuel / 100
                     )
                     rated_status = {
                         'currency': currency,
                         'amount': amount + percentage_increase,
                         'service': service.name,
+                        'shipping_weight': package_weight,
                         'order_id': self.id,
                         'wizard_id': picking_rated.id
                     }
@@ -663,6 +685,15 @@ class SaleOrder(models.Model):
         for order_line in self.order_line:
             sale_order_volume += order_line.product_id.volume * order_line.product_uom_qty
         return round(sale_order_volume, 3)
+
+    def get_shipping_weight(self):
+        """
+        Calculates the shipping weight. This will be the maximun of the sale_order weight and
+        the volume weight
+        """
+        volume_weight_translator = self.sudo().transporter_id.weight_volume_translation
+        volume_weight = self.get_sale_order_volume() * volume_weight_translator
+        return max(volume_weight, self.get_sale_order_weight())
 
 
 class TransportationTransporter(models.Model):

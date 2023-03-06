@@ -80,3 +80,4 @@ class PickingRatedWizardTree(models.TransientModel):
     amount = fields.Float('Amount')
     service = fields.Char('Service')
     transit_time = fields.Char('Arrival')
+    shipping_weight = fields.Float(string="Shipping weight", readonly=True, default=0)

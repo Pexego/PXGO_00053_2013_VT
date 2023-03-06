@@ -11,6 +11,7 @@
     'data': [
         'views/sale_order_board_view.xml',
         'wizard/picking_rated_wizard_view.xml',
+        'views/transportation_view.xml'
     ],
     'installable': True,
 }
