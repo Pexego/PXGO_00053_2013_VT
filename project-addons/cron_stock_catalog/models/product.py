@@ -188,21 +188,21 @@ class ProductProduct(models.Model):
 
     @api.model
     def _get_eol_stock_move_domain(self, date):
-        """ :param date: date min to search stock_moves
-            :returns the domain to search the stock_moves with products in eol
-        """
-        return [('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),
-             ('product_id.state', '=', 'end'), ('sale_line_id', '!=', False)]
+        """ :returns the super domain adding only sales if it comes in the context"""
+        domain = super()._get_eol_stock_move_domain(date)
+        if self.env.context.get('only_sales', False):
+            domain += ['&',('sale_line_id','!=',False)] + domain
+        return domain
 
     def cron_eol_products(self, date=False):
-        """ Send to commercials an email with a xls attachment with the eol products out of stock and pending shipment
+        """ Send to purchase team an email with a xls attachment with the eol products out of stock and pending shipment
         :param date: Optional. If not set its value will be today - 1 year """
 
         headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva", "Activo", "Cantidad pendiente"]
         if not date:
             date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
         rows = []
-        domain = self._get_eol_stock_move_domain(date)
+        domain = self.with_context({'only_sales':True})._get_eol_stock_move_domain(date)
         moves = self.env['stock.move'].search(domain)
         for move in moves:
             picking_name = move.picking_id.name if move.picking_id else ""
