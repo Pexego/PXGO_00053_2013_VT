@@ -79,16 +79,16 @@ class PromotionsRulesConditionsExprs(models.Model):
                     "Value for computed subtotal combination is invalid\n"
                     "Eg for right format is `['brand1,brand2',..]|120.50`")
             product_brands_iter, quantity = value.split("|")
-            if not (type(eval(product_brands_iter)) in [tuple, list] and
+            if not (type(eval(product_brands_iter)) not in [tuple, list] and
                     type(eval(quantity)) in [int, float]):
                 raise UserError(
                     "Value for Compute sub total of brand is invalid\n"
                     "Eg for right format is `['brand1,brand2',..]|120.50`")
-        if attribute == 'category_in_order' and type(eval(value)) in [tuple, list]:
+        if attribute == 'category_in_order' and type(eval(value)) not in [tuple, list]:
             raise UserError(
                 "Value for Product Category in Order is invalid\n"
                 "Eg for right format is ['prod_categ_1','prod_categ_2',...]")
-        if attribute == 'order_pricelist_brand' and type(eval(value)) in [tuple, list]:
+        if attribute == 'order_pricelist_brand' and type(eval(value)) not in [tuple, list]:
             raise UserError(
                 "Value for Order Pricelist Brand in Order is invalid\n"
                 "Eg for right format is ['order_pricelist_brand_1','order_pricelist_brand_2',...]")
