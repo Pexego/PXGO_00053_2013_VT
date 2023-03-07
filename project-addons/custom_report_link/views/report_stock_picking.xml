@@ -155,8 +155,8 @@
         <template id="report_picking_dropship_custom">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
-                    <t t-set="doc" t-value="doc.with_context({'dropship':True})"/>
-                    <t t-call="custom_report_link.report_picking_custom_data" t-lang="doc.sale_id.partner_id.commercial_partner_id.lang" />
+                    <t t-set="doc" t-value="doc.with_context({'dropship':True,'lang':doc.sale_id.partner_id.commercial_partner_id.lang})"/>
+                    <t t-call="custom_report_link.report_picking_custom_data"/>
                 </t>
             </t>
         </template>
@@ -196,9 +196,8 @@
         <template id="report_picking_custom_valued">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
-                    <t t-set="doc" t-value="doc.with_context({'picking_valued':True})"/>
-                    <t t-call="custom_report_link.report_picking_custom_data"
-                       t-lang="doc.partner_id.commercial_partner_id.lang"/>
+                    <t t-set="doc" t-value="doc.with_context({'picking_valued':True,'lang':doc.partner_id.commercial_partner_id.lang})"/>
+                    <t t-call="custom_report_link.report_picking_custom_data"/>
                 </t>
             </t>
         </template>
