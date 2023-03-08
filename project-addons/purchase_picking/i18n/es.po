@@ -702,3 +702,8 @@ msgstr "Características"
 #: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
 msgid "Costs"
 msgstr "Costes"
+
+#. module: purchase_picking
+#: selection:purchase.order,invoice_status:0
+msgid "Partially Invoiced"
+msgstr "Parcialmente facturado"
