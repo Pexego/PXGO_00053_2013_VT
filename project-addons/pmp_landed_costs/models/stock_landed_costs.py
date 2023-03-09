@@ -192,6 +192,16 @@ class StockValuationAdjustmentLines(models.Model):
             line.cost_purchase_per_unit = \
                 line.cost_purchase / (line.quantity or 1.0)
 
+    @api.multi
+    def _get_cost_percentage_variance(self):
+        for line in self:
+            try:
+                line.cost_percentage_variance = (
+                                                    line.new_unit_cost - line.former_cost_per_unit
+                                                ) * 100 / line.former_cost_per_unit
+            except ZeroDivisionError:
+                line.cost_percentage_variance = 0
+
     new_unit_cost = fields.Float('New standard price', store=True,
                                  compute="_get_new_move_cost")
     tariff = fields.Float("Tariff", digits=(16, 2))
@@ -200,6 +210,9 @@ class StockValuationAdjustmentLines(models.Model):
     cost_purchase_per_unit = fields.Float(
         'Purchase Price (Per Unit)', compute='_compute_cost_purchase_per_unit',
         digits=0, store=True)
+    cost_percentage_variance = fields.Float(
+        'Variance %', compute='_get_cost_percentage_variance', digits=(16, 2)
+    )
 
 
 class StockLandedCostLines(models.Model):
