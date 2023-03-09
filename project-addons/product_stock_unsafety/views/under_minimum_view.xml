@@ -43,6 +43,7 @@
                     <field name="biggest_sale_qty"/>
                     <field name="min_days_id"/>
                     <field name="remaining_days_sale"/>
+                    <field name="real_remaining_days_sale"/>
                     <field name="minimum_proposal"/>
                     <field name="product_qty"/>
                     <button name="cancel" type="object" string="Cancel" states='exception,in_progress' icon="STOCK_CANCEL"/>
@@ -77,6 +78,7 @@
                             <field name="product_qty"/>
                             <field name="min_days_id"/>
                             <field name="remaining_days_sale"/>
+                            <field name="real_remaining_days_sale"/>
                             <field name="last_sixty_days_sales"/>
                             <field name="biggest_sale_id"/>
                             <field name="biggest_sale_qty"/>

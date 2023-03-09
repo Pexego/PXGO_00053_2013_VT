@@ -24,14 +24,18 @@ class ProductProduct(models.Model):
 
     def _calc_remaining_days(self):
         for product in self:
-            stock_days = 0.00
+            stock_days, real_stock_days = 0.00, 0.00
             stock_per_day = product.get_daily_sales()
             virtual_available = product.virtual_available - \
                 product.incoming_qty
+            real_available = product.qty_available - product.incoming_qty
             if stock_per_day > 0 and virtual_available:
                 stock_days = round(virtual_available / stock_per_day)
+            if stock_per_day > 0 and real_available:
+                real_stock_days = round(real_available / stock_per_day)
 
             product.remaining_days_sale = stock_days
+            product.real_remaining_days_sale = real_stock_days
             product.joking = stock_days * product.standard_price
 
     @api.model
@@ -154,6 +158,11 @@ class ProductProduct(models.Model):
     remaining_days_sale = fields.Float('Remaining Stock Days', readonly=True,
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
+                                            "computed consulting sales in sixty "
+                                            "days with stock.", multi=True)
+    real_remaining_days_sale = fields.Float('Remaining Stock Days (real)', readonly=True,
+                                            compute='_calc_remaining_days',
+                                            help="Stock measure in days of sale "
                                             "computed consulting sales in sixty "
                                             "days with stock.", multi=True)
     joking = fields.Float("Joking", readonly=True,

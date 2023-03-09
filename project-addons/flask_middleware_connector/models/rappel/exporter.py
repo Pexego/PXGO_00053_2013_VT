@@ -44,6 +44,8 @@ class RappelInfoExporter(Component):
                 "date_end": binding.date_end,
                 "amount": binding.amount,
                 "amount_est": binding.amount_est,
+                "qty_invoiced": binding.curr_qty,
+                "qty_to_invoice": binding.curr_qty_pickings,
                 }
         if mode == "insert":
             return self.backend_adapter.insert(vals)

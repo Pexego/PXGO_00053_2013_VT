@@ -3,7 +3,6 @@ import base64
 from datetime import datetime,timedelta
 import xlsxwriter
 
-
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -13,7 +12,7 @@ class ProductProduct(models.Model):
         """
         headers = ["ID", "Último Proveedor", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
                    "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
-                   "Cant. pedido más grande", "Días de stock restantes", "Stock en playa",
+                   "Cant. pedido más grande", "Días de stock restantes", "Días de stock restantes (real)", "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado"]
 
@@ -21,7 +20,7 @@ class ProductProduct(models.Model):
 
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
-                  "remaining_days_sale", "qty_available_input_loc", "average_margin",
+                  "remaining_days_sale", "real_remaining_days_sale", "qty_available_input_loc", "average_margin",
                   "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state"]
         rows = []
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
@@ -140,7 +139,7 @@ class ProductProduct(models.Model):
                    "Margen PVD_Iberia", "Margen PVD_Italia", "Margen PVD_Francia","Margen PVD_Europa", "Margen PVI_Iberia", "Margen PVI_Italia",
                    "Margen PVI_Francia", "Margen PVI_Europa", "Stock Real", "Stock Disponible", "Coste 2",
                    "Nombre de la categoría Padre", "Nombre de la categoría", "Ventas en los últimos 60 días con stock",
-                   "Días de stock restantes", "Nombre de la marca", "Stock Cocina", "Estado", "Joking",
+                   "Días de stock restantes", "Días de stock restantes (real)", "Nombre de la marca", "Stock Cocina", "Estado", "Joking",
                    "Fabricando"]
 
         domain = [('sale_ok', '=', True)]
@@ -149,7 +148,7 @@ class ProductProduct(models.Model):
                   "pvi1_price", "pvi3_price", "pvi4_price", "pvi2_price", "margin_pvd1", "margin_pvd3",
                   "margin_pvd4", 'margin_pvd2', "margin_pvi1", "margin_pvi3", "margin_pvi4", "margin_pvi2", "qty_available",
                   "virtual_available_wo_incoming", "standard_price_2_inc", "categ_id",
-                  "last_sixty_days_sales", "remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
+                  "last_sixty_days_sales", "remaining_days_sale", "real_remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
                   "state", "joking", "qty_in_production"]
 
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
@@ -187,27 +186,38 @@ class ProductProduct(models.Model):
                         .format(datetime.now().strftime('%m%d')),
                         "cron_stock_catalog.email_template_general_alberto_3")
 
-    def cron_eol_products(self):
-        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva","Activo","Cantidad pendiente"]
+    @api.model
+    def _get_eol_stock_move_domain(self, date):
+        """ :returns the super domain adding only sales if it comes in the context"""
+        domain = super()._get_eol_stock_move_domain(date)
+        if self.env.context.get('only_sales', False):
+            domain += ['&',('sale_line_id','!=',False)] + domain
+        return domain
 
-        date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
-        discontinued_products = self.env['product.product'].search([('state', '=', 'end')])
+    def cron_eol_products(self, date=False):
+        """ Send to purchase team an email with a xls attachment with the eol products out of stock and pending shipment
+        :param date: Optional. If not set its value will be today - 1 year """
+
+        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva", "Activo", "Cantidad pendiente"]
+        if not date:
+            date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
         rows = []
-        for product in discontinued_products:
-            moves = self.env['stock.move'].search([('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),
-                 ('product_id', '=', product.id), ('sale_line_id', '!=', False)])
-            for move in moves:
-                picking_name = move.picking_id.name if move.picking_id else ""
-                qty = move.product_uom_qty
-                if move.state=='partially_available':
-                    qty -= move.reserved_availability
-                first_replacement = move.product_id.get_first_no_eol_replacement_product(product_visited=set(move.product_id))
-                replacement_name = ""
-                replacement_sale_ok = ""
-                if first_replacement:
-                    replacement_name = first_replacement.default_code
-                    replacement_sale_ok = "SI" if first_replacement.sale_ok else "NO"
-                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,replacement_name,replacement_sale_ok,qty])
+        domain = self.with_context({'only_sales':True})._get_eol_stock_move_domain(date)
+        moves = self.env['stock.move'].search(domain)
+        for move in moves:
+            picking_name = move.picking_id.name if move.picking_id else ""
+            qty = move.product_uom_qty
+            if move.state == 'partially_available':
+                qty -= move.reserved_availability
+            first_replacement = move.product_id.get_first_no_eol_replacement_product(
+                product_visited=set(move.product_id))
+            replacement_name = ""
+            replacement_sale_ok = ""
+            if first_replacement:
+                replacement_name = first_replacement.default_code
+                replacement_sale_ok = "SI" if first_replacement.sale_ok else "NO"
+            rows.append([move.sale_line_id.order_id.name, picking_name, move.sale_line_id.salesman_id.name,
+                         move.product_id.default_code, replacement_name, replacement_sale_ok, qty])
 
         file_b64 = self.generate_xls(headers, rows)
         self.send_email(file_b64, "eol_products",

@@ -32,6 +32,10 @@ class ProductStockUnsafety(models.Model):
         related='product_id.remaining_days_sale',
         string='Remaining Days of Sale',
         readonly=True)
+    real_remaining_days_sale = fields.Float(
+        related='product_id.real_remaining_days_sale',
+        string='Remaining Days of Sale (real)',
+        readonly=True)
     real_stock = fields.Float(related='product_id.qty_available',
                               string='Real Stock', readonly=True,
                               help='Quantity in stock')
