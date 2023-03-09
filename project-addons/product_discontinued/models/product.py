@@ -38,15 +38,22 @@ class ProductProduct(models.Model):
                     return result
 
     @api.model
-    def cron_send_mail_to_commercials_products_discontinued(self):
-        date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
-        discontinued_products = self.env['product.product'].search(
-            [('product_tmpl_id.state', 'ilike', 'end'), ('virtual_stock_conservative', '<=', 0)])
-        moves = self.env['stock.move'].search(
-            ['&', '&', '&', ('state', 'in', ('partially_available', 'confirmed', 'waiting')),
-             ('date', '>=', date),
-             ('product_id', 'in', discontinued_products.mapped('id')), '|',
-             ('sale_line_id', '!=', False), ('claim_line_id', '!=', False)])
+    def _get_eol_stock_move_domain(self, date):
+        """ :param date: date min to search stock_moves
+            :returns the domain to search the stock_moves with products in eol
+        """
+        return ['&','&',('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),
+             ('product_id.state', '=', 'end'), '|',
+             ('sale_line_id', '!=', False), ('claim_line_id', '!=', False)]
+
+    @api.model
+    def cron_send_mail_to_commercials_products_discontinued(self, date=False):
+        """ Send to commercials an email with the eol products out of stock and pending shipment
+        :param date: Optional. If not set its value will be today - 1 year """
+        if not date:
+            date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
+        domain = self._get_eol_stock_move_domain(date)
+        moves = self.env['stock.move'].search(domain)
         moves_group_by_commercial = dict()
         if moves:
             moves_sales = moves.filtered(lambda m:m.sale_line_id)

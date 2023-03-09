@@ -3,7 +3,6 @@ import base64
 from datetime import datetime,timedelta
 import xlsxwriter
 
-
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -187,27 +186,38 @@ class ProductProduct(models.Model):
                         .format(datetime.now().strftime('%m%d')),
                         "cron_stock_catalog.email_template_general_alberto_3")
 
-    def cron_eol_products(self):
-        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva","Activo","Cantidad pendiente"]
+    @api.model
+    def _get_eol_stock_move_domain(self, date):
+        """ :returns the super domain adding only sales if it comes in the context"""
+        domain = super()._get_eol_stock_move_domain(date)
+        if self.env.context.get('only_sales', False):
+            domain += ['&',('sale_line_id','!=',False)] + domain
+        return domain
 
-        date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
-        discontinued_products = self.env['product.product'].search([('state', '=', 'end')])
+    def cron_eol_products(self, date=False):
+        """ Send to purchase team an email with a xls attachment with the eol products out of stock and pending shipment
+        :param date: Optional. If not set its value will be today - 1 year """
+
+        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva", "Activo", "Cantidad pendiente"]
+        if not date:
+            date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
         rows = []
-        for product in discontinued_products:
-            moves = self.env['stock.move'].search([('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),
-                 ('product_id', '=', product.id), ('sale_line_id', '!=', False)])
-            for move in moves:
-                picking_name = move.picking_id.name if move.picking_id else ""
-                qty = move.product_uom_qty
-                if move.state=='partially_available':
-                    qty -= move.reserved_availability
-                first_replacement = move.product_id.get_first_no_eol_replacement_product(product_visited=set(move.product_id))
-                replacement_name = ""
-                replacement_sale_ok = ""
-                if first_replacement:
-                    replacement_name = first_replacement.default_code
-                    replacement_sale_ok = "SI" if first_replacement.sale_ok else "NO"
-                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,replacement_name,replacement_sale_ok,qty])
+        domain = self.with_context({'only_sales':True})._get_eol_stock_move_domain(date)
+        moves = self.env['stock.move'].search(domain)
+        for move in moves:
+            picking_name = move.picking_id.name if move.picking_id else ""
+            qty = move.product_uom_qty
+            if move.state == 'partially_available':
+                qty -= move.reserved_availability
+            first_replacement = move.product_id.get_first_no_eol_replacement_product(
+                product_visited=set(move.product_id))
+            replacement_name = ""
+            replacement_sale_ok = ""
+            if first_replacement:
+                replacement_name = first_replacement.default_code
+                replacement_sale_ok = "SI" if first_replacement.sale_ok else "NO"
+            rows.append([move.sale_line_id.order_id.name, picking_name, move.sale_line_id.salesman_id.name,
+                         move.product_id.default_code, replacement_name, replacement_sale_ok, qty])
 
         file_b64 = self.generate_xls(headers, rows)
         self.send_email(file_b64, "eol_products",
