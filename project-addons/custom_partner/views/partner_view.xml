@@ -34,9 +34,12 @@
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="property_supplier_payment_term_id" position="before">
-                <field name="eur_currency" invisible="1"/>
-                <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
-            </field>
+                    <field name="eur_currency" invisible="1"/>
+                    <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
+                </field>
+                <field name="property_account_position_id" position="after">
+                    <field name="no_auto_invoice"/>
+                </field>
             </field>
         </record>
 

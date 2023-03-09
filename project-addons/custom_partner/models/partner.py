@@ -89,6 +89,7 @@ class ResPartner(models.Model):
     property_product_pricelist = fields.\
         Many2one(search="_search_pricelist_name")
     forwarder = fields.Boolean(string="Forwarder")
+    no_auto_invoice = fields.Boolean(string="No auto invoice")
 
     @api.multi
     @api.depends('country_id')

@@ -37,39 +37,54 @@ class SaleOrder(models.Model):
                 or False
 
     @api.model
-    def cron_create_invoices(self, limit):
+    def cron_create_invoices(self, mode, limit=0):
+        """
+        Search the orders to invoice and create them
+        :param limit: Limits the number of order to search
+        :param mode: The type of invoice, options:
+            'Diaria'
+            'Mensual'
+            'Semanal'
+            'Quincenal'
+        :returns: true or false
+        """
         sale_obj = self.env['sale.order']
         ctx = dict(self._context or {})
         ctx['bypass_risk'] = True
         templates = []
         validate = True
         ok_validation = True
+        max_invoice = limit or 9999
 
-        # Sales to Invoice
+        # Sales to Invoice based on invoicing mode
         sales = sale_obj.\
             search([('invoice_status_2', '=', 'to_invoice'),
-                    ('invoice_type_id.name', '=', 'Diaria'),
+                    ('invoice_type_id.name', '=', mode),
+                    ('partner_id.no_auto_invoice', '=', False),
                     ('tests', '=', False)],
-                   order='confirmation_date desc', limit=limit)
+                   order='confirmation_date desc', limit=max_invoice)
+
         # Create invoice
-        res = []
-        for sale in sales:
-            try:
-                invoices = sale.action_invoice_create()
-                res.extend(invoices)
-            except:
-                print("No invoiceable lines on sale {}".format(sale.name))
-                invoices = self.env['account.invoice'].\
-                    search([('state', '=', 'draft'),
-                            ('origin', '=', sale.name)])
-                if invoices:
-                    invoices.unlink()
-                pass
-        # if len(sales) != len(res):
-            # templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+        if mode == 'Diaria':
+            res = []
+            for sale in sales:
+                try:
+                    invoices = sale.action_invoice_create()
+                    res.extend(invoices)
+                except:
+                    print("No invoiceable lines on sale {}".format(sale.name))
+                    invoices = self.env['account.invoice']. \
+                        search([('state', '=', 'draft'),
+                                ('origin', '=', sale.name)])
+                    if invoices:
+                        invoices.unlink()
+                    pass
+        else:
+            invoices = sales.action_invoice_create()
+
         invoices_created = self.env['account.invoice'].with_context(ctx).\
-            browse(res)
-        if len(res) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
+            browse(invoices)
+        if len(invoices) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
             # There are invoices created without lines
             templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices_empty_lines', False))
             # Do not validate them because it will generate an error
