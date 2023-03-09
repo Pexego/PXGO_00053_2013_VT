@@ -29,7 +29,9 @@
                 <field name="eta"/>
                 <field name="n_ref" class="numeric_left_rows"/>
                 <field name="ctns"/>
-                <field name="dimensions"/>
+                <field name="container_type"/>
+                <field name="kilograms"/>
+                <field name="cubic_meters"/>
                 <field name="status"/>
                 <field name="customs_channel" widget="color" options="{'readonly_mode': 'color'}"/>
                 <field name="pickings_warehouse"/>
