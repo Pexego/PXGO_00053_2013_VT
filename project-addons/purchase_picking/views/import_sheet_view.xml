@@ -73,6 +73,16 @@
         <field name="view_id" ref="view_import_sheet_tree"/>
     </record>
 
+    <report
+        id="import_sheet_xlsx"
+        model="import.sheet"
+        string="Print to XLSX"
+        report_type="xlsx"
+        name="purchase_picking.import_sheet"
+        file="import_sheet"
+        attachment_use="False"
+    />
+
     <menuitem name="Import Sheets" parent="purchase.menu_purchase_control"
         action="action_open_import_sheet_tree_view" id="import_sheet_menu"/>
 </odoo>

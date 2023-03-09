@@ -111,3 +111,8 @@ msgstr "Caractéristiques"
 #: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
 msgid "Costs"
 msgstr "Coûts"
+
+#. module: purchase_picking
+#: model:ir.actions.report,name:purchase_picking.import_sheet_xlsx
+msgid "Print to XLSX"
+msgstr "Exporter vers XLSX"

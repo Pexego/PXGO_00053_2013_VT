@@ -709,3 +709,8 @@ msgstr "Costes"
 #: selection:purchase.order,invoice_status:0
 msgid "Partially Invoiced"
 msgstr "Parcialmente facturado"
+
+#. module: purchase_picking
+#: model:ir.actions.report,name:purchase_picking.import_sheet_xlsx
+msgid "Print to XLSX"
+msgstr "Imprimir a XLSX"
