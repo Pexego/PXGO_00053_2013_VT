@@ -65,7 +65,22 @@ class SaleOrder(models.Model):
                    order='confirmation_date desc', limit=max_invoice)
 
         # Create invoice
-        invoices = sales.action_invoice_create()
+        if mode == 'Diaria':
+            res = []
+            for sale in sales:
+                try:
+                    invoices = sale.action_invoice_create()
+                    res.extend(invoices)
+                except:
+                    print("No invoiceable lines on sale {}".format(sale.name))
+                    invoices = self.env['account.invoice']. \
+                        search([('state', '=', 'draft'),
+                                ('origin', '=', sale.name)])
+                    if invoices:
+                        invoices.unlink()
+                    pass
+        else:
+            invoices = sales.action_invoice_create()
 
         invoices_created = self.env['account.invoice'].with_context(ctx).\
             browse(invoices)
