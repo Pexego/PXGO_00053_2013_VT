@@ -13,7 +13,7 @@ class ProductProduct(models.Model):
         """
         headers = ["ID", "Último Proveedor", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
                    "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
-                   "Cant. pedido más grande", "Días de stock restantes", "Stock en playa",
+                   "Cant. pedido más grande", "Días de stock restantes", "Días de stock restantes (real)", "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado"]
 
@@ -21,7 +21,7 @@ class ProductProduct(models.Model):
 
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
-                  "remaining_days_sale", "qty_available_input_loc", "average_margin",
+                  "remaining_days_sale", "real_remaining_days_sale", "qty_available_input_loc", "average_margin",
                   "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state"]
         rows = []
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
@@ -140,7 +140,7 @@ class ProductProduct(models.Model):
                    "Margen PVD_Iberia", "Margen PVD_Italia", "Margen PVD_Francia","Margen PVD_Europa", "Margen PVI_Iberia", "Margen PVI_Italia",
                    "Margen PVI_Francia", "Margen PVI_Europa", "Stock Real", "Stock Disponible", "Coste 2",
                    "Nombre de la categoría Padre", "Nombre de la categoría", "Ventas en los últimos 60 días con stock",
-                   "Días de stock restantes", "Nombre de la marca", "Stock Cocina", "Estado", "Joking",
+                   "Días de stock restantes", "Días de stock restantes (real)", "Nombre de la marca", "Stock Cocina", "Estado", "Joking",
                    "Fabricando"]
 
         domain = [('sale_ok', '=', True)]
@@ -149,7 +149,7 @@ class ProductProduct(models.Model):
                   "pvi1_price", "pvi3_price", "pvi4_price", "pvi2_price", "margin_pvd1", "margin_pvd3",
                   "margin_pvd4", 'margin_pvd2', "margin_pvi1", "margin_pvi3", "margin_pvi4", "margin_pvi2", "qty_available",
                   "virtual_available_wo_incoming", "standard_price_2_inc", "categ_id",
-                  "last_sixty_days_sales", "remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
+                  "last_sixty_days_sales", "remaining_days_sale", "real_remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
                   "state", "joking", "qty_in_production"]
 
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
