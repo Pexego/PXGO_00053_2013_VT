@@ -17,7 +17,7 @@ class BaseIOFolder(models.Model):
                         'doc_type': 'order',
                         'price_source': 'order'}).with_context(not_associated=True).import_order_button()
             sale = self.env['sale.order'].browse(action['res_id'])
-            sale.with_context(bypass_override=True).action_confirm()
+            sale.with_context(bypass_override=True, bypass_risk=True).action_confirm()
             for picking in sale.picking_ids:
                 picking.action_done()
         else:
