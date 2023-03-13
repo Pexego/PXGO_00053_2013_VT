@@ -30,6 +30,11 @@ class ProductProduct(models.Model):
             boms = self.env['mrp.bom'].search([('bom_line_ids.product_id', '=', self.id)])
             for product in boms.mapped('product_tmpl_id'):
                 product.product_variant_ids.calculate_bom_weight()
+
+        if values.get('volume', False) and self.used_in_bom_count:
+            boms = self.env['mrp.bom'].search([('bom_line_ids.product_id', '=', self.id)])
+            for product in boms.mapped('product_tmpl_id'):
+                product.product_variant_ids.calculate_bom_volume()
         return res
 
     @api.multi
@@ -42,3 +47,11 @@ class ProductProduct(models.Model):
                 weight_net_total += line.product_id.weight_net * line.product_qty
             self.weight = weight_total or self.weight
             self.weight_net = weight_net_total or self.weight_net
+
+    @api.multi
+    def calculate_bom_volume(self):
+        if self.bom_ids:
+            volume_total = 0.0
+            for line in self.bom_ids[0].bom_line_ids:
+                volume_total += line.product_id.volume * line.product_qty
+            self.volume = volume_total or self.volume
