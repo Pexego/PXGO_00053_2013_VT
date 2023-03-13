@@ -24,6 +24,7 @@ class SaleOrderLineReport(models.Model):
 
     _name = 'sale.order.line.report'
     _auto = False
+    _order = 'date_order desc'
 
     name = fields.Char('Name', readonly=True)
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
@@ -109,6 +110,6 @@ LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
 LEFT JOIN stock_move sm on sm.sale_line_id = sol.id
 LEFT JOIN res_partner rp on rp.id = sol.order_partner_id
 GROUP BY sol.id, sol.name, pt.product_brand_id, pt.categ_id, sol.order_partner_id, rp.country_id, sol.product_uom_qty,
-         sol.product_uom, sol.price_unit, sol.discount, sol.salesman_id, sol.state, sol.order_id, 
+         sol.product_uom, sol.price_unit, sol.discount, sol.salesman_id, sol.state, sol.order_id,
          so.date_order, so.confirmation_date, so.team_id, pt.state, so.state, so.invoice_status_2)
 """)

@@ -7,6 +7,8 @@
             <tree string="Invoice pending sales">
                 <field name="order_id"/>
                 <field name="product_id"/>
+                <field name="date_order"/>
+                <field name="confirmation_date"/>
                 <field name="name"/>
                 <field name="product_uom_qty"/>
                 <field name="order_partner_id"/>
