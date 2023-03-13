@@ -11,6 +11,7 @@ class Rappel(models.Model):
 
     _inherit = 'rappel'
 
+    exclude_brands_mode = fields.Boolean()
     brand_ids = fields.Many2many('product.brand', 'rappel_product_brand_rel',
                                  'rappel_id', 'product_brand_id', 'Brand')
     discount_voucher = fields.Boolean()
@@ -32,8 +33,9 @@ class Rappel(models.Model):
                 if rappel.product_id:
                     product_ids += rappel.product_id
                 elif rappel.brand_ids:
+                    operator = 'not in' if rappel.exclude_brands_mode else 'in'
                     product_ids += product_obj.search(
-                        [('product_brand_id', 'in', rappel.brand_ids.ids)])
+                        [('product_brand_id', operator, rappel.brand_ids.ids)])
                 elif rappel.product_categ_id:
                     product_ids += product_obj.search(
                         [('categ_id', '=', rappel.product_categ_id.id)])
