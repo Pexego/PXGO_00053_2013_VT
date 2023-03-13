@@ -66,18 +66,18 @@ class SaleOrder(models.Model):
 
         # Create invoice
         if mode == 'Diaria':
-            res = []
+            invoices = []
             for sale in sales:
                 try:
-                    invoices = sale.action_invoice_create()
-                    res.extend(invoices)
+                    invoice = sale.action_invoice_create()
+                    invoices.extend(invoice)
                 except:
                     print("No invoiceable lines on sale {}".format(sale.name))
-                    invoices = self.env['account.invoice']. \
+                    empty_invoices_empty = self.env['account.invoice']. \
                         search([('state', '=', 'draft'),
                                 ('origin', '=', sale.name)])
-                    if invoices:
-                        invoices.unlink()
+                    if empty_invoices_empty:
+                        empty_invoices_empty.unlink()
                     pass
         else:
             invoices = sales.action_invoice_create()
