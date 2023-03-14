@@ -79,6 +79,12 @@ class SaleOrder(models.Model):
                     if empty_invoices_empty:
                         empty_invoices_empty.unlink()
                     pass
+        elif mode == self.env.ref('custom_partner.biweekly_grouped_by_shipping').name:
+            invoices = []
+            shipping_addrs = sales.mapped('partner_shipping_id')
+            for shipp in shipping_addrs:
+                invoice = sales.filtered(lambda s: s.partner_shipping_id == shipp).action_invoice_create()
+                invoices.extend(invoice)
         else:
             invoices = sales.action_invoice_create()
 
