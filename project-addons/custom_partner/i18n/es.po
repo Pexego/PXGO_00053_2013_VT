@@ -534,3 +534,8 @@ msgstr "Pendientes de Facturar"
 #, python-format
 msgid "You have recently deactivated the partner from web, that is supposed to be something permanent. Now you shall wait to activate the partner again."
 msgstr "Has desactivado recientemente este cliente de la web, se supone que eso es una acción permanente. Deberás esperar para activar el cliente de nuevo."
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_sale_order_line_confirmation_date
+msgid "Confirmation Date"
+msgstr "Fecha de confirmación"

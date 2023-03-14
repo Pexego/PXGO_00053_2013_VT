@@ -203,3 +203,8 @@ msgstr " \n"
 #: model:ir.model.fields,field_description:rappel_custom.field_sale_order_no_rappel
 msgid "W/O Rappel"
 msgstr "Senza rappel"
+
+#. module: rappel_custom
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_exclude_brands_mode
+msgid "Exclude Brands Mode"
+msgstr "Escludi Marchi"

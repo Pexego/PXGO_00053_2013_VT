@@ -513,3 +513,8 @@ msgstr "Ordini in attesa di fatturazione"
 #, python-format
 msgid "You have recently deactivated the partner from web, that is supposed to be something permanent. Now you shall wait to activate the partner again."
 msgstr "Hai recentemente disattivato il partner dal web, che dovrebbe essere qualcosa di permanente. Ora dovrai aspettare di riattivare il partner."
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_sale_order_line_confirmation_date
+msgid "Confirmation Date"
+msgstr "Data di conferma"
