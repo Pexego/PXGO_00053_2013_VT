@@ -50,6 +50,13 @@ class SaleOrder(models.Model):
                 picking.not_sync = True
         return res
 
+    @api.multi
+    def copy(self, default=None):
+        default = default or {}
+        default['scheduled_date'] = False
+        return super().copy(default)
+
+
 class StockPicking(models.Model):
 
     _inherit = 'stock.picking'
