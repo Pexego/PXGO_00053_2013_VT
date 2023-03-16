@@ -20,7 +20,7 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    scheduled_date = fields.Datetime('Scheduled shipping date')
+    scheduled_date = fields.Datetime('Scheduled shipping date', copy=False)
     not_sync_picking = fields.Boolean()
 
     @api.multi
@@ -49,12 +49,6 @@ class SaleOrder(models.Model):
             for picking in self.picking_ids:
                 picking.not_sync = True
         return res
-
-    @api.multi
-    def copy(self, default=None):
-        default = default or {}
-        default['scheduled_date'] = False
-        return super().copy(default)
 
 
 class StockPicking(models.Model):
