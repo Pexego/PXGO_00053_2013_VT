@@ -74,8 +74,7 @@ class StockPicking(models.Model):
     @api.multi
     def action_shedule(self):
 
-        view_id = self.env['stock.schedule.wizard']
-        new = view_id.create({})
+        new = self.env['stock.schedule.wizard'].create({})
 
         return {
             'name': 'Schedule Shippement',
