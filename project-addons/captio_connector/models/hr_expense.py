@@ -86,11 +86,11 @@ class HrExpense(models.Model):
                             exp_vals = []
 
                             # Create all the necessary data
-                            if expense["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito'):
+                            if expense["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito', 'Carte Crédit'):
                                 payment_method = ' TJ '
                                 journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.card_account_id.id,
-                            elif expense["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti'):
+                            elif expense["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti', 'En espèces'):
                                 payment_method = ' EF '
                                 journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.cash_account_id.id,
@@ -206,7 +206,9 @@ class HrExpense(models.Model):
                             else:
                                 partner_cif = sii_expense["SpanishNIF"]
 
-                            partner = self.env['res.partner'].search([('vat', 'ilike', partner_cif), ('is_company', '=', True)])
+                            partner = self.env['res.partner'].search([('vat', 'ilike', partner_cif),
+                                                                      ('is_company', '=', True),
+                                                                      ('supplier', '=', True)])
                             fiscal_position = self.env['account.fiscal.position'].search([('company_id', '=', 1),
                                                                                           ('country_id.code', '=', 'ES')])
                             if not partner:
@@ -262,11 +264,11 @@ class HrExpense(models.Model):
                             # -- Account Move to pay the invoice -- (like a normal expense but with 410 account)
                             exp_vals = []
                             # Create all the necessary data
-                            if expense_detail["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito'):
+                            if expense_detail["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito', 'Carte Crédit'):
                                 payment_method = ' TJ '
                                 journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.card_account_id.id,
-                            elif expense_detail["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti'):
+                            elif expense_detail["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti', 'En espèces'):
                                 payment_method = ' EF '
                                 journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.cash_account_id.id,
@@ -346,11 +348,11 @@ class HrExpense(models.Model):
                                         user = self.assign_user_from_captio(expense["User"]["Id"])
 
                                     # Create all the necessary data
-                                    if expense["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito'):
+                                    if expense["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito', 'Carte Crédit'):
                                         payment_method = ' TJ '
                                         journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                         close_account = user.card_account_id.id,
-                                    elif expense["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti'):
+                                    elif expense["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti', 'En espèces'):
                                         payment_method = ' EF '
                                         journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                         close_account = user.cash_account_id.id,
