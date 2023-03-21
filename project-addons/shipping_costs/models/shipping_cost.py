@@ -183,16 +183,27 @@ class SaleOrderShippingCost(models.TransientModel):
         """
         Returns the pallet number of the sale_order shipping
         """
-        self.pallet_number = math.ceil(self.sale_order_volume * (1 / self.shipping_cost_id.volume))
+        for so_shipping_cost in self:
+            try:
+                so_shipping_cost.pallet_number = math.ceil(
+                    so_shipping_cost.sale_order_volume * (
+                        1 / so_shipping_cost.shipping_cost_id.volume
+                    )
+                )
+            except ZeroDivisionError:
+                # we consider as default pallet volume 1 cbm
+                so_shipping_cost.pallet_number = so_shipping_cost.sale_order_volume
 
     def _get_sale_order_weight(self):
         """
         Calculates sale_order weight
         """
-        self.sale_order_weight = self.sale_order_id.get_sale_order_weight()
+        for so_shipping_cost in self:
+            so_shipping_cost.sale_order_weight = so_shipping_cost.sale_order_id.get_sale_order_weight()
 
     def _get_sale_order_volume(self):
         """
         Calculates sale_order volume
         """
-        self.sale_order_volume = self.sale_order_id.get_sale_order_volume()
+        for so_shipping_cost in self:
+            so_shipping_cost.sale_order_volume = so_shipping_cost.sale_order_id.get_sale_order_volume()
