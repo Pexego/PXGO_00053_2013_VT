@@ -73,15 +73,15 @@ class PostalCodeRange(models.Model):
         - first_code <= last_code
         """
         for postal_code_range in self:
-            if not re.match(self.postal_code_format_id.regex, postal_code_range.first_code):
+            if not re.match(postal_code_range.postal_code_format_id.regex, postal_code_range.first_code):
                 raise UserError(_(
                     'Not valid postal code value: "%s". Please, try using one like this "%s"') % (
-                    postal_code_range.first_code, self.postal_code_format_id.postal_code_sample
+                    postal_code_range.first_code, postal_code_range.postal_code_format_id.postal_code_sample
                 ))
-            if not re.match(self.postal_code_format_id.regex, postal_code_range.last_code):
+            if not re.match(postal_code_range.postal_code_format_id.regex, postal_code_range.last_code):
                 raise UserError(_(
                     'Not valid postal code value: "%s". Please, try using one like this "%s"') % (
-                    postal_code_range.last_code, self.postal_code_format_id.postal_code_sample
+                    postal_code_range.last_code, postal_code_range.postal_code_format_id.postal_code_sample
                 ))
             if postal_code_range.first_code > postal_code_range.last_code:
                 raise Warning(_('Error!:: End code is lower than first code.'))
