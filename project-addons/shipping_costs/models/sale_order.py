@@ -4,12 +4,6 @@ from odoo import models, fields, api
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    sale_order_shipping_cost_id = fields.One2many(
-        "sale.order.shipping.cost",
-        "sale_order_id",
-        "Shipping Cost"
-    )
-
     @api.multi
     def compute_variables(self):
         """

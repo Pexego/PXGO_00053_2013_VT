@@ -36,8 +36,6 @@ import time
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    picking_rated_id = fields.One2many("picking.rated.wizard", "sale_order_id", string="Picking rated")
-
     @api.multi
     def compute_variables(self):
         new = self.env['picking.rated.wizard'].create({'sale_order_id': self})
