@@ -50,8 +50,9 @@ class ProductProduct(models.Model):
 
     @api.multi
     def calculate_bom_volume(self):
-        if self.bom_ids:
-            volume_total = 0.0
-            for line in self.bom_ids[0].bom_line_ids:
-                volume_total += line.product_id.volume * line.product_qty
-            self.volume = volume_total or self.volume
+        for product in self:
+            if product.bom_ids:
+                volume_total = 0.0
+                for line in product.bom_ids[0].bom_line_ids:
+                    volume_total += line.product_id.volume * line.product_qty
+                product.volume = volume_total or product.volume
