@@ -27,26 +27,27 @@ class ProductProduct(models.Model):
     def write(self, values):
         res = super().write(values)
         if values.get('weight', False) or values.get('weight_net', False) and self.used_in_bom_count:
-            boms = self.env['mrp.bom'].search([('bom_line_ids.product_id', '=', self.id)])
+            boms = self.env['mrp.bom'].search([('bom_line_ids.product_id', 'in', self.ids)])
             for product in boms.mapped('product_tmpl_id'):
                 product.product_variant_ids.calculate_bom_weight()
 
         if values.get('volume', False) and self.used_in_bom_count:
-            boms = self.env['mrp.bom'].search([('bom_line_ids.product_id', '=', self.id)])
+            boms = self.env['mrp.bom'].search([('bom_line_ids.product_id', 'in', self.ids)])
             for product in boms.mapped('product_tmpl_id'):
                 product.product_variant_ids.calculate_bom_volume()
         return res
 
     @api.multi
     def calculate_bom_weight(self):
-        if self.bom_ids:
-            weight_total = 0.0
-            weight_net_total = 0.0
-            for line in self.bom_ids[0].bom_line_ids:
-                weight_total += line.product_id.weight * line.product_qty
-                weight_net_total += line.product_id.weight_net * line.product_qty
-            self.weight = weight_total or self.weight
-            self.weight_net = weight_net_total or self.weight_net
+        for product in self:
+            if product.bom_ids:
+                weight_total = 0.0
+                weight_net_total = 0.0
+                for line in product.bom_ids[0].bom_line_ids:
+                    weight_total += line.product_id.weight * line.product_qty
+                    weight_net_total += line.product_id.weight_net * line.product_qty
+                product.weight = weight_total or product.weight
+                product.weight_net = weight_net_total or product.weight_net
 
     @api.multi
     def calculate_bom_volume(self):
