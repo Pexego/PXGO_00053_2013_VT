@@ -69,3 +69,13 @@ msgstr "Porcentaje de incremento en transporte que depende de transportista"
 #: model:ir.model.fields,field_description:sale_order_board.field_transportation_transporter_fuel
 msgid "Fuel(%)"
 msgstr "Incremento de precio en el transporte(%)"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_transportation_transporter_weight_volume_translation
+msgid "Translation (kg/cbm)"
+msgstr "Conversión (kg/cbm)"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_shipping_weight
+msgid "Shipping weight"
+msgstr "Peso de envío"
