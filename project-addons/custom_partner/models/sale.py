@@ -55,7 +55,7 @@ class SaleOrder(models.Model):
         templates = []
         validate = True
         ok_validation = True
-        max_invoice = limit or 9999
+        max_invoice = limit or None
 
         # Sales to Invoice based on invoicing mode
         sales = sale_obj. \
@@ -70,7 +70,7 @@ class SaleOrder(models.Model):
             partners = sales.mapped('partner_id.commercial_partner_id')
             for partner in partners:
                 try:
-                    sales_to_invoice = sales.filtered(lambda s: s.partner_id == partner and
+                    sales_to_invoice = sales.filtered(lambda s: s.partner_id == partner and not
                                                                 all(s.order_line.filtered(lambda sl: sl.invoice_status == 'to invoice').mapped('deposit')))
                     invoice = sales_to_invoice.action_invoice_create()
                 except:
@@ -130,7 +130,7 @@ class SaleOrder(models.Model):
         templates = []
         validate = True
         ok_validation = True
-        max_invoice = limit or 9999
+        max_invoice = limit or None
 
         # Sales to Invoice based on invoicing mode
         sales = sale_obj.\
