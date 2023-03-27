@@ -68,6 +68,38 @@
         </field>
     </record>
 
+    <record id="shipping_cost_calculator_form" model="ir.ui.view">
+        <field name="name">shipping.cost.calculator.form</field>
+        <field name="model">shipping.cost.calculator</field>
+        <field name="arch" type="xml">
+            <form string="Shipping Cost Calculator">
+                <group>
+                    <field name="shipping_weight"/>
+                    <field name="shipping_volume"/>
+                    <field name="zip_code"/>
+                </group>
+                <footer>
+                    <button name="calculate_shipping_cost" string="Calculate" type="object" class="oe_highlight"
+                            attrs="{'invisible': ['|', '|', ('shipping_weight','=', False), ('shipping_volume','=', False), ('zip_code', '=', False)]}"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_open_shipping_cost_calculator_view">
+        <field name="name">Shipping Costs Caculator</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipping.cost.calculator</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="shipping_cost_calculator_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="shipping_cost_calculator_item" name="Shipping Costs Calculator" action="action_open_shipping_cost_calculator_view"
+              parent="transportation.menu_transportation_sale" sequence="12"/>
+
     <record model="ir.actions.act_window" id="action_open_shipping_cost_view">
         <field name="name">Shipping Costs</field>
         <field name="type">ir.actions.act_window</field>

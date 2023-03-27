@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 import math
+from odoo.exceptions import UserError
 
 
 COMPARATORS = [
@@ -254,3 +255,68 @@ class SaleOrderShippingCost(models.TransientModel):
         except ZeroDivisionError:
             # we consider as default pallet volume 1 cbm
             return shipping_volume
+
+
+class ShippingCostCalculator(models.TransientModel):
+    _name = 'shipping.cost.calculator'
+
+    shipping_weight = fields.Float('Shipping weight')
+    shipping_volume = fields.Float('Shipping voluem')
+    zip_code = fields.Char('Zip code')
+
+    def calculate_shipping_cost(self):
+        # FIXME: Ojo con los permisos de los comerciales externos
+        """
+        Calculates shipping costs given shipping weight, shipping volume and
+        destination's zip code
+
+        Returns an action that opens a picking_rated_wizard model
+        """
+        if not self.shipping_volume or not self.shipping_weight or not self.zip_code:
+            raise UserError(_(
+                'Invalid values to calculate shipping costs. Please, try filling all values.'
+            ))
+        zones = self.env['shipping.zone'].search([]).filtered(
+            lambda zone: zone.is_postal_code_in_zone(self.zip_code)
+        )
+        if not zones:
+            raise UserError(_(
+                'There are no zones embedding "%s". Please, try with another zip code or configure zones'
+            ) % self.zip_code)
+
+        services = []
+        shipping_costs = self.env['shipping.cost'].search([('shipping_zone_id', 'in', zones.ids)])
+        create_so_sc = self.env['sale.order.shipping.cost'].create
+        picking_rated = self.env['picking.rated.wizard'].create({
+            'total_weight': self.shipping_weight,
+            'total_volume': self.shipping_volume,
+        })
+        action_to_return = self.env.ref('sale_order_board.action_open_picking_rated_wizard').read()[0]
+        action_to_return['res_id'] = picking_rated.id
+
+        for sc in shipping_costs:
+            new_so_sc = create_so_sc({'shipping_cost_id': sc.id})
+            services += new_so_sc.calculate_shipping_cost(
+                self.shipping_volume,
+                self.shipping_weight,
+                mode='pallet'
+            )
+            services += new_so_sc.calculate_shipping_cost(
+                self.shipping_volume,
+                self.shipping_weight,
+                mode='total_weight'
+            )
+
+        services_to_add = [
+            (0, 0, {
+                'currency': 'EUR',
+                'transit_time': '',
+                'amount': service['price'],
+                'service': service['service_name'],
+                'shipping_weight': self.shipping_weight,
+                'wizard_id': picking_rated.id,
+                'sequence': 0
+            }) for service in services
+        ]
+        picking_rated.write({'data': services_to_add})
+        return action_to_return
