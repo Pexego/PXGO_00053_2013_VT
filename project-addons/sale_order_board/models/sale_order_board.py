@@ -63,7 +63,7 @@ class SaleOrder(models.Model):
                             new,
                             package_weight=sale_order_weight,
                             num_pieces=math.ceil(sale_order_weight / 20),
-                            package_pieces=sum(order.order_line.mapped('product_uom_qty'))
+                            package_pieces=int(sum(order.order_line.mapped('product_uom_qty')))
                         )
                     except(requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                         message_error += (
