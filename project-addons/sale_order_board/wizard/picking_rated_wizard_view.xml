@@ -36,4 +36,14 @@
             </form>
         </field>
     </record>
+
+    <record id="action_open_picking_rated_wizard" model="ir.actions.act_window">
+        <field name="name">Shipping Data Information</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">picking.rated.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
 </odoo>

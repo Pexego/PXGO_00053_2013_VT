@@ -256,8 +256,17 @@ class TestSaleOrderShippingCost(SavepointCase):
     def test_calculates_chipping_costs_correctly(self):
         pallet_prices_expected = [12.1]
         weight_prices_expected = [18.15]
-        pallet_result = self.sale_order_shipping_cost.calculate_shipping_cost()
-        weight_result = self.sale_order_shipping_cost.calculate_shipping_cost(pallet_mode=False)
+
+        pallet_result = self.sale_order_shipping_cost.calculate_shipping_cost(
+            1,
+            10,
+            'pallet'
+        )
+        weight_result = self.sale_order_shipping_cost.calculate_shipping_cost(
+            1,
+            10,
+            'total_weight'
+        )
         pallet_prices_obtained = [elem['price'] for elem in pallet_result]
         weight_prices_obtained = [elem['price'] for elem in weight_result]
         self.assertEqual(pallet_prices_expected, pallet_prices_obtained)
