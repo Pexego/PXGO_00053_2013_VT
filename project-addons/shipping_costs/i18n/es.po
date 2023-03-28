@@ -406,3 +406,46 @@ msgstr "transportation.transporter"
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_weight_volume_translation
 msgid "Translation (kg/cbm)"
 msgstr "Conversión (kg/cbm)"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_shipping_weight
+msgid "Shipping weight"
+msgstr "Peso de envío"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_shipping_volume
+msgid "Shipping volume"
+msgstr "Volumen de envío"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_zip_code
+msgid "Zip code"
+msgstr "Código postal"
+
+#. module: shipping_costs
+#: model:ir.actions.act_window,name:shipping_costs.action_open_shipping_cost_calculator_view
+#: model:ir.ui.menu,name:shipping_costs.shipping_cost_calculator_item
+msgid "Shipping Costs Caculator"
+msgstr "Calculadora de gastos de envío"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_calculator_form
+msgid "Calculate"
+msgstr "Calcular"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_calculator_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:276
+#, python-format
+msgid "Invalid values to calculate shipping costs. Please, try changing values."
+msgstr "Valores para calcular los costes de envío incorrectos. Por favor, prueba cambiando los valores."
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:283
+#, python-format
+msgid "There are no zones embedding "%s". Please, try with another zip code."
+msgstr "No hay zonas que contengan "%s". Por favor, prueba con otro código postal."
