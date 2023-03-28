@@ -17,6 +17,7 @@ class MoveReserves(models.TransientModel):
     def on_change_product_id_origin(self):
         """Changes the domain of the reserves_origin_id field"""
         if self.product_id:
+            self.reserves_origin_id = None
             return {'domain': {'reserves_origin_id': [('product_id', '=', self.product_id.id),
                                                       ('picking_type_id.code', '=', 'outgoing'),
                                                       ('state', 'not in', ['done', 'draft', 'cancel'])]}}
@@ -25,6 +26,7 @@ class MoveReserves(models.TransientModel):
     def on_change_product_id_dest(self):
         """Changes the domain of the reserves_dest_id field"""
         if self.product_id:
+            self.reserves_dest_id = None
             return {'domain': {'reserves_dest_id': [('product_id', '=', self.product_id.id),
                                                     ('state', 'not in', ['done', 'draft', 'cancel', 'assigned'])]}}
 
