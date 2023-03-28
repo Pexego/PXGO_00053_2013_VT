@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
                 or False
 
     @api.model
-    def cron_create_invoices_monthly(self, mode, limit=0):
+    def cron_create_invoices_monthly(self, mode, limit=None):
         """
         Search the orders to invoice and create them grouped by partner
         and commit with every invoice
@@ -55,7 +55,6 @@ class SaleOrder(models.Model):
         templates = []
         validate = True
         ok_validation = True
-        max_invoice = limit or None
 
         # Sales to Invoice based on invoicing mode
         sales = sale_obj. \
@@ -63,7 +62,7 @@ class SaleOrder(models.Model):
                     ('invoice_type_id.name', '=', mode),
                     ('partner_id.no_auto_invoice', '=', False),
                     ('tests', '=', False)],
-                   order='confirmation_date desc', limit=max_invoice)
+                   order='confirmation_date desc', limit=limit)
 
         # Create invoice
         if mode == 'Mensual':
@@ -113,7 +112,7 @@ class SaleOrder(models.Model):
         return True
 
     @api.model
-    def cron_create_invoices(self, mode, limit=0):
+    def cron_create_invoices(self, mode, limit=None):
         """
         Search the orders to invoice and create them
         :param limit: Limits the number of order to search
@@ -130,7 +129,6 @@ class SaleOrder(models.Model):
         templates = []
         validate = True
         ok_validation = True
-        max_invoice = limit or None
 
         # Sales to Invoice based on invoicing mode
         sales = sale_obj.\
@@ -138,7 +136,7 @@ class SaleOrder(models.Model):
                     ('invoice_type_id.name', '=', mode),
                     ('partner_id.no_auto_invoice', '=', False),
                     ('tests', '=', False)],
-                   order='confirmation_date desc', limit=max_invoice)
+                   order='confirmation_date desc', limit=limit)
 
         # Create invoice
         if mode == 'Diaria':
