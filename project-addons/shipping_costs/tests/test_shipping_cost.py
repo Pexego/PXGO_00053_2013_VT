@@ -1,6 +1,5 @@
 from odoo.tests.common import SavepointCase
-from odoo.exceptions import ValidationError
-from unittest.mock import patch
+from odoo.exceptions import ValidationError, UserError
 
 
 class TestShippingCost(SavepointCase):
@@ -349,3 +348,128 @@ class TestSaleOrderShippingCost(SavepointCase):
             mode_of_fee
         )
         self.assertEqual(expected_fee, returned_fee)
+
+
+class TestShippingCostCalculator(SavepointCase):
+    post_install = True
+    at_install = True
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.shipping_cost_calculator = cls.env['shipping.cost.calculator'].create({
+            'shipping_weight': 10,
+            'shipping_volume': 1.0,
+            'zip_code': 'Good code'
+        })
+
+        cls.postal_code_format = cls.env['postal.code.format'].create({
+            'name': 'Test format',
+            'regex': r'\AGood code$',
+            'postal_code_sample': 'Good code'
+        })
+        cls.country = cls.env['res.country'].create({
+            'name': 'Test Country',
+            'postal_code_format_id': cls.postal_code_format.id
+        })
+        cls.partner = cls.env['res.partner'].create({
+            'company_type': 'person',
+            'name': 'Test partner',
+            'country_id': cls.country.id
+        })
+        cls.good_service = cls.env['transportation.service'].create({'name': 'Good service test'})
+        cls.good_transporter = cls.env['transportation.transporter'].create({
+            'name': 'Good transporter',
+            'partner_id': cls.partner.id,
+            'service_ids': [(4, cls.good_service.id)]
+        })
+        cls.good_zone = cls.env['shipping.zone'].create({
+            'name': 'Good zone',
+            'transporter_id': cls.good_transporter.id,
+            'country_id': cls.country.id,
+            'postal_code_ids': [
+                (0, 0, {'first_code': 'Good code', 'last_code': 'Good code'})
+            ]
+        })
+
+        cls.supplement_good_service = cls.env['shipping.cost.supplement'].create({
+            'service_id': cls.good_service.id,
+            'added_percentage': 10.0
+        })
+        cls.one_pallet_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'pallet',
+            'max_qty': 1,
+            'price': 10.0
+        })
+        cls.five_pallet_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'pallet',
+            'max_qty': 5,
+            'price': 30.0
+        })
+        cls.weight_50_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'total_weight',
+            'max_qty': 50.0,
+            'price': 15.0
+        })
+        cls.weight_100_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'total_weight',
+            'max_qty': 100.0,
+            'price': 20.0
+        })
+        cls.shipping_cost = cls.env['shipping.cost'].create({
+            'cost_name': 'Test shipping cost',
+            'fee_ids': [
+                (4, cls.one_pallet_fee.id),
+                (4, cls.five_pallet_fee.id),
+                (4, cls.weight_50_fee.id),
+                (4, cls.weight_100_fee.id)
+            ],
+            'volume': 5.0,
+            'is_active': True,
+            'transporter_id': cls.good_transporter.id,
+            'supplement_ids': [(4, cls.supplement_good_service.id)],
+            'shipping_zone_id': cls.good_zone.id
+        })
+
+    def test_calculate_shipping_cost(self):
+        returned_action = self.shipping_cost_calculator.calculate_shipping_cost()
+        picking_rated_returned = self.env['picking.rated.wizard'].browse(returned_action['res_id'])
+
+        expected_currency_list = ['EUR', 'EUR']
+        expected_prices = [11.0, 16.5]
+        expected_service_names = ['Good service test'] * 2
+        expected_transit_time = ['', '']
+
+        obtained_currency_list = picking_rated_returned.data.mapped('currency')
+        obtained_prices = picking_rated_returned.data.mapped('amount')
+        obtained_service_names = picking_rated_returned.data.mapped('service')
+        obtained_transit_time = [''] * 2
+
+        self.assertEqual(expected_currency_list, obtained_currency_list)
+        self.assertEqual(expected_prices, obtained_prices)
+        self.assertEqual(expected_service_names, obtained_service_names)
+        self.assertEqual(expected_transit_time, obtained_transit_time)
+
+    def test_calculate_shipping_cost_with_negative_volume(self):
+        self.shipping_cost_calculator.write({'shipping_volume': -1})
+        with self.assertRaisesRegex(
+            UserError,
+            'Invalid values to calculate shipping costs. Please, try changing values.'
+        ):
+            self.shipping_cost_calculator.with_context({'lang': 'en'}).calculate_shipping_cost()
+
+    def test_calculate_shipping_cost_with_negative_weight(self):
+        self.shipping_cost_calculator.write({'shipping_weight': -1})
+        with self.assertRaisesRegex(
+            UserError,
+            'Invalid values to calculate shipping costs. Please, try changing values.'
+        ):
+            self.shipping_cost_calculator.with_context({'lang': 'en'}).calculate_shipping_cost()
+
+    def test_calculate_shipping_cost_with_zip_code_not_found(self):
+        self.shipping_cost_calculator.write({'zip_code': 'Bad code'})
+        with self.assertRaisesRegex(
+            UserError,
+            'There are no zones embedding "Bad code". Please, try with another zip code.'
+        ):
+            self.shipping_cost_calculator.with_context({'lang': 'en'}).calculate_shipping_cost()
