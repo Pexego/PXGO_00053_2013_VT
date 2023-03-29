@@ -65,22 +65,49 @@ class MoveReserves(models.TransientModel):
             raise UserError(_('You have selected more quantity than is available in the origin reserve'))
         if self.qty > self.reserves_dest_id.product_uom_qty:
             raise UserError(_('You have selected more quantity than is in the destination reserve'))
+        if self.qty == 0:
+            raise UserError(_('You must select some quantity'))
 
+        # 1. create reserve intermediate
         dummy_reserve = self.create_dummy_reserve(self.product_id, self.qty)
-        origin_qty_reserved = self.reserves_origin_id.reserved_availability
+        # origin_qty_reserved = self.reserves_origin_id.reserved_availability
+        sale_lines = None
 
         try:
+            # 2. release origin
             if not self.reserves_origin_id.reservation_ids:
                 # When is reserved directly on the picking there is not stock.reservation
                 self.reserves_origin_id.action_do_unreserve()
             else:
+                if self.reserves_origin_id.reservation_ids.mapped('sale_line_id'):
+                    sale_lines = self.reserves_origin_id.reservation_ids.mapped('sale_line_id')
                 self.reserves_origin_id.reservation_ids.release()  # TODO: sudo??
+
+            # 3. reserve intermediate
             dummy_reserve.reserve()
-            if self.qty != origin_qty_reserved:
-                self.reserves_origin_id.reservation_ids.reserve()
+
+            # 4. reserve origin
+            if not self.reserves_origin_id.reservation_ids:
+                # When is reserved directly on the picking there is not stock.reservation
+                self.reserves_origin_id._action_assign()
+            else:
+                if sale_lines:
+                    # if there were reserves but there was deleted
+                    sale_lines.acquire_stock_reservation(date_validity=self.reserves_origin_id.reservation_ids[0].date_validity, note=None)
+                    self.reserves_origin_id.reservation_ids.unlink()
+                else:
+                    self.reserves_origin_id.reservation_ids.reserve()
+
+
+            # 5. release intermediate
             dummy_reserve.release()
+
+            # 6. reserve destination
             self.reserves_dest_id._action_assign()
+
+            # 7. delete intermediate
             dummy_reserve.unlink()
+
         except:
             raise UserError(_('There is been an error, try again later'))
 
@@ -96,6 +123,6 @@ class StockMove(models.Model):
             if move.picking_id:
                 name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or '_') + ' | ' + (move.picking_id.name or '_') + ' | ' + (move.user_id.name or '_')
             else:
-                name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or '_') + ' | ' + (move.user_id.name or '_')
+                name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or move.sale_id.name or '_') + ' | ' + (move.user_id.name or '_')
             result.append((move.id, name))
         return result
