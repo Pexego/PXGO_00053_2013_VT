@@ -11,6 +11,7 @@ class MrpBom(models.Model):
         res = super().write(values)
         for bom in self:
             bom.product_tmpl_id.product_variant_ids.calculate_bom_weight()
+            bom.product_tmpl_id.product_variant_ids.calculate_bom_volume()
             bom.product_tmpl_id.recalculate_standard_price_2()
         return res
 
@@ -18,5 +19,6 @@ class MrpBom(models.Model):
     def create(self, values):
         res = super().create(values)
         res.product_tmpl_id.product_variant_ids.calculate_bom_weight()
+        res.product_tmpl_id.product_variant_ids.calculate_bom_volume()
         res.product_tmpl_id.recalculate_standard_price_2()
         return res

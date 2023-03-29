@@ -7,9 +7,14 @@
             <form string="Sales Order Lines">
                 <group>
                     <field name="total_weight"/>
-                    <t attrs="{'invisible': [('products_wo_weight', '=', '0')]}">
-                        <b><field name="products_wo_weight" style="color:red"/></b>
-                        <field name="products_without_weight" style="color:red"/>
+                    <t>
+                        <b><field name="message_products_weight" style="color:red"/></b>
+                        <field name="product_names_without_weight" style="color:red"/>
+                    </t>
+                    <field name="total_volume"/>
+                    <t>
+                        <b><field name="message_products_volume" style="color:red"/></b>
+                        <field name="product_names_without_volume" style="color:red"/>
                     </t>
                 </group>
                 <group>
@@ -19,6 +24,7 @@
                             <field name="amount"/>
                             <field name="currency"/>
                             <field name="transit_time"/>
+                            <field name="shipping_weight"/>
                         </tree>
                     </field>
                 </group>
