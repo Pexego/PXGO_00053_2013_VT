@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="transporter_form_add_translation" model="ir.ui.view">
+        <field name="name">transportation.transporter.form.add.translation</field>
+        <field name="model">transportation.transporter</field>
+        <field name="inherit_id" ref="transportation.transporter_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="weight_volume_translation"/>
+            </field>
+        </field>
+    </record>
+</odoo>

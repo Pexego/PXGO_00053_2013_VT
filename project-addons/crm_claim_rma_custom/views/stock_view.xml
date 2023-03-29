@@ -27,4 +27,31 @@
             </button>
         </field>
     </record>
+
+    <record id="view_move_picking_tree_modify_qty_confirmed_attributes" model="ir.ui.view">
+            <field name="name">stock.move.tree.modify.qty_confirmed.attributes</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="picking_incidences.view_move_picking_tree_add_ready_qty"/>
+            <field name="arch" type="xml">
+                <field name="priority" position="after">
+                    <field name="not_sync" invisible="1"/>
+                </field>
+                <field name="qty_confirmed" position="attributes">
+                    <attribute name="attrs">{'column_invisible': ['|','|','&amp;',('parent.state', 'not in', ['confirmed','partially_available']),'|',('parent.not_sync','=',False),('parent.state','!=','assigned'),('parent.block_picking','=',True),('parent.move_type', '!=' , 'direct')]}</attribute>
+                </field>
+            </field>
+        </record>
+      <record id="view_picking_form_modify_buttons_attributes" model="ir.ui.view">
+        <field name="name">stock.picking.form.modify.buttons.attributtes</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="picking_incidences.view_picking_form_add_incidences"/>
+        <field name="arch" type="xml">
+            <button name="action_accept_confirmed_qty" position="attributes">
+                <attribute name="attrs">{'invisible':['|','|','&amp;',('state', 'not in', ['confirmed','partially_available']),'|',('not_sync','=',False),('state','!=','assigned'),('block_picking','=',True),('move_type', '!=' , 'direct')]}</attribute>
+            </button>
+            <button name="action_copy_reserv_qty" position="attributes">
+                <attribute name="attrs">{'invisible':['|','|','&amp;',('state', 'not in', ['confirmed','partially_available']),'|',('not_sync','=',False),('state','!=','assigned'),('block_picking','=',True),('move_type', '!=' , 'direct')]}</attribute>
+            </button>
+        </field>
+      </record>
 </odoo>

@@ -20,7 +20,7 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    scheduled_date = fields.Datetime('Scheduled shipping date')
+    scheduled_date = fields.Datetime('Scheduled shipping date', copy=False)
     not_sync_picking = fields.Boolean()
 
     @api.multi
@@ -50,6 +50,7 @@ class SaleOrder(models.Model):
                 picking.not_sync = True
         return res
 
+
 class StockPicking(models.Model):
 
     _inherit = 'stock.picking'
@@ -67,8 +68,7 @@ class StockPicking(models.Model):
     @api.multi
     def action_shedule(self):
 
-        view_id = self.env['stock.schedule.wizard']
-        new = view_id.create({})
+        new = self.env['stock.schedule.wizard'].create({})
 
         return {
             'name': 'Schedule Shippement',

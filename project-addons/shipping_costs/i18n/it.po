@@ -1,0 +1,409 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* shipping_costs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-09 10:29+0000\n"
+"PO-Revision-Date: 2023-02-09 10:29+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: shipping_costs
+#: model:ir.model.fields,help:shipping_costs.field_postal_code_format_postal_code_sample
+msgid "An example of how the postal code format must be."
+msgstr "Un esempio di come deve essere il formato del codice postale."
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_postal_code_sample
+msgid "Code Sample"
+msgstr "Codice campione"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Conditions"
+msgstr "Condizioni"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.postal_code_format_form_view
+msgid "Countries"
+msgstr "Nazioni"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_res_country
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_country_ids
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_country_id
+msgid "Country"
+msgstr "Nazione"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_create_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_create_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_create_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_create_date
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_create_date
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_create_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_display_name
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_display_name
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_display_name
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_display_name
+msgid "Display Name"
+msgstr "Visualizza Nome"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/zone.py:87
+#, python-format
+msgid "Error!:: End code is lower than first code."
+msgstr "Errore! Il codice finale è inferiore al primo codice."
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:67
+#, python-format
+msgid "Error!:: Services must be offered by the transporter selected."
+msgstr "Errore! I servizi devono essere offerti dal trasportatore selezionato."
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:61
+#, python-format
+msgid "Error!:: Shipping zone assigned is not for the transporter selected."
+msgstr "Errore! La zona di spedizione assegnata non è quella del trasportatore selezionato."
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Fee"
+msgstr "Tassa"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Fees"
+msgstr "Imposte"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_first_code
+msgid "First"
+msgstr "Primo"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_fuel
+msgid "Fuel"
+msgstr "Fuel"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_id
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_id
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_id
+msgid "ID"
+msgstr "ID"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_last_code
+msgid "Last"
+msgstr "Ultimo"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format___last_update
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range___last_update
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost___last_update
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone___last_update
+msgid "Last Modified on"
+msgstr "Data di ultima modifica"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_write_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_write_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_write_uid
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_write_uid
+msgid "Last Updated by"
+msgstr "Ultima modifica di"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_write_date
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_write_date
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_write_date
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_write_date
+msgid "Last Updated on"
+msgstr "Ultima modifica il"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_name
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/zone.py:115
+#, python-format
+msgid "Not valid postal code sample: \"%s\""
+msgstr "Esempio di codice postale non valido: \"%s\""
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/zone.py:77
+#: code:addons/shipping_costs/models/zone.py:82
+#, python-format
+msgid "Not valid postal code value: \"%s\". Please, try using one like this \"%s\""
+msgstr "Valore del codice postale non valido: \"%s\". Provate a utilizzare un valore come questo \"%s\""
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_note
+msgid "Notes"
+msgstr "Note"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_pallet_number
+msgid "Pallet number"
+msgstr "Numero di pallet"
+
+#. module: shipping_costs
+#: model:ir.model.fields,help:shipping_costs.field_shipping_cost_fuel
+msgid "Percentage increase in transportation which varies depending on transporter"
+msgstr "Aumento percentuale del costo di trasporto che varia a seconda del corriere "
+
+#. module: shipping_costs
+#: model:ir.actions.act_window,name:shipping_costs.action_open_postal_code_format_view
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_postal_code_format_id
+#: model:ir.model.fields,field_description:shipping_costs.field_res_country_postal_code_format_id
+#: model:ir.ui.menu,name:shipping_costs.postal_code_format_item
+msgid "Postal Code Format"
+msgstr "Formato del codice postale"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_zone_form_view
+msgid "Postal Code Ranges"
+msgstr "Intervalli dei codici postali"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_postal_code_ids
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_zone_form_view
+msgid "Postal Codes"
+msgstr "Codici postali"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_sale_order
+msgid "Quotation"
+msgstr "Citazione"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_regex
+msgid "Regular expression"
+msgstr "Espressione regolare"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_sale_order_id
+msgid "Sale Order"
+msgstr "Ordine"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Sale order conditions"
+msgstr "Condizioni d'ordine"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_sale_order_volume
+msgid "Sale order volume"
+msgstr "Dimensione dell'ordine"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_sale_order_weight
+msgid "Sale order weight"
+msgstr "Peso dell'ordine"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Setup default terms and conditions in your sales settings ..."
+msgstr "Imposta termini e condizioni predefinite nelle impostazioni di vendita ..."
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_sale_order_shipping_cost_id
+#: model:ir.model.fields,field_description:shipping_costs.field_sale_order_shipping_cost_shipping_cost_id
+#: model:ir.model.fields,field_description:shipping_costs.field_transportation_transporter_shipping_cost_id
+msgid "Shipping Cost"
+msgstr "Costo di Spedizione"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_transportation_service_shipping_cost_supplement_id
+msgid "Shipping Cost Supplement"
+msgstr "Supplemento alle spese di spedizione"
+
+#. module: shipping_costs
+#: model:ir.actions.act_window,name:shipping_costs.action_open_shipping_cost_view
+#: model:ir.ui.menu,name:shipping_costs.shipping_cost_item
+msgid "Shipping Costs"
+msgstr "Costi di spedizione"
+
+#. module: shipping_costs
+#: model:ir.ui.menu,name:shipping_costs.shipping_zone_item
+msgid "Shipping Zone"
+msgstr "Zona di consegna"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_shipping_cost_ids
+msgid "Shipping costs"
+msgstr "Costi di spedizione"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_shipping_zone_id
+msgid "Shipping zone"
+msgstr "Zona di consegna"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Supplement"
+msgstr "Suplemento"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_form_view
+msgid "Supplements"
+msgstr "Supplementi"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_transporter_id
+msgid "Transporter"
+msgstr "Trasportatore"
+
+#. module: shipping_costs
+#: model:ir.model.fields,help:shipping_costs.field_postal_code_format_regex
+msgid "With this regular expression you will tell how is the format of the postal code."
+msgstr "Con questa espressione regolare si può dire come è il formato del codice postale."
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_postal_code_range_shipping_zone_id
+#: model:ir.model.fields,field_description:shipping_costs.field_res_country_shipping_zone_ids
+#: model:ir.model.fields,field_description:shipping_costs.field_transportation_transporter_zone_id
+msgid "Zone"
+msgstr "Zona"
+
+#. module: shipping_costs
+#: model:ir.actions.act_window,name:shipping_costs.action_open_shipping_zone_view
+msgid "Zones"
+msgstr "Zone"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:6
+#, python-format
+msgid "equals"
+msgstr "Pari a"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:8
+#, python-format
+msgid "greater than"
+msgstr "Maggiore di"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:9
+#, python-format
+msgid "greater than or equal to"
+msgstr "Maggiore o uguale a"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:12
+#, python-format
+msgid "is in"
+msgstr "In "
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:13
+#, python-format
+msgid "is not in"
+msgstr "Non in"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:10
+#, python-format
+msgid "less than"
+msgstr "Meno di"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:11
+#, python-format
+msgid "less than or equal to"
+msgstr "Meno o uguale a"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_location_zone
+msgid "location.zone"
+msgstr "location.zone"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:7
+#, python-format
+msgid "not equal to"
+msgstr "Diversi da"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_postal_code_format
+msgid "postal.code.format"
+msgstr "postal.code.format"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_postal_code_range
+msgid "postal.code.range"
+msgstr "postal.code.range"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_sale_order_shipping_cost
+msgid "sale.order.shipping.cost"
+msgstr "sale.order.shipping.cost"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_sale_order_shipping_service_cost
+msgid "sale.order.shipping.service.cost"
+msgstr "sale.order.shipping.service.cost"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost
+msgid "shipping cost"
+msgstr "Costo di spedizione"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost_condition
+msgid "shipping.cost.condition"
+msgstr "shipping.cost.condition"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost_fee
+msgid "shipping.cost.fee"
+msgstr "shipping.cost.fee"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_cost_supplement
+msgid "shipping.cost.supplement"
+msgstr "shipping.cost.supplement"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_shipping_zone
+msgid "shipping.zone"
+msgstr "shipping.zone"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_transportation_service
+msgid "transportation.service"
+msgstr "transportation.service"
+
+#. module: shipping_costs
+#: model:ir.model,name:shipping_costs.model_transportation_transporter
+msgid "transportation.transporter"
+msgstr "transportation.transporter"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_weight_volume_translation
+msgid "Translation (kg/cbm)"
+msgstr "Conversione (kg/cbm)"
+
