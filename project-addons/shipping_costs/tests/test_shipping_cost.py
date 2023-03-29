@@ -1,5 +1,6 @@
 from odoo.tests.common import SavepointCase
 from odoo.exceptions import ValidationError
+from unittest.mock import patch
 
 
 class TestShippingCost(SavepointCase):
@@ -56,8 +57,35 @@ class TestShippingCost(SavepointCase):
             'transporter_id': cls.bad_transporter.id,
             'country_id': cls.country.id
         })
+        cls.one_pallet_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'pallet',
+            'max_qty': 1,
+            'price': 10.0
+        })
+        cls.five_pallet_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'pallet',
+            'max_qty': 5,
+            'price': 30.0
+        })
+        cls.weight_50_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'total_weight',
+            'max_qty': 50.0,
+            'price': 15.0
+        })
+        cls.weight_100_fee = cls.env['shipping.cost.fee'].create({
+            'type': 'total_weight',
+            'max_qty': 100.0,
+            'price': 20.0
+        })
         cls.shipping_cost = cls.env['shipping.cost'].create({
             'cost_name': 'Test shipping cost',
+            'fee_ids': [
+                (4, cls.one_pallet_fee.id),
+                (4, cls.five_pallet_fee.id),
+                (4, cls.weight_50_fee.id),
+                (4, cls.weight_100_fee.id)
+            ],
+            'volume': 5.0,
             'is_active': True,
             'transporter_id': cls.good_transporter.id,
             'supplement_ids': [(4, cls.supplement_good_service.id)],
@@ -124,6 +152,18 @@ class TestShippingCost(SavepointCase):
             'Error!:: Shipping zone assigned is not for the transporter selected.'
         ):
             self.shipping_cost.with_context({'lang': 'en'}).write({'transporter_id': self.bad_transporter.id})
+
+    def test_get_fee_price_by_weight(self):
+        expected_fee = 15
+        shipping_weight = 10
+        returned_fee = self.shipping_cost.get_fee_price_by_weight(shipping_weight)
+        self.assertEqual(expected_fee, returned_fee)
+
+    def test_get_fee_price_by_pallet(self):
+        expected_fee = 10
+        pallet_number = 1
+        returned_fee = self.shipping_cost.get_fee_price_by_pallet(pallet_number)
+        self.assertEqual(expected_fee, returned_fee)
 
 
 class TestSaleOrderShippingCost(SavepointCase):
@@ -253,7 +293,7 @@ class TestSaleOrderShippingCost(SavepointCase):
             'shipping_cost_id': cls.shipping_cost.id
         })
 
-    def test_calculates_chipping_costs_correctly(self):
+    def test_calculates_shipping_costs_correctly(self):
         pallet_prices_expected = [12.1]
         weight_prices_expected = [18.15]
 
@@ -271,3 +311,41 @@ class TestSaleOrderShippingCost(SavepointCase):
         weight_prices_obtained = [elem['price'] for elem in weight_result]
         self.assertEqual(pallet_prices_expected, pallet_prices_obtained)
         self.assertEqual(weight_prices_expected, weight_prices_obtained)
+
+    def test_get_service_price_list_correctly(self):
+        expected_service_price_list = [{
+            'price': 12.1,
+            'sale_order_shipping_cost_id': self.sale_order_shipping_cost.id,
+            'service_name': 'Good service test'
+        }]
+
+        base_price = 10
+        obtained_service_price_list = self.sale_order_shipping_cost.get_service_price_list(
+            base_price
+        )
+
+        self.assertEquals(expected_service_price_list, obtained_service_price_list)
+
+    def test_fee_price_with_pallet_mode(self):
+        expected_fee = 10
+        pallet_number = 1
+        shipping_weight = 10
+        mode_of_fee = 'pallet'
+        returned_fee = self.sale_order_shipping_cost.get_fee_price(
+            pallet_number,
+            shipping_weight,
+            mode_of_fee
+        )
+        self.assertEqual(expected_fee, returned_fee)
+
+    def test_fee_price_with_weight_mode(self):
+        expected_fee = 15
+        pallet_number = 1
+        shipping_weight = 10
+        mode_of_fee = 'total_weight'
+        returned_fee = self.sale_order_shipping_cost.get_fee_price(
+            pallet_number,
+            shipping_weight,
+            mode_of_fee
+        )
+        self.assertEqual(expected_fee, returned_fee)
