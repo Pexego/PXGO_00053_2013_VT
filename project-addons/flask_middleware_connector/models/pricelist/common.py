@@ -66,27 +66,27 @@ class ProductPricelistItem(models.Model):
     _inherit = 'product.pricelist.item'
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def export_pricelist_item(self, product):
+    def export_pricelist_item(self, product, pricelist):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.update(self, 'insert', product)
+            return exporter.update('insert', product, pricelist)
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_pricelist_item(self, product):
+    def update_pricelist_item(self, product, pricelist):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.update(self, 'update', product)
+            return exporter.update('update', product, pricelist)
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def unlink_pricelist_item(self, product):
+    def unlink_pricelist_item(self, product, pricelist):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.delete(self,product)
+            return exporter.delete(product, pricelist)
         return True
 
     def get_related_web_items(self, categ_id, brand_id, pricelist_processed=None):
@@ -134,12 +134,16 @@ class ProductPricelistItemListener(Component):
             if pricelist.web and pricelist.base_pricelist and record.product_id:
                 for field in up_fields:
                     if field in fields:
+                        pricelist = record.pricelist_calculated if (record.item_id or not record.pricelist_id) \
+                                                                     and record.pricelist_calculated else record.pricelist_id
                         #This line calls the job creation (f.e item._export_pricelist_item(product))
-                        getattr(record.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(record.product_id)
+                        getattr(record.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(record.product_id, pricelist)
                         items = record.get_related_web_items(record.product_id.categ_id, brand)
                         for i in items:
+                            pricelist_item = i.pricelist_calculated if (i.item_id or not i.pricelist_id) \
+                                                                       and i.pricelist_calculated else i.pricelist_id
                             # This line calls the job creation (f.e item._export_pricelist_item(product))
-                            getattr(i.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(record.product_id)
+                            getattr(i.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(record.product_id, pricelist_item)
                         break
 
     def on_record_write(self, record, fields=None):

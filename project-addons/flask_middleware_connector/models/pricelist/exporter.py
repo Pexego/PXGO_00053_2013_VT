@@ -39,9 +39,7 @@ class ProductPricelistItemExporter(Component):
     _apply_on = ['product.pricelist.item']
     _usage = 'record.exporter'
 
-    def update(self, binding, mode, product):
-        pricelist = binding.pricelist_calculated if (binding.item_id or not binding.pricelist_id) \
-                                                    and binding.pricelist_calculated else binding.pricelist_id
+    def update(self, mode, product, pricelist):
 
         id = int(f'{product.id}{pricelist.id}')
         vals = {
@@ -57,9 +55,7 @@ class ProductPricelistItemExporter(Component):
             self.backend_adapter.update(id, vals)
         return True
 
-    def delete(self, binding,product):
-        pricelist = binding.pricelist_calculated if (binding.item_id or not binding.pricelist_id) \
-                                                    and binding.pricelist_calculated else binding.pricelist_id
+    def delete(self, product, pricelist):
         id = int(f'{product.id}{pricelist.id}')
         self.backend_adapter.remove(id)
         return True
