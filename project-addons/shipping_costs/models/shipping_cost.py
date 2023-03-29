@@ -83,9 +83,9 @@ class ShippingCost(models.Model):
         shipping_weight:
             Shipping weight
         """
-        fee_ids = self.sudo().fee_ids.filtered(
-            lambda fee: fee.type == 'total_weight'
-        ).filtered(lambda fee: fee.max_qty >= shipping_weight)
+        fee_ids = self.fee_ids.filtered(
+            lambda fee: fee.type == 'total_weight' and fee.max_qty >= shipping_weight
+        )
         if len(fee_ids) == 0:
             return None
         fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
@@ -101,9 +101,9 @@ class ShippingCost(models.Model):
         pallet_number:
             Number of pallets of the shipping
         """
-        fee_ids = self.sudo().fee_ids.filtered(
-            lambda fee: fee.type == 'pallet'
-        ).filtered(lambda fee: fee.max_qty >= pallet_number)
+        fee_ids = self.fee_ids.filtered(
+            lambda fee: fee.type == 'pallet' and fee.max_qty >= pallet_number
+        )
         if len(fee_ids) == 0:
             return None
         fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
@@ -214,7 +214,7 @@ class SaleOrderShippingCost(models.TransientModel):
                 'service_name': f'{supplement.service_id.name}',
                 'sale_order_shipping_cost_id': self.id
             }
-            for supplement in self.sudo().shipping_cost_id.supplement_ids
+            for supplement in self.shipping_cost_id.supplement_ids
         ]
         return service_price_list
 
@@ -260,32 +260,31 @@ class SaleOrderShippingCost(models.TransientModel):
 class ShippingCostCalculator(models.TransientModel):
     _name = 'shipping.cost.calculator'
 
-    shipping_weight = fields.Float('Shipping weight')
-    shipping_volume = fields.Float('Shipping voluem')
-    zip_code = fields.Char('Zip code')
+    shipping_weight = fields.Float('Shipping weight', required=True)
+    shipping_volume = fields.Float('Shipping volume', required=True)
+    zip_code = fields.Char('Zip code', required=True)
 
     def calculate_shipping_cost(self):
-        # FIXME: Ojo con los permisos de los comerciales externos
         """
         Calculates shipping costs given shipping weight, shipping volume and
         destination's zip code
 
         Returns an action that opens a picking_rated_wizard model
         """
-        if not self.shipping_volume or not self.shipping_weight or not self.zip_code:
+        if self.shipping_volume < 0 or self.shipping_weight < 0:
             raise UserError(_(
-                'Invalid values to calculate shipping costs. Please, try filling all values.'
+                'Invalid values to calculate shipping costs. Please, try changing values.'
             ))
-        zones = self.env['shipping.zone'].search([]).filtered(
+        zones = self.env['shipping.zone'].sudo().search([]).filtered(
             lambda zone: zone.is_postal_code_in_zone(self.zip_code)
         )
         if not zones:
             raise UserError(_(
-                'There are no zones embedding "%s". Please, try with another zip code or configure zones'
+                'There are no zones embedding "%s". Please, try with another zip code.'
             ) % self.zip_code)
 
         services = []
-        shipping_costs = self.env['shipping.cost'].search([('shipping_zone_id', 'in', zones.ids)])
+        shipping_costs = self.env['shipping.cost'].sudo().search([('shipping_zone_id', 'in', zones.ids)])
         create_so_sc = self.env['sale.order.shipping.cost'].create
         picking_rated = self.env['picking.rated.wizard'].create({
             'total_weight': self.shipping_weight,
@@ -296,12 +295,12 @@ class ShippingCostCalculator(models.TransientModel):
 
         for sc in shipping_costs:
             new_so_sc = create_so_sc({'shipping_cost_id': sc.id})
-            services += new_so_sc.calculate_shipping_cost(
+            services += new_so_sc.sudo().calculate_shipping_cost(
                 self.shipping_volume,
                 self.shipping_weight,
                 mode='pallet'
             )
-            services += new_so_sc.calculate_shipping_cost(
+            services += new_so_sc.sudo().calculate_shipping_cost(
                 self.shipping_volume,
                 self.shipping_weight,
                 mode='total_weight'
