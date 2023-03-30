@@ -33,7 +33,7 @@
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='additional_landed_cost']" position="attributes">
                 <attribute name="sum">Total.</attribute>
-                <attribute name="invisible">True</attribute>
+                <attribute name="invisible">False</attribute>
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="after">
                 <field name="tariff" readonly="1"/>
