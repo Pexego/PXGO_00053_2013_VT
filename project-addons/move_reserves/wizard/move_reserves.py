@@ -98,7 +98,6 @@ class MoveReserves(models.TransientModel):
                 else:
                     self.reserves_origin_id.reservation_ids.reserve()
 
-
             # 5. release intermediate
             dummy_reserve.release()
 

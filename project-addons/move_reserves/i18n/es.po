@@ -62,25 +62,31 @@ msgid "Reserves Origin"
 msgstr "Reserva Origen"
 
 #. module: move_reserves
-#: code:addons/move_reserves/wizard/move_reserves.py:83
+#: code:addons/move_reserves/wizard/move_reserves.py:111
 #, python-format
 msgid "There is been an error, try again later"
 msgstr "Ha habido un error, prueba de nuevo más tarde"
 
 #. module: move_reserves
-#: code:addons/move_reserves/wizard/move_reserves.py:63
+#: code:addons/move_reserves/wizard/move_reserves.py:65
 #, python-format
 msgid "You have selected more quantity than is available in the origin reserve"
 msgstr "Has seleccionado más cantidad de la disponible en la reserva origen"
 
 #. module: move_reserves
-#: code:addons/move_reserves/wizard/move_reserves.py:65
+#: code:addons/move_reserves/wizard/move_reserves.py:67
 #, python-format
 msgid "You have selected more quantity than is in the destination reserve"
 msgstr "Has seleccionado más cantidad de la requerida en la reserva destino"
 
 #. module: move_reserves
-#: code:addons/move_reserves/wizard/move_reserves.py:61
+#: code:addons/move_reserves/wizard/move_reserves.py:63
 #, python-format
 msgid "You have selected the same move in both"
 msgstr "Has seleccionado la misma reserva en ambas"
+
+#. module: move_reserves
+#: code:addons/move_reserves/wizard/move_reserves.py:69
+#, python-format
+msgid "You must select some quantity"
+msgstr "Tienes que seleccionar alguna cantidad"
