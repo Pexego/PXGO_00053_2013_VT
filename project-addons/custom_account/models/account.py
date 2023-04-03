@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api, _, exceptions
 from statistics import mean
+from datetime import datetime
 
 
 class AccountMoveLine(models.Model):
@@ -306,6 +307,13 @@ class AccountInvoice(models.Model):
         res = super().purchase_order_change()
         return res
 
+    @api.model
+    def _prepare_refund(self, invoice, date_invoice=None, date=None, description=None, journal_id=None):
+        values = super()._prepare_refund(invoice, date_invoice, date, description, journal_id)
+        date_due = fields.Datetime.from_string(invoice.date_due)
+        today = datetime.today()
+        values.update({'date_due': invoice.date_due if date_due>today else today})
+        return values
 
 class PaymentMode(models.Model):
 
