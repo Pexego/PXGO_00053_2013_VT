@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_sheet,import.sheet,model_import_sheet,purchase.group_purchase_user,1,0,0,0
+access_import_sheet_commercials,import.sheet,model_import_sheet,stock_custom.commercial_group,1,0,0,0
+access_import_sheet_manager,import.sheet,model_import_sheet,purchase.group_purchase_manager,1,1,1,1

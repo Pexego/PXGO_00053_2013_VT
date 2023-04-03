@@ -1,0 +1,108 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * pmp_landed_costs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-06 16:17+0000\n"
+"PO-Revision-Date: 2019-05-06 16:17+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_container_id
+msgid "Container"
+msgstr "Envoyer"
+
+#. module: pmp_landed_costs
+#: model:ir.actions.act_window,name:pmp_landed_costs.action_stock_container_import_sheets
+msgid "Stock Container Import Sheets"
+msgstr "Feuilles d'importation"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_dua_date
+msgid "DUA date"
+msgstr "Date DUA"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_forwarder_comercial
+msgid "Forwarded"
+msgstr "Transitaire"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_treasury
+msgid "Treasury"
+msgstr "Ferme"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_freight
+msgid "Freight"
+msgstr "Transporto merci"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_fee
+msgid "Fee"
+msgstr "Fret"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_inspection
+msgid "Inspection"
+msgstr "Inspection"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_arrival_cost
+msgid "Arrival costs"
+msgstr "Coûts d'arrivée"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_container_type
+msgid "Container Type"
+msgstr "Conteneur"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_channel
+msgid "Channel"
+msgstr "Canal"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_form
+#: model:ir.ui.menu,name:pmp_landed_costs.import_sheet_menu
+#: model:ir.actions.act_window,name:pmp_landed_costs.action_open_import_sheet_tree_view
+msgid "Import Sheets"
+msgstr "Feuilles d'importation"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_form
+msgid "Create New Sheet"
+msgstr "Créer une nouvelle feuille"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
+msgid "Importations"
+msgstr "Importations"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
+msgid "General"
+msgstr "Général"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
+msgid "Characteristics"
+msgstr "Caractéristiques"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
+msgid "Costs"
+msgstr "Coûts"
+
+#. module: pmp_landed_costs
+#: model:ir.actions.report,name:pmp_landed_costs.import_sheet_xlsx
+msgid "Print to XLSX"
+msgstr "Exporter vers XLSX"
