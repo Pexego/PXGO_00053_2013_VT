@@ -48,6 +48,8 @@ class ImportSheet(models.Model):
     inspection = fields.Float(string="Inspection")
     arrival_cost = fields.Float(string="Arrival costs")
 
+    landed_cost_ids = fields.One2many("stock.landed.cost", "import_sheet_id", string="Landed costs")
+
 
 class ImportSheetXlsx(models.AbstractModel):
     """

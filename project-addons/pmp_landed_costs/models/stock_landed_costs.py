@@ -20,6 +20,8 @@ class StockLandedCost(models.Model):
                                      search='_search_container')
     forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
+    import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
+
     @api.multi
     def _get_container(self):
         move_obj = self.env['stock.move']
