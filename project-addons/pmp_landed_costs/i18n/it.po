@@ -252,3 +252,13 @@ msgstr "Confermare"
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
 msgid "Cancel"
 msgstr "Annullare"
+
+#. module: pmp_landed_costs
+#: model:ir.actions.act_window,name:pmp_landed_costs.action_open_landed_cost_view
+msgid "Landed costs"
+msgstr "Costi target"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
+msgid "See landed costs"
+msgstr "Vedi costi target"
