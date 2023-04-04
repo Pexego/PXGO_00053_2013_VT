@@ -74,6 +74,20 @@ class ImportSheet(models.Model):
         action['res_id'] = wizard.id
         return action
 
+    def action_open_landed_cost_by_sheet(self):
+        """
+        Returns action with the view of the landed cost list related with this import sheet
+
+        Returns:
+        -------
+        action
+        """
+        action = self.env.ref(
+            'pmp_landed_costs.action_open_landed_cost_view'
+        ).read()[0]
+        action['domain'] = [('import_sheet_id', '=', self.id)]
+        return action
+
     def get_landed_cost_creator_wizard(self):
         """
         Creates a landed_cost_creator_wizard associated to the import_sheet

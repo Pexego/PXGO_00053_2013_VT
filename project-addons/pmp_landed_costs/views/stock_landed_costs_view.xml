@@ -76,4 +76,13 @@
             </field>
         </field>
     </record>
+
+    <record id="action_open_landed_cost_view" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Landed costs</field>
+        <field name="res_model">stock.landed.cost</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_stock_landed_cost_tree_picking"/>
+    </record>
 </odoo>
