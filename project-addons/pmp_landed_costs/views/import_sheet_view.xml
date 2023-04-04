@@ -31,9 +31,9 @@
         </field>
     </record>
 
-    <record id="view_create_landed_cost_wizard_form" model="ir.ui.view">
-        <field name="name">create.landed.cost.wizard</field>
-        <field name="model">create.landed.cost.wizard</field>
+    <record id="view_landed_cost_creator_wizard_form" model="ir.ui.view">
+        <field name="name">landed.cost.creator.wizard</field>
+        <field name="model">landed.cost.creator.wizard</field>
         <field name="arch" type="xml">
             <form string="Create landed costs">
                 <group col="2" string="General">
@@ -96,13 +96,13 @@
         <field name="view_id" ref="view_import_sheet_tree"/>
     </record>
 
-    <record id="action_open_create_landed_cost_wizard_view" model="ir.actions.act_window">
+    <record id="action_open_landed_cost_creator_wizard_view" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Create landed cost</field>
-        <field name="res_model">create.landed.cost.wizard</field>
+        <field name="res_model">landed.cost.creator.wizard</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_create_landed_cost_wizard_form"/>
+        <field name="view_id" ref="view_landed_cost_creator_wizard_form"/>
         <field name="target">new</field>
     </record>
 

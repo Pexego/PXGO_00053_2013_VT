@@ -1,4 +1,5 @@
 from odoo import fields, models
+import datetime
 
 
 class ImportSheet(models.Model):
@@ -49,8 +50,16 @@ class ImportSheet(models.Model):
     arrival_cost = fields.Float(string="Arrival costs")
 
     landed_cost_ids = fields.One2many("stock.landed.cost", "import_sheet_id", string="Landed costs")
+    landed_cost_count = fields.Integer("Landed cost count", compute="_get_landed_cost_count", default=0)
 
-    def action_open_create_landed_cost(self):
+    def _get_landed_cost_count(self):
+        """
+        Calculates count of landed costs that are associated to this import sheet
+        """
+        count = self.env['stock.landed.cost'].search_count([('import_sheet_id', '=', self.id)])
+        self.landed_cost_count = count
+
+    def action_open_landed_cost_creator(self):
         """
         Returns action with the view of the create_landed_cost_wizard model
 
@@ -58,46 +67,144 @@ class ImportSheet(models.Model):
         -------
         action
         """
-        wizard = self.get_create_landed_cost_wizard()
+        wizard = self.get_landed_cost_creator_wizard()
         action = self.env.ref(
-            'pmp_landed_costs.action_open_create_landed_cost_wizard_view'
+            'pmp_landed_costs.action_open_landed_cost_creator_wizard_view'
         ).read()[0]
         action['res_id'] = wizard.id
         return action
 
-    def get_create_landed_cost_wizard(self):
+    def get_landed_cost_creator_wizard(self):
         """
-        Creates a create_landed_cost_wizard associated to the import_sheet
+        Creates a landed_cost_creator_wizard associated to the import_sheet
 
         Returns:
         -------
-        create.landed.cost.wizard
+        landed.cost.creator.wizard
         """
         value_returned = self.container_id.get_products_with_no_weight()
-        wizard = self.env['create.landed.cost.wizard'].create({
+        wizard = self.env['landed.cost.creator.wizard'].create({
             'import_sheet_id': self.id,
             'product_ids': [(6, 0, value_returned.ids)]
         })
         return wizard
 
+    def calculate_fee_price(self):
+        """
+        Calculates the price by fee
 
-class CreateLandedCost(models.TransientModel):
+        Returns:
+        -------
+        Float:
+            Fee price
+        """
+        return self.fee
+
+    def calculate_destination_cost_price(self):
+        """
+        Calculates price by destination cost
+
+        Returns:
+        -------
+        Float:
+            Freight + inspection + arrival cost prices
+        """
+        return self.freight + self.inspection + self.arrival_cost
+
+
+class LandedCostCreator(models.TransientModel):
     """
     Models the creation of stock_landed_costs from import_sheet.
-    shows a list with all products with o weight
+    Shows a list with all products with no weight
     """
-    _name = 'create.landed.cost.wizard'
+    _name = 'landed.cost.creator.wizard'
 
     import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
     product_ids = fields.Many2many('product.product', string='Products')
+    container_id = fields.Many2one(related='import_sheet_id.container_id')
+
+    def _get_account_journal_for_landed_cost(self):
+        """
+        Returns the correct account journal to assign to landed cost
+
+        Return:
+        ------
+        account.journal
+        """
+        # FIXME:
+        # self.env['account.journal'].search([()])
+        return 1
+
+    def _get_product_for_landed_cost_line(self):
+        """
+        Returns the correct product to assign to landed cost lines
+
+        Return:
+        ------
+        product.product
+        """
+        # FIXME:
+        # self.env['product.product'].search([()])
+        return 2724
+
+    def _get_account_for_landed_cost_line(self):
+        """
+        Returns the correct account to assign to landed cost lines
+
+        Return:
+        ------
+        account.account
+        """
+        # FIXME:
+        # self.env['account.journal'].search([()])
+        return 845
 
     def create_landed_cost(self):
         """
-        :return:
+        Creates landed cost associated to import_sheet_id.
+        This landed cost has two cost lines.
         """
-        # TODO: creamos un LC
-        #  Creamos dos lineas en el LC: una por arancel y otra por coste de destino
-        raise NotImplementedError
+        landed_cost = self.env['stock.landed.cost'].create({
+            'date': datetime.date.today(),
+            'picking_ids': [(6, 0, self.container_id.picking_ids.ids)],
+            'container_ids': [(4, self.container_id.id)],
+            'account_journal_id': self._get_account_journal_for_landed_cost(),
+            'forwarder_invoice': self.import_sheet_id.forwarder_comercial,
+            'import_sheet_id': self.import_sheet_id.id
+        })
+        self._create_cost_lines(landed_cost)
+        return
+
+    def _create_cost_lines(self, landed_cost):
+        """
+        Creates two stock.landed.cost.lines.
+        The first by fee, the second by destination costs
+
+        Parameters:
+        ----------
+        landed_cost: stock.landed.cost
+            Landed cost where we are going to create lines
+        """
+        create_line = self.env['stock.landed.cost.lines'].create
+        product_id = self._get_product_for_landed_cost_line()
+        account_id = self._get_account_for_landed_cost_line()
+        create_line({
+            'cost_id': landed_cost.id,
+            'product_id': product_id,
+            'name': 'Arancel',
+            'account_id': account_id,
+            'split_method': 'by_tariff',
+            'price_unit': self.import_sheet_id.calculate_fee_price()
+        })
+        create_line({
+            'cost_id': landed_cost.id,
+            'product_id': product_id,
+            'name': 'Coste en destino',
+            'account_id': account_id,
+            'split_method': 'equal',
+            'price_unit': self.import_sheet_id.calculate_destination_cost_price()
+        })
+        return
 
 
 class ImportSheetXlsx(models.AbstractModel):
