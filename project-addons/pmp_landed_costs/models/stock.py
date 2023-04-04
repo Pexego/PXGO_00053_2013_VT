@@ -28,3 +28,10 @@ class StockContainer(models.Model):
         action['domain'] = [('id', 'in', self.import_sheet_ids.ids)]
 
         return action
+
+    def get_products_with_no_weight(self):
+        """
+        Returns container products that have no weight
+        :return: product.product
+        """
+        return self.move_ids.mapped('product_id').filtered(lambda product: product.weight == 0)

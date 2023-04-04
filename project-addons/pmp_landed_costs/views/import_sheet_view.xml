@@ -96,6 +96,16 @@
         <field name="view_id" ref="view_import_sheet_tree"/>
     </record>
 
+    <record id="action_open_create_landed_cost_wizard_view" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Create landed cost</field>
+        <field name="res_model">create.landed.cost.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_create_landed_cost_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
     <report
         id="import_sheet_xlsx"
         model="import.sheet"

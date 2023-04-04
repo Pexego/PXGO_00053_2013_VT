@@ -50,6 +50,30 @@ class ImportSheet(models.Model):
 
     landed_cost_ids = fields.One2many("stock.landed.cost", "import_sheet_id", string="Landed costs")
 
+    def action_open_create_landed_cost(self):
+        """
+        Returns action with the view of the create_landed_cost_wizard model
+        :return: action
+        """
+        wizard = self.get_create_landed_cost_wizard()
+        action = self.env.ref(
+            'pmp_landed_costs.action_open_create_landed_cost_wizard_view'
+        ).read()[0]
+        action['res_id'] = wizard.id
+        return action
+
+    def get_create_landed_cost_wizard(self):
+        """
+        Creates a create_landed_cost_wizard associated to the import_sheet
+        :return: create.landed.cost.wizard
+        """
+        value_returned = self.container_id.get_products_with_no_weight()
+        wizard = self.env['create.landed.cost.wizard'].create({
+            'import_sheet_id': self.id,
+            'product_ids': [(6, 0, value_returned.ids)]
+        })
+        return wizard
+
 
 class CreateLandedCost(models.TransientModel):
     """
