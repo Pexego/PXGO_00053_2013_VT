@@ -77,6 +77,39 @@
         </field>
     </record>
 
+    <record id="view_landed_cost_creator_wizard_form" model="ir.ui.view">
+        <field name="name">landed.cost.creator.wizard</field>
+        <field name="model">landed.cost.creator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create landed costs">
+                <group col="2" string="General">
+                    <field name="import_sheet_id" readonly="1"/>
+                </group>
+                <separator string="Products without weight" colspan="4"/>
+                <field name="product_ids" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="weight"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="create_landed_cost" string="Confirm" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_open_landed_cost_creator_wizard_view" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Create landed cost</field>
+        <field name="res_model">landed.cost.creator.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_landed_cost_creator_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
     <record id="action_open_landed_cost_view" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Landed costs</field>
