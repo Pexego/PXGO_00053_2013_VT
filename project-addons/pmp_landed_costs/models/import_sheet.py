@@ -53,7 +53,10 @@ class ImportSheet(models.Model):
     def action_open_create_landed_cost(self):
         """
         Returns action with the view of the create_landed_cost_wizard model
-        :return: action
+
+        Returns:
+        -------
+        action
         """
         wizard = self.get_create_landed_cost_wizard()
         action = self.env.ref(
@@ -65,7 +68,10 @@ class ImportSheet(models.Model):
     def get_create_landed_cost_wizard(self):
         """
         Creates a create_landed_cost_wizard associated to the import_sheet
-        :return: create.landed.cost.wizard
+
+        Returns:
+        -------
+        create.landed.cost.wizard
         """
         value_returned = self.container_id.get_products_with_no_weight()
         wizard = self.env['create.landed.cost.wizard'].create({
@@ -112,7 +118,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes the content into the excell report.
 
-        Parameters
+        Parameters:
         ----------
         workbook:
             Workbook object from xlsxwriter library where the report is going to be written
@@ -131,12 +137,12 @@ class ImportSheetXlsx(models.AbstractModel):
         Returns two dictionaries. One with worksheet name as key and rows content as value.
         The second with headers as value.
 
-        Parameters
+        Parameters:
         ----------
         import_sheets:
             Import Sheet instances from where we want to get row_values
 
-        Return
+        Return:
         ------
         row_dict, headers_dict
         """
@@ -163,7 +169,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes the content of the report file
 
-        Parameters
+        Parameters:
         ----------
         worksheet_row_values: Dict[str, List[Tuple[Any]]]
             Are the values we want to write on each worksheet.
@@ -183,7 +189,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes the column headers in worksheet
 
-        Parameters
+        Parameters:
         ----------
         worksheet:
             Worksheet where the headers are going to be writen
@@ -200,7 +206,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes a row in the report
 
-        Parameters
+        Parameters:
         ----------
         worksheet:
             Worksheet where the row is going to be writen
@@ -243,7 +249,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes a complete sheet of the report
 
-        Parameters
+        Parameters:
         ----------
         worksheet:
             Worksheet that is going to be writen
