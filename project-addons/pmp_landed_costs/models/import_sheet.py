@@ -51,6 +51,25 @@ class ImportSheet(models.Model):
     landed_cost_ids = fields.One2many("stock.landed.cost", "import_sheet_id", string="Landed costs")
 
 
+class CreateLandedCost(models.TransientModel):
+    """
+    Models the creation of stock_landed_costs from import_sheet.
+    shows a list with all products with o weight
+    """
+    _name = 'create.landed.cost.wizard'
+
+    import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
+    product_ids = fields.Many2many('product.product', string='Products')
+
+    def create_landed_cost(self):
+        """
+        :return:
+        """
+        # TODO: creamos un LC
+        #  Creamos dos lineas en el LC: una por arancel y otra por coste de destino
+        raise NotImplementedError
+
+
 class ImportSheetXlsx(models.AbstractModel):
     """
     Models the xlsx file with import sheets report to be downloaded

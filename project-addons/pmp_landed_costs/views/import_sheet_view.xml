@@ -31,6 +31,29 @@
         </field>
     </record>
 
+    <record id="view_create_landed_cost_wizard_form" model="ir.ui.view">
+        <field name="name">create.landed.cost.wizard</field>
+        <field name="model">create.landed.cost.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create landed costs">
+                <group col="2" string="General">
+                    <field name="import_sheet_id" readonly="1"/>
+                </group>
+                <separator string="Products without weight" colspan="4"/>
+                <field name="product_ids" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="weight"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="create_landed_cost" string="Confirm" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
     <record id="view_import_sheet_tree" model="ir.ui.view">
         <field name="name">import.sheet.tree</field>
         <field name="model">import.sheet</field>
