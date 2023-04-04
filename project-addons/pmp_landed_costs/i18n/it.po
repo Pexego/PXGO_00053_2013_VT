@@ -226,3 +226,29 @@ msgstr "Parzialmente Fatturato"
 #: model:ir.actions.report,name:pmp_landed_costs.import_sheet_xlsx
 msgid "Print to XLSX"
 msgstr "Imprimere un XLSX"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_create_landed_cost_wizard_import_sheet_id
+msgid "Import sheet"
+msgstr "Foglio di importazioni"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+#: model:ir.actions.act_window,name:pmp_landed_costs.action_open_create_landed_cost_wizard_view
+msgid "Create landed costs"
+msgstr "Creare costi target"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+msgid "Products without weight"
+msgstr "Prodotti non pesati"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+msgid "Confirm"
+msgstr "Confermare"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+msgid "Cancel"
+msgstr "Annullare"
