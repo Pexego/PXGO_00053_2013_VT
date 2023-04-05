@@ -318,7 +318,9 @@ class LandedCostCreator(models.TransientModel):
             'import_sheet_id': self.import_sheet_id.id
         })
         self._create_cost_lines(landed_cost)
-        return
+
+        action = self.import_sheet_id.action_open_landed_cost_by_sheet()
+        return action
 
     def _create_cost_lines(self, landed_cost):
         """
