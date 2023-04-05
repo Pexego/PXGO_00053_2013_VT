@@ -12,14 +12,20 @@ class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
     _order = 'write_date desc'
 
-    account_journal_id = fields.\
-        Many2one(default=lambda self: self.env['account.journal'].
-                 search([('code', '=', 'APUR')]))
+    account_journal_id = fields.Many2one(
+        default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')])
+    )
 
     container_ids = fields.Many2many('stock.container', string='Containers',
                                      compute='_get_container', inverse='_set_pickings',
                                      search='_search_container')
-    forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
+    forwarder_invoice = fields.Char(
+        string='Forwarder Invoice',
+        required=True,
+        default=lambda self: self.env['import.sheet'].browse(
+            self.env.context.get('active_id')
+        ).forwarder_comercial
+    )
 
     import_sheet_id = fields.Many2one(
         'import.sheet',
