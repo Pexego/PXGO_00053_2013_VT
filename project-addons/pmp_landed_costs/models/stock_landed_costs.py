@@ -64,6 +64,22 @@ class StockLandedCost(models.Model):
         if product and vals.get('weight', 0.0) == 0:
             raise UserError(_('Not all the products have weight: %s') % product.default_code)
 
+    @staticmethod
+    def check_if_all_lines_have_split_method(cost_lines):
+        """
+        Returns if all lines in cost_lines have a correct split_method.
+
+        Parameters:
+        ----------
+        cost_lines: stock.landed.cost.lines
+            Lines that are wanted to check its split_method
+
+        Return:
+        ------
+        Bool
+        """
+        return len(cost_lines.filtered(lambda line: line.split_method == 'to_define')) == 0
+
     @api.multi
     def compute_landed_cost(self):
         AdjustementLines = self.env['stock.valuation.adjustment.lines']
@@ -72,6 +88,11 @@ class StockLandedCost(models.Model):
         digits = dp.get_precision('Product Price')(self._cr)
         towrite_dict = {}
         for cost in self.filtered(lambda cost: cost.picking_ids):
+
+            cost_lines = cost.cost_lines
+            if not self.check_if_all_lines_have_split_method(cost_lines):
+                raise UserError(_("Can't calculate landed costs. There are lines with split method to define."))
+
             total_qty = 0.0
             total_cost = 0.0
             total_weight = 0.0
@@ -83,7 +104,7 @@ class StockLandedCost(models.Model):
             all_val_line_values = cost.get_valuation_lines()
             for val_line_values in all_val_line_values:
                 self.check_lines_hscode(val_line_values)
-                for cost_line in cost.cost_lines:
+                for cost_line in cost_lines:
                     if cost_line.split_method == 'by_weight':
                         self.check_lines_weight(val_line_values)
                     val_line_values.update({'cost_id': cost.id,
@@ -101,7 +122,7 @@ class StockLandedCost(models.Model):
 
                 total_line += 1
 
-            for line in cost.cost_lines:
+            for line in cost_lines:
                 value_split = 0.0
                 if line.split_method == 'by_tariff':
                     currency_change = line.price_unit / total_tariff
@@ -221,8 +242,10 @@ class StockValuationAdjustmentLines(models.Model):
 class StockLandedCostLines(models.Model):
     _inherit = 'stock.landed.cost.lines'
 
-    split_method = fields.Selection(selection_add=[('by_tariff',
-                                                    'By tariff')])
+    split_method = fields.Selection(selection_add=[
+        ('by_tariff', 'By tariff'),
+        ('to_define', 'To define')
+    ])
 
     @api.onchange('product_id')
     def onchange_product_id(self):
