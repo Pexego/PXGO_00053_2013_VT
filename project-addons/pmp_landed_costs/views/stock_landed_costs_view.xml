@@ -46,6 +46,7 @@
             </field>
             <field name="picking_ids" position="after">
                 <field name="container_ids"  widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="import_sheet_id"/>
             </field>
             <field name="account_move_id" position="after">
                 <field name="forwarder_invoice"/>
