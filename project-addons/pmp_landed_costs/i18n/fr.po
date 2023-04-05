@@ -144,3 +144,14 @@ msgstr "Coûts cibles"
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
 msgid "See landed costs"
 msgstr "Voir coûts cibles"
+
+#. module: pmp_landed_costs
+#: selection:stock.landed.cost.lines,split_method:0
+msgid "To define"
+msgstr "A définir"
+
+#. module: pmp_landed_costs
+#: code:addons/pmp_landed_costs/models/stock_landed_costs.py:94
+#, python-format
+msgid "Can't calculate landed costs. There are lines with split method to define."
+msgstr "Erreur lors du calcul des coûts de destination. Il y a des lignes avec une méthode de division à définir"
