@@ -277,18 +277,10 @@ class LandedCostCreator(models.TransientModel):
     import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
     product_ids = fields.Many2many('product.product', string='Products')
     container_id = fields.Many2one(related='import_sheet_id.container_id')
-
-    def _get_account_journal_for_landed_cost(self):
-        """
-        Returns the correct account journal to assign to landed cost
-
-        Return:
-        ------
-        account.journal
-        """
-        # FIXME:
-        # self.env['account.journal'].search([()])
-        return 1
+    account_journal_id = fields.Many2one(
+        'account.journal',
+        default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')])
+    )
 
     def _get_product_for_landed_cost_line(self):
         """
@@ -298,9 +290,7 @@ class LandedCostCreator(models.TransientModel):
         ------
         product.product
         """
-        # FIXME:
-        # self.env['product.product'].search([()])
-        return 2724
+        return self.env['product.product'].search([('default_code', '=', 'Coste en destino')])
 
     def _get_account_for_landed_cost_line(self):
         """
@@ -310,9 +300,9 @@ class LandedCostCreator(models.TransientModel):
         ------
         account.account
         """
-        # FIXME:
-        # self.env['account.journal'].search([()])
-        return 845
+        product = self._get_product_for_landed_cost_line()
+        return (product.property_stock_account_input or
+                product.categ_id.property_stock_account_input_categ_id)
 
     def create_landed_cost(self):
         """
@@ -323,7 +313,7 @@ class LandedCostCreator(models.TransientModel):
             'date': datetime.date.today(),
             'picking_ids': [(6, 0, self.container_id.picking_ids.ids)],
             'container_ids': [(4, self.container_id.id)],
-            'account_journal_id': self._get_account_journal_for_landed_cost(),
+            'account_journal_id': self.account_journal_id.id,
             'forwarder_invoice': self.import_sheet_id.forwarder_comercial,
             'import_sheet_id': self.import_sheet_id.id
         })
@@ -343,21 +333,21 @@ class LandedCostCreator(models.TransientModel):
             Landed cost where we are going to create lines
         """
         create_line = self.env['stock.landed.cost.lines'].create
-        product_id = self._get_product_for_landed_cost_line()
-        account_id = self._get_account_for_landed_cost_line()
+        product = self._get_product_for_landed_cost_line()
+        account = self._get_account_for_landed_cost_line()
         create_line({
             'cost_id': landed_cost.id,
-            'product_id': product_id,
+            'product_id': product.id,
             'name': 'Arancel',
-            'account_id': account_id,
+            'account_id': account.id,
             'split_method': 'by_tariff',
             'price_unit': self.import_sheet_id.calculate_fee_price()
         })
         create_line({
             'cost_id': landed_cost.id,
-            'product_id': product_id,
+            'product_id': product.id,
             'name': 'Coste en destino',
-            'account_id': account_id,
+            'account_id': account.id,
             'split_method': 'to_define',
             'price_unit': self.import_sheet_id.calculate_destination_cost_price()
         })

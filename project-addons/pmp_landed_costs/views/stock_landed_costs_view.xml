@@ -85,6 +85,7 @@
             <form string="Create landed costs">
                 <group col="2" string="General">
                     <field name="import_sheet_id" readonly="1"/>
+                    <field name="account_journal_id"/>
                 </group>
                 <separator string="Products without weight" colspan="4"/>
                 <field name="product_ids" string="">
