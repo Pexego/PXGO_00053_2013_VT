@@ -55,8 +55,9 @@ class ImportSheet(models.Model):
         """
         Calculates count of landed costs that are associated to this import sheet
         """
-        count = self.env['stock.landed.cost'].search_count([('import_sheet_id', '=', self.id)])
-        self.landed_cost_count = count
+        for sheet in self:
+            count = self.env['stock.landed.cost'].search_count([('import_sheet_id', '=', sheet.id)])
+            sheet.landed_cost_count = count
 
     def action_open_landed_cost_creator(self):
         """
