@@ -114,28 +114,29 @@ msgstr "Feuille d'importation"
 
 #. module: pmp_landed_costs
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
-#: model:ir.actions.act_window,name:pmp_landed_costs.action_open_create_landed_cost_wizard_view
-#: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_landed_cost_creator_wizard_import_sheet_id
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_import_sheet_id
 msgid "Create landed costs"
 msgstr "Créer des coûts cibles"
 
 #. module: pmp_landed_costs
-#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_landed_cost_creator_wizard_form
 msgid "Products without weight"
 msgstr "Produits non pesés"
 
 #. module: pmp_landed_costs
-#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_landed_cost_creator_wizard_form
 msgid "Confirm"
 msgstr "Confirmer"
 
 #. module: pmp_landed_costs
-#: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_landed_cost_creator_wizard_form
 msgid "Cancel"
 msgstr "Annuler"
 
 #. module: pmp_landed_costs
 #: model:ir.actions.act_window,name:pmp_landed_costs.action_open_landed_cost_view
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
 msgid "Landed costs"
 msgstr "Coûts cibles"
 
