@@ -346,7 +346,7 @@ class LandedCostCreator(models.TransientModel):
             'product_id': product_id,
             'name': 'Coste en destino',
             'account_id': account_id,
-            'split_method': 'equal',
+            'split_method': 'to_define',
             'price_unit': self.import_sheet_id.calculate_destination_cost_price()
         })
         return
