@@ -278,6 +278,9 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <field name="company_type" position="before">
+                    <field name="dropship" invisible="1"/>
+                </field>
                 <field name="company_type" position="attributes">
                     <attribute name="attrs">{'invisible':[('dropship','=',True)]}</attribute>
                 </field>
