@@ -21,7 +21,11 @@ class StockLandedCost(models.Model):
                                      search='_search_container')
     forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
-    import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
+    import_sheet_id = fields.Many2one(
+        'import.sheet',
+        string='Import sheet',
+        default=lambda self: self.env['import.sheet'].browse(self.env.context.get('active_id'))
+    )
 
     @api.multi
     def _get_container(self):
