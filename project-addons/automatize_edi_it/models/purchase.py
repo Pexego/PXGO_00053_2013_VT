@@ -105,6 +105,7 @@ class PurchaseOrder(models.Model):
     def cron_check_qty_to_invoice_lx(self, months=1):
         search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
         purchases = self.search([('invoice_status', '=', 'to invoice'), ('date_order', '>=', search_date)])
+        orders_not_found = []
 
         if purchases:
             # get the server
@@ -117,8 +118,20 @@ class PurchaseOrder(models.Model):
             for purchase in purchases:
                 if purchase.amount_total != purchase.amount_to_invoice_es:
                     purchase.amount_to_invoice_es, purchase.es_sale_order = self._get_qty_to_invoice_es(purchase.name, odoo_es)
+                    if not purchase.es_sale_order:
+                        orders_not_found.append(purchase.name)
 
             odoo_es.logout()
+            if orders_not_found:
+                vals = {
+                    'subject': 'Orders not found in Odoo ES',
+                    'body_html': '<br>'.join(orders_not_found),
+                    'email_to': 'odoo_team@visiotechsecurity.com',
+                    'auto_delete': False,
+                    'email_from': 'odoo_team@visiotechsecurity.com',
+                }
+                mail_id = self.env['mail.mail'].sudo().create(vals)
+                mail_id.sudo().send()
 
 
 
