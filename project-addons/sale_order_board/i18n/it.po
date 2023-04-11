@@ -70,3 +70,13 @@ msgstr "Aumento percentuale del costo di trasporto che varia a seconda del corri
 msgid "Fuel(%)"
 msgstr "Aumento dei costi di trasporto(%)"
 
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_transportation_transporter_weight_volume_translation
+msgid "Translation (kg/cbm)"
+msgstr "Conversione (kg/cbm)"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_shipping_weight
+msgid "Shipping weight"
+msgstr "Peso di spedizione"
+

@@ -28,5 +28,9 @@
             <field name="function">True</field>
         </record>
 
+        <record forcecreate="True" id="biweekly_grouped_by_shipping" model="res.partner.invoice.type">
+            <field name="name">Quincenal agrupada por envío</field>
+        </record>
+
     </data>
 </odoo>

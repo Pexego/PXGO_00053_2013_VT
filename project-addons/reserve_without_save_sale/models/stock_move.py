@@ -1,6 +1,18 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
 
+class StockPicking(models.Model):
+
+    _inherit = "stock.picking"
+    @api.multi
+    def action_accept_confirmed_qty(self):
+        """ Update reserves when create a backorder"""
+        result = super().action_accept_confirmed_qty()
+        for pick in self:
+            for move in pick.move_lines.filtered(lambda m: m.reserved_availability > m.product_uom_qty):
+                move.action_do_unreserve()
+                move._action_assign()
+        return result
 
 class StockMove(models.Model):
 

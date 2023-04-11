@@ -414,11 +414,12 @@ class ProductProduct(models.Model):
             items = []
             for item in brand_pricelist_items:
                 real_item = product_id.item_ids.filtered(lambda i: i.pricelist_id == item.base_pricelist_id)
-                items.append((0, 0, {'pricelist_id': item.base_pricelist_id.id,
-                                                           'pricelist_calculated': item.pricelist_id.id,
-                                                           'product_id': product_id.id,
-                                                           'applied_on': '1_product',
-                                                           'item_id': real_item.id}))
+                if real_item:
+                    items.append((0, 0, {'pricelist_id': item.base_pricelist_id.id,
+                                                               'pricelist_calculated': item.pricelist_id.id,
+                                                               'product_id': product_id.id,
+                                                               'applied_on': '1_product',
+                                                               'item_id': real_item.id}))
             product_id.write({'item_ids': items})
 
     def create_product_pricelist_items(self,brand_id):
@@ -453,23 +454,27 @@ class ProductProduct(models.Model):
         :param vals: values to write product
         :return: super()
         """
+        old_brands = {}
+        for product in self:
+            old_brands[product] = product.product_brand_id
+        res = super().write(vals)
         brand = vals.get('product_brand_id', False)
         for product in self:
+            old_brand = old_brands[product]
             if 'product_brand_id' in vals and not brand:
-                product.item_ids.unlink()
-                product.item_brand_ids.unlink()
+                product.item_ids.with_context({'old_brand': old_brand}).unlink()
+                product.item_brand_ids.with_context({'old_brand': old_brand}).unlink()
                 continue
-            if brand and product.product_brand_id.id != brand:
-                if product.item_brand_ids or not product.product_brand_id.id:
-                    product.item_ids.unlink()
-                    product.item_brand_ids.unlink()
+            if brand and old_brand.id != brand:
+                if product.item_brand_ids or not old_brand:
+                    product.item_ids.with_context({'old_brand': old_brand}).unlink()
+                    product.item_brand_ids.with_context({'old_brand': old_brand}).unlink()
                     product.create_product_pricelist_items(brand)
                     continue
                 brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
                 if brand_pricelist_items:
-                    product.item_ids.unlink()
+                    product.item_ids.with_context({'old_brand': old_brand}).unlink()
                     product.create_product_pricelist_items(brand)
-        res = super().write(vals)
         if 'item_ids' in vals:
             prices_to_update = self.get_list_updated_prices()
             res = super().write(prices_to_update)

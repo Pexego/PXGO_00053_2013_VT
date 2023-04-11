@@ -675,6 +675,8 @@ msgstr "Canal"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+#: model:ir.ui.menu,name:purchase_picking.import_sheet_menu
+#: model:ir.actions.act_window,name:purchase_picking.action_open_import_sheet_tree_view
 msgid "Import Sheets"
 msgstr "Hojas de Importación"
 
@@ -707,3 +709,8 @@ msgstr "Costes"
 #: selection:purchase.order,invoice_status:0
 msgid "Partially Invoiced"
 msgstr "Parcialmente facturado"
+
+#. module: purchase_picking
+#: model:ir.actions.report,name:purchase_picking.import_sheet_xlsx
+msgid "Print to XLSX"
+msgstr "Imprimir a XLSX"

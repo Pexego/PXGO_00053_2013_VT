@@ -35,9 +35,12 @@ class ResPartner(models.Model):
             f"{self.env['ir.config_parameter'].sudo().get_param('web.sim.active.endpoint')}"
             f"?{urllib.parse.urlencode(data)}"
         )
-        response = requests.get(web_endpoint, headers=headers, data=json.dumps({}))
-        if response.status_code == 200:
-            num_active_sims = int(response.content)
+        try:
+            response = requests.get(web_endpoint, headers=headers, data=json.dumps({}), timeout=2)
+            if response.status_code == 200:
+                num_active_sims = int(response.content)
+        except requests.exceptions.Timeout as e:
+            pass
 
         self.sim_active_perc = round(num_active_sims * 100 / sim_count, 2)
 

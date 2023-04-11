@@ -66,30 +66,30 @@ class ProductPricelistItem(models.Model):
     _inherit = 'product.pricelist.item'
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def export_pricelist_item(self, product):
+    def export_pricelist_item(self, product, pricelist):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.update(self, 'insert', product)
+            return exporter.update('insert', product, pricelist)
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_pricelist_item(self, product):
+    def update_pricelist_item(self, product, pricelist):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.update(self, 'update', product)
+            return exporter.update('update', product, pricelist)
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def unlink_pricelist_item(self, product):
+    def unlink_pricelist_item(self, product, pricelist):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.delete(self,product)
+            return exporter.delete(product, pricelist)
         return True
 
-    def get_related_web_items(self, brand_id, categ_id, pricelist_processed=None):
+    def get_related_web_items(self, categ_id, brand_id, pricelist_processed=None):
         if pricelist_processed is None:
             pricelist_processed = set()
         pricelist_items = self.env['product.pricelist.item']
@@ -102,7 +102,8 @@ class ProductPricelistItem(models.Model):
                     continue
                 pricelist_processed.add(p.pricelist_id.id)
                 pricelist_items |= p
-                pricelist_items |= p.get_related_web_items(brand_id,categ_id,pricelist_processed)
+                pricelist_items |= p.get_related_web_items(categ_id,brand_id,pricelist_processed)
+
         return pricelist_items
 
 class ProductPricelistItemListener(Component):
@@ -110,16 +111,44 @@ class ProductPricelistItemListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['product.pricelist.item']
 
+    def _create_product_pricelist_items_works(self, record, up_fields, fields, mode):
+        """
+        This function creates jobs (export,update or unlinks) of product pricelist items for a given record and
+        its related pricelist items.
+
+        :param record: The pricelist item that has changed
+                :type record: product.pricelist.item
+        :param up_fields: The fields that when modified trigger the generation of the job
+                :type up_fields: list<string>
+        :param fields: The fields modified
+            :type fields: list<string>
+        :param mode: The mode of the job operation (export, update or unlink)
+            :type mode: str
+        :return: None
+        """
+        pricelists = record.pricelist_id | record.pricelist_calculated
+        if record.pricelist_id.brand_group_id and record.pricelist_calculated:
+            return
+        brand = self.env.context.get('old_brand') or record.product_id.product_brand_id
+        for pricelist in pricelists:
+            if pricelist.web and pricelist.base_pricelist and record.product_id:
+                for field in up_fields:
+                    if field in fields:
+                        pricelist = record.pricelist_calculated if (record.item_id or not record.pricelist_id) \
+                                                                     and record.pricelist_calculated else record.pricelist_id
+                        #This line calls the job creation (f.e item._export_pricelist_item(product))
+                        getattr(record.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(record.product_id, pricelist)
+                        items = record.get_related_web_items(record.product_id.categ_id, brand)
+                        for i in items:
+                            pricelist_item = i.pricelist_calculated if (i.item_id or not i.pricelist_id) \
+                                                                       and i.pricelist_calculated else i.pricelist_id
+                            # This line calls the job creation (f.e item._export_pricelist_item(product))
+                            getattr(i.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(record.product_id, pricelist_item)
+                        break
+
     def on_record_write(self, record, fields=None):
         up_fields = ["fixed_price"]
-        if record.pricelist_id.web or (not record.pricelist_id and record.pricelist_calculated.web):
-            for field in up_fields:
-                if field in fields:
-                    record.with_delay(priority=11, eta=80).update_pricelist_item(record.product_id)
-                    items = record.get_related_web_items(record.product_id.categ_id,record.product_id.product_brand_id)
-                    for i in items:
-                        i.with_delay(priority=11, eta=80).update_pricelist_item(record.product_id)
-                    break
+        self._create_product_pricelist_items_works(record, up_fields, fields, "update")
 
     def on_record_create(self, record, fields=None):
         up_fields = [
@@ -131,21 +160,7 @@ class ProductPricelistItemListener(Component):
             'fixed_price',
             'calculated_price'
         ]
-        if (record.pricelist_id.web or (not record.pricelist_id and record.pricelist_calculated.web)) and record.product_id:
-            for field in up_fields:
-                if field in fields:
-                    record.with_delay(priority=11, eta=80).export_pricelist_item(record.product_id)
-                    items = record.get_related_web_items(record.product_id.categ_id, record.product_id.product_brand_id)
-                    if items:
-                        for i in items:
-                            i.with_delay(priority=11, eta=80).export_pricelist_item(record.product_id)
-                    break
-
+        self._create_product_pricelist_items_works(record, up_fields, fields, "export")
 
     def on_record_unlink(self, record):
-        if record.pricelist_id.web:
-            record.with_delay(priority=11, eta=80).unlink_pricelist_item(record.product_id)
-            items = record.get_related_web_items(record.product_id.categ_id, record.product_id.product_brand_id)
-            for i in items:
-                i.with_delay(priority=11, eta=80).unlink_pricelist_item(record.product_id)
-
+        self._create_product_pricelist_items_works(record, [None], [None], "unlink")

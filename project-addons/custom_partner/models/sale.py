@@ -37,7 +37,18 @@ class SaleOrder(models.Model):
                 or False
 
     @api.model
-    def cron_create_invoices(self, limit):
+    def cron_create_invoices_monthly(self, mode, limit=None):
+        """
+        Search the orders to invoice and create them grouped by partner
+        and commit with every invoice
+        :param limit: Limits the number of order to search
+        :param mode: The type of invoice, options:
+            'Diaria'
+            'Mensual'
+            'Semanal'
+            'Quincenal'
+        :returns: true or false
+        """
         sale_obj = self.env['sale.order']
         ctx = dict(self._context or {})
         ctx['bypass_risk'] = True
@@ -45,31 +56,115 @@ class SaleOrder(models.Model):
         validate = True
         ok_validation = True
 
-        # Sales to Invoice
-        sales = sale_obj.\
+        # Sales to Invoice based on invoicing mode
+        sales = sale_obj. \
             search([('invoice_status_2', '=', 'to_invoice'),
-                    ('invoice_type_id.name', '=', 'Diaria'),
+                    ('invoice_type_id.name', '=', mode),
+                    ('partner_id.no_auto_invoice', '=', False),
                     ('tests', '=', False)],
                    order='confirmation_date desc', limit=limit)
+
         # Create invoice
-        res = []
-        for sale in sales:
-            try:
-                invoices = sale.action_invoice_create()
-                res.extend(invoices)
-            except:
-                print("No invoiceable lines on sale {}".format(sale.name))
-                invoices = self.env['account.invoice'].\
-                    search([('state', '=', 'draft'),
-                            ('origin', '=', sale.name)])
-                if invoices:
-                    invoices.unlink()
-                pass
-        # if len(sales) != len(res):
-            # templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+        if mode == 'Mensual':
+            partners = sales.mapped('partner_id.commercial_partner_id')
+            for partner in partners:
+                try:
+                    sales_to_invoice = sales.filtered(lambda s: s.partner_id == partner and not
+                                                                all(s.order_line.filtered(lambda sl: sl.invoice_status == 'to invoice').mapped('deposit')))
+                    invoice = sales_to_invoice.action_invoice_create()
+                except:
+                    print("No invoiceable lines on sale {}".format(sales_to_invoice.mapped('name')))
+                    empty_invoices_empty = self.env['account.invoice']. \
+                        search([('state', '=', 'draft'),
+                                ('origin', '=', ', '.join(sales_to_invoice.mapped('name')))])
+                    if empty_invoices_empty:
+                        empty_invoices_empty.unlink()
+                    invoice = None
+                    pass
+
+                invoice_created = self.env['account.invoice'].with_context(ctx).browse(invoice)
+                if invoice_created:
+                    if len(invoice) != len(invoice_created.mapped('invoice_line_ids.invoice_id.id')):
+                        # There are invoices created without lines
+                        templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices_empty_lines', False))
+                        # Do not validate them because it will generate an error
+                        validate = False
+                    if validate:
+                        # Validate invoice
+                        invoice_created.action_invoice_open()
+                        if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
+                            ok_validation = False
+                        if not ok_validation:
+                            templates.append(self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False))
+                    if invoice_created:
+                        for tmpl in templates:
+                            ctx.update({
+                                'default_model': 'account.invoice',
+                                'default_res_id': invoice_created[0].id,
+                                'default_use_template': bool(tmpl.id),
+                                'default_template_id': tmpl.id,
+                                'default_composition_mode': 'comment',
+                                'mark_so_as_sent': True
+                            })
+                            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+                            composer_id.with_context(ctx).send_mail()
+                    self.env.cr.commit()
+        return True
+
+    @api.model
+    def cron_create_invoices(self, mode, limit=None):
+        """
+        Search the orders to invoice and create them
+        :param limit: Limits the number of order to search
+        :param mode: The type of invoice, options:
+            'Diaria'
+            'Mensual'
+            'Semanal'
+            'Quincenal'
+        :returns: true or false
+        """
+        sale_obj = self.env['sale.order']
+        ctx = dict(self._context or {})
+        ctx['bypass_risk'] = True
+        templates = []
+        validate = True
+        ok_validation = True
+
+        # Sales to Invoice based on invoicing mode
+        sales = sale_obj.\
+            search([('invoice_status_2', '=', 'to_invoice'),
+                    ('invoice_type_id.name', '=', mode),
+                    ('partner_id.no_auto_invoice', '=', False),
+                    ('tests', '=', False)],
+                   order='confirmation_date desc', limit=limit)
+
+        # Create invoice
+        if mode == 'Diaria':
+            invoices = []
+            for sale in sales:
+                try:
+                    invoice = sale.action_invoice_create()
+                    invoices.extend(invoice)
+                except:
+                    print("No invoiceable lines on sale {}".format(sale.name))
+                    empty_invoices_empty = self.env['account.invoice']. \
+                        search([('state', '=', 'draft'),
+                                ('origin', '=', sale.name)])
+                    if empty_invoices_empty:
+                        empty_invoices_empty.unlink()
+                    pass
+        elif mode == self.env.ref('custom_partner.biweekly_grouped_by_shipping').name:
+            invoices = []
+            shipping_addrs = sales.mapped('partner_shipping_id')
+            for shipp in shipping_addrs:
+                invoice = sales.filtered(lambda s: s.partner_shipping_id == shipp).action_invoice_create()
+                invoices.extend(invoice)
+        else:
+            invoices = sales.action_invoice_create()
+
         invoices_created = self.env['account.invoice'].with_context(ctx).\
-            browse(res)
-        if len(res) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
+            browse(invoices)
+        if len(invoices) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
             # There are invoices created without lines
             templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices_empty_lines', False))
             # Do not validate them because it will generate an error
@@ -117,3 +212,10 @@ class SaleOrder(models.Model):
             res['journal_id'] = invoice_type.journal_id.id
         return res
 
+
+class SaleOrderLine(models.Model):
+
+    _inherit = 'sale.order.line'
+
+    date_order = fields.Datetime(related='order_id.date_order')
+    confirmation_date = fields.Datetime(related='order_id.confirmation_date')

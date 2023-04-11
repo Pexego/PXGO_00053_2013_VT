@@ -693,3 +693,8 @@ msgstr "Sconto % nell Sub total marchi escluse"
 #, python-format
 msgid "No product with the code %s"
 msgstr "Non ci sono prodotti con il nome %s"
+
+#. module: sale_promotions_extend
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Order Pricelist Brand"
+msgstr "Marca di listino"
