@@ -176,6 +176,7 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <button name="action_picking_move_tree" position="attributes">
+                <attribute name="groups">stock.group_production_lot</attribute>
                 <attribute name="attrs">{'invisible': False}</attribute>
             </button>
         </field>
