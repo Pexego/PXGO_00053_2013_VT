@@ -115,10 +115,9 @@ class StockMove(models.Model):
     _inherit = "stock.move"
 
     @api.multi
-    @api.depends('origin', 'user_id', 'string_availability_info')
     def name_get(self):
         result = []
-        for move in self:
+        for move in self.filtered(lambda m: m.picking_type_id.code == 'outgoing' and m.state not in ['done', 'draft', 'cancel']):
             if move.picking_id:
                 name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or '_') + ' | ' + (move.picking_id.name or '_') + ' | ' + (move.user_id.name or '_')
             else:
