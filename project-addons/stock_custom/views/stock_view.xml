@@ -40,7 +40,7 @@
                 <field name="commercial"/>
             </field>
             <field name="scheduled_date" position="attributes">
-                <attribute name="groups">base.group_system</attribute>
+                <attribute name="groups">base.group_system,purchase.group_purchase_manager</attribute>
             </field>
             <xpath expr="//sheet/notebook/page[2]/button[@name='put_in_pack']" position="attributes">
                 <attribute name="invisible">1</attribute>
