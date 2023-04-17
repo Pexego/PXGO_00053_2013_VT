@@ -16,6 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
+msgid "Adjuntar con pedido"
+msgstr "Allega con ordine"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
+msgid "Pendiente de revisión"
+msgstr "Revisione in atto"
+
+#. module: crm_claim_rma_custom
 #: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_claim_sort
 msgid "Received Claims"
 msgstr "RMA Ricevuti"
