@@ -43,6 +43,7 @@
              'views/account_bank_statement.xml',
              'wizard/statement_ignore.xml',
              'views/sale_view.xml',
+             'wizard/purchase_batch_invoicing_view.xml',
              ],
     "installable": True
 }

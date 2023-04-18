@@ -1340,6 +1340,11 @@ msgid "Filter"
 msgstr "Filtro"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_purchase_batch_invoicing_invoice_ref
+msgid "Invoice Reference"
+msgstr "N. factura proveedor (SII)"
+
+#. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 msgid "Employees"
 msgstr "Empleados"
