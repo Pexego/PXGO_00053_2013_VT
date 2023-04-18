@@ -101,16 +101,32 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="rappel.rappel_calculated_form"/>
         <field name="arch" type="xml">
-            <field name="invoice_id" position="after">
-                <field name="invoice_line_ids">
-                    <tree create="false" delete="false" edit="false">
-                        <field name="invoice_id"/>
-                        <field name="product_id"/>
-                        <field name="quantity" sum="Total qty"/>
-                        <field name="price_subtotal" sum="Price Subtotal"/>
-                    </tree>
-                </field>
-            </field>
+            <xpath expr="//group" position="after">
+                <notebook>
+                    <page string="Invoice lines">
+                        <field name="invoice_line_ids">
+                            <tree create="false" delete="false" edit="false">
+                                <field name="invoice_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total qty"/>
+                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="no_rappel"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="No rappel invoice lines">
+                        <field name="no_rappel_invoice_line_ids">
+                            <tree create="false" delete="false" edit="false">
+                                <field name="invoice_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total qty"/>
+                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="no_rappel"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
         </field>
     </record>
 
@@ -131,15 +147,31 @@
                     <field name="section_id"/>
                     <field name="section_goal"/>
                     <field name="amount"/>
-                    <field name="invoice_line_ids">
-                        <tree create="false" delete="false" edit="false">
-                            <field name="invoice_id"/>
-                            <field name="product_id"/>
-                            <field name="quantity" sum="Total qty"/>
-                            <field name="price_subtotal" sum="Price Subtotal"/>
-                        </tree>
-                    </field>
                 </group>
+                <notebook>
+                    <page string="Invoice lines">
+                        <field name="invoice_line_ids">
+                            <tree create="false" delete="false" edit="false">
+                                <field name="invoice_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total qty"/>
+                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="no_rappel"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="No rappel invoice lines">
+                        <field name="no_rappel_invoice_line_ids">
+                            <tree create="false" delete="false" edit="false">
+                                <field name="invoice_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total qty"/>
+                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="no_rappel"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
             </form>
         </field>
     </record>
