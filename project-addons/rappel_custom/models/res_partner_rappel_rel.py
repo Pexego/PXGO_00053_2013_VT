@@ -83,16 +83,91 @@ class ResPartnerRappelRel(models.Model):
              ('no_rappel', '=', False)])
         return sum([x.qty_to_invoice * (x.price_subtotal / (x.product_uom_qty or 1)) for x in order_lines])
 
-    @api.model
-    def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
-        goal_percentage = 0
-        rappel_calculated_obj = self.env['rappel.calculated']
+    @staticmethod
+    def _get_total_amount_for_lines(field, invoice_lines, refund_lines):
+        """
+
+        :param field:
+        :param invoice_lines:
+        :param refund_lines:
+        :return:
+        """
         invoice_lines_for_rappel_quantity = invoice_lines.filtered(
             lambda line: not line.no_rappel
         )
         refund_lines_for_rappel_quantity = refund_lines.filtered(
             lambda line: not line.no_rappel
         )
+        total = sum([x[field] for x in invoice_lines_for_rappel_quantity]) - \
+                sum([x[field] for x in refund_lines_for_rappel_quantity])
+
+        return total
+
+    def _compute_rappel_fixed_mode(self, rappel_info, field, invoice_lines, refund_lines):
+        """
+
+        :param rappel_info:
+        :param field:
+        :param invoice_lines:
+        :param refund_lines:
+        :return:
+        """
+        total_rappel = 0.0
+        total_rappel_est = 0.0
+        goal_percentage = 0
+        if self.rappel_id.calc_amount == 'qty':
+            total_rappel = self.rappel_id.fix_qty
+        else:
+            total = self._get_total_amount_for_lines(field, invoice_lines, refund_lines)
+            pending_to_invoice = self._calculate_pending_to_invoice()
+            total_est = total + pending_to_invoice
+            rappel_info["curr_qty"] = total
+            rappel_info["curr_qty_pickings"] = pending_to_invoice
+            if total:
+                total_rappel = total * self.rappel_id.fix_qty / 100.0
+            if total_est:
+                total_rappel_est = total_est * self.rappel_id.fix_qty / 100.0
+
+        rappel_info['amount'] = total_rappel
+        rappel_info['amount_est'] = total_rappel_est
+        return total_rappel, goal_percentage
+
+    def _compute_rappel_variable_mode(self, rappel_info, field, invoice_lines, refund_lines):
+        """
+
+        :param rappel_info:
+        :param field:
+        :param invoice_lines:
+        :param refund_lines:
+        :return:
+        """
+        total_rappel = 0.0
+        goal_percentage = 0
+        if self.rappel_id.qty_type != 'value':
+            field = 'quantity'
+        total = self._get_total_amount_for_lines(field, invoice_lines, refund_lines)
+        pending_to_invoice = self._calculate_pending_to_invoice()
+        total_est = total + pending_to_invoice
+        rappel_info["curr_qty"] = total
+        rappel_info["curr_qty_pickings"] = pending_to_invoice
+
+        if self.partner_id.invoice_type_id.name in \
+            ('Mensual', 'Quincenal', 'Semanal') and total_est:
+            rappel_info, goal_percentage, total_rappel = self.compute_total(
+                self, total_est, rappel_info, True)
+        else:
+            rappel_info['amount_est'] = 0.0
+
+        if total:
+            rappel_info, goal_percentage, total_rappel = self.compute_total(
+                self, total, rappel_info, False)
+        else:
+            rappel_info['amount'] = 0.0
+        return total_rappel, goal_percentage
+
+    @api.model
+    def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
+        rappel_calculated_obj = self.env['rappel.calculated']
         for rappel in self:
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
@@ -100,52 +175,22 @@ class ResPartnerRappelRel(models.Model):
                            'amount': 0.0,
                            'amount_est': 0.0,
                            'date_end': period[1]}
-            total_rappel = 0.0
-            total_rappel_est = 0.0
+            field = 'price_subtotal'
             if rappel.rappel_id.calc_mode == 'fixed':
-                if rappel.rappel_id.calc_amount == 'qty':
-                    total_rappel = rappel.rappel_id.fix_qty
-                else:
-                    total = sum([x.price_subtotal for x in invoice_lines_for_rappel_quantity]) - \
-                            sum([x.price_subtotal for x in refund_lines_for_rappel_quantity])
-                    pending_to_invoice = rappel._calculate_pending_to_invoice()
-                    total_est = total + pending_to_invoice
-                    if total:
-                        total_rappel = total * rappel.rappel_id.fix_qty / 100.0
-                    if total_est:
-                        total_rappel_est = total_est * \
-                            rappel.rappel_id.fix_qty / 100.0
-                    rappel_info["curr_qty"] = total
-                    rappel_info["curr_qty_pickings"] = pending_to_invoice
-
-                rappel_info['amount'] = total_rappel
-                rappel_info['amount_est'] = total_rappel_est
+                total_rappel, goal_percentage = rappel._compute_rappel_fixed_mode(
+                    rappel_info,
+                    field,
+                    invoice_lines,
+                    refund_lines
+                )
             else:
-                field = ''
-                if rappel.rappel_id.qty_type == 'value':
-                    field = 'price_subtotal'
-                else:
-                    field = 'quantity'
-                pending_to_invoice = rappel._calculate_pending_to_invoice()
-                total = sum([x[field] for x in invoice_lines_for_rappel_quantity]) - \
-                    sum([x[field] for x in refund_lines_for_rappel_quantity])
-                total_est = total + pending_to_invoice
-                rappel_info["curr_qty"] = total
-                rappel_info["curr_qty_pickings"] = pending_to_invoice
-
-                if self.partner_id.invoice_type_id.name in \
-                        ('Mensual', 'Quincenal', 'Semanal') and total_est:
-                    rappel_info, goal_percentage, total_rappel = self.compute_total(
-                        rappel, total_est, rappel_info, True)
-                else:
-                    rappel_info['amount_est'] = 0.0
-
-                if total:
-                    rappel_info, goal_percentage, total_rappel = self.compute_total(
-                        rappel, total, rappel_info, False)
-                else:
-                    rappel_info['amount'] = 0.0
-            total_invoice_ids = [(6,0,(invoice_lines + refund_lines).ids)]
+                total_rappel, goal_percentage = rappel._compute_rappel_variable_mode(
+                    rappel_info,
+                    field,
+                    invoice_lines,
+                    refund_lines
+                )
+            total_invoice_ids = [(6, 0, (invoice_lines + refund_lines).ids)]
             rappel_info['invoice_line_ids'] = total_invoice_ids
 
             if period[1] < fields.Date.from_string(fields.Date.today()):
