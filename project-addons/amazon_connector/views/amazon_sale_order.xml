@@ -135,7 +135,7 @@
                                     <field name="product_qty"/>
                                     <field name="price_unit"/>
                                     <field name="price_subtotal"/>
-                                    <field name="tax_id" widget="many2many_tags"/>
+                                    <field name="tax_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
                                     <field name="price_tax"/>
                                     <field name="price_total"/>
                                 </tree>
