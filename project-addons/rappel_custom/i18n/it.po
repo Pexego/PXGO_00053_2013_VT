@@ -208,3 +208,15 @@ msgstr "Senza rappel"
 #: model:ir.model.fields,field_description:rappel_custom.field_rappel_exclude_brands_mode
 msgid "Exclude Brands Mode"
 msgstr "Escludi Marchi"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Invoice lines"
+msgstr "Linee di fatturazione"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "No rappel invoice lines"
+msgstr "Linee senza rappel"
