@@ -72,3 +72,4 @@ class ProductTag(models.Model):
     child_id = fields.One2many('product.tag', 'parent_id', string="Child tags")
     parent_left = fields.Integer("Left Parent", index=True)
     parent_right = fields.Integer("Right Parent", index=True)
+    color = fields.Integer()
