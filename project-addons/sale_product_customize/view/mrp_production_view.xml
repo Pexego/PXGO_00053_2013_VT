@@ -24,7 +24,7 @@
                 <field name="origin" position="after">
                     <field name="sale_id"/>
                     <field name="production_name"/>
-                    <field name="type_ids" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="type_ids" options="{'color_field': 'color'}" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                 </field>
                 <field name="availability" position="after">
                     <field name="picking_out"/>
@@ -42,7 +42,7 @@
             <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
             <field name="arch" type="xml">
                 <field name="origin" position="after">
-                    <field name="type_ids" widget="many2many_tags"/>
+                    <field name="type_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 </field>
                 <!--tree position="attributes">
                     <attribute name="create">0</attribute>
