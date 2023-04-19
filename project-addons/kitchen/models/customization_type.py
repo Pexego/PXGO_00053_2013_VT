@@ -9,3 +9,5 @@ class KitchenCustomization(models.Model):
     rule_ids = fields.One2many('automatic.customization.type.rule','type_id')
 
     preview = fields.Boolean()
+
+    color = fields.Integer()
