@@ -390,3 +390,9 @@ class AccountPayment(models.Model):
                     line.write({'blocked': True})
 
         return res
+
+
+class AccountTax(models.Model):
+    _inherit = "account.tax"
+
+    color = fields.Integer()
