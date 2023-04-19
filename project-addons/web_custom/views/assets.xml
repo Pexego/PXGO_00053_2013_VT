@@ -1,0 +1,8 @@
+<odoo>
+    <template id="add_group_to_color_picker_in_tags" name="Add group to color picker in tags" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="web_custom/static/src/js/relational_fields.js"/>
+        </xpath>
+    </template>
+
+</odoo>
