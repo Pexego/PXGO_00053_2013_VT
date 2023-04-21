@@ -17,12 +17,12 @@ msgstr ""
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
-msgid "Adjuntar con pedido"
+msgid "Attach with order"
 msgstr "Bei Bestellung anhängen"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
-msgid "Pendiente de revisión"
+msgid "Pending review"
 msgstr "Ausstehende Bewertung"
 
 #. module: crm_claim_rma_custom
