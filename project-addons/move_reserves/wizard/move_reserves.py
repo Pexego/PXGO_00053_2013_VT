@@ -123,5 +123,5 @@ class StockMove(models.Model):
             else:
                 name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or move.sale_id.name or '_') + ' | ' + (move.user_id.name or '_')
             result.append((move.id, name))
-        res = super(StockMove, self.filtered(lambda m: m.picking_type_id.code != 'outgoing' and m.state in ['done', 'draft', 'cancel'])).name_get()
+        res = super(StockMove, self.filtered(lambda m: m.picking_type_id.code != 'outgoing' or m.state in ['done', 'draft', 'cancel'])).name_get()
         return result + res
