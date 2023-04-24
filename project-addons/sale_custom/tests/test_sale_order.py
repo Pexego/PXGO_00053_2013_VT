@@ -6,7 +6,7 @@ class TestSaleOrder(TransactionCase):
     post_install = True
     at_install = True
 
-    def setup(self):
+    def setUp(self):
         super(TestSaleOrder, self).setUp()
         self.so_model = self.env['sale.order']
         self.res_partner_model = self.env['res.partner']
