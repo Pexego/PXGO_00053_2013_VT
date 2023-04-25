@@ -651,6 +651,7 @@ msgstr "RMAs pendientes"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
 msgid "Attach RMA"
 msgstr "Adjuntar RMA"
 
