@@ -220,3 +220,22 @@ msgstr "Linee di fatturazione"
 #: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
 msgid "No rappel invoice lines"
 msgstr "Linee senza rappel"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Total qty"
+msgstr "Quantità totale"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Price"
+msgstr "Importo"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Price Total"
+msgstr "Importo totale"
+
