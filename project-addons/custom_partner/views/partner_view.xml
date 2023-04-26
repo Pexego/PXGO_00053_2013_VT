@@ -454,7 +454,7 @@
                     <attribute name="invisible">0</attribute>
                 </field>
                 <field name="user_id" position="after">
-                    <field name="category_id"/>
+                    <field name="category_id" widget="many2many_tags" options="{'color_field':'color'}"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
                     <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
