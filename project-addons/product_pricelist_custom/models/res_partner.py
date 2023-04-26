@@ -5,8 +5,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
 
-    pricelist_brand_ids = fields.Many2many('product.pricelist', domain=[('brand_group_id', '!=', False),
-                                                                        ('base_pricelist', '=', False)])
+    pricelist_brand_ids = fields.Many2many('product.pricelist', domain=[('brand_group_id', '!=', False)])
 
     @api.constrains('pricelist_brand_ids','team_id')
     def _check_tags(self):
