@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_reserves" model="ir.ui.view">
+        <field name="name">Move Reserves</field>
+        <field name="model">move.reserves</field>
+        <field name="arch" type="xml">
+             <form string="Move reserves">
+                <group>
+                    <group>
+                        <field name="product_id" required="1" options="{'no_create': True, 'no_open': True}" domain="[('type','=','product')]"/>
+                        <field name="qty" required="1"/>
+                    </group>
+                    <div>
+                        <br/>Make sure you have permission to move the reserves, the move will be registered.<br/>
+                    </div>
+                    <label for="reserves_origin_id"/>
+                    <field name="reserves_origin_id" options="{'no_create': True, 'no_open': True}" col="4"/>
+                    <label for="reserves_dest_id"/>
+                    <field name="reserves_dest_id" options="{'no_create': True, 'no_open': True}" col="4"/>
+                </group>
+                <footer>
+                    <button name="action_move_reserve" string="Move" type="object" class="btn-primary" icon="fa-exchange"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_move_reserves" model="ir.actions.act_window">
+        <field name="name">Move Reserves</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">move.reserves</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_move_reserves"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="move_reserves_menu" name="Move Reserves" parent="sale.sale_order_menu"
+              action="action_view_move_reserves"
+              groups="base.group_system"
+              sequence="5"/>
+
+</odoo>

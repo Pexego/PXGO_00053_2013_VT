@@ -1,12 +1,8 @@
-from odoo import models, fields, api, _, http
+from odoo import models, fields, api, _
 from datetime import datetime, timedelta
 from pandas.core.algorithms import quantile
 from numpy import mean
 from dateutil.relativedelta import relativedelta
-from io import BytesIO
-import xlwt
-from odoo.addons.web.controllers.main import content_disposition
-from odoo.http import request
 
 
 def calculate_distances(quantiles_by_product):
@@ -234,52 +230,28 @@ class PurchaseSuggestions(models.TransientModel):
         return action
 
 
-class PurchaseSuggestionsWizardReport(models.TransientModel):
+class PurchaseSuggestionsXlsx(models.AbstractModel):
     """
-    Models the file with purchase suggestion report to be downloaded
+    Models the xlsx file with purchase suggestion report to be downloaded
     """
-    _name = 'purchase.suggestions.wizard.report'
-    _rec_name = 'file_name'
+    _name = 'report.purchase_suggestions.purchase_suggestions'
+    _inherit = 'report.report_xlsx.abstract'
 
-    file_name = fields.Char('Report name', size=64)
-
-    def get_excel_report(self):
+    def generate_xlsx_report(self, workbook, data, purchase_suggestions):
         """
-        Redirects to /purchase.suggestions/report controller to generate the excel report
-        """
-        return {
-            'type': 'ir.actions.act_url',
-            'url': f'/web/binary/purchase.suggestions/report/{self.env.context["active_id"]}',
-            'target': 'self'
-        }
-
-
-class PurchaseSuggestionsReportController(http.Controller):
-    @http.route([
-        '/web/binary/purchase.suggestions/report/<model("purchase.suggestions"):wizard>'
-    ], type='http', auth="user", csrf=False)
-    def get_excel_report(self, wizard=None, **kwargs):
-        """
-        Generates and returns the report excel file which contains the purchase sugestions.
+        Writes the content into the excell report.
 
         Parameters
         ----------
-        wizard:
-            Purchase Suggestions instance from where we want to create the report
+        workbook:
+            Workbook object from xlsxwriter library where the report is going to be written
+        data:
+            Dictionary with data and token
+        purchase_suggestions:
+            Objects from where we are going to get the values needed to create the report
         """
-        response = request.make_response(None, headers=[
-            ('Content-Type', 'application/vnd.ms-excel'),
-            ('Content-Disposition', content_disposition(
-                'purchase_suggestions_report' + '.xlsx'
-            ))
-        ])
-        worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report(wizard)
-        with BytesIO() as output:
-            workbook = xlwt.Workbook(encoding="UTF-8")
-            self.write_on_report_file(workbook, worksheet_row_values, worksheet_headers)
-            workbook.save(output)
-            response.stream.write(output.getvalue())
-        return response
+        worksheet_row_values, worksheet_headers = self._get_rows_and_headers_for_report(purchase_suggestions)
+        self.write_on_report_file(workbook, worksheet_row_values, worksheet_headers)
 
     @staticmethod
     def _get_rows_and_headers_for_report(wizard):
@@ -351,7 +323,7 @@ class PurchaseSuggestionsReportController(http.Controller):
         """
 
         for worksheet_name, headers in worksheet_headers.items():
-            worksheet = workbook.add_sheet(worksheet_name)
+            worksheet = workbook.add_worksheet(worksheet_name)
             row_values = worksheet_row_values[worksheet_name]
             self._write_worksheet(worksheet, headers, row_values)
 

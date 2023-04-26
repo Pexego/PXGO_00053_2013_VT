@@ -94,7 +94,8 @@ class PartnerListener(Component):
             "state_id", "email_web", "ref", "user_id",
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
             "is_company", "email", "active", "prospective", "phone", "mobile",
-            "property_payment_term_id", "last_sale_date", "csv_connector_access"
+            "property_payment_term_id", "last_sale_date", "csv_connector_access",
+            "pricelist_brand_ids"
         ]
         if 'web' in fields and record.web and \
                 (partner.active or partner.prospective):

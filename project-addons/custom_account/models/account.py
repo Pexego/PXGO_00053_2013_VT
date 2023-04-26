@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api, _, exceptions
 from statistics import mean
+from datetime import datetime
 
 
 class AccountMoveLine(models.Model):
@@ -162,7 +163,10 @@ class AccountInvoice(models.Model):
                             or partner.commercial_partner_id.invoice_type_id)
             if invoice_type and invoice_type.journal_id:
                 vals['journal_id'] = invoice_type.journal_id.id
-        return super().create(vals)
+        res = super().create(vals)
+        if res.type == "out_refund" and not res.payment_term_id:
+            res.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+        return res
 
     @api.onchange('partner_id', 'company_id')
     def _onchange_partner_id(self):
@@ -303,6 +307,13 @@ class AccountInvoice(models.Model):
         res = super().purchase_order_change()
         return res
 
+    @api.model
+    def _prepare_refund(self, invoice, date_invoice=None, date=None, description=None, journal_id=None):
+        values = super()._prepare_refund(invoice, date_invoice, date, description, journal_id)
+        date_due = fields.Datetime.from_string(invoice.date_due)
+        today = datetime.today()
+        values.update({'date_due': invoice.date_due if date_due>today else today})
+        return values
 
 class PaymentMode(models.Model):
 
