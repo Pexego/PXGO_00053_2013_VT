@@ -109,7 +109,7 @@
                                 <field name="invoice_id"/>
                                 <field name="product_id"/>
                                 <field name="quantity" sum="Total qty"/>
-                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
                                 <field name="no_rappel"/>
                             </tree>
                         </field>
@@ -120,7 +120,7 @@
                                 <field name="invoice_id"/>
                                 <field name="product_id"/>
                                 <field name="quantity" sum="Total qty"/>
-                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
                                 <field name="no_rappel"/>
                             </tree>
                         </field>
@@ -155,7 +155,7 @@
                                 <field name="invoice_id"/>
                                 <field name="product_id"/>
                                 <field name="quantity" sum="Total qty"/>
-                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
                                 <field name="no_rappel"/>
                             </tree>
                         </field>
@@ -166,7 +166,7 @@
                                 <field name="invoice_id"/>
                                 <field name="product_id"/>
                                 <field name="quantity" sum="Total qty"/>
-                                <field name="price_subtotal" sum="Price Subtotal"/>
+                                <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
                                 <field name="no_rappel"/>
                             </tree>
                         </field>
