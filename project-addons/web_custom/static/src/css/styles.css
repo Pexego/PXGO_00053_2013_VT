@@ -1,0 +1,4 @@
+/* This fix many2many tags display above the table header */
+.o_list_view.table th{
+    z-index: 1;
+}
