@@ -12,10 +12,15 @@ class RappelCalculated(models.Model):
 
     goal_percentage = fields.Float()
 
-    invoice_line_ids = fields.Many2many('account.invoice.line', readonly=True)
+    invoice_line_ids = fields.Many2many(
+        'account.invoice.line',
+        domain=[('no_rappel', '=', False)],
+        readonly=True
+    )
     no_rappel_invoice_line_ids = fields.Many2many(
         'account.invoice.line',
-        domain=[('no_rappel', '=', True)]
+        domain=[('no_rappel', '=', True)],
+        readonly=True
     )
 
     @api.model
