@@ -223,8 +223,8 @@ msgstr "Excluir Marcas"
 #. module: rappel_custom
 #: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
 #: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
-msgid "Invoice lines"
-msgstr "Líneas de Factura"
+msgid "Rappel invoice lines"
+msgstr "Líneas de factura con rappel"
 
 #. module: rappel_custom
 #: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
