@@ -273,6 +273,20 @@
             </field>
         </record>
 
+        <record id="view_partner_make_company_type_invisible" model="ir.ui.view">
+            <field name="name">view.partner.make.company.type.invisible</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="company_type" position="before">
+                    <field name="dropship" invisible="1"/>
+                </field>
+                <field name="company_type" position="attributes">
+                    <attribute name="attrs">{'invisible':[('dropship','=',True)]}</attribute>
+                </field>
+            </field>
+        </record>
+
 
         <record id="res_partner_view_web_search" model="ir.ui.view">
             <field name="name">View.web.customers</field>
