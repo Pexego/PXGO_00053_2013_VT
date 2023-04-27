@@ -241,6 +241,16 @@ msgstr "Creare costi target"
 
 #. module: pmp_landed_costs
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_landed_cost_creator_wizard_form
+msgid "Products without HSCode"
+msgstr "Prodotti senza HSCode"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_landed_cost_creator_wizard_form
+msgid "Products without volume"
+msgstr "Prodotti senza volume"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_landed_cost_creator_wizard_form
 msgid "Products without weight"
 msgstr "Prodotti non pesati"
 
