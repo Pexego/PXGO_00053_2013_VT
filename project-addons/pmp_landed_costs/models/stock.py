@@ -29,12 +29,14 @@ class StockContainer(models.Model):
 
         return action
 
-    def get_products_with_no_weight(self):
+    def get_products_for_landed_cost_warning(self):
         """
-        Returns container products that have no weight
+        Returns container products that have no weight or no hs_code_id or no volume
 
         Returns:
         -------
         product.product
         """
-        return self.move_ids.mapped('product_id').filtered(lambda product: product.weight == 0)
+        return self.move_ids.mapped('product_id').filtered(
+            lambda product: product.weight == 0 or not product.hs_code_id or product.volume == 0
+        )

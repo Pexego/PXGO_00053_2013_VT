@@ -96,10 +96,10 @@ class ImportSheet(models.Model):
         -------
         landed.cost.creator.wizard
         """
-        value_returned = self.container_id.get_products_with_no_weight()
+        product_ids = self.container_id.get_products_for_landed_cost_warning()
         wizard = self.env['landed.cost.creator.wizard'].create({
             'import_sheet_id': self.id,
-            'product_ids': [(6, 0, value_returned.ids)]
+            'product_ids': [(6, 0, product_ids.ids)]
         })
         return wizard
 

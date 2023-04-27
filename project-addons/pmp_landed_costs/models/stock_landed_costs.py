@@ -276,6 +276,21 @@ class LandedCostCreator(models.TransientModel):
 
     import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
     product_ids = fields.Many2many('product.product', string='Products')
+    products_without_weight = fields.Many2many(
+        'product.product',
+        string='Products without weight',
+        domain=[('weight', '=', 0)]
+    )
+    products_without_hs_code = fields.Many2many(
+        'product.product',
+        string='Products without HSCode',
+        domain=[('hs_code_id', '=', False)]
+    )
+    products_without_volume = fields.Many2many(
+        'product.product',
+        string='Products without volume',
+        domain=[('volume', '=', 0)]
+    )
     container_id = fields.Many2one(related='import_sheet_id.container_id')
     account_journal_id = fields.Many2one(
         'account.journal',

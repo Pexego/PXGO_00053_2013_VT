@@ -87,11 +87,25 @@
                     <field name="import_sheet_id" readonly="1"/>
                     <field name="account_journal_id"/>
                 </group>
+                <separator string="Products without HSCode" colspan="4"/>
+                <field name="products_without_hs_code" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="hs_code_id"/>
+                    </tree>
+                </field>
                 <separator string="Products without weight" colspan="4"/>
-                <field name="product_ids" string="">
+                <field name="products_without_weight" string="">
                     <tree create="false" delete="false">
                         <field name="default_code"/>
                         <field name="weight"/>
+                    </tree>
+                </field>
+                <separator string="Products without volume" colspan="4"/>
+                <field name="products_without_volume" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="volume"/>
                     </tree>
                 </field>
                 <footer>
