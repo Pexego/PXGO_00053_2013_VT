@@ -297,6 +297,24 @@ class LandedCostCreator(models.TransientModel):
         default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')])
     )
 
+    def update_products(self):
+        """
+        Updates wizard view to see which are the products that have lack of fields seen.
+
+        Return:
+        ------
+            action
+        """
+        action = self.env.ref('pmp_landed_costs.view_landed_cost_creator_wizard_form').read()[0]
+        action['context'] = self.env.context
+        return {
+            'type': 'ir.actions.act_multi',
+            'actions': [
+                {'type': 'ir.actions.act_view_reload'},
+                action
+            ]
+        }
+
     def _get_product_for_landed_cost_line(self):
         """
         Returns the correct product to assign to landed cost lines
