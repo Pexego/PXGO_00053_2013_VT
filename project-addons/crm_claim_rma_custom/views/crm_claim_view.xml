@@ -31,6 +31,10 @@
                 <filter string="RMA Arcore" domain="[('warehouse_location','=','italia')]"/>
                 <filter string="RMA Madrid" domain="[('warehouse_location','like','madrid')]"/>
                 <filter string="Transport incidence" domain="[('transport_incidence','=', True)]"/>
+
+                <filter string="Attach with order" domain="[('stage_id.name','like','Adjuntar con pedido')]"/>
+                <filter string="Pending review" domain="[('stage_id.name','like','Pendiente revisión')]"/>
+
             </filter>
         </field>
     </record>
