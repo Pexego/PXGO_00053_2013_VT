@@ -95,8 +95,7 @@ class ProductProduct(models.Model):
             for row in res:
                 fifo_automated_values[(row[0], row[1])] = row[2]
         for product in products:
-            #import wdb
-            #wdb.set_trace()
+
             value = 0
             category_name = product["categ_id"][1]
 
@@ -122,8 +121,8 @@ class ProductProduct(models.Model):
                                                          valuation_account_id)) or 0, 2)
             seller_ids = product["seller_ids"]
             if seller_ids:
-                sellers = self.env['product.supplierinfo'].browse(seller_ids)
-                display_name = sellers[0].display_name or 0
+                #sellers = self.env['product.supplierinfo'].browse(seller_ids)
+                #display_name = sellers[0].display_name or 0
                 product_fields = [product["id"], product['display_name'], brand_name, category_name,
                                   last_supplier_id, product["qty_available"], value]
                 rows.append(product_fields)
