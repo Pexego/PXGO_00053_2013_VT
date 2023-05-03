@@ -27,12 +27,12 @@ class SaleOrder(models.Model):
             })
             service_cost_list = new_so_sc.sudo().calculate_shipping_cost(
                 self.get_sale_order_volume(),
-                self.get_sale_order_weight(),
+                shipping_weight,
                 mode='pallet'
             )
             service_cost_list += new_so_sc.sudo().calculate_shipping_cost(
                 self.get_sale_order_volume(),
-                self.get_sale_order_weight(),
+                shipping_weight,
                 mode='total_weight'
             )
             services_to_add += [
