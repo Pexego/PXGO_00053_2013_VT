@@ -42,19 +42,20 @@ class PurchaseBatchInvoicing(models.TransientModel):
         purchases = self.purchase_order_ids
         invoices = purchases.mapped('invoice_ids')
         invoice_ids = res['domain'][0][2]
+        invoices_filtered = invoices.filtered(lambda i: i.id in invoice_ids)
 
         if self.invoice_ref:
-            for invoice in invoices.filtered(lambda i: i.id in invoice_ids):
+            for invoice in invoices_filtered:
                 invoice.reference = self.invoice_ref
         else:
-            for invoice in invoices.filtered(lambda i: i.id in invoice_ids):
+            for invoice in invoices_filtered:
                 invoice.reference = False
                 purchases_inv = self.env['purchase.order'].search([('name', 'in', invoice.origin.split(', '))])
                 if purchases_inv and purchases_inv.mapped('container_ids'):
                     invoice.reference = ' - '.join(purchases_inv.mapped('container_ids.name'))
 
         if self.invoice_date:
-            for invoice in invoices.filtered(lambda i: i.id in invoice_ids):
+            for invoice in invoices_filtered:
                 invoice.date_invoice = self.invoice_date
 
         return res
