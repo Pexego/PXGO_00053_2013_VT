@@ -30,6 +30,7 @@ class ProductPricelist(models.Model):
     brand_group_id = fields.Many2one("brand.group")
     default_brand_pricelist = fields.Boolean("Default Brand Pricelist", copy=False)
     team_id = fields.Many2one('crm.team', copy=False)
+    color = fields.Integer()
 
     display_name = fields.Char(
         compute='_compute_display_name',

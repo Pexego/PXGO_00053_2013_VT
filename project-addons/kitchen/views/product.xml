@@ -10,7 +10,7 @@
                 <group name="customization" string="Customization conditions">
                     <field name="customizable" readonly="1"/>
                     <field name="customization_type_ids" widget="many2many_tags"
-                           attrs="{'invisible':[('customizable','=',False)],'readonly':1}"/>
+                           attrs="{'invisible':[('customizable','=',False)],'readonly':1}" options="{'color_field': 'color'}"/>
                     <field name="erase_logo" readonly="1"/>
                 </group>
             </group>

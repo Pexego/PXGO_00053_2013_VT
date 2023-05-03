@@ -1,0 +1,86 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* move_reserves
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-23 15:34+0000\n"
+"PO-Revision-Date: 2023-03-23 15:34+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: move_reserves
+#: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
+msgid "<br/>Make sure you have permission to move the reserves, the move will be registered.<br/>"
+msgstr "<br/>Asegurate de tener permiso para mover las reservas, el movimiento será registrado.<br/>"
+
+#. module: move_reserves
+#: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
+msgid "Cancel"
+msgstr "Anulla"
+
+#. module: move_reserves
+#: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
+msgid "Move"
+msgstr "Spostare"
+
+#. module: move_reserves
+#: model:ir.actions.act_window,name:move_reserves.action_view_move_reserves
+#: model:ir.ui.menu,name:move_reserves.move_reserves_menu
+msgid "Move Reserves"
+msgstr "Spostare Riserve"
+
+#. module: move_reserves
+#: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
+msgid "Move reserves"
+msgstr "Spostare riserve"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_move_reserves_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_move_reserves_qty
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_move_reserves_reserves_dest_id
+msgid "Reserves Dest"
+msgstr "Riserva Destinazione"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_move_reserves_reserves_origin_id
+msgid "Reserves Origin"
+msgstr "Riserva Origine"
+
+#. module: move_reserves
+#: code:addons/move_reserves/wizard/move_reserves.py:83
+#, python-format
+msgid "There is been an error, try again later"
+msgstr "Ha habido un error, prueba de nuevo más tarde"
+
+#. module: move_reserves
+#: code:addons/move_reserves/wizard/move_reserves.py:63
+#, python-format
+msgid "You have selected more quantity than is available in the origin reserve"
+msgstr "Has seleccionado más cantidad de la disponible en la reserva origen"
+
+#. module: move_reserves
+#: code:addons/move_reserves/wizard/move_reserves.py:65
+#, python-format
+msgid "You have selected more quantity than is in the destination reserve"
+msgstr "Has seleccionado más cantidad de la requerida en la reserva destino"
+
+#. module: move_reserves
+#: code:addons/move_reserves/wizard/move_reserves.py:61
+#, python-format
+msgid "You have selected the same move in both"
+msgstr "Has seleccionado la misma reserva en ambas"

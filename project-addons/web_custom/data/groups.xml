@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="group_select_tag_color" model="res.groups">
+            <field name="name">Select Tag Color</field>
+    </record>
+</odoo>

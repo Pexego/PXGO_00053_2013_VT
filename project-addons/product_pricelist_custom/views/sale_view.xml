@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="pricelist_id" position="after">
-                <field name="pricelist_brand_ids" widget="many2many_tags"/>
+                <field name="pricelist_brand_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
             </field>
         </field>
     </record>
