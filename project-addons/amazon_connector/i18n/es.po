@@ -1770,3 +1770,10 @@ msgstr "Cliente empresarial"
 #: model:ir.model.fields,field_description:amazon_connector.field_res_partner_retail_phone
 msgid "Retail Phone"
 msgstr "Teléfono Retail"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:262
+#: code:addons/amazon_connector/models/amazon_sale_order.py:374
+#, python-format
+msgid "There is a error calling vat service: %s"
+msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
