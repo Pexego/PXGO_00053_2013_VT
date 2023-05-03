@@ -213,7 +213,8 @@ class SaleOrderShippingCost(models.TransientModel):
             {
                 'price': round(fuel_added_price * (1 + supplement.added_percentage / 100), 2),
                 'service_name': f'{supplement.service_id.name}',
-                'sale_order_shipping_cost_id': self.id
+                'sale_order_shipping_cost_id': self.id,
+                'weight_volume_translation': self.shipping_cost_id.weight_volume_translation
             }
             for supplement in self.shipping_cost_id.supplement_ids
         ]
@@ -303,14 +304,15 @@ class ShippingCostCalculator(models.TransientModel):
 
         for sc in shipping_costs:
             new_so_sc = create_so_sc({'shipping_cost_id': sc.id})
+            shipping_weight = self.get_shipping_weight(sc.weight_volume_translation)
             services += new_so_sc.sudo().calculate_shipping_cost(
                 self.shipping_volume,
-                self.shipping_weight,
+                shipping_weight,
                 mode='pallet'
             )
             services += new_so_sc.sudo().calculate_shipping_cost(
                 self.shipping_volume,
-                self.shipping_weight,
+                shipping_weight,
                 mode='total_weight'
             )
 
@@ -320,10 +322,24 @@ class ShippingCostCalculator(models.TransientModel):
                 'transit_time': '',
                 'amount': service['price'],
                 'service': service['service_name'],
-                'shipping_weight': self.shipping_weight,
+                'shipping_weight': self.get_shipping_weight(service['weight_volume_translation']),
                 'wizard_id': picking_rated.id,
                 'sequence': 0
             }) for service in services
         ]
         picking_rated.write({'data': services_to_add})
         return action_to_return
+
+    def get_shipping_weight(self, weight_volume_translator):
+        """
+        Calculates the shipping weight. This will be the maximun of the shipping weight and
+        the volume weight
+
+        Parameters:
+        ----------
+        weight_volume_translator: Float
+            Translator to obtain volume_weight
+        """
+        volume_weight = self.shipping_volume * weight_volume_translator
+        return max(volume_weight, self.shipping_weight)
+
