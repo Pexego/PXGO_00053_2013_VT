@@ -7,7 +7,6 @@ from odoo.tools import float_compare
 
 
 class SaleOrderLine(models.Model):
-
     _inherit = 'sale.order.line'
 
     description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
@@ -31,45 +30,48 @@ class SaleOrderLine(models.Model):
         if self.product_id and self.order_id and self.order_id.partner_id and self.product_id.product_brand_id:
             product_categories = set(self.product_id.product_brand_id.category_ids)
             partner_categories = set(self.order_id.partner_id.category_id)
-            if product_categories and not(product_categories & partner_categories):
+            if product_categories and not (product_categories & partner_categories):
                 raise UserError(_('This partner cannot buy this product brand'))
 
     @api.onchange('product_uom_qty', 'product_uom', 'route_id')
     def _onchange_product_id_check_availability(self):
         if not self.product_id or not self.product_uom_qty or not \
-                self.product_uom:
+            self.product_uom:
             self.product_packaging = False
             return {}
         if self.order_id.state == 'sale':
             exception = self.order_id.check_weight(True)
             if exception:
-                warning_mess =  {
-                        'title': _('Max weight advise'),
-                        'message': exception}
+                warning_mess = {
+                    'title': _('Max weight advise'),
+                    'message': exception}
                 return {'warning': warning_mess}
         if self.product_id.type == 'product':
-            precision = self.env['decimal.precision'].\
+            precision = self.env['decimal.precision']. \
                 precision_get('Product Unit of Measure')
             product = self.product_id.with_context(
                 warehouse=self.order_id.warehouse_id.id,
                 lang=self.order_id.partner_id.lang or self.env.user.lang or
-                'en_US'
+                     'en_US'
             )
-            product_qty = self.product_uom.\
+            product_qty = self.product_uom. \
                 _compute_quantity(self.product_uom_qty, self.product_id.uom_id)
             if float_compare(product.virtual_stock_conservative, product_qty,
                              precision_digits=precision) == -1:
                 is_available = self._check_routing()
                 if not is_available:
                     if self.product_id.replacement_id:
-                        if self.product_id.replacement_id.virtual_stock_conservative-self.product_uom_qty >= 0 and self.product_id.replacement_id.sale_ok:
-                            message = _('The quantity of the selected product (%i units) is not available at this moment but there is another product that can replace it: %s.') %(self.product_id.virtual_stock_conservative,self.product_id.replacement_id.default_code)
+                        if self.product_id.replacement_id.virtual_stock_conservative - self.product_uom_qty >= 0 and self.product_id.replacement_id.sale_ok:
+                            message = _(
+                                'The quantity of the selected product (%i units) is not available at this moment but there is another product that can replace it: %s.') % (
+                                      self.product_id.virtual_stock_conservative,
+                                      self.product_id.replacement_id.default_code)
                             warning_mess = {
                                 'title': _('Not enough inventory but we have a replacement product!'),
                                 'message': message
                             }
                             return {'warning': warning_mess}
-                    message =  \
+                    message = \
                         _('You plan to sell %s %s but you only have %s %s '
                           'available in %s warehouse.') % \
                         (self.product_uom_qty, self.product_uom.name,
@@ -77,7 +79,7 @@ class SaleOrderLine(models.Model):
                          product.uom_id.name, self.order_id.warehouse_id.name)
                     if float_compare(product.virtual_stock_conservative,
                                      self.product_id.
-                                     virtual_stock_conservative,
+                                         virtual_stock_conservative,
                                      precision_digits=precision) == -1:
                         message += \
                             _('\nThere are %s %s available accross all '
@@ -106,13 +108,12 @@ class SaleOrderLine(models.Model):
 
 
 class SaleOrder(models.Model):
-
     _inherit = "sale.order"
 
     validated_dir = fields.Boolean(default=False)
 
     partner_id = fields.Many2one(
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]},)
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]}, )
     partner_invoice_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     partner_shipping_id = fields.Many2one(
@@ -134,7 +135,7 @@ class SaleOrder(models.Model):
     @api.multi
     @api.onchange('is_project')
     def onchange_is_project(self):
-       for order in self:
+        for order in self:
             order.not_sync_picking = order.is_project
             order.no_promos = order.is_project
 
@@ -142,7 +143,7 @@ class SaleOrder(models.Model):
     def _get_is_editable(self):
         for order in self:
             order.is_editable = (self.env.user.has_group('sale_custom.sale_editor') and order.state == 'sale') \
-                    or order.state in ('draft', 'sent', 'reserve')
+                                or order.state in ('draft', 'sent', 'reserve')
 
     @api.multi
     @api.onchange('partner_id')
@@ -166,7 +167,7 @@ class SaleOrder(models.Model):
             line._onchange_discount()
             line.write({'old_discount': 0.0, 'accumulated_promo': False})
         if self.order_line and \
-                self.pricelist_id and self.pricelist_id.discount_policy == 'with_discount':
+            self.pricelist_id and self.pricelist_id.discount_policy == 'with_discount':
             self.order_line.write({'discount': 0.0})
 
     def open_historical_orders(self):
@@ -180,7 +181,7 @@ class SaleOrder(models.Model):
             limit=1, order='date_order DESC').id
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         record_url = base_url + '/web/?#view_type=list&model=sale.order&action=' + \
-            str(order_view_id) + '&active_id=' + str(partner_id)
+                     str(order_view_id) + '&active_id=' + str(partner_id)
         return {
             'name': 'Historical Partner Orders',
             'type': 'ir.actions.act_url',
@@ -193,7 +194,7 @@ class SaleOrder(models.Model):
     def recalculate_line_prices(self):
         for order in self:
             for line in order.order_line:
-                if line.original_line_id.discount >line.discount or not line.original_line_id:
+                if line.original_line_id.discount > line.discount or not line.original_line_id:
                     line._onchange_discount()
 
     @api.multi
@@ -232,9 +233,9 @@ class SaleOrder(models.Model):
         }
 
     def validate_address(self):
-        self.validated_dir = True   # Validate the address to not break with flow
+        self.validated_dir = True  # Validate the address to not break with flow
 
-        listFields = []             # Dictionary to control all fields of address
+        listFields = []  # Dictionary to control all fields of address
         fields = {'Street': self.partner_shipping_id.street,
                   'Zip': self.partner_shipping_id.zip,
                   'City': self.partner_shipping_id.city,
@@ -248,15 +249,17 @@ class SaleOrder(models.Model):
                 if not value:
                     listFields.append(_(key))
 
-            warning += ', '.join(listFields)   # Separate by commas
+            warning += ', '.join(listFields)  # Separate by commas
 
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
-        if not self.force_generic_product and any(d.product_id.id == self.env.ref('sale_margin_percentage.generic_product').id for d in self.order_line):
-            raise UserError(_("You can't confirm a sale with the product %s.") % self.env.ref('sale_margin_percentage.generic_product').name)
+        if not self.force_generic_product and any(
+            d.product_id.id == self.env.ref('sale_margin_percentage.generic_product').id for d in self.order_line):
+            raise UserError(_("You can't confirm a sale with the product %s.") % self.env.ref(
+                'sale_margin_percentage.generic_product').name)
         if not self.env.context.get('bypass_override', False) and (
-                not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False)):
+            not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False)):
             user_buyer = self.env['ir.config_parameter'].sudo().get_param(
                 'web.user.buyer')
             for sale in self:
@@ -264,7 +267,7 @@ class SaleOrder(models.Model):
                 if exception:
                     return exception
                 if not sale.validated_dir and sale.create_uid.email == \
-                        user_buyer and self.delivery_type not in 'installations':
+                    user_buyer and self.delivery_type not in 'installations':
                     message = _('Please, validate shipping address.')
                     raise exceptions.Warning(message)
 
@@ -280,7 +283,7 @@ class SaleOrder(models.Model):
                 self.apply_commercial_rules()
 
                 if not sale.is_all_reserved and 'confirmed' not in \
-                        self.env.context:
+                    self.env.context:
                     message = "Some of the products of this order {} aren't available now".format(self.name)
                     self.env.user.notify_info(title="Please consider that!",
                                               message=message)
@@ -289,21 +292,26 @@ class SaleOrder(models.Model):
         if isinstance(res, bool):
             for sale in self:
                 products_to_order = ''
+                partner_name = ''
                 for line in sale.order_line.filtered(lambda l: l.product_id.state == 'make_to_order'):
                     products_to_order = products_to_order + \
                                         line.product_id.default_code + ' -> ' + \
                                         str(line.product_uom_qty) + '    '
+
+                    partner_name = str(line.order_id.partner_id.name)
+
                 if products_to_order:
-                    sale.send_email_to_purchases(products_to_order)
+                    sale.send_email_to_purchases(products_to_order, partner_name)
         return res
 
     @api.multi
-    def send_email_to_purchases(self, products_to_order):
+    def send_email_to_purchases(self, products_to_order, partner_name):
         self.ensure_one()
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
         context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         context['products_to_order'] = products_to_order
+        context['partner_name'] = partner_name
         context.pop('default_state', False)
 
         template_id = self.env.ref('sale_custom.email_template_purchase_product_to_order')
@@ -321,7 +329,7 @@ class SaleOrder(models.Model):
         canary = self.partner_shipping_id and \
                  not self.env.context.get("bypass_canary_max_weight", False) and \
                  self.partner_shipping_id.state_id.id in (
-                 self.env.ref("base.state_es_tf").id, self.env.ref("base.state_es_gc").id)
+                     self.env.ref("base.state_es_tf").id, self.env.ref("base.state_es_gc").id)
         if dhl_flight or canary:
             dhl_max_weight = self.env['ir.config_parameter'].sudo().get_param('dhl_max_weight')
             canary_max_weight = self.env['ir.config_parameter'].sudo().get_param('canary_max_weight')
