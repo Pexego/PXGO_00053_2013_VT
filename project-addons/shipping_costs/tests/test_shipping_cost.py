@@ -312,10 +312,12 @@ class TestSaleOrderShippingCost(SavepointCase):
         self.assertEqual(weight_prices_expected, weight_prices_obtained)
 
     def test_get_service_price_list_correctly(self):
+        translator_value = self.sale_order_shipping_cost.shipping_cost_id.weight_volume_translation
         expected_service_price_list = [{
             'price': 12.1,
             'sale_order_shipping_cost_id': self.sale_order_shipping_cost.id,
-            'service_name': 'Good service test'
+            'service_name': 'Good service test',
+            'weight_volume_translation': translator_value
         }]
 
         base_price = 10
@@ -357,12 +359,6 @@ class TestShippingCostCalculator(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.shipping_cost_calculator = cls.env['shipping.cost.calculator'].create({
-            'shipping_weight': 10,
-            'shipping_volume': 1.0,
-            'zip_code': 'Good code'
-        })
-
         cls.postal_code_format = cls.env['postal.code.format'].create({
             'name': 'Test format',
             'regex': r'\AGood code$',
@@ -371,6 +367,12 @@ class TestShippingCostCalculator(SavepointCase):
         cls.country = cls.env['res.country'].create({
             'name': 'Test Country',
             'postal_code_format_id': cls.postal_code_format.id
+        })
+        cls.shipping_cost_calculator = cls.env['shipping.cost.calculator'].create({
+            'shipping_weight': 10,
+            'shipping_volume': 1.0,
+            'zip_code': 'Good code',
+            'country_id': cls.country.id
         })
         cls.partner = cls.env['res.partner'].create({
             'company_type': 'person',
