@@ -409,13 +409,13 @@ msgstr "Conversione (kg/cbm)"
 
 #. module: shipping_costs
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_shipping_weight
-msgid "Shipping weight"
-msgstr "Peso di spedizione"
+msgid "Shipping weight (kg)"
+msgstr "Peso di spedizione (kg)"
 
 #. module: shipping_costs
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_shipping_volume
-msgid "Shipping volume"
-msgstr "Volume di spedizione"
+msgid "Shipping volume (m3)"
+msgstr "Volume di spedizione (m3)"
 
 #. module: shipping_costs
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_zip_code

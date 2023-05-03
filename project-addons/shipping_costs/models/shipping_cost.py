@@ -260,8 +260,8 @@ class SaleOrderShippingCost(models.TransientModel):
 class ShippingCostCalculator(models.TransientModel):
     _name = 'shipping.cost.calculator'
 
-    shipping_weight = fields.Float('Shipping weight', required=True)
-    shipping_volume = fields.Float('Shipping volume', required=True)
+    shipping_weight = fields.Float('Shipping weight (kg)', required=True)
+    shipping_volume = fields.Float('Shipping volume (m3)', required=True)
     zip_code = fields.Char('Zip code', required=True)
 
     def calculate_shipping_cost(self):
