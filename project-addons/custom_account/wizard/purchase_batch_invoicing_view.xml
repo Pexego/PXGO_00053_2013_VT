@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <field name="grouping" position="after">
                 <field name="invoice_ref"/>
+                <field name="invoice_date"/>
             </field>
         </field>
     </record>

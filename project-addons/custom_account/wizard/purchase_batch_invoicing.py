@@ -6,6 +6,12 @@ class PurchaseBatchInvoicing(models.TransientModel):
 
     invoice_ref = fields.Char("Invoice Reference", default=lambda self: self._get_reference_inv())
 
+    grouping = fields.Selection(
+        default="partner_id"
+    )
+
+    invoice_date = fields.Date("Invoice Date")
+
     @api.model
     def _get_reference_inv(self):
         purchases = self.env["purchase.order"].search(self._purchase_order_domain(self.env.context["active_ids"]))
@@ -33,20 +39,22 @@ class PurchaseBatchInvoicing(models.TransientModel):
         if not res:
             res = super(PurchaseBatchInvoicing, self).action_batch_invoice()
 
+        purchases = self.purchase_order_ids
+        invoices = purchases.mapped('invoice_ids')
+        invoice_ids = res['domain'][0][2]
+
         if self.invoice_ref:
-            purchases = self.purchase_order_ids
-            invoices = purchases.mapped('invoice_ids')
-            invoice_ids = res['domain'][0][2]
             for invoice in invoices.filtered(lambda i: i.id in invoice_ids):
                 invoice.reference = self.invoice_ref
         else:
-            purchases = self.purchase_order_ids
-            invoices = purchases.mapped('invoice_ids')
-            invoice_ids = res['domain'][0][2]
-
             for invoice in invoices.filtered(lambda i: i.id in invoice_ids):
                 invoice.reference = False
                 purchases_inv = self.env['purchase.order'].search([('name', 'in', invoice.origin.split(', '))])
                 if purchases_inv and purchases_inv.mapped('container_ids'):
                     invoice.reference = ' - '.join(purchases_inv.mapped('container_ids.name'))
+
+        if self.invoice_date:
+            for invoice in invoices.filtered(lambda i: i.id in invoice_ids):
+                invoice.date_invoice = self.invoice_date
+
         return res

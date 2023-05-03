@@ -1386,3 +1386,8 @@ msgstr "El pedido no puede ser tramitado ya que se ha excedido la cantidad máxi
 #: model:ir.model.fields,field_description:custom_account.field_sale_order_allow_payment_term
 msgid "Allow Payment Term"
 msgstr "Permitir Plazo de pago"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_purchase_batch_invoicing_invoice_date
+msgid "Invoice Date"
+msgstr "Fecha de factura"
