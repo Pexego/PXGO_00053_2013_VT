@@ -263,6 +263,7 @@ class ShippingCostCalculator(models.TransientModel):
     shipping_weight = fields.Float('Shipping weight (kg)', required=True)
     shipping_volume = fields.Float('Shipping volume (m3)', required=True)
     zip_code = fields.Char('Zip code', required=True)
+    country_id = fields.Many2one('res.country', string='Country', required=True)
 
     def calculate_shipping_cost(self):
         """
@@ -275,7 +276,9 @@ class ShippingCostCalculator(models.TransientModel):
             raise UserError(_(
                 'Invalid values to calculate shipping costs. Please, try changing values.'
             ))
-        zones = self.env['shipping.zone'].sudo().search([]).filtered(
+        zones = self.env['shipping.zone'].sudo().search(
+            [('country_id', '=', self.country_id.id)]
+        ).filtered(
             lambda zone: zone.is_postal_code_in_zone(self.zip_code)
         )
         if not zones:

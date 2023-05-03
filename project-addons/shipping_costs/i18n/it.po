@@ -39,6 +39,7 @@ msgstr "Nazioni"
 #: model:ir.model,name:shipping_costs.model_res_country
 #: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_country_ids
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_country_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_country_id
 msgid "Country"
 msgstr "Nazione"
 
