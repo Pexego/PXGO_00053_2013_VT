@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Create customization">
                 <group>
-                    <field name="notify_users" widget="many2many_tags"/>
+                    <field name="notify_users" widget="many2many_tags" options="{'color_field': 'color'}"/>
                     <field name="notify_sales_team"/>
                     <field name="order_id" invisible="1"/>
                 </group>
@@ -18,7 +18,7 @@
                         <field name="product_erase_logo" invisible="1"/>
                         <field name="product_qty"/>
                         <field name="qty"/>
-                        <field name="type_ids" widget="many2many_tags" attrs="{'readonly':[('product_erase_logo','=',True)]}"/>
+                        <field name="type_ids" widget="many2many_tags" attrs="{'readonly':[('product_erase_logo','=',True)]}" options="{'color_field': 'color'}"/>
                         <field name="erase_logo"/>
                     </tree>
                 </field>

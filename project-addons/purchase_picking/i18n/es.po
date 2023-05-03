@@ -597,6 +597,11 @@ msgid "Received"
 msgstr "Recibido"
 
 #. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Payment pending"
+msgstr "Pago pendiente"
+
+#. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_virtual_stock_conservative
 msgid "Virtual Stock Conservative"
 msgstr "Stock Disponible"

@@ -63,7 +63,7 @@
                                 <field name="sale_picking_id"/>
                                 <field name="return_picking_id" />
                                 <field name="loss_picking_id" />
-                                <field name="damaged_move_ids" widget="many2many_tags" />
+                                <field name="damaged_move_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                                 <field name="damaged_picking_id"/>
                                 <field name="claim_move_id" />
                                 <field name="claim_picking_id" />

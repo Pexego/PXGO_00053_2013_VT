@@ -691,3 +691,4 @@ class AmazonMarketplace(models.Model):
     code = fields.Char()
     amazon_name = fields.Char()
     account_id = fields.Many2one("account.account")
+    color = fields.Integer()

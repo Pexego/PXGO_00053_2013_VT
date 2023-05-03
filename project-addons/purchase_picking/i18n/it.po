@@ -522,6 +522,11 @@ msgstr "Rivendicare"
 
 #. module: purchase_picking
 #: selection:stock.container,telex:0
+msgid "Payment pending"
+msgstr "In attesa di Pagamento"
+
+#. module: purchase_picking
+#: selection:stock.container,telex:0
 msgid "Asked"
 msgstr "Chiesto"
 
