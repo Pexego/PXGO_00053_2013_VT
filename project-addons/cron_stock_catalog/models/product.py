@@ -3,7 +3,6 @@ import base64
 from datetime import datetime, timedelta
 import xlsxwriter
 
-
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
