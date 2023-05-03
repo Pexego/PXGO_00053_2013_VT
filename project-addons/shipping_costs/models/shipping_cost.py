@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 import math
 from odoo.exceptions import UserError
+from odoo.addons import decimal_precision as dp
 
 
 COMPARATORS = [
@@ -260,8 +261,12 @@ class SaleOrderShippingCost(models.TransientModel):
 class ShippingCostCalculator(models.TransientModel):
     _name = 'shipping.cost.calculator'
 
-    shipping_weight = fields.Float('Shipping weight (kg)', required=True)
-    shipping_volume = fields.Float('Shipping volume (m3)', required=True)
+    shipping_weight = fields.Float(
+        'Shipping weight (kg)', required=True, digits=dp.get_precision('Stock Weight')
+    )
+    shipping_volume = fields.Float(
+        'Shipping volume (m3)', required=True, digits=dp.get_precision('Stock Weight')
+    )
     zip_code = fields.Char('Zip code', required=True)
     country_id = fields.Many2one('res.country', string='Country', required=True)
 
