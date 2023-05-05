@@ -588,3 +588,8 @@ msgstr "Almacén"
 #: field:product.product,next_incoming_date:0
 msgid "Next incoming date"
 msgstr "Próxima fecha de llegada"
+
+#. module: product_stock_unsafety
+#: model:ir.model.fields,field_description:product_stock_unsafety.field_product_product_final_replacement_id
+msgid "Final replacement"
+msgstr "Reemplazo final"

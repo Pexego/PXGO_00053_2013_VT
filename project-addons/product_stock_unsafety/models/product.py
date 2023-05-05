@@ -184,6 +184,7 @@ class ProductProduct(models.Model):
                           multi=True)
     joking_index = fields.Float("Joking Index", readonly=True)
     replacement_id = fields.Many2one("product.product", "Replaced by")
+    final_replacement_id = fields.Many2one("product.product", "Final replacement")
     min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
                                   related="orderpoint_ids.min_days_id",
                                   readonly=True)
@@ -192,6 +193,48 @@ class ProductProduct(models.Model):
     min_suggested_qty = fields.Integer(
         'Min qty suggested', compute='_get_min_suggested_qty')
     seller_id = fields.Many2one('res.partner', related='seller_ids.name', store=True, string='Main Supplier')
+
+    @api.onchange('replacement_id')
+    def onchange_replacement_id(self):
+        """
+        # FIXME: Caso reemplazo recíproco
+        Searches final_replacement_id, depending on final_replacement set
+        """
+        final_replace_product = self.replacement_id.final_replacement_id
+        # case we change replacement_id to a final_replacement_id
+        if not final_replace_product:
+            final_replace_product = self.replacement_id
+        # case replacement_id changed, but still final_replacement_id
+        if final_replace_product == self.final_replacement_id:
+            return
+        self.final_replacement_id = final_replace_product
+
+    def _set_final_replacement_recursive(self, products, replacement_product):
+        """
+        Sets final_replacement_id to every product in products and products that which
+        replacement_id is in products.
+        Graph of products with its replacements is traveled in depth.
+
+        Parameters:
+        -----------
+        products: List[product.product]
+            Used as a queue. List of products to set final_replacement_id equals
+            to replacement_product
+        replacement_product: Int
+            ID of product.product to set
+        """
+        if len(products) == 0:
+            return True
+        prod = products.pop()
+        if prod.final_replacement_id.id == replacement_product:
+            return True
+        prod.write({'final_replacement_id': replacement_product})
+        new_products = list(self.env['product.product'].search([('replacement_id', '=', prod.id)]))
+        products.extend(new_products)
+        return self._set_final_replacement_recursive(
+            products,
+            replacement_product
+        )
 
     def change_state_orderpoints(self, vals):
         active = 'active' in vals.keys()
@@ -208,7 +251,21 @@ class ProductProduct(models.Model):
     @api.multi
     def write(self, vals):
         self.change_state_orderpoints(vals)
-        return super().write(vals)
+        res = super().write(vals)
+        if 'replacement_id' in vals:
+            new_final_replacement_id = vals.get('final_replacement_id')
+            if new_final_replacement_id is not None:
+                if not new_final_replacement_id:
+                    new_final_replacement_id = self.id
+
+                products_to_iterate = list(self.env['product.product'].search(
+                    [('replacement_id', '=', self.id)]
+                ))
+                self._set_final_replacement_recursive(
+                    products=products_to_iterate,
+                    replacement_product=new_final_replacement_id
+                )
+        return res
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
