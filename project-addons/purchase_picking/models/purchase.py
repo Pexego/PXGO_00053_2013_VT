@@ -41,6 +41,8 @@ class PurchaseOrder(models.Model):
 
     container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers', search='_search_containers')
 
+    force_invoiced = fields.Boolean(states={'done': [('readonly', False)], 'purchase': [('readonly', False)]}, )
+
     @api.multi
     def _get_containers(self):
         for order in self:
@@ -158,12 +160,12 @@ class PurchaseOrder(models.Model):
     @api.depends('state', 'order_line.qty_invoiced', 'order_line.qty_received', 'order_line.product_qty')
     def _get_invoiced(self):
         """
-            Extends the original method to add a new invoice_status --> partially
+            Extends the original method to add the possibility of changing 'no' invoice status as 'invoiced'
         """
         super()._get_invoiced()
         for order in self:
-            if order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
-                order.invoice_status = 'partially'
+            if order.invoice_status == 'no':
+                order.invoice_status = 'invoiced'
 
 class PurchaseOrderLine(models.Model):
 
