@@ -26,9 +26,9 @@
                             <field name="arrival_cost"/>
                             <field name="landed_cost_count" invisible="1"/>
                             <button name="action_open_landed_cost_creator" string="Create landed costs"
-                                    type="object" icon="fa-ship" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
+                                    type="object" icon="fa-thumbs-o-down" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
                             <button name="action_open_landed_cost_by_sheet" string="See landed costs"
-                                    type="object" icon="fa-file-text-o" attrs="{'invisible': [('landed_cost_count', '=', 0)]}"/>
+                                    type="object" icon="fa-thumbs-o-up" attrs="{'invisible': [('landed_cost_count', '=', 0)]}"/>
                         </tree>
                     </field>
                 </page>
