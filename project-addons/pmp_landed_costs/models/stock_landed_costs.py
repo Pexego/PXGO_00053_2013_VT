@@ -193,6 +193,7 @@ class StockValuationAdjustmentLines(models.Model):
                 line.cost_purchase / (line.quantity or 1.0)
 
     @api.multi
+    @api.depends('new_unit_cost', 'former_cost_per_unit')
     def _get_cost_percentage_variance(self):
         for line in self:
             try:
