@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="Update Partner Risk">
                 <group>
-                    <field name="partner_ids" widget="many2many_tags"/>
+                    <field name="partner_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                     <field name="new_risk"/>
                 </group>
 

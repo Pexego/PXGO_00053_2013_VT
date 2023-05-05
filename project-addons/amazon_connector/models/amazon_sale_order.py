@@ -8,7 +8,7 @@ import re
 import time
 from stdnum.eu import vat
 from zeep.exceptions import Fault
-
+from stdnum import exceptions as stdnumExceptions
 
 class AmazonSaleOrder(models.Model):
     _name = 'amazon.sale.order'
@@ -257,6 +257,10 @@ class AmazonSaleOrder(models.Model):
                                     read = True
                                 except Fault as e:
                                     read = e.message != 'MS_MAX_CONCURRENT_REQ'
+                                except stdnumExceptions.InvalidComponent as e:
+                                    amazon_order.state = 'error'
+                                    amazon_order.message_error += _('There is a error calling vat service: %s') %e.message
+                                    break
                             if vies_response and vies_response['valid'] and vies_response['name']!='---' and vies_response['address']!='---':
                                 amazon_order.billing_country_id = self.env['res.country'].search(
                                     [('code', '=', vies_response['countryCode'])]).id
@@ -365,6 +369,10 @@ class AmazonSaleOrder(models.Model):
                                 read = True
                             except Fault as e:
                                 read = e.message != 'MS_MAX_CONCURRENT_REQ'
+                            except stdnumExceptions.InvalidComponent as e:
+                                amazon_order.state = 'error'
+                                amazon_order.message_error += _('There is a error calling vat service: %s') %e.message
+                                break
                         if vies_response and vies_response['valid'] and vies_response['name'] != '---' and vies_response[
                             'address'] != '---':
                             amazon_order.billing_country_id = self.env['res.country'].search(
@@ -691,3 +699,4 @@ class AmazonMarketplace(models.Model):
     code = fields.Char()
     amazon_name = fields.Char()
     account_id = fields.Many2one("account.account")
+    color = fields.Integer()

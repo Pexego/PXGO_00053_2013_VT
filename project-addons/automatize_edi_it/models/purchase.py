@@ -49,7 +49,7 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _get_amt_to_invoice(self):
         for order in self:
-            order.amount_to_invoice_it = sum([l.qty_received * l.price_unit for l in order.order_line])
+            order.amount_to_invoice_it = round(sum([l.qty_received * l.price_unit for l in order.order_line]), 2)
 
     force_confirm = fields.Boolean()
     amount_to_invoice_es = fields.Monetary()
@@ -104,9 +104,10 @@ class PurchaseOrder(models.Model):
 
     def cron_check_qty_to_invoice_lx(self, months=1):
         search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
-        purchases = self.search([('invoice_status', '=', 'to invoice'), ('date_order', '>=', search_date)])
+        purchases = self.search([('invoice_status', '=', 'to invoice'),
+                                 ('remark', '=', False),
+                                 ('date_order', '>=', search_date)])
         orders_not_found = []
-
         if purchases:
             # get the server
             server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
