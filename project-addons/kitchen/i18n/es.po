@@ -580,6 +580,7 @@ msgstr "Pendiente"
 #. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_kitchen_customization_line_photo
 #: model:ir.model.fields,field_description:kitchen.field_kitchen_customization_preview_photo
+#: model:ir.model.fields,field_description:kitchen.field_customization_line_preview_selector
 msgid "Photo"
 msgstr "Foto"
 
@@ -597,6 +598,7 @@ msgstr "Preview"
 
 #. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_kitchen_customization_line_preview_selector
+#: model:ir.model.fields,field_description:kitchen.field_customization_line_preview_selector
 msgid "Preview Selector"
 msgstr "Selector de Previews"
 
