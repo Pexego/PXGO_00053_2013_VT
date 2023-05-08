@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 from datetime import date
 from dateutil.relativedelta import relativedelta
+import math
 
 
 class ProductProduct(models.Model):
@@ -26,13 +27,14 @@ class ProductProduct(models.Model):
         for product in self:
             stock_days, real_stock_days = 0.00, 0.00
             stock_per_day = product.get_daily_sales()
+            real_stock_per_day = product.last_sixty_days_sales / 60.0
             virtual_available = product.virtual_available - \
                 product.incoming_qty
-            real_available = product.qty_available - product.incoming_qty
+            real_available = product.qty_available
             if stock_per_day > 0 and virtual_available:
                 stock_days = round(virtual_available / stock_per_day)
-            if stock_per_day > 0 and real_available:
-                real_stock_days = round(real_available / stock_per_day)
+            if real_stock_per_day > 0 and real_available:
+                real_stock_days = math.floor(real_available / real_stock_per_day)
 
             product.remaining_days_sale = stock_days
             product.real_remaining_days_sale = real_stock_days
