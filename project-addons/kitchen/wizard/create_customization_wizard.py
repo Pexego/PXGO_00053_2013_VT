@@ -160,6 +160,9 @@ class CustomizationWizard(models.TransientModel):
             if not line.erase_logo and line.product_erase_logo:
                 raise UserError(
                     _("You can't create a customization without check erase logo option of this product : %s") % line.original_product_id.default_code)
+            if not self.order_id.skip_checking_previews and not line.preview_selector and line.type_ids.filtered(lambda t:t.preview):
+                raise UserError(
+                    _("You can't create a customization with no preview selected : %s") % line.original_product_id.default_code)
             line_type_ids = line.type_ids
             product_type_ids = line.original_product_id.customization_type_ids
             if line_type_ids - product_type_ids:
