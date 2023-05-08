@@ -323,7 +323,7 @@ class LandedCostCreator(models.TransientModel):
         ------
         product.product
         """
-        return self.env['product.product'].search([('default_code', '=', 'Coste en destino')])
+        return self.env.ref('pmp_landed_costs.product_product_shipping_cost')
 
     def _get_account_for_landed_cost_line(self):
         """
