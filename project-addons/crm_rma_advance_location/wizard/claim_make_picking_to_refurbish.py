@@ -7,18 +7,14 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
     _name = "claim.make.picking.to.refurbish.wizard"
 
     @staticmethod
-    def get_lots_dict_remaining_moves(move):
-        """ This function return the lots_text of not used moves
+    def get_lots_remaining_moves(move):
+        """ This function returns the lot_text not used in other moves
         :param move: original stock.move from incoming picking
         :return: set() set of lots text
         """
         lot_text = set(move.lots_text.split(','))
-        children_lots_text = move.child_move_ids.mapped('lots_text')
-        not_used_lots_text = set()
-        for lot in lot_text:
-            if lot not in children_lots_text:
-                not_used_lots_text.add(lot)
-        return not_used_lots_text
+        children_lots_text = set(move.child_move_ids.mapped('lots_text'))
+        return lot_text - children_lots_text
 
     @api.model
     def _get_picking_lines(self):
@@ -41,7 +37,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             if claim_id and len(claim_id) == 1:
                 new_line.update({'claim_id': claim_id.id})
             qty = move.product_uom_qty - move.qty_used
-            not_used_lots_text = self.get_lots_dict_remaining_moves(move)
+            not_used_lots_text = self.get_lots_remaining_moves(move)
             for __ in range(int(qty)):
                 new_line_dict = {}
                 if not_used_lots_text:
