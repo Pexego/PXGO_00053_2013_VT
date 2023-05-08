@@ -16,6 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
+msgid "Attach with order"
+msgstr "Adjunto com pedido"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
+msgid "Pending review"
+msgstr "Revisão pendente"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
 #, python-format
 msgid "<p>Dear Customer,</p> <p>We inform you that we have received the products corresponding to %s.</p><p>We will start the procedure as soon as possible.</p> <p>Sincerely,</p><p>VISIOTECH</p>"

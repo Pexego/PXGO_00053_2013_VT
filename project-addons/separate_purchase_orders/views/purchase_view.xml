@@ -87,7 +87,7 @@
                                     <field name="taxes_id" widget="many2many_tags"
                                            domain="[('type_tax_use','=','purchase')]"
                                            context="{'default_type_tax_use': 'purchase'}"
-                                           options="{'no_create': True}"/>
+                                           options="{'color_field': 'color', 'no_create': True}"/>
                                     <field name="price_subtotal" widget="monetary"/>
                                 </tree>
 

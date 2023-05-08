@@ -21,7 +21,6 @@
 from odoo import models, fields, api, _, exceptions
 from datetime import datetime, timedelta
 
-
 class StockContainer(models.Model):
 
     _name = 'stock.container'
@@ -43,6 +42,7 @@ class StockContainer(models.Model):
     telex = fields.Selection([
         ('asked', 'Asked'),
         ('claimed', 'Claimed'),
+        ('payment_pending', 'Payment pending'),
         ('received', 'Received')
     ])
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)

@@ -8,7 +8,7 @@
             <notebook position="inside">
                 <page name="amazon_connector" string="Amazon Connector">
                     <group name="amazon_credentials" string="Credentials">
-                        <field name="marketplace_ids" widget="many2many_tags"/>
+                        <field name="marketplace_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="refresh_token"/>
                         <field name="lwa_app_id"/>
                         <field name="lwa_client_secret"/>

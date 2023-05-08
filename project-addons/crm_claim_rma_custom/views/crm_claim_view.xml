@@ -31,6 +31,10 @@
                 <filter string="RMA Arcore" domain="[('warehouse_location','=','italia')]"/>
                 <filter string="RMA Madrid" domain="[('warehouse_location','like','madrid')]"/>
                 <filter string="Transport incidence" domain="[('transport_incidence','=', True)]"/>
+
+                <filter string="Attach with order" domain="[('stage_id.name','like','Adjuntar con pedido')]"/>
+                <filter string="Pending review" domain="[('stage_id.name','like','Pendiente revisión')]"/>
+
             </filter>
         </field>
     </record>
@@ -70,7 +74,7 @@
                 <field name="t_incidence_picking" attrs="{'invisible':[('transport_incidence', '=', False)]}"/>
                 <field name="warehouse_date"/>
                 <field name="transport_incidence"/>
-                <field name="deposit_id" invisible="1" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags"/>
+                <field name="deposit_id" invisible="1" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 <field name="amazon_rma" attrs="{'invisible':['|',('partner_name','=',False),'!',('partner_name', 'like', 'amazon')]}"/>
                 <field name="partner_name" invisible="1"/>
             </field>
@@ -80,7 +84,7 @@
             <field name="email_from" position="after">
                 <field name="comercial"/>
                 <field name="country" invisible="True"/>
-                <field name="category_id" widget="many2many_tags"/>
+                <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
             </field>
             <field name="activity_summary" position="after">
                 <field name="att_order_id"/>
@@ -99,7 +103,7 @@
                           <field name="qty"/>
                           <field name="price_unit"/>
                           <field name="discount"/>
-                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" required="1"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" options="{'color_field': 'color'}" required="1"/>
                           <field name="price_subtotal"/>
                           <field name="invoiced"/>
                         </tree>
@@ -132,7 +136,7 @@
                                     </div>
                                     <label for="tax_ids"/>
                                     <div>
-                                        <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                                        <field name="tax_ids" widget="many2many_tags" options="{'color_field': 'color'}" domain="[('type_tax_use','=','sale')]"/>
                                     </div>
                                     <label for="price_subtotal"/>
                                     <div>

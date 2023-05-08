@@ -14,7 +14,7 @@
                             <field name="product_uom"/>
                         </group>
                         <group>
-                            <field name="customization_type_ids" widget="many2many_tags"/>
+                            <field name="customization_type_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="requires_mount" invisible="1"/>
                             <field name="requires_partner" invisible="1"/>
                             <field name="partner_id" attrs="{'invisible': [('requires_partner', '=',False)], 'required': [('requires_partner', '=', True)]}"/>
