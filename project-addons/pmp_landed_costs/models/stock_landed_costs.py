@@ -4,6 +4,7 @@
 from odoo import models, api, _, fields, tools
 import odoo.addons.decimal_precision as dp
 from odoo.exceptions import UserError
+import datetime
 
 
 class StockLandedCost(models.Model):
@@ -11,14 +12,26 @@ class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
     _order = 'write_date desc'
 
-    account_journal_id = fields.\
-        Many2one(default=lambda self: self.env['account.journal'].
-                 search([('code', '=', 'APUR')]))
+    account_journal_id = fields.Many2one(
+        default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')])
+    )
 
     container_ids = fields.Many2many('stock.container', string='Containers',
                                      compute='_get_container', inverse='_set_pickings',
                                      search='_search_container')
-    forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
+    forwarder_invoice = fields.Char(
+        string='Forwarder Invoice',
+        required=True,
+        default=lambda self: self.env['import.sheet'].browse(
+            self.env.context.get('active_id')
+        ).forwarder_comercial
+    )
+
+    import_sheet_id = fields.Many2one(
+        'import.sheet',
+        string='Import sheet',
+        default=lambda self: self.env['import.sheet'].browse(self.env.context.get('active_id'))
+    )
 
     @api.multi
     def _get_container(self):
@@ -61,6 +74,22 @@ class StockLandedCost(models.Model):
         if product and vals.get('weight', 0.0) == 0:
             raise UserError(_('Not all the products have weight: %s') % product.default_code)
 
+    @staticmethod
+    def check_if_all_lines_have_split_method(cost_lines):
+        """
+        Returns if all lines in cost_lines have a correct split_method.
+
+        Parameters:
+        ----------
+        cost_lines: stock.landed.cost.lines
+            Lines that are wanted to check its split_method
+
+        Return:
+        ------
+        Bool
+        """
+        return len(cost_lines.filtered(lambda line: line.split_method == 'to_define')) == 0
+
     @api.multi
     def compute_landed_cost(self):
         AdjustementLines = self.env['stock.valuation.adjustment.lines']
@@ -69,6 +98,11 @@ class StockLandedCost(models.Model):
         digits = dp.get_precision('Product Price')(self._cr)
         towrite_dict = {}
         for cost in self.filtered(lambda cost: cost.picking_ids):
+
+            cost_lines = cost.cost_lines
+            if not self.check_if_all_lines_have_split_method(cost_lines):
+                raise UserError(_("Can't calculate landed costs. There are lines with split method to define."))
+
             total_qty = 0.0
             total_cost = 0.0
             total_weight = 0.0
@@ -80,7 +114,7 @@ class StockLandedCost(models.Model):
             all_val_line_values = cost.get_valuation_lines()
             for val_line_values in all_val_line_values:
                 self.check_lines_hscode(val_line_values)
-                for cost_line in cost.cost_lines:
+                for cost_line in cost_lines:
                     if cost_line.split_method == 'by_weight':
                         self.check_lines_weight(val_line_values)
                     val_line_values.update({'cost_id': cost.id,
@@ -98,7 +132,7 @@ class StockLandedCost(models.Model):
 
                 total_line += 1
 
-            for line in cost.cost_lines:
+            for line in cost_lines:
                 value_split = 0.0
                 if line.split_method == 'by_tariff':
                     currency_change = line.price_unit / total_tariff
@@ -218,8 +252,10 @@ class StockValuationAdjustmentLines(models.Model):
 class StockLandedCostLines(models.Model):
     _inherit = 'stock.landed.cost.lines'
 
-    split_method = fields.Selection(selection_add=[('by_tariff',
-                                                    'By tariff')])
+    split_method = fields.Selection(selection_add=[
+        ('by_tariff', 'By tariff'),
+        ('to_define', 'To define')
+    ])
 
     @api.onchange('product_id')
     def onchange_product_id(self):
@@ -229,3 +265,123 @@ class StockLandedCostLines(models.Model):
                 self.product_id.property_stock_account_input.id or \
                 self.product_id.categ_id.\
                 property_stock_account_input_categ_id.id
+
+
+class LandedCostCreator(models.TransientModel):
+    """
+    Models the creation of stock_landed_costs from import_sheet.
+    Shows a list with all products with no weight
+    """
+    _name = 'landed.cost.creator.wizard'
+
+    import_sheet_id = fields.Many2one('import.sheet', string='Import sheet')
+    product_ids = fields.Many2many('product.product', string='Products')
+    products_without_weight = fields.Many2many(
+        'product.product',
+        string='Products without weight',
+        domain=[('weight', '=', 0)]
+    )
+    products_without_hs_code = fields.Many2many(
+        'product.product',
+        string='Products without HSCode',
+        domain=[('hs_code_id', '=', False)]
+    )
+    products_without_volume = fields.Many2many(
+        'product.product',
+        string='Products without volume',
+        domain=[('volume', '=', 0)]
+    )
+    container_id = fields.Many2one(related='import_sheet_id.container_id')
+    account_journal_id = fields.Many2one(
+        'account.journal',
+        default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')])
+    )
+
+    def update_products(self):
+        """
+        Updates wizard view to see which are the products that have lack of fields seen.
+
+        Return:
+        ------
+            action
+        """
+        action = self.env.ref('pmp_landed_costs.view_landed_cost_creator_wizard_form').read()[0]
+        action['context'] = self.env.context
+        return {
+            'type': 'ir.actions.act_multi',
+            'actions': [
+                {'type': 'ir.actions.act_view_reload'},
+                action
+            ]
+        }
+
+    def _get_product_for_landed_cost_line(self):
+        """
+        Returns the correct product to assign to landed cost lines
+
+        Return:
+        ------
+        product.product
+        """
+        return self.env.ref('pmp_landed_costs.product_product_shipping_cost')
+
+    def _get_account_for_landed_cost_line(self):
+        """
+        Returns the correct account to assign to landed cost lines
+
+        Return:
+        ------
+        account.account
+        """
+        product = self._get_product_for_landed_cost_line()
+        return (product.property_stock_account_input or
+                product.categ_id.property_stock_account_input_categ_id)
+
+    def create_landed_cost(self):
+        """
+        Creates landed cost associated to import_sheet_id.
+        This landed cost has two cost lines.
+        """
+        landed_cost = self.env['stock.landed.cost'].create({
+            'date': datetime.date.today(),
+            'picking_ids': [(6, 0, self.container_id.picking_ids.ids)],
+            'container_ids': [(4, self.container_id.id)],
+            'account_journal_id': self.account_journal_id.id,
+            'forwarder_invoice': self.import_sheet_id.forwarder_comercial,
+            'import_sheet_id': self.import_sheet_id.id
+        })
+        self._create_cost_lines(landed_cost)
+
+        action = self.import_sheet_id.action_open_landed_cost_by_sheet()
+        return action
+
+    def _create_cost_lines(self, landed_cost):
+        """
+        Creates two stock.landed.cost.lines.
+        The first by fee, the second by destination costs
+
+        Parameters:
+        ----------
+        landed_cost: stock.landed.cost
+            Landed cost where we are going to create lines
+        """
+        create_line = self.env['stock.landed.cost.lines'].create
+        product = self._get_product_for_landed_cost_line()
+        account = self._get_account_for_landed_cost_line()
+        create_line({
+            'cost_id': landed_cost.id,
+            'product_id': product.id,
+            'name': 'Arancel',
+            'account_id': account.id,
+            'split_method': 'by_tariff',
+            'price_unit': self.import_sheet_id.calculate_fee_price()
+        })
+        create_line({
+            'cost_id': landed_cost.id,
+            'product_id': product.id,
+            'name': 'Coste en destino',
+            'account_id': account.id,
+            'split_method': 'to_define',
+            'price_unit': self.import_sheet_id.calculate_destination_cost_price()
+        })
+        return
