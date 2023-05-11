@@ -14,12 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_id
-msgid "Container"
-msgstr "Envoyer"
-
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_product_product_date_first_incoming
 msgid "Date First Incoming"
@@ -29,90 +23,3 @@ msgstr "Date de première arrivée"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_virtual_stock_conservative
 msgid "Virtual Stock Conservative"
 msgstr "Quantité disponible"
-
-#. module: purchase_picking
-#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_import_sheets
-msgid "Stock Container Import Sheets"
-msgstr "Feuilles d'importation"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dua_date
-msgid "DUA date"
-msgstr "Date DUA"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_forwarder_comercial
-msgid "Forwarded"
-msgstr "Transitaire"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_treasury
-msgid "Treasury"
-msgstr "Ferme"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_freight
-msgid "Freight"
-msgstr "Transporto merci"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_fee
-msgid "Fee"
-msgstr "Fret"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_inspection
-msgid "Inspection"
-msgstr "Inspection"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_arrival_cost
-msgid "Arrival costs"
-msgstr "Coûts d'arrivée"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_type
-msgid "Container Type"
-msgstr "Conteneur"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_channel
-msgid "Channel"
-msgstr "Canal"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-#: model:ir.ui.menu,name:purchase_picking.import_sheet_menu
-#: model:ir.actions.act_window,name:purchase_picking.action_open_import_sheet_tree_view
-msgid "Import Sheets"
-msgstr "Feuilles d'importation"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-msgid "Create New Sheet"
-msgstr "Créer une nouvelle feuille"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-msgid "Importations"
-msgstr "Importations"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
-msgid "General"
-msgstr "Général"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
-msgid "Characteristics"
-msgstr "Caractéristiques"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
-msgid "Costs"
-msgstr "Coûts"
-
-#. module: purchase_picking
-#: model:ir.actions.report,name:purchase_picking.import_sheet_xlsx
-msgid "Print to XLSX"
-msgstr "Exporter vers XLSX"

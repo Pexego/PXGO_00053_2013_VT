@@ -21,7 +21,6 @@
 from odoo import models, fields, api, _, exceptions
 from datetime import datetime, timedelta
 
-
 class StockContainer(models.Model):
 
     _name = 'stock.container'
@@ -43,6 +42,7 @@ class StockContainer(models.Model):
     telex = fields.Selection([
         ('asked', 'Asked'),
         ('claimed', 'Claimed'),
+        ('payment_pending', 'Payment pending'),
         ('received', 'Received')
     ])
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)
@@ -166,35 +166,11 @@ class StockContainer(models.Model):
     company_id = fields.Many2one("res.company", "Company", required=True,
                                  default=lambda self: self.env['res.company']._company_default_get('stock.container'))
 
-    import_sheet_ids = fields.One2many(
-        "import.sheet",
-        "container_id",
-        string="Import Sheets",
-        required=True
-    )
-    import_sheet_count = fields.Integer(compute='_get_import_sheet_count', default=0)
-
     date_to_order = fields.Date(compute='_get_order_date', store=True)
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Container name must be unique')
     ]
-
-    def _get_import_sheet_count(self):
-        """
-        Gets the list of import_sheet associated with the container and calculates
-        the count of them.
-        """
-        for container in self:
-            container.import_sheet_count = len(container.import_sheet_ids)
-
-    def action_view_sheets(self):
-
-        action = self.env.ref('purchase_picking.action_stock_container_import_sheets').read()[0]
-
-        action['domain'] = [('id', 'in', self.import_sheet_ids.ids)]
-
-        return action
 
 
 class StockPicking(models.Model):

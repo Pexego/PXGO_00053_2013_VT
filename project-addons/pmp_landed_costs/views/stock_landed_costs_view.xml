@@ -45,7 +45,8 @@
                 <attribute name="domain">[('state', '=', 'done'),('picking_type_code', '=', 'incoming')]</attribute>
             </field>
             <field name="picking_ids" position="after">
-                <field name="container_ids"  widget="many2many_tags"/>
+                <field name="container_ids"  widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="import_sheet_id"/>
             </field>
             <field name="account_move_id" position="after">
                 <field name="forwarder_invoice"/>
@@ -59,8 +60,8 @@
         <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_tree"/>
         <field name="arch" type="xml">
             <field name="date" position="after">
-                <field name="picking_ids" widget="many2many_tags"/>
-                <field name="container_ids" widget="many2many_tags"/>
+                <field name="picking_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="container_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
             </field>
         </field>
     </record>
@@ -75,5 +76,63 @@
                 <field name="container_ids"/>
             </field>
         </field>
+    </record>
+
+    <record id="view_landed_cost_creator_wizard_form" model="ir.ui.view">
+        <field name="name">landed.cost.creator.wizard</field>
+        <field name="model">landed.cost.creator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create landed costs">
+                <group col="2" string="General">
+                    <field name="import_sheet_id" readonly="1"/>
+                    <field name="account_journal_id"/>
+                </group>
+                <separator string="Products without HSCode" colspan="4"/>
+                <field name="products_without_hs_code" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="hs_code_id"/>
+                    </tree>
+                </field>
+                <separator string="Products without weight" colspan="4"/>
+                <field name="products_without_weight" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="weight"/>
+                    </tree>
+                </field>
+                <separator string="Products without volume" colspan="4"/>
+                <field name="products_without_volume" string="">
+                    <tree create="false" delete="false">
+                        <field name="default_code"/>
+                        <field name="volume"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="create_landed_cost" string="Confirm" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                    <button name="update_products" string="Update" type="object" class="oe_link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_open_landed_cost_creator_wizard_view" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Create landed cost</field>
+        <field name="res_model">landed.cost.creator.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_landed_cost_creator_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_open_landed_cost_view" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Landed costs</field>
+        <field name="res_model">stock.landed.cost</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_stock_landed_cost_tree_picking"/>
     </record>
 </odoo>

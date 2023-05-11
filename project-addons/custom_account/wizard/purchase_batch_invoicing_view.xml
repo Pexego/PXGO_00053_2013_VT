@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_purchase_batch_invoicing_view" model="ir.ui.view">
+        <field name="name">Purchase Batch Invoicing</field>
+        <field name="model">purchase.batch_invoicing</field>
+        <field name="inherit_id" ref="purchase_batch_invoicing.wizard_purchase_batch_invoicing_view"/>
+        <field name="arch" type="xml">
+            <field name="grouping" position="after">
+                <field name="invoice_ref"/>
+                <field name="invoice_date"/>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>
