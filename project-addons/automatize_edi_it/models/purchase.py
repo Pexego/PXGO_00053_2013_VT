@@ -134,5 +134,76 @@ class PurchaseOrder(models.Model):
                 mail_id = self.env['mail.mail'].sudo().create(vals)
                 mail_id.sudo().send()
 
+    def cron_automate_invoicing(self, months=2):
+        """
+        TODO
+        :param months:
+        :return:
+        """
+        search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
+        purchases = self.search([('invoice_status', '=', 'to invoice'),
+                                 ('date_order', '>=', search_date)])
+        purchases_filtered = purchases.filtered(lambda p: p.amount_total == p.amount_to_invoice_es)
+
+        if not purchases_filtered:
+            return
+        odoo_es = self._get_odoo_es()
+        try:
+            for purchase in purchases_filtered:
+                purchase._create_invoice()
+                order_es = odoo_es.env['sale.order'].search([
+                    ('client_order_ref', '=', purchase.name), ('partner_id', '=', 245247)
+                ])
+                # TODO: Revisar que pueda funcionar
+                try:
+                    order_es.action_invoice_create()
+                    odoo_es.env.cr.commit()
+                except Exception:
+                    odoo_es.env.cr.rollback()
+                    raise OdooEsException(_('Error creating order %s invoice') % order_es.name)
+                self.env.cr.commit()
+        except Exception:
+            self.env.cr.rollback()
+        finally:
+            odoo_es.logout()
+
+    def _create_invoice(self):
+        """
+        TODO
+        :return:
+        """
+        invoices = self.env["account.invoice"]
+        invoice = invoices.create({
+            "partner_id": self.partner_id.id,
+            "type": "in_invoice",
+        })
+        invoice._onchange_partner_id()
+        invoice.currency_id = self.currency_id
+        invoice.purchase_id = self
+        invoice.purchase_order_change()
+        invoice.compute_taxes()
+
+    def _get_odoo_es(self):
+        """
+        TODO
+        :return:
+        """
+        server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
+        # Prepare the connection to the server
+        odoo_es = odoorpc.ODOO(server.server_url, port=server.server_port)
+        # Login
+        odoo_es.login(server.server_db, server.login, server.password)
+        return odoo_es
 
 
+class OdooEsException(Exception):
+    """
+    This error should be raised when we have an exception while
+    doing something in Odoo Spain from other Odoo server
+    """
+
+    def __init__(self, response_url, *args):
+        self.response_url = response_url
+
+    def __str__(self):
+        return 'OdooEsException: ' + self.response_url
