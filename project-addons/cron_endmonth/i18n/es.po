@@ -19,3 +19,8 @@ msgstr ""
 #: selection:ir.cron,interval_type:0
 msgid "End of month"
 msgstr "Fin de mes"
+
+#. module: cron_crontab
+#: selection:ir.cron,interval_type:0
+msgid "End of month Workday"
+msgstr "Fin de mes Laborable"
