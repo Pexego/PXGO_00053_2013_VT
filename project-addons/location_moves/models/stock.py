@@ -266,3 +266,7 @@ class StockPicking(models.Model):
                                                      ('picking_type_id.code', '=', 'internal'),
                                                      ('date', '<', one_week_ago.strftime('%Y-%m-%d'))])
         pickings.action_cancel()
+
+        pickings_draft = pickings.filtered(lambda p: p.state == 'draft')
+        if pickings_draft:
+            pickings_draft.write({'state': 'cancel'})
