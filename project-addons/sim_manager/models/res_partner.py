@@ -2,9 +2,10 @@ from odoo import models, fields, _
 from odoo.addons.component.core import Component
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, date
 import calendar
 import urllib
+from dateutil.relativedelta import relativedelta
 
 
 class ResPartner(models.Model):
@@ -126,6 +127,8 @@ class ResPartner(models.Model):
                                     invoice.write({'payment_mode_id': rb_payment.id if rb_payment else rd_payment.id,
                                                    'partner_bank_id': valid_mandates[0].partner_bank_id.id,
                                                    'mandate_id': valid_mandates[0].id})
+                            if invoice.payment_mode_id.name == 'Ricevuta bancaria':  # only in Italy
+                                invoice.write({'date_due': self.get_last_day_of_month()})
                             invoice.action_invoice_open()
                             if prepaid_condition and len(valid_mandates) <= 0:
                                 mail_bank_error_message += self.create_row_email(invoice.number, invoice.user_id.name, partner.name)
@@ -149,6 +152,17 @@ class ResPartner(models.Model):
                         mail_id_check.with_context(context).send()
 
     @staticmethod
+    def get_last_day_of_month():
+        today = date.today()
+        next_month = (today + relativedelta(months=1)).month
+        next_year = today.year
+        if next_month == 1:
+            next_year += 1
+        next_day = calendar.monthrange(next_year, next_month)[1]
+        next_date = date(next_year, next_month, next_day)
+        return next_date
+
+    @staticmethod
     def create_table_email(headers, rows):
         return """<table class="table-simple-border"">
                 %s
@@ -170,6 +184,7 @@ class ResPartner(models.Model):
                     <th>Comercial</th>
                     <th>Cliente</th>
                 <tr>"""
+
 
 class PartnerListener(Component):
     _inherit = 'partner.event.listener'
