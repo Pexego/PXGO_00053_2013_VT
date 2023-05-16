@@ -189,27 +189,6 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Importations">
-                            <field name="import_sheet_ids" widget="one2many_list" colspan="4">
-                                <tree string="Import Sheets" class="custom_tree" default_order="dua asc">
-                                    <field name="dua"/>
-                                    <field name="container_id"/>
-                                    <field name="dua_date"/>
-                                    <field name="treasury"/>
-                                    <field name="kgs"/>
-                                    <field name="cbm"/>
-                                    <field name="incoterm"/>
-                                    <field name="destination_port"/>
-                                    <field name="forwarder_comercial"/>
-                                    <field name="container_type"/>
-                                    <field name="channel"/>
-                                    <field name="freight"/>
-                                    <field name="fee"/>
-                                    <field name="inspection"/>
-                                    <field name="arrival_cost"/>
-                                </tree>
-                            </field>
-                        </page>
                     </notebook>
                 </group>
             </form>
