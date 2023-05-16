@@ -48,7 +48,7 @@ class ResPartnerRappelRel(models.Model):
              ('commercial_partner_id', '=', self.partner_id.id),
              ('company_id', '=', company_id)])
         pricelist_ids = tuple(self.rappel_id.pricelist_ids.ids)
-        domain_lines=[('no_rappel', '=', False)]
+        domain_lines = []
         if pricelist_ids:
             domain_lines += [('sale_line_ids.order_id.pricelist_id','in',pricelist_ids)]
         # Si el rappel afecta al catalago entero,
@@ -79,13 +79,20 @@ class ResPartnerRappelRel(models.Model):
         order_lines = self.env['sale.order.line'].search(
             [('order_id', 'in', orders.ids),
              ('product_id', 'in', products),
-             ('invoice_status', '=', 'to invoice')])
+             ('invoice_status', '=', 'to invoice'),
+             ('no_rappel', '=', False)])
         return sum([x.qty_to_invoice * (x.price_subtotal / (x.product_uom_qty or 1)) for x in order_lines])
 
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
         goal_percentage = 0
         rappel_calculated_obj = self.env['rappel.calculated']
+        invoice_lines_for_rappel_quantity = invoice_lines.filtered(
+            lambda line: not line.no_rappel
+        )
+        refund_lines_for_rappel_quantity = refund_lines.filtered(
+            lambda line: not line.no_rappel
+        )
         for rappel in self:
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
@@ -99,8 +106,8 @@ class ResPartnerRappelRel(models.Model):
                 if rappel.rappel_id.calc_amount == 'qty':
                     total_rappel = rappel.rappel_id.fix_qty
                 else:
-                    total = sum([x.price_subtotal for x in invoice_lines]) - \
-                            sum([x.price_subtotal for x in refund_lines])
+                    total = sum([x.price_subtotal for x in invoice_lines_for_rappel_quantity]) - \
+                            sum([x.price_subtotal for x in refund_lines_for_rappel_quantity])
                     pending_to_invoice = rappel._calculate_pending_to_invoice()
                     total_est = total + pending_to_invoice
                     if total:
@@ -120,8 +127,8 @@ class ResPartnerRappelRel(models.Model):
                 else:
                     field = 'quantity'
                 pending_to_invoice = rappel._calculate_pending_to_invoice()
-                total = sum([x[field] for x in invoice_lines]) - \
-                    sum([x[field] for x in refund_lines])
+                total = sum([x[field] for x in invoice_lines_for_rappel_quantity]) - \
+                    sum([x[field] for x in refund_lines_for_rappel_quantity])
                 total_est = total + pending_to_invoice
                 rappel_info["curr_qty"] = total
                 rappel_info["curr_qty_pickings"] = pending_to_invoice

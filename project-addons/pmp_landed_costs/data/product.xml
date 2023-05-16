@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+    <record id="product_product_shipping_cost" model="product.product">
+        <field name="name">A borrar - Costes en destino</field>
+        <field name="default_code">A borrar - Costes en destino</field>
+        <field name="standard_price">0.1</field>
+        <field name="uom_id" ref="product.product_uom_hour"/>
+        <field name="uom_po_id" ref="product.product_uom_hour"/>
+        <field name="type">service</field>
+        <field name="name">Assembly Service Cost</field>
+        <field name="categ_id" ref="product.product_category_all"/>
+    </record>
+</odoo>
