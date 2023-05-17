@@ -35,7 +35,7 @@
         <field name="name">sim.package.tree</field>
         <field name="model">sim.package</field>
         <field name="arch" type="xml">
-            <tree string="SIM packages" delete="0">
+            <tree string="SIM packages">
                 <field name="code"/>
                 <field name="partner_id"/>
                 <field name="state"/>
@@ -47,7 +47,7 @@
         <field name="name">sim.package.form</field>
         <field name="model">sim.package</field>
         <field name="arch" type="xml">
-            <form string="SIM packages" delete="0">
+            <form string="SIM packages">
                 <header>
                     <button name="%(sim_manager.action_sim_export_wizard)d" string="Sync web" type="action"
                             groups="mrp.group_mrp_user"/>
