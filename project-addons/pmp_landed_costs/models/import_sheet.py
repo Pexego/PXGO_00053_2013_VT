@@ -48,6 +48,83 @@ class ImportSheet(models.Model):
     inspection = fields.Float(string="Inspection")
     arrival_cost = fields.Float(string="Arrival costs")
 
+    landed_cost_ids = fields.One2many("stock.landed.cost", "import_sheet_id", string="Landed costs")
+    landed_cost_count = fields.Integer("Landed cost count", compute="_get_landed_cost_count", default=0)
+
+    def _get_landed_cost_count(self):
+        """
+        Calculates count of landed costs that are associated to this import sheet
+        """
+        for sheet in self:
+            count = self.env['stock.landed.cost'].search_count([('import_sheet_id', '=', sheet.id)])
+            sheet.landed_cost_count = count
+
+    def action_open_landed_cost_creator(self):
+        """
+        Returns action with the view of the create_landed_cost_wizard model
+
+        Returns:
+        -------
+        action
+        """
+        wizard = self.get_landed_cost_creator_wizard()
+        action = self.env.ref(
+            'pmp_landed_costs.action_open_landed_cost_creator_wizard_view'
+        ).read()[0]
+        action['res_id'] = wizard.id
+        return action
+
+    def action_open_landed_cost_by_sheet(self):
+        """
+        Returns action with the view of the landed cost list related with this import sheet
+
+        Returns:
+        -------
+        action
+        """
+        action = self.env.ref(
+            'pmp_landed_costs.action_open_landed_cost_view'
+        ).read()[0]
+        action['domain'] = [('import_sheet_id', '=', self.id)]
+        return action
+
+    def get_landed_cost_creator_wizard(self):
+        """
+        Creates a landed_cost_creator_wizard associated to the import_sheet
+
+        Returns:
+        -------
+        landed.cost.creator.wizard
+        """
+        product_ids = self.container_id.get_products_for_landed_cost_warning()
+        wizard = self.env['landed.cost.creator.wizard'].create({
+            'import_sheet_id': self.id,
+            'product_ids': [(6, 0, product_ids.ids)]
+        })
+        return wizard
+
+    def calculate_fee_price(self):
+        """
+        Calculates the price by fee
+
+        Returns:
+        -------
+        Float:
+            Fee price
+        """
+        return self.fee
+
+    def calculate_destination_cost_price(self):
+        """
+        Calculates price by destination cost
+
+        Returns:
+        -------
+        Float:
+            Freight + inspection + arrival cost prices
+        """
+        return self.freight + self.inspection + self.arrival_cost
+
 
 class ImportSheetXlsx(models.AbstractModel):
     """
@@ -67,7 +144,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes the content into the excell report.
 
-        Parameters
+        Parameters:
         ----------
         workbook:
             Workbook object from xlsxwriter library where the report is going to be written
@@ -86,12 +163,12 @@ class ImportSheetXlsx(models.AbstractModel):
         Returns two dictionaries. One with worksheet name as key and rows content as value.
         The second with headers as value.
 
-        Parameters
+        Parameters:
         ----------
         import_sheets:
             Import Sheet instances from where we want to get row_values
 
-        Return
+        Return:
         ------
         row_dict, headers_dict
         """
@@ -118,7 +195,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes the content of the report file
 
-        Parameters
+        Parameters:
         ----------
         worksheet_row_values: Dict[str, List[Tuple[Any]]]
             Are the values we want to write on each worksheet.
@@ -138,7 +215,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes the column headers in worksheet
 
-        Parameters
+        Parameters:
         ----------
         worksheet:
             Worksheet where the headers are going to be writen
@@ -155,7 +232,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes a row in the report
 
-        Parameters
+        Parameters:
         ----------
         worksheet:
             Worksheet where the row is going to be writen
@@ -198,7 +275,7 @@ class ImportSheetXlsx(models.AbstractModel):
         """
         Writes a complete sheet of the report
 
-        Parameters
+        Parameters:
         ----------
         worksheet:
             Worksheet that is going to be writen

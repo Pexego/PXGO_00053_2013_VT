@@ -48,7 +48,6 @@ msgstr "Consumato per"
 #: model:ir.ui.view,arch_db:purchase_picking.stock_move_search_add_new_state
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_container_id
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_container_id
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_id
 msgid "Container"
 msgstr "Spedizione"
 
@@ -575,101 +574,3 @@ msgstr "Riferimento fornitore"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_customs_channel
 msgid "Customs Channel"
 msgstr "Canale"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
-#: model:ir.model.fields,help:purchase_picking.field_stock_container_container_type
-msgid "Container type"
-msgstr "Tipo di contenitore"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_container_type
-#: model:ir.model.fields,help:purchase_picking.field_stock_container_channel
-msgid "Channel"
-msgstr "Canale"
-
-#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_import_sheets
-msgid "Stock Container Import Sheets"
-msgstr "Fogli di importazioni"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_dua_date
-msgid "DUA date"
-msgstr "Data DUA"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_forwarder_comercial
-msgid "Forwarded"
-msgstr "Spedizioniere"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_treasury
-msgid "Treasury"
-msgstr "Tesoro"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_freight
-msgid "Freight"
-msgstr "Transporto merci"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_fee
-msgid "Fee"
-msgstr "Tariffa"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_inspection
-msgid "Inspection"
-msgstr "Ispezione"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_arrival_cost
-msgid "Arrival costs"
-msgstr "Costi d'arrivo"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_import_sheet_container_type
-msgid "Container Type"
-msgstr "Contenitore"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-#: model:ir.ui.menu,name:purchase_picking.import_sheet_menu
-#: model:ir.actions.act_window,name:purchase_picking.action_open_import_sheet_tree_view
-msgid "Import Sheets"
-msgstr "Fogli di importazioni"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-msgid "Create New Sheet"
-msgstr "Crea nuovo foglio"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-msgid "Importations"
-msgstr "Importazioni"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
-msgid "General"
-msgstr "Generale"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
-msgid "Characteristics"
-msgstr "Caratteristiche"
-
-#. module: purchase_picking
-#: model:ir.ui.view,arch_db:purchase_picking.view_import_sheet_form
-msgid "Costs"
-msgstr "Costi"
-
-#. module: purchase_picking
-#: selection:purchase.order,invoice_status:0
-msgid "Partially Invoiced"
-msgstr "Parzialmente Fatturato"
-
-#. module: purchase_picking
-#: model:ir.actions.report,name:purchase_picking.import_sheet_xlsx
-msgid "Print to XLSX"
-msgstr "Imprimere un XLSX"
