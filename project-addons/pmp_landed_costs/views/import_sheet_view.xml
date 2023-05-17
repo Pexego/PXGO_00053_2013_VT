@@ -27,6 +27,16 @@
                     <field name="inspection"/>
                     <field name="arrival_cost"/>
                 </group>
+                <separator string="Landed costs" colspan="4"/>
+                <field name="landed_cost_ids">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="picking_ids" widget="many2many_tags"/>
+                        <field name="container_ids" widget="many2many_tags"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
             </form>
         </field>
     </record>
