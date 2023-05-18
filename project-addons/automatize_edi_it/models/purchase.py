@@ -141,6 +141,7 @@ class PurchaseOrder(models.Model):
         :return:
         """
         search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
+        # FIXME: filters
         purchases = self.search([('invoice_status', '=', 'to invoice'),
                                  ('date_order', '>=', search_date)])
         purchases_filtered = purchases.filtered(lambda p: p.amount_total == p.amount_to_invoice_es)
@@ -167,8 +168,7 @@ class PurchaseOrder(models.Model):
 
     def _create_invoice(self):
         """
-        TODO
-        :return:
+        Creates an invoice associated to self
         """
         invoices = self.env["account.invoice"]
         invoice = invoices.create({
@@ -183,8 +183,14 @@ class PurchaseOrder(models.Model):
 
     def _get_odoo_es(self):
         """
-        TODO
-        :return:
+        Connects with Odoo Spain Server and logs in and returns the
+        connection with the server.
+
+        This connection deactivates auto_commit.
+
+        Returns:
+        -------
+            Odoo Spain server connection
         """
         server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
         # Prepare the connection to the server
