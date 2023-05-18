@@ -154,12 +154,10 @@ class PurchaseOrder(models.Model):
                 order_es = odoo_es.env['sale.order'].search([
                     ('client_order_ref', '=', purchase.name), ('partner_id', '=', 245247)
                 ])
-                # TODO: Revisar que pueda funcionar
                 try:
                     order_es.action_invoice_create()
-                    odoo_es.env.cr.commit()
+                    odoo_es.env.commit()
                 except Exception:
-                    odoo_es.env.cr.rollback()
                     raise OdooEsException(_('Error creating order %s invoice') % order_es.name)
                 self.env.cr.commit()
         except Exception:
@@ -193,6 +191,7 @@ class PurchaseOrder(models.Model):
         odoo_es = odoorpc.ODOO(server.server_url, port=server.server_port)
         # Login
         odoo_es.login(server.server_db, server.login, server.password)
+        odoo_es.config['auto_commit'] = False
         return odoo_es
 
 
