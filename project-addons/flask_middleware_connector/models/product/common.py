@@ -176,7 +176,7 @@ class ProductProduct(models.Model):
         return True
 
     @api.multi
-    def compute_date_next_incoming(self):
+    def compute_next_incoming(self):
         for product in self:
             product.date_next_incoming = False
             moves = self.env['stock.move'].search(
@@ -187,8 +187,10 @@ class ProductProduct(models.Model):
                 key=lambda m: m.date_expected and m.date_reliability)
             if moves:
                 product.date_next_incoming = moves[0].date_expected
+                product.qty_next_incoming = moves[0].product_uom_qty
 
-    date_next_incoming = fields.Datetime(compute="compute_date_next_incoming")
+    date_next_incoming = fields.Datetime(compute="compute_next_incoming")
+    qty_next_incoming = fields.Float(compute="compute_next_incoming")
 
 
 class ProductCategoryListener(Component):
