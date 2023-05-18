@@ -13,9 +13,14 @@
                 'transportation',
                 'product_harmonized_system',
                 'purchase',
-                'intrastat_product'],
-    "data": ['views/stock_landed_costs_view.xml',
+                'intrastat_product',
+                'purchase_picking'],
+    "data": ['data/product.xml',
+             'views/stock_view.xml',
+             'views/import_sheet_view.xml',
+             'views/stock_landed_costs_view.xml',
              'views/product_view.xml',
-             'views/hs_code_view.xml'],
+             'views/hs_code_view.xml',
+             'security/ir.model.access.csv'],
     "installable": True
 }

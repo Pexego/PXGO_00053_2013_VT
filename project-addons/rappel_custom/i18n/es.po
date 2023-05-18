@@ -219,3 +219,33 @@ msgstr "Rappel Actual"
 #: model:ir.model.fields,field_description:rappel_custom.field_rappel_exclude_brands_mode
 msgid "Exclude Brands Mode"
 msgstr "Excluir Marcas"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Rappel invoice lines"
+msgstr "Líneas de factura con rappel"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "No rappel invoice lines"
+msgstr "Líneas sin rappel"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Total qty"
+msgstr "Cantidad total"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Price"
+msgstr "Importe"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Price Total"
+msgstr "Importe total"
