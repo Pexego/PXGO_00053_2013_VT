@@ -1,7 +1,17 @@
 from odoo import models, fields, api, exceptions, _
 
 from odoo.exceptions import UserError
-from requests import post
+from requests import post,get,codes
+import base64
+
+class KitchenCustomizationPreviewWizard(models.TransientModel):
+    _name = 'kitchen.customization.preview.wizard'
+
+    name = fields.Char()
+    photo = fields.Binary(attachment=True)
+    url = fields.Char()
+    status = fields.Char()
+    sale_line_id = fields.Many2one("sale.order.line")
 
 
 class CustomizationLine(models.TransientModel):
@@ -17,20 +27,72 @@ class CustomizationLine(models.TransientModel):
     product_erase_logo = fields.Boolean()
     sale_product_id = fields.Many2one('product.product')
     original_product_id = fields.Many2one('product.product')
+    preview_selector = fields.Many2one('kitchen.customization.preview.wizard')
+    preview_ids = fields.Many2many('kitchen.customization.preview.wizard')
+    photo = fields.Binary(related="preview_selector.photo")
+    url = fields.Char(related="preview_selector.url")
 
-    @staticmethod
-    def create_wizard_line(product, line, qty):
+    def create_previews(self, previews, api_headers, sale_line):
+        """
+            Create previews for the sale_line given
+        :param previews: json list with preview values
+        :param api_headers: header for calling the rubrika api
+        :param sale_line: line of the sale order
+        :return: kitchen.customization.preview.wizard list created
+        """
+        new_previews = self.env['kitchen.customization.preview.wizard']
+        for count, preview in enumerate(previews):
+            if preview.get('status') == 'OldPreview':
+                new_preview = self.env['kitchen.customization.preview.wizard'].create(
+                    {'name': _('OldPreview - Go to Sharepoint'),
+                     'url': 'The previews are on Sharepoint', 'status': 'OldPreview',
+                     'sale_line_id':sale_line.id})
+            else:
+                photo = base64.b64encode(get(preview.get('logo'),headers=api_headers).content)
+                new_preview = self.env['kitchen.customization.preview.wizard'].create(
+                    {'photo': photo, 'name': 'Preview %s' % str(count + 1),
+                     'url': preview.get('urlView'), 'status': preview.get('status'),'sale_line_id':sale_line.id})
+            new_previews |= new_preview
+        return new_previews
+
+    @api.onchange("type_ids")
+    def onchange_type_ids(self):
+        preview_types = self.type_ids.filtered(lambda t: t.preview)
+        if not self.sale_line_id.order_id.skip_checking_previews and preview_types and self.preview_ids:
+            self.preview_selector = self.preview_ids[0]
+        elif not preview_types:
+            self.preview_selector = False
+
+    def create_wizard_line(self, product, line, qty):
+        dicc = {}
         if qty:
-            return {'qty': qty,
+            dicc = {'qty': qty,
                     'product_qty': qty,
                     'product_id': product.id,
                     'original_product_id': product.id,
                     'sale_line_id': line.id,
-                    'type_ids': None,
+                    'type_ids': [(6,0, product.customization_type_ids.ids)],
                     'product_erase_logo': product.erase_logo,
                     'sale_product_id': line.product_id.id
                     }
-        return False
+            preview_types = product.customization_type_ids.filtered(lambda t: t.preview)
+            if not line.order_id.skip_checking_previews and preview_types:
+                previews_url, headers = self.env['kitchen.customization']._get_previews_params()
+                req = post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
+                    line.order_id.partner_id.ref, product.default_code), headers=headers)
+                if req.status_code != codes.ok or len(req.json()) == 0:
+                    raise UserError(
+                        _("There are no previews for this partner and this product %s") % self.original_product_id.default_code)
+                previews = req.json()
+                new_previews = [x for x in previews if x.get('status') in ['Approved', 'OldPreview']]
+                if new_previews:
+                    previews_created = self.create_previews(new_previews, headers, line)
+                    if previews_created:
+                        dicc.update({'preview_selector':previews_created[0],
+                                     'photo': previews_created[0].photo,
+                                     'preview_ids': [(6,0,previews_created.ids)]})
+
+        return dicc
 
 
 class CustomizationWizard(models.TransientModel):
@@ -45,6 +107,9 @@ class CustomizationWizard(models.TransientModel):
         for line in self.env['sale.order'].browse(self.env.context.get('active_ids')).order_line.filtered(
                 lambda l: (l.product_id.customizable or l.product_id.erase_logo) and not l.deposit
                           and l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes' and l.price_unit >= 0):
+            old_previews = self.env['kitchen.customization.preview.wizard'].search(
+                [('sale_line_id', '=', line.id), ('status', '!=', 'used_to_create_preview')])
+            old_previews.sudo().unlink()
             if line.product_id.bom_ids:
                 for bom in line.product_id.bom_ids[0].bom_line_ids.filtered(
                         lambda b: b.product_id.customizable or b.product_id.erase_logo):
@@ -67,8 +132,15 @@ class CustomizationWizard(models.TransientModel):
     notify_users = fields.Many2many('res.users', default=lambda self: [
         (6, 0, [self.env['sale.order'].browse(self.env.context.get('active_ids')).user_id.id])])
 
+    def _get_old_previews(self):
+        """
+            Gets the previews of the customization lines that are in the old state
+        :return: old previews list
+        """
+        return self.customization_line.mapped('preview_selector').filtered(lambda p: p.name == "OldPreview - Go to Sharepoint")
+
     def action_create(self):
-        lines = []
+        lines = self.env['customization.line']
         if self.order_id.state != 'reserve':
             raise UserError(_("you can't create a customization of a done order"))
 
@@ -80,11 +152,6 @@ class CustomizationWizard(models.TransientModel):
                                                                              (6, 0, self.notify_users.ids)],
                                                                          'notify_sales_team': self.notify_sales_team
                                                                          })
-        old_previews = ""
-        products_error_state = {}
-        partner_ref = self.order_id.partner_id.ref
-        previews_url, headers = customization._get_previews_params()
-
         for line in self.customization_line:
             qty = line.qty
             if not line.type_ids and not line.product_erase_logo:
@@ -93,6 +160,9 @@ class CustomizationWizard(models.TransientModel):
             if not line.erase_logo and line.product_erase_logo:
                 raise UserError(
                     _("You can't create a customization without check erase logo option of this product : %s") % line.original_product_id.default_code)
+            if not self.order_id.skip_checking_previews and not line.preview_selector and line.type_ids.filtered(lambda t:t.preview):
+                raise UserError(
+                    _("You can't create a customization with no preview selected : %s") % line.original_product_id.default_code)
             line_type_ids = line.type_ids
             product_type_ids = line.original_product_id.customization_type_ids
             if line_type_ids - product_type_ids:
@@ -112,39 +182,13 @@ class CustomizationWizard(models.TransientModel):
                 raise UserError(_(
                     "You can't create a customization with a bigger quantity of the product than what appears in the order: %s") % line.original_product_id.default_code)
             elif qty > 0:
-                product_previews = []
-                product_old_previews = []
-                previews = []
-                if not self.order_id.skip_checking_previews and line.mapped('type_ids').filtered(lambda t: t.preview):
-                    req = post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                    partner_ref, line.original_product_id.default_code), headers=headers)
-                    if req.status_code != 200 or len(req.json())==0:
-                        raise UserError(_("There are no previews for this partner and this product %s") % line.original_product_id.default_code)
-                    previews = req.json()
-                for prev in previews:
-                    state = prev.get('status', False)
-                    if state == 'Approved':
-                        product_previews.append(prev)
-                    elif state == 'OldPreview':
-                        product_old_previews.append(prev)
-                    else:
-                        products_error_state[line.original_product_id.default_code] = state
-
-                    if product_previews and line.original_product_id.default_code in products_error_state:
-                        del products_error_state[line.original_product_id.default_code]
-                if not product_previews and product_old_previews:
-                    product_previews = product_old_previews
-                    old_previews += line.original_product_id.default_code
-                    if line.original_product_id.default_code in products_error_state:
-                        del products_error_state[line.original_product_id.default_code]
-                if not products_error_state:
-                    lines += customization.create_line(line.original_product_id, qty, line, product_previews,headers)
-        if products_error_state:
-            raise UserError(_("There are no active previews of these products: %s" %str(products_error_state)))
+                lines += customization.create_line(line.original_product_id, qty, line)
         if lines:
+            old_previews = self._get_old_previews()
             if old_previews:
                 template = self.env.ref('kitchen.send_mail_old_previews')
-                template.with_context({'lang': 'es_ES', 'old_previews': old_previews}).send_mail(customization.id)
+                template.with_context({'lang': 'es_ES', 'old_previews': old_previews.mapped(
+                    'sale_line_id.product_id.default_code')}).send_mail(customization.id)
             return {
                 'view_type': 'form',
                 'view_mode': 'form',
