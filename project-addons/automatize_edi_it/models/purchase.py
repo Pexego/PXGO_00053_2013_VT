@@ -136,14 +136,20 @@ class PurchaseOrder(models.Model):
 
     def cron_automate_invoicing(self, months=2):
         """
-        TODO
-        :param months:
-        :return:
+        Creates invoices for purchases and for the related sales in Odoo Spain
+
+        Parameters:
+        ----------
+        months: Int
+            Number of months to search purchases
         """
         search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
-        # FIXME: filters
+        picking_type_domain = (self.env.ref('stock.picking_type_in').id,
+                               self.env.ref('stock_dropshipping.picking_type_dropship').id)
         purchases = self.search([('invoice_status', '=', 'to invoice'),
-                                 ('date_order', '>=', search_date)])
+                                 ('date_order', '>=', search_date),
+                                 ('partner_id', '=', 27),
+                                 ('picking_type_id', 'in', picking_type_domain)])
         purchases_filtered = purchases.filtered(lambda p: p.amount_total == p.amount_to_invoice_es)
 
         if not purchases_filtered:
