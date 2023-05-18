@@ -41,6 +41,7 @@
                 'picking_incidences',
                 'custom_account'],
     "data": [
+             'views/assets.xml',
              'data/groups.xml',
              'views/crm_claim_view.xml',
              'data/substate_data.xml',
@@ -56,6 +57,7 @@
              'views/res_partner_view.xml',
              'views/sale_view.xml',
              'views/product_view.xml',
-             'wizard/product_incidences_advise_wiz.xml'],
+             'wizard/product_incidences_advise_wiz.xml',
+             'wizard/crm_claim_pending_wizard.xml'],
     "installable": True
 }

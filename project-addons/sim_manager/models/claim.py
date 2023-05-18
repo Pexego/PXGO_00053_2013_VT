@@ -37,6 +37,7 @@ class ClaimLine(models.Model):
 
     @api.onchange('prodlot_id')
     def onchange_prodlot_id(self):
+        super().onchange_prodlot_id()
         if self.product_id:
             products = self.env['sim.type'].search([('product_id', '=', self.product_id.id)])
             if products:
