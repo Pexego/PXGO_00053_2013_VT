@@ -1629,3 +1629,9 @@ msgstr "\n"
 "% endif\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordiali saluti,</p>\n"
 "            "
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/models/crm_claim_rma.py:210
+#, python-format
+msgid "Wrong number of serial numbers. Remember Separate them by commas"
+msgstr "Numero errato di numeri di serie. Ricorda Separali con le virgole"
