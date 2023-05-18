@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <menuitem name="Received Claims" id="menu_crm_case_claims"
+        parent="crm_claim.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
+
     <record id="view_pending_rma_filter" model="ir.ui.view">
         <field name="name">view.pending.rma.filter</field>
-        <field name="model">sale.order.claim.wizard</field>
+        <field name="model">crm.claim.pending.wizard</field>
         <field name="arch" type="xml">
             <form string="Pending RMA">
                 <field name="line_ids">
@@ -14,7 +17,7 @@
                     </tree>
                 </field>
                 <footer>
-                    <button string="Add" name="add_to_sale_order" type="object" class="oe_highlight"/>
+                    <button string="Add" name="add_to_claim" type="object" class="oe_highlight"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>
@@ -24,26 +27,9 @@
     <record id="action_show_pending_claims" model="ir.actions.act_window">
         <field name="name">Pending RMA</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">sale.order.claim.wizard</field>
+        <field name="res_model">crm.claim.pending.wizard</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_pending_rma_filter"/>
         <field name="target">new</field>
     </record>
-
-    <record id="sale_order_form_rma_button" model="ir.ui.view">
-        <field name="name">sale.order.form.rma.button</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_view_invoice']" position="before">
-                <button type="object" name="action_view_pending_rma"
-                        class="oe_stat_button button_rma_pending"
-                        icon="fa-wrench"
-                        attrs="{'invisible': [('rma_pending_count','=',0)]}">
-                    <field name="rma_pending_count" widget="statinfo" string="Attach RMA"/>
-                </button>
-            </xpath>
-        </field>
-    </record>
-
 </odoo>
