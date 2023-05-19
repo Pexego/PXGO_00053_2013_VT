@@ -160,13 +160,14 @@ class PurchaseOrder(models.Model):
     @api.depends('state', 'order_line.qty_invoiced', 'order_line.qty_received', 'order_line.product_qty')
     def _get_invoiced(self):
         """
-            Extends the original method to add the possibility of changing 'no' invoice status as 'invoiced'
+            Extends the original method to add a new invoice_status --> partially
         """
         super()._get_invoiced()
         for order in self:
-            if order.invoice_status == 'no':
+            if order.force_invoiced or all(line.qty_invoiced == line.product_qty for line in order.order_line):
                 order.invoice_status = 'invoiced'
-
+            elif order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
+                order.invoice_status = 'partially'
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
