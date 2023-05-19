@@ -138,7 +138,6 @@ class SaleOrder(models.Model):
             order.not_sync_picking = order.is_project
             order.no_promos = order.is_project
             order.infinite_reservation = order.is_project
-
             order.update_stock_reservation_date_validity()
 
     @api.multi
