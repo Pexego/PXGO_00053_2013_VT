@@ -37,7 +37,9 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             if claim_id and len(claim_id) == 1:
                 new_line.update({'claim_id': claim_id.id})
             qty = move.product_uom_qty - move.qty_used
-            not_used_lots_text = self.get_lots_remaining_moves(move)
+            not_used_lots_text = set()
+            if move.lots_text:
+                not_used_lots_text = self.get_lots_remaining_moves(move)
             for __ in range(int(qty)):
                 new_line_dict = {}
                 if not_used_lots_text:
