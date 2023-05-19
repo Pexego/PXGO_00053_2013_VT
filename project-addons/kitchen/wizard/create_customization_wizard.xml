@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Create customization">
                 <group>
-                    <field name="notify_users" widget="many2many_tags"/>
+                    <field name="notify_users" widget="many2many_tags" options="{'color_field': 'color'}"/>
                     <field name="notify_sales_team"/>
                     <field name="order_id" invisible="1"/>
                 </group>
@@ -16,10 +16,14 @@
                         <field name="product_id"/>
                         <field name="sale_product_id" readonly="1"/>
                         <field name="product_erase_logo" invisible="1"/>
+                        <field name="sale_line_id" invisible="1"/>
                         <field name="product_qty"/>
                         <field name="qty"/>
-                        <field name="type_ids" widget="many2many_tags" attrs="{'readonly':[('product_erase_logo','=',True)]}"/>
+                        <field name="type_ids" widget="many2many_tags" attrs="{'readonly':[('product_erase_logo','=',True)]}" options="{'color_field': 'color'}"/>
                         <field name="erase_logo"/>
+                        <field name="preview_selector" domain="[('sale_line_id','=',sale_line_id),('status','!=','used_to_create_preview')]"
+                               attrs="{'invisible':[('preview_selector','=',False)]}" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="photo" widget="image" resize="30px,30px" readonly="1" attrs="{'invisible':[('preview_selector','=',False)]}" />
                     </tree>
                 </field>
                 <group>

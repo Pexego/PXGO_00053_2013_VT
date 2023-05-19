@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, exceptions, _
+from datetime import date
+from dateutil.relativedelta import relativedelta
 import odoorpc
 
 
@@ -47,7 +49,7 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _get_amt_to_invoice(self):
         for order in self:
-            order.amount_to_invoice_it = sum([l.qty_received * l.price_unit for l in order.order_line])
+            order.amount_to_invoice_it = round(sum([l.qty_received * l.price_unit for l in order.order_line]), 2)
 
     force_confirm = fields.Boolean()
     amount_to_invoice_es = fields.Monetary()
@@ -100,9 +102,12 @@ class PurchaseOrder(models.Model):
                     amt_to_invoice += line.qty_to_invoice * line.price_unit
         return amt_to_invoice, es_sale
 
-    def cron_check_qty_to_invoice_lx(self):
-        purchases = self.search([('invoice_status', '=', 'to invoice')])
-
+    def cron_check_qty_to_invoice_lx(self, months=1):
+        search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
+        purchases = self.search([('invoice_status', '=', 'to invoice'),
+                                 ('remark', '=', False),
+                                 ('date_order', '>=', search_date)])
+        orders_not_found = []
         if purchases:
             # get the server
             server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
@@ -114,8 +119,20 @@ class PurchaseOrder(models.Model):
             for purchase in purchases:
                 if purchase.amount_total != purchase.amount_to_invoice_es:
                     purchase.amount_to_invoice_es, purchase.es_sale_order = self._get_qty_to_invoice_es(purchase.name, odoo_es)
+                    if not purchase.es_sale_order:
+                        orders_not_found.append(purchase.name)
 
             odoo_es.logout()
+            if orders_not_found:
+                vals = {
+                    'subject': 'Orders not found in Odoo ES',
+                    'body_html': '<br>'.join(orders_not_found),
+                    'email_to': 'odoo_team@visiotechsecurity.com',
+                    'auto_delete': False,
+                    'email_from': 'odoo_team@visiotechsecurity.com',
+                }
+                mail_id = self.env['mail.mail'].sudo().create(vals)
+                mail_id.sudo().send()
 
 
 

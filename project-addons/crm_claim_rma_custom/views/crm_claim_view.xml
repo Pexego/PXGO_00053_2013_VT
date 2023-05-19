@@ -31,6 +31,10 @@
                 <filter string="RMA Arcore" domain="[('warehouse_location','=','italia')]"/>
                 <filter string="RMA Madrid" domain="[('warehouse_location','like','madrid')]"/>
                 <filter string="Transport incidence" domain="[('transport_incidence','=', True)]"/>
+
+                <filter string="Attach with order" domain="[('stage_id.name','like','Adjuntar con pedido')]"/>
+                <filter string="Pending review" domain="[('stage_id.name','like','Pendiente revisión')]"/>
+
             </filter>
         </field>
     </record>
@@ -70,7 +74,7 @@
                 <field name="t_incidence_picking" attrs="{'invisible':[('transport_incidence', '=', False)]}"/>
                 <field name="warehouse_date"/>
                 <field name="transport_incidence"/>
-                <field name="deposit_id" invisible="1" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags"/>
+                <field name="deposit_id" invisible="1" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 <field name="amazon_rma" attrs="{'invisible':['|',('partner_name','=',False),'!',('partner_name', 'like', 'amazon')]}"/>
                 <field name="partner_name" invisible="1"/>
             </field>
@@ -80,14 +84,23 @@
             <field name="email_from" position="after">
                 <field name="comercial"/>
                 <field name="country" invisible="True"/>
-                <field name="category_id" widget="many2many_tags"/>
+                <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
             </field>
             <field name="activity_summary" position="after">
                 <field name="att_order_id"/>
+                <field name="att_claim_id"/>
             </field>
             <field name="claim_type" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
+            <div name="buttons" position="inside">
+                <button type="object" name="action_view_pending_rma"
+                        class="oe_stat_button button_rma_pending"
+                        icon="fa-wrench"
+                        attrs="{'invisible': ['|',('rma_pending_count','=',0),('delivery_type','!=','shipping')]}">
+                    <field name="rma_pending_count" widget="statinfo" string="Attach RMA"/>
+                </button>
+            </div>
             <xpath expr="/form/sheet/group/notebook/page[2]" position="after">
                 <page string="Invoicing">
                     <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
@@ -99,7 +112,7 @@
                           <field name="qty"/>
                           <field name="price_unit"/>
                           <field name="discount"/>
-                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" required="1"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" options="{'color_field': 'color'}" required="1"/>
                           <field name="price_subtotal"/>
                           <field name="invoiced"/>
                         </tree>
@@ -132,7 +145,7 @@
                                     </div>
                                     <label for="tax_ids"/>
                                     <div>
-                                        <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                                        <field name="tax_ids" widget="many2many_tags" options="{'color_field': 'color'}" domain="[('type_tax_use','=','sale')]"/>
                                     </div>
                                     <label for="price_subtotal"/>
                                     <div>

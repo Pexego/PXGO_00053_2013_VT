@@ -85,12 +85,12 @@ class AmazonSettlement(models.Model):
                 reports_answer = reports_obj.get_reports(nextToken=reports_next_token)
                 reports = reports_answer.payload
                 reports_next_token = reports_answer.next_token
-            for report in reports:
+            for report in reports.get('reports'):
                 read = False
                 while not read:
                     try:
                         last_report_document = reports_obj.get_report_document(report.get('reportDocumentId'),
-                                                                               decrypt=True).payload
+                                                                               download=True, decrypt=True).payload
                         read = True
                     except SellingApiRequestThrottledException:
                         time.sleep(amazon_time_rate_limit)

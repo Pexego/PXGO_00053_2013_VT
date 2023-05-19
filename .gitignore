@@ -160,3 +160,6 @@ custom_theme_xmas
 reserve_without_save_sale_custom_it
 cron_stock_catalog_it
 shipping_costs
+move_reserves
+web_custom
+cron_endmonth

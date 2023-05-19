@@ -1644,3 +1644,9 @@ msgstr "No corresponde con descripción de web"
 #: selection:claim.line,claim_origine:0
 msgid "Missing parts"
 msgstr "Partes o accesorios faltantes"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/models/crm_claim_rma.py:210
+#, python-format
+msgid "Wrong number of serial numbers. Remember Separate them by commas"
+msgstr "Cantidad de Números de Serie incorrecto. Recuerda que van separados por comas"
