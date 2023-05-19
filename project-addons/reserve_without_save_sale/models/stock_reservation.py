@@ -34,15 +34,26 @@ class StockReservation(models.Model):
     partner_id = fields.Many2one('res.partner', relation='sale_id.partner_id',
                                  readonly=True)
 
+    def _get_date_validity(self, order):
+        """ Calculate the date validity of the reservation
+        :param order_id: id of the sale.order
+        :return: Validity date based on inifine_reservation of sale.order
+        """
+        now = datetime.now()
+        if order and order.infinite_reservation:
+            date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+        else:
+            days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+            date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+        return date_validity
+
     @api.model
     def create(self, vals):
         context2 = dict(self._context)
         context2.pop('default_state', False)
-        order_id = vals.get('sale_id')
+        order_id = vals.get('sale_id', False)
         order_obj = self.env['sale.order'].browse(order_id)
-        now = datetime.now()
-        if order_obj.infinite_reservation:
-            vals['date_validity'] = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+        vals['date_validity'] = self._get_date_validity(order_obj)
         res = super(StockReservation, self.with_context(context2)).create(vals)
         res.move_id.user_id = res.user_id
         if vals.get('sequence') and res.move_id:
@@ -80,6 +91,7 @@ class StockReservation(models.Model):
         if vals.get('sale_line_id'):
             for reserve in self:
                 reserve.move_id.sale_line_id = vals['sale_line_id']
+                reserve.date_validity = self._get_date_validity(reserve.sale_id)
         return res
 
     def reassign(self, old_sequence=False):
@@ -113,16 +125,9 @@ class StockReservation(models.Model):
         The reservation is done using the default UOM of the product.
         A date until which the product is reserved can be specified.
         """
-        days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
-        now = datetime.now()
         moves = self.env['stock.move']
         for reserve in self:
-            date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
-            current_order_id = reserve.sale_line_id.order_id
-            if current_order_id:
-                if current_order_id.infinite_reservation:
-                    date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
-
+            date_validity = self._get_date_validity(reserve.sale_id)
             current_sale_line_id = reserve.sale_line_id.id
             res = super(StockReservation, reserve).reserve()
             reserve.refresh()
@@ -132,7 +137,7 @@ class StockReservation(models.Model):
                 reservation = self.env['stock.reservation'].search(
                     [('move_id', '=', move.id)])
                 if not reservation:
-                    reservation = self.env['stock.reservation'].create(
+                    self.env['stock.reservation'].create(
                         {'move_id': move.id,
                          'sale_line_id': current_sale_line_id,
                          'date_validity': date_validity
