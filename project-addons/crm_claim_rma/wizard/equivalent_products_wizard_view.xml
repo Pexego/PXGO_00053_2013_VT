@@ -17,7 +17,7 @@
                             <field name="virtual_available"/>
                             <field name="incoming_qty"/>
                             <field name="qty_in_production"/>
-                            <field name="tag_ids" widget="many2many_tags"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         </tree>
                     </field>
                 </group>

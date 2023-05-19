@@ -16,6 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
+msgid "Attach with order"
+msgstr "Adjuntar con pedido"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:view_crm_case_claims_filter_custom
+msgid "Pending review"
+msgstr "Pendiente de revisión"
+
+#. module: crm_claim_rma_custom
 #: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_claim_sort
 msgid "Received Claims"
 msgstr "RMA Recibidos"
@@ -100,6 +110,8 @@ msgstr "No puede borrar una linea facturada."
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_claim_id
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_claim_id_ro
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_claim_id
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_claim_id_ro
 msgid "Claim"
 msgstr "Reclamación"
 
@@ -255,6 +267,7 @@ msgstr "Gestionado en Odoo"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_res_partner
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_partner_id
 msgid "Partner"
 msgstr "Empresa"
 
@@ -633,12 +646,14 @@ msgstr "\n Añadir %s  Ub.: %s"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_choose
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_choose
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
 msgid "Add"
 msgstr "Añadir"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_partner_shipping_id
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_partner_shipping_id
 msgid "Shipping"
 msgstr "Dir. Envío"
 
@@ -646,11 +661,13 @@ msgstr "Dir. Envío"
 #: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims
 msgid "Pending RMA"
 msgstr "RMAs pendientes"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
 msgid "Attach RMA"
 msgstr "Adjuntar RMA"
 
@@ -658,6 +675,11 @@ msgstr "Adjuntar RMA"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_att_order_id
 msgid "Attach Sale"
 msgstr "Pedido adjunto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_att_claim_id
+msgid "Attached Claim"
+msgstr "RMA adjunto"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_sequence
