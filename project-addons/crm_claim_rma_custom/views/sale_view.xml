@@ -21,8 +21,8 @@
         </field>
     </record>
 
-    <record id="action_show_pending_claims" model="ir.actions.act_window">
-        <field name="name">Pending RMA</field>
+    <record id="action_show_pending_claims_order" model="ir.actions.act_window">
+        <field name="name">Pending RMA Order</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.order.claim.wizard</field>
         <field name="view_mode">form</field>
