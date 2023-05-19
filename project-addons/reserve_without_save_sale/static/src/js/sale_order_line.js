@@ -25,6 +25,7 @@ odoo.define('reserve_without_save_sale', function(require) {
                 'sale_line_id': element.data.id || false,
                 'warehouse': recordData.warehouse_id.data.id,
                 'sale_id': recordData.id,
+                'infinite_reservation': recordData.infinite_reservation,
                 'user_id': recordData.user_id.data.id,
                 'csrf_token': require('web.core').csrf_token
             }
