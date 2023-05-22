@@ -126,6 +126,7 @@ class StockReservation(models.Model):
         A date until which the product is reserved can be specified.
         """
         moves = self.env['stock.move']
+        reserve_obj = self.env['stock.reservation']
         for reserve in self:
             date_validity = self._get_date_validity(reserve.sale_id)
             current_sale_line_id = reserve.sale_line_id.id
@@ -134,10 +135,10 @@ class StockReservation(models.Model):
             moves |= res
             for move in res:
                 move.sale_line_id = current_sale_line_id
-                reservation = self.env['stock.reservation'].search(
+                reservation = reserve_obj.search(
                     [('move_id', '=', move.id)])
                 if not reservation:
-                    self.env['stock.reservation'].create(
+                    reserve_obj.create(
                         {'move_id': move.id,
                          'sale_line_id': current_sale_line_id,
                          'date_validity': date_validity
