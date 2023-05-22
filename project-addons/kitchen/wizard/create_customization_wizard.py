@@ -31,6 +31,7 @@ class CustomizationLine(models.TransientModel):
     preview_ids = fields.Many2many('kitchen.customization.preview.wizard')
     photo = fields.Binary(related="preview_selector.photo")
     url = fields.Char(related="preview_selector.url")
+    preview_error = fields.Boolean()
 
     def create_previews(self, previews, api_headers, sale_line):
         """
@@ -81,8 +82,7 @@ class CustomizationLine(models.TransientModel):
                 req = post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
                     line.order_id.partner_id.ref, product.default_code), headers=headers)
                 if req.status_code != codes.ok or len(req.json()) == 0:
-                    raise UserError(
-                        _("There are no previews for this partner and this product %s") % self.original_product_id.default_code)
+                    dicc['preview_error'] = True
                 previews = req.json()
                 new_previews = [x for x in previews if x.get('status') in ['Approved', 'OldPreview']]
                 if new_previews:
@@ -125,7 +125,20 @@ class CustomizationWizard(models.TransientModel):
 
     customization_line = fields.One2many('customization.line',
                                          'wizard_id', 'lines', default=_get_lines)
-    type_ids = fields.Many2many('customization.type', required=1)
+    @api.depends("customization_line","customization_line.type_ids")
+    def _get_errors(self):
+        """ Calculate the products that do not have a preview in rubrika"""
+        for wiz in self:
+            errors = ''
+            products = ''
+            for line in wiz.customization_line:
+                if line.preview_error and line.type_ids.filtered(lambda t:t.preview):
+                    products += f' {line.original_product_id.default_code},'
+            if products:
+                errors += _("There are no previews for this partner and these products:%s") % products
+            wiz.errors = errors
+
+    errors = fields.Text(compute=_get_errors, store=True)
 
     comments = fields.Text('Comments')
 
@@ -160,9 +173,13 @@ class CustomizationWizard(models.TransientModel):
             if not line.erase_logo and line.product_erase_logo:
                 raise UserError(
                     _("You can't create a customization without check erase logo option of this product : %s") % line.original_product_id.default_code)
-            if not self.order_id.skip_checking_previews and not line.preview_selector and line.type_ids.filtered(lambda t:t.preview):
-                raise UserError(
-                    _("You can't create a customization with no preview selected : %s") % line.original_product_id.default_code)
+            if not self.order_id.skip_checking_previews and line.type_ids.filtered(lambda t:t.preview):
+                if line.preview_error:
+                    raise UserError(
+                        _("There are no previews for this partner and this product %s") % line.original_product_id.default_code)
+                if not line.preview_selector:
+                    raise UserError(
+                        _("You can't create a customization with no preview selected : %s") % line.original_product_id.default_code)
             line_type_ids = line.type_ids
             product_type_ids = line.original_product_id.customization_type_ids
             if line_type_ids - product_type_ids:
