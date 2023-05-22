@@ -152,112 +152,149 @@ class AccountTreasuryForecast(models.Model):
 
     @api.multi
     def calculate_invoices(self):
-        invoice_obj = self.env['account.invoice']
-        treasury_invoice_obj = self.env['account.treasury.forecast.invoice']
-        new_invoice_ids = []
-        in_invoice_lst = []
-        out_invoice_lst = []
-
         for record in self:
-
-            # CUSTOMER
-            search_filter_customer = ['&', ('type', 'in', ['out_invoice', 'out_refund'])]
-            if record.payment_mode_customer == 'debit_receipt':
-                search_filter_customer.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
-                                               ('state', 'in', ['open', 'paid']),
-                                               ('date_due', '>=', record.start_date), ('date_due', '<=', record.end_date)])
-            else:
-                if record.payment_mode_customer == 'both':
-                    search_filter_customer.extend(['|',
-                                                   '&', ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
-                                                   '&', ('state', 'in', ['open', 'paid']),
-                                                   '&', ('date_due', '>=', record.start_date),
-                                                   ('date_due', '<=', record.end_date)])
-
-                if record.account_bank:
-                    search_filter_customer.extend(['&', ('payment_mode_id.fixed_journal_id.bank_account_id',
-                                                         '=', record.account_bank.id)])
-
-                if record.check_old_open_customer:
-                    start_date = record.opened_start_date_customer
-                else:
-                    start_date = record.start_date
-
-                search_filter_customer.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
-                                               '&', ('state', '=', 'open'),
-                                               '&', ('date_due', '>=', start_date), ('date_due', '<=', record.end_date)])
-            invoice_ids = invoice_obj.search(search_filter_customer, order='date_due asc, id asc')
-            for invoice_o in invoice_ids:
-                values = {
-                    'invoice_id': invoice_o.id,
-                    'date_due': invoice_o.date_due,
-                    'partner_id': invoice_o.partner_id.id,
-                    'journal_id': invoice_o.journal_id.id,
-                    'state': invoice_o.state,
-                    'base_amount': invoice_o.amount_untaxed_signed,
-                    'total_amount': invoice_o.amount_total_signed,
-                    'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
-                    'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
-                }
-                new_id = treasury_invoice_obj.create(values)
-                new_invoice_ids.append(new_id)
-                out_invoice_lst.append(new_id.id)
-
-            # SUPPLIER
-            search_filter_supplier = ['&', '&', ('type', 'in', ['in_invoice', 'in_refund']),
-                                      ('partner_id.commercial_partner_id', '!=', 148435)]  # Omit AEAT invoices
-
-            if record.payment_mode_supplier == 'debit_receipt':
-                search_filter_supplier.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
-                                               ('state', 'in', ['open', 'paid']),
-                                               ('date_due', '>=', record.start_date), ('date_due', '<=', record.end_date)])
-            else:
-                if record.payment_mode_supplier == 'both':
-                    search_filter_supplier.extend(['|',
-                                                   '&',
-                                                   ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
-                                                   '&', ('state', 'in', ['open', 'paid']),
-                                                   '&', ('date_due', '>=', record.start_date),
-                                                   ('date_due', '<=', record.end_date)])
-
-                if record.check_old_open_supplier:
-                    start_date = record.opened_start_date_supplier
-                else:
-                    start_date = record.start_date
-
-                if record.not_bankable_supplier:
-                    id_currency_usd = record.env.ref("base.USD").id
-                    search_filter_supplier.extend(['&', '|',
-                                                   ('partner_id.property_purchase_currency_id',
-                                                    '!=', id_currency_usd),
-                                                   ('partner_id.property_account_payable_id.code', '!=', '40000000')])
-
-                search_filter_supplier.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
-                                               '&', ('state', '=', 'open'),
-                                               '&', ('date_due', '>=', start_date), ('date_due', '<=', record.end_date)])
-
-            invoice_ids = invoice_obj.search(search_filter_supplier, order='date_due asc, id asc')
-            for invoice_o in invoice_ids:
-                values = {
-                    'invoice_id': invoice_o.id,
-                    'date_due': invoice_o.date_due,
-                    'partner_id': invoice_o.partner_id.id,
-                    'journal_id': invoice_o.journal_id.id,
-                    'state': invoice_o.state,
-                    # TODO -> Pendiente migrar "custom_account"
-                    # 'base_amount': invoice_o.subtotal_wt_rect,
-                    # 'total_amount': invoice_o.total_wt_rect,
-                    'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
-                    'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
-                }
-                new_id = treasury_invoice_obj.create(values)
-                new_invoice_ids.append(new_id)
-                in_invoice_lst.append(new_id.id)
-
+            out_invoice_lst = record._get_customer_invoices()
+            in_invoice_lst = record._get_supplier_invoices()
             record.write({'out_invoice_ids': [(6, 0, out_invoice_lst)],
                           'in_invoice_ids': [(6, 0, in_invoice_lst)]})
 
-        return new_invoice_ids
+        return
+
+    def _get_customer_invoices(self):
+        """
+        Creates invoices to assign in customer page
+
+        Returns:
+        -------
+            List[account.invoice]
+        """
+        invoices = []
+        invoice_obj = self.env['account.invoice']
+        treasury_invoice_obj = self.env['account.treasury.forecast.invoice']
+        domain = self._get_customer_invoices_domain()
+
+        invoice_ids = invoice_obj.search(domain, order='date_due asc, id asc')
+        for invoice_o in invoice_ids:
+            values = {
+                'invoice_id': invoice_o.id,
+                'date_due': invoice_o.date_due,
+                'partner_id': invoice_o.partner_id.id,
+                'journal_id': invoice_o.journal_id.id,
+                'state': invoice_o.state,
+                'base_amount': invoice_o.amount_untaxed_signed,
+                'total_amount': invoice_o.amount_total_signed,
+                'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
+                'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
+            }
+            new_id = treasury_invoice_obj.create(values)
+            invoices.append(new_id.id)
+        return invoices
+
+    def _get_supplier_invoices(self):
+        """
+        Creates invoices to assign in supplier page
+
+        Returns:
+        -------
+            List[account.invoice]
+        """
+        invoices = []
+        invoice_obj = self.env['account.invoice']
+        treasury_invoice_obj = self.env['account.treasury.forecast.invoice']
+        domain = self._get_supplier_invoices_domain()
+
+        invoice_ids = invoice_obj.search(domain, order='date_due asc, id asc')
+        for invoice_o in invoice_ids:
+            values = {
+                'invoice_id': invoice_o.id,
+                'date_due': invoice_o.date_due,
+                'partner_id': invoice_o.partner_id.id,
+                'journal_id': invoice_o.journal_id.id,
+                'state': invoice_o.state,
+                # TODO -> Pendiente migrar "custom_account"
+                # 'base_amount': invoice_o.subtotal_wt_rect,
+                # 'total_amount': invoice_o.total_wt_rect,
+                'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
+                'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
+            }
+            new_id = treasury_invoice_obj.create(values)
+            invoices.append(new_id.id)
+        return invoices
+
+    def _get_customer_invoices_domain(self):
+        """
+        Creates domain to obtain invoices for customer page
+
+        Returns:
+        -------
+            List[Any]
+        """
+        domain = ['&', ('type', 'in', ['out_invoice', 'out_refund'])]
+
+        if self.payment_mode_customer == 'debit_receipt':
+            domain.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                           ('state', 'in', ['open', 'paid']),
+                           ('date_due', '>=', self.start_date), ('date_due', '<=', self.end_date)])
+        else:
+            if self.payment_mode_customer == 'both':
+                domain.extend(['|', '&',
+                               ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                               '&', ('state', 'in', ['open', 'paid']),
+                               '&', ('date_due', '>=', self.start_date),
+                               ('date_due', '<=', self.end_date)])
+
+            if self.account_bank:
+                domain.extend(['&', ('payment_mode_id.fixed_journal_id.bank_account_id',
+                                     '=', self.account_bank.id)])
+
+            if self.check_old_open_customer:
+                start_date = self.opened_start_date_customer
+            else:
+                start_date = self.start_date
+
+            domain.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
+                           '&', ('state', '=', 'open'),
+                           '&', ('date_due', '>=', start_date), ('date_due', '<=', self.end_date)])
+        return domain
+
+    def _get_supplier_invoices_domain(self):
+        """
+        Creates domain to obtain invoices for supplier page
+
+        Returns:
+        -------
+            List[Any]
+        """
+        domain = ['&', '&', ('type', 'in', ['in_invoice', 'in_refund']),
+                  ('partner_id.commercial_partner_id', '!=', 148435)]  # Omit AEAT invoices
+
+        if self.payment_mode_supplier == 'debit_receipt':
+            domain.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                           ('state', 'in', ['open', 'paid']),
+                           ('date_due', '>=', self.start_date), ('date_due', '<=', self.end_date)])
+        else:
+            if self.payment_mode_supplier == 'both':
+                domain.extend(['|', '&',
+                               ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                               '&', ('state', 'in', ['open', 'paid']),
+                               '&', ('date_due', '>=', self.start_date),
+                               ('date_due', '<=', self.end_date)])
+
+            if self.check_old_open_supplier:
+                start_date = self.opened_start_date_supplier
+            else:
+                start_date = self.start_date
+
+            if self.not_bankable_supplier:
+                id_currency_usd = self.env.ref("base.USD").id
+                domain.extend(['&', '|',
+                               ('partner_id.property_purchase_currency_id', '!=', id_currency_usd),
+                               ('partner_id.property_account_payable_id.code', '!=', '40000000')])
+
+            domain.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
+                           '&', ('state', '=', 'open'),
+                           '&', ('date_due', '>=', start_date), ('date_due', '<=', self.end_date)])
+        return domain
 
     @api.model
     def next_date_period(self, date_origin, period, quantity):
