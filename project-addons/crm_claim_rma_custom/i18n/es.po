@@ -79,6 +79,11 @@ msgid "Allow confirm"
 msgstr "Permitir envío"
 
 #. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_advance_material
+msgid "Advance Material"
+msgstr "Material adelantado"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/crm_claim.py:156
 #, python-format
 msgid "Any line to invoice"
