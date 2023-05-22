@@ -162,3 +162,4 @@ cron_stock_catalog_it
 shipping_costs
 move_reserves
 web_custom
+cron_endmonth

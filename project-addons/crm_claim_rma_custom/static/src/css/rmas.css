@@ -1,0 +1,11 @@
+.button_rma_pending{
+	background-color: #ECDDE8!important;
+	cursor: pointer;
+}
+.button_rma_pending:hover{
+	background-color: #cba2c0!important;
+}
+.button_rma_pending i, .button_rma_pending div .o_stat_value, .button_rma_pending div.o_button_icon{
+	color: #875A7B!important;
+}
+
