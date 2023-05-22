@@ -134,7 +134,7 @@ class PurchaseOrder(models.Model):
                 mail_id = self.env['mail.mail'].sudo().create(vals)
                 mail_id.sudo().send()
 
-    def cron_automate_invoicing(self, months=2):
+    def cron_automate_invoicing_lx(self, months=2):
         """
         Creates invoices for purchases and for the related sales in Odoo Spain
 
