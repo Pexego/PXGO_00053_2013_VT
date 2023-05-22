@@ -158,9 +158,10 @@ class PurchaseOrder(models.Model):
         try:
             for purchase in purchases_filtered:
                 purchase._create_invoice()
-                order_es = odoo_es.env['sale.order'].search([
+                order_es_id = odoo_es.env['sale.order'].search([
                     ('client_order_ref', '=', purchase.name), ('partner_id', '=', 245247)
                 ])
+                order_es = odoo_es.env['sale.order'].browse(order_es_id)
                 try:
                     order_es.action_invoice_create()
                     odoo_es.env.commit()
