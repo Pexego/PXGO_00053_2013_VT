@@ -727,6 +727,6 @@ msgid "Order Pricelist Brand"
 msgstr "Tarifas especiales por marca"
 
 #. module: sale_promotions_extend
-#: model:ir.model.fields,field_description:custom_partner.field_res_partner_no_promos
+#: model:ir.model.fields,field_description:sale_promotions_extend.field_res_partner_no_promos
 msgid "Not apply promotions"
 msgstr "No aplicar promociones"
