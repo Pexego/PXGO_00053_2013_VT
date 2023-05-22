@@ -50,4 +50,16 @@
         <field name="code">model.cron_check_qty_to_invoice_lx()</field>
     </record>
 
+    <record forcecreate="True" id="ir_cron_automate_invoicing_lx" model="ir.cron">
+        <field name="name">Automate invoicing LX</field>
+        <field eval="True" name="active"/>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall"/>
+        <field name="model_id" ref="model_purchase_order"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_automate_invoicing_lx()</field>
+    </record>
+
 </odoo>
