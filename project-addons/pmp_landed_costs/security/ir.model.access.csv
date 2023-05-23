@@ -5,3 +5,9 @@ access_import_sheet_manager,import.sheet,model_import_sheet,purchase.group_purch
 access_landed_cost_creator_wizard,landed.cost.creator.wizard,model_landed_cost_creator_wizard,purchase.group_purchase_user,1,0,0,0
 access_landed_cost_creator_wizard,landed.cost.creator.wizard,model_landed_cost_creator_wizard,stock_custom.commercial_group,1,0,0,0
 access_landed_cost_creator_wizard,landed.cost.creator.wizard,model_landed_cost_creator_wizard,purchase.group_purchase_manager,1,1,1,1
+access_stock_landed_cost,stock.landed.cost,model_stock_landed_cost,purchase.group_purchase_user,1,0,0,0
+access_stock_landed_cost_manager,stock.landed.cost,model_stock_landed_cost,purchase.group_purchase_manager,1,1,1,1
+access_stock_landed_cost_lines,stock.landed.cost.lines,model_stock_landed_cost_lines,purchase.group_purchase_user,1,0,0,0
+access_stock_landed_cost_lines_manager,stock.landed.cost.lines,model_stock_landed_cost_lines,purchase.group_purchase_manager,1,1,1,1
+access_stock_valuation_adjustment_lines,stock.valuation.adjustment.lines,model_stock_valuation_adjustment_lines,purchase.group_purchase_user,1,0,0,0
+access_stock_valuation_adjustment_lines_manager,stock.valuation.adjustment.lines,model_stock_valuation_adjustment_lines,purchase.group_purchase_manager,1,1,1,1
