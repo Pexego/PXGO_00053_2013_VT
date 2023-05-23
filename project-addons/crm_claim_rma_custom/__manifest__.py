@@ -41,9 +41,9 @@
                 'picking_incidences',
                 'custom_account'],
     "data": [
-             'data/stage_data.xml',
              'views/assets.xml',
              'data/groups.xml',
+             'data/stage_data.xml',
              'views/crm_claim_view.xml',
              'data/substate_data.xml',
              'security/ir.model.access.csv',
