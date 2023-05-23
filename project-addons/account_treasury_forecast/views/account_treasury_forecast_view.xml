@@ -88,6 +88,8 @@
                                 <group colspan="4" col="4">
                                     <separator string="Payment mode" colspan="4"/>
                                     <field name="payment_mode_customer" string="Choose the payment mode" colspan="4"/>
+                                    <field name="payment_mode_customer_m2m" string="Choose the payment mode" colspan="4" widget="many2many_tags"/>
+                                    <!--SOLO VISIBLE SI TIENE Transferencia EN LOS MÉTODOS DE PAGO-->
                                     <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
                                     <group col="4" colspan="4">
                                         <field name="account_bank" colspan="4" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
@@ -104,6 +106,8 @@
                                 <group colspan="4" col="4">
                                     <separator string="Payment mode" colspan="4"/>
                                     <field name="payment_mode_supplier" string="Choose the payment mode" colspan="4"/>
+                                    <field name="payment_mode_supplier_m2m" string="Choose the payment mode" colspan="4" widget="many2many_tags"/>
+                                    <!--SOLO VISIBLE SI TIENE Transferencia EN LOS MÉTODOS DE PAGO-->
                                     <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
                                     <group col="4" colspan="4">
                                         <group col="2" colspan="2">

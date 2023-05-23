@@ -97,12 +97,26 @@ class AccountTreasuryForecast(models.Model):
     variable_line_ids = fields.One2many(
         'account.treasury.forecast.line', 'treasury_id',
         string="Variable Lines", domain=[('line_type', '=', 'variable')])
+    # FIXME: IDEA-> cambiar a many2many con ese tag en vista -> usar eso para filtrar luego con un 'in'
     payment_mode_customer = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
+    payment_mode_customer_m2m = fields.Many2many(
+        'account.payment.mode',
+        'treasury_forecast_customer_payment_mode_rel',
+        string='Payment mode'
+    )  # TODO: problema -> ¿como diferencias entre los campos de las dos pestañas?
+       #  - Definir 2 tablas distintas
+       #  - Filtrar con un domain
     account_bank = fields.Many2one('res.partner.bank', 'Account bank',
                                    domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
     check_old_open_customer = fields.Boolean(string="Old (opened)")
     opened_start_date_customer = fields.Date(string="Start Date")
+    # FIXME: IDEA-> cambiar a many2many con ese tag en vista -> usar eso para filtrar luego con un 'in'
     payment_mode_supplier = fields.Selection(PAYMENT_MODE, "Payment mode", default='both')
+    payment_mode_supplier_m2m = fields.Many2many(
+        'account.payment.mode',
+        'treasury_forecast_supplier_payment_mode_rel',
+        string='Payment mode'
+    )
     check_old_open_supplier = fields.Boolean(string="Old (opened)")
     opened_start_date_supplier = fields.Date(string="Start Date")
     not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
@@ -116,19 +130,24 @@ class AccountTreasuryForecast(models.Model):
 
     @api.one
     @api.constrains('payment_mode_customer', 'check_old_open_customer',
+                    'payment_mode_customer_m2m', 'check_old_open_customer_m2m',
                     'payment_mode_supplier', 'check_old_open_supplier',
                     'opened_start_date_customer', 'opened_start_date_supplier', 'start_date')
     def check_filter(self):
-        if not self.payment_mode_customer or not self.payment_mode_supplier:
+        if not self.payment_mode_customer_m2m or not self.payment_mode_supplier_m2m:
             raise exceptions.Warning(
                 _('Error!:: You must select one option for payment mode fields.'))
-        elif self.payment_mode_customer != 'debit_receipt' and self.check_old_open_customer \
-                and self.opened_start_date_customer >= self.start_date:
+        # TODO: transferencia en modos de pago del cliente & ...
+        elif ('debit_receipt' not in self.payment_mode_customer_m2m.mapped('treasury_forecast_type')
+              and self.check_old_open_customer
+              and self.opened_start_date_customer >= self.start_date):
             raise exceptions.Warning(
                 _('Error!:: Start date of old opened invoices in customers must be lower '
                   'than the start date specified before.'))
-        elif self.payment_mode_supplier != 'debit_receipt' and self.check_old_open_supplier \
-                and self.opened_start_date_supplier >= self.start_date:
+        # TODO: transferencia en modos de pago del proveedor & ...
+        elif ('debit_receipt' not in self.payment_mode_supplier_m2m.mapped('treasury_forecast_type')
+              and self.check_old_open_supplier
+              and self.opened_start_date_supplier >= self.start_date):
             raise exceptions.Warning(
                 _('Error!:: Start date of old opened invoices in suppliers must be lower '
                   'than the start date specified before.'))
@@ -230,28 +249,24 @@ class AccountTreasuryForecast(models.Model):
             List[Any]
         """
         domain = ['&', ('type', 'in', ['out_invoice', 'out_refund'])]
-
-        if self.payment_mode_customer == 'debit_receipt':
-            domain.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+        treasury_forecast_types = self.payment_mode_customer_m2m.mapped('treasury_forecast_type')
+        if 'debit_receipt' in treasury_forecast_types:
+            if 'transfer' in treasury_forecast_types:
+                # only needed when we have both types of forecast
+                domain.append('|')
+            # FIXME: cambiar a que solo salgan con tipos que están en el filtro
+            domain.extend(['&', '&', '&', ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
                            ('state', 'in', ['open', 'paid']),
                            ('date_due', '>=', self.start_date), ('date_due', '<=', self.end_date)])
-        else:
-            if self.payment_mode_customer == 'both':
-                domain.extend(['|', '&',
-                               ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
-                               '&', ('state', 'in', ['open', 'paid']),
-                               '&', ('date_due', '>=', self.start_date),
-                               ('date_due', '<=', self.end_date)])
-
+        if 'transfer' in treasury_forecast_types:
             if self.account_bank:
                 domain.extend(['&', ('payment_mode_id.fixed_journal_id.bank_account_id',
                                      '=', self.account_bank.id)])
-
             if self.check_old_open_customer:
                 start_date = self.opened_start_date_customer
             else:
                 start_date = self.start_date
-
+            # FIXME: cambiar a que solo salgan con tipos que están en el filtro
             domain.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
                            '&', ('state', '=', 'open'),
                            '&', ('date_due', '>=', start_date), ('date_due', '<=', self.end_date)])
@@ -267,30 +282,26 @@ class AccountTreasuryForecast(models.Model):
         """
         domain = ['&', '&', ('type', 'in', ['in_invoice', 'in_refund']),
                   ('partner_id.commercial_partner_id', '!=', 148435)]  # Omit AEAT invoices
-
-        if self.payment_mode_supplier == 'debit_receipt':
-            domain.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+        treasury_forecast_types = self.payment_mode_supplier_m2m.mapped('treasury_forecast_type')
+        if 'debit_receipt' in treasury_forecast_types:
+            if 'transfer' in treasury_forecast_types:
+                # only needed when we have both types of forecast
+                domain.append('|')
+            # FIXME: cambiar a que solo salgan con tipos que están en el filtro
+            domain.extend(['&', '&', '&', ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
                            ('state', 'in', ['open', 'paid']),
                            ('date_due', '>=', self.start_date), ('date_due', '<=', self.end_date)])
-        else:
-            if self.payment_mode_supplier == 'both':
-                domain.extend(['|', '&',
-                               ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
-                               '&', ('state', 'in', ['open', 'paid']),
-                               '&', ('date_due', '>=', self.start_date),
-                               ('date_due', '<=', self.end_date)])
-
-            if self.check_old_open_supplier:
-                start_date = self.opened_start_date_supplier
-            else:
-                start_date = self.start_date
-
+        if 'transfer' in treasury_forecast_types:
             if self.not_bankable_supplier:
                 id_currency_usd = self.env.ref("base.USD").id
                 domain.extend(['&', '|',
                                ('partner_id.property_purchase_currency_id', '!=', id_currency_usd),
                                ('partner_id.property_account_payable_id.code', '!=', '40000000')])
-
+            if self.check_old_open_supplier:
+                start_date = self.opened_start_date_supplier
+            else:
+                start_date = self.start_date
+            # FIXME: cambiar a que solo salgan con tipos que están en el filtro
             domain.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
                            '&', ('state', '=', 'open'),
                            '&', ('date_due', '>=', start_date), ('date_due', '<=', self.end_date)])
