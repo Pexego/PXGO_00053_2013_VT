@@ -113,9 +113,31 @@ class AccountTreasuryForecast(models.Model):
         'treasury_forecast_supplier_payment_mode_rel',
         string='Payment mode'
     )
+    has_transfer_payments_customer = fields.Boolean(
+        string='Has transfer payments', compute='_get_has_transfer_payments'
+    )
+    has_transfer_payments_supplier = fields.Boolean(
+        string='Has transfer payments', compute='_get_has_transfer_payments'
+    )
     check_old_open_supplier = fields.Boolean(string="Old (opened)")
     opened_start_date_supplier = fields.Date(string="Start Date")
     not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
+
+    @api.depends('payment_mode_customer_m2m', 'payment_mode_supplier_m2m')
+    def _get_has_transfer_payments(self):
+        """
+        Calculates if the object has any transfer payment in supplier and if there
+        is any transfer payment in customer
+        """
+        for each_record in self:
+            customer_treasury_forecast_types = each_record.payment_mode_customer_m2m.mapped(
+                'treasury_forecast_type'
+            )
+            supplier_treasury_forecast_types = each_record.payment_mode_supplier_m2m.mapped(
+                'treasury_forecast_type'
+            )
+            each_record.has_transfer_payments_customer = 'transfer' in customer_treasury_forecast_types
+            each_record.has_transfer_payments_supplier = 'transfer' in supplier_treasury_forecast_types
 
     @api.multi
     @api.constrains('end_date', 'start_date')
