@@ -23,10 +23,6 @@ from odoo import models, fields, api, exceptions, _
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-PAYMENT_MODE = [('debit_receipt', 'Debit receipt'),
-                ('transfer', 'Transfer'),
-                ('both', 'Both')]
-
 
 class AccountTreasuryForecastInvoice(models.Model):
     _name = 'account.treasury.forecast.invoice'
@@ -97,7 +93,6 @@ class AccountTreasuryForecast(models.Model):
     variable_line_ids = fields.One2many(
         'account.treasury.forecast.line', 'treasury_id',
         string="Variable Lines", domain=[('line_type', '=', 'variable')])
-    payment_mode_customer = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
     payment_mode_customer_m2m = fields.Many2many(
         'account.payment.mode',
         'treasury_forecast_customer_payment_mode_rel',
@@ -107,7 +102,6 @@ class AccountTreasuryForecast(models.Model):
                                    domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
     check_old_open_customer = fields.Boolean(string="Old (opened)")
     opened_start_date_customer = fields.Date(string="Start Date")
-    payment_mode_supplier = fields.Selection(PAYMENT_MODE, "Payment mode", default='both')
     payment_mode_supplier_m2m = fields.Many2many(
         'account.payment.mode',
         'treasury_forecast_supplier_payment_mode_rel',

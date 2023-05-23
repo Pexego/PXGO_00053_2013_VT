@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * account_treasury_forecast
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
@@ -445,24 +445,6 @@ msgstr "Data di Inizio"
 #: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_payment_mode_customer
 msgid "Payment mode"
 msgstr "Metodo di pagamento"
-
-#. module: account_treasury_forecast
-#: selection:account.treasury.forecast,payment_mode_customer:0
-#: selection:account.treasury.forecast,payment_mode_supplier:0
-msgid "Transfer"
-msgstr "Trasferimento"
-
-#. module: account_treasury_forecast
-#: selection:account.treasury.forecast,payment_mode_customer:0
-#: selection:account.treasury.forecast,payment_mode_supplier:0
-msgid "Debit receipt"
-msgstr "Ricevuta addebito"
-
-#. module: account_treasury_forecast
-#: selection:account.treasury.forecast,payment_mode_customer:0
-#: selection:account.treasury.forecast,payment_mode_supplier:0
-msgid "Both"
-msgstr "Entrambi"
 
 #. module: account_treasury_forecast
 #: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view_add_filters

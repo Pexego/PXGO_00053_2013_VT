@@ -87,7 +87,6 @@
                             <page string="Out invoices">
                                 <group colspan="4" col="4">
                                     <separator string="Payment mode" colspan="4"/>
-                                    <field name="payment_mode_customer" string="Choose the payment mode" colspan="4" invisible="1"/>
                                     <field name="payment_mode_customer_m2m" string="Choose the payment mode" colspan="4" widget="many2many_tags"/>
                                     <field name="has_transfer_payments_customer" colspan="4" invisible="1"/>
                                     <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('has_transfer_payments_customer', '=', False)]}"/>
@@ -105,7 +104,6 @@
                             <page string="In invoices">
                                 <group colspan="4" col="4">
                                     <separator string="Payment mode" colspan="4"/>
-                                    <field name="payment_mode_supplier" string="Choose the payment mode" colspan="4" invisible="1"/>
                                     <field name="payment_mode_supplier_m2m" string="Choose the payment mode" colspan="4" widget="many2many_tags"/>
                                     <field name="has_transfer_payments_supplier" colspan="4" invisible="1"/>
                                     <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('has_transfer_payments_supplier', '=', False)]}"/>
