@@ -120,7 +120,7 @@ class EdifMenssage(models.Model):
     def IMD(self, description):
         msg = "IMD+F+M+:::{}".format(description[:35])
         if len(description) > 35:
-            msg += ":{}".format(description[35:])
+            msg += ":{}".format(description[35:70])
         return msg + "'\n"
 
     def QTY(self, typ, qty):
