@@ -93,6 +93,7 @@ class ClaimMakePicking(models.TransientModel):
 
     @api.multi
     def action_create_picking(self):
+        claim = self.env['crm.claim'].browse(self.env.context.get('active_id'))
         if not self.env.context.get('bypass_product_incidences_advise', False):
             incidences = self.claim_line_ids.mapped('claim_line_id.product_id.incidence_ids').filtered(lambda i:i.warn)
             if incidences:
@@ -101,7 +102,7 @@ class ClaimMakePicking(models.TransientModel):
                         '%s,%s' % ('claim_make_picking.wizard', self.id),
                     'continue_method': 'action_create_picking',
                     'incidence_ids': [(6, 0, incidences.ids)],
-                    'claim_id': self.env.context.get('active_id')
+                    'claim_id': claim.id
                 }).action_show()
         res = super(ClaimMakePicking, self).action_create_picking()
         if self.odoo_management or (self.not_sync or
@@ -112,10 +113,19 @@ class ClaimMakePicking(models.TransientModel):
                                            " by Odoo."))
             if res.get('res_id', False):
                 pick = self.env["stock.picking"].browse(res['res_id'])
+                notes = (pick.internal_notes or '') + (claim.internal_notes or '')
+                pick.write({'odoo_management':self.odoo_management,
+                            'not_sync': self.not_sync or self.claim_line_dest_location.not_sync,
+                            'internal_notes': notes})
                 pick.odoo_management = self.odoo_management
                 pick.not_sync = self.not_sync or \
                     self.claim_line_dest_location.not_sync
-
+                claim.internal_notes = ''
+        elif res.get('res_id', False):
+            pick = self.env["stock.picking"].browse(res['res_id'])
+            notes = (pick.internal_notes or '') + (claim.internal_notes or '')
+            pick.internal_notes = notes
+            claim.internal_notes = ''
         return res
 
     @api.model
