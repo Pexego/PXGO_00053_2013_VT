@@ -3,6 +3,7 @@ import base64
 from datetime import datetime, timedelta
 import xlsxwriter
 
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -97,11 +98,10 @@ class ProductProduct(models.Model):
 
             value = 0
             category_name = product["categ_id"][1]
+            last_supplier_id = None
 
             if product["last_supplier_id"]:
                 last_supplier_id = product["last_supplier_id"][1]
-            else:
-                last_supplier_id = 0
 
             brand_name = product["product_brand_id"][1] if product["product_brand_id"] and product["product_brand_id"][
                 1] else 0
@@ -118,23 +118,10 @@ class ProductProduct(models.Model):
                     property_stock_valuation_account_id.id
                 value = round(fifo_automated_values.get((product["id"],
                                                          valuation_account_id)) or 0, 2)
-            seller_ids = product["seller_ids"]
-            if seller_ids:
-                #sellers = self.env['product.supplierinfo'].browse(seller_ids)
-                #display_name = sellers[0].display_name or 0
-                product_fields = [product["id"], product['display_name'], brand_name, category_name,
-                                  last_supplier_id, product["qty_available"], value]
-                rows.append(product_fields)
-                """if len(sellers) > 1:
-                    sellers = sellers[1::]
-                    for seller in sellers:
-                        display_name = seller.display_name or 0
-                        product_fields = ["", "", "", "", display_name, "", ""]
-                        rows.append(product_fields)"""
-            else:
-                product_fields = [product["id"], product['display_name'], brand_name, category_name,
-                                  last_supplier_id, product["qty_available"], value]
-                rows.append(product_fields)
+
+            product_fields = [product["id"], product['display_name'], brand_name, category_name,
+                              last_supplier_id, product["qty_available"], value]
+            rows.append(product_fields)
 
         file_b64 = self.generate_xls(headers, rows)
         if not to_date:
