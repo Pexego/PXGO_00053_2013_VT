@@ -35,6 +35,7 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     date_due = fields.Date(index=False)
+    name = fields.Char(index=False)
 
 
 class AccountBankStatementLine(models.Model):
