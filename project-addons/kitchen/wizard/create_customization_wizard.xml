@@ -6,6 +6,8 @@
         <field name="arch" type="xml">
             <form string="Create customization">
                 <group>
+
+                    <field name="errors" readonly="1" style="color:red" attrs="{'invisible':['|',('errors','=',False),('errors','=','')]}"/>
                     <field name="notify_users" widget="many2many_tags" options="{'color_field': 'color'}"/>
                     <field name="notify_sales_team"/>
                     <field name="order_id" invisible="1"/>
