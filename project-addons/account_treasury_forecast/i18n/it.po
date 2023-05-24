@@ -442,17 +442,14 @@ msgid "Start Date"
 msgstr "Data di Inizio"
 
 #. module: account_treasury_forecast
-#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_payment_mode_customer
-msgid "Payment mode"
-msgstr "Metodo di pagamento"
-
-#. module: account_treasury_forecast
 #: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view_add_filters
+#: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view
 msgid "Choose the payment mode"
 msgstr "Selezionare il metodo di pagamento"
 
 #. module: account_treasury_forecast
 #: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_payment_mode_customer_m2m
 msgid "Payment mode"
 msgstr "Metodo di pagamento"
 
