@@ -1,6 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).ç
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 from datetime import date
 from dateutil.relativedelta import relativedelta
 import math
@@ -194,12 +195,67 @@ class ProductProduct(models.Model):
         'Min qty suggested', compute='_get_min_suggested_qty')
     seller_id = fields.Many2one('res.partner', related='seller_ids.name', store=True, string='Main Supplier')
 
+    def _is_possible_to_have_cycle(self, original):
+        """
+        Returns if we are setting final_replacement_id equals to self or not changing it.
+        In this case we could have a cycle in our graph
+
+        Parameters:
+        ----------
+        original: product.product
+            The product we had before changing values
+        """
+        original_final_replace = original.final_replacement_id
+        return original_final_replace == self.replacement_id.final_replacement_id or (
+            not original_final_replace and self.replacement_id.final_replacement_id == original
+        )
+
+    def search_cycle(self, start_of_cycle):
+        """
+        Follows replacements products to find if we are our final_replacement.
+        In that case we have a cycle.
+
+        Parameters:
+        ----------
+        start_of_cycle: product.product
+            The product.product from where we start searching
+
+        Returns:
+        -------
+            Bool
+        If we have a cycle
+        """
+        replacement_prod = self.replacement_id
+        if not replacement_prod:  # end of tree
+            return False
+        if replacement_prod == start_of_cycle:  # cycle found
+            return True
+        return replacement_prod.search_cycle(start_of_cycle)
+
+    def check_cycles(self, origin):
+        """
+        Checks that there are no products that has self as final_replacement.
+        Raises an exception in case we have it.
+
+        Parameters:
+        ----------
+        origin: product.product
+            Product from where we start checking if there is any cycle
+        """
+        if self._is_possible_to_have_cycle(origin):
+            cycle_searched = self.search_cycle(origin)
+            if cycle_searched:
+                raise UserError(_(
+                    'Not possible to assign %s as replacement product'
+                ) % self.replacement_id.default_code)
+
     @api.onchange('replacement_id')
     def onchange_replacement_id(self):
         """
-        # FIXME: Caso reemplazo recíproco
-        Searches final_replacement_id, depending on final_replacement set
+        Searches final_replacement_id, depending on final_replacement set.
+        If we are setting self as final_replacement raises an exception
         """
+        self.check_cycles(self._origin)
         final_replace_product = self.replacement_id.final_replacement_id
         # case we change replacement_id to a final_replacement_id
         if not final_replace_product:
@@ -266,6 +322,7 @@ class ProductProduct(models.Model):
                     replacement_product=new_final_replacement_id
                 )
         return res
+
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'

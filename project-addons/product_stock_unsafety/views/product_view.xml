@@ -10,7 +10,7 @@
                     <field name="remaining_days_sale"/>
                     <field name="real_remaining_days_sale"/>
                     <field name="replacement_id"/>
-                    <field name="final_replacement_id" readonly="1"/>
+                    <field name="final_replacement_id" readonly="1" force_save="1"/>
                 </field>
             </field>
         </record>
