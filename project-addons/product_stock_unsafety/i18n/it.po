@@ -593,3 +593,9 @@ msgstr "Prossima data d'arrivo"
 #: model:ir.model.fields,field_description:product_stock_unsafety.field_product_product_final_replacement_id
 msgid "Final replacement"
 msgstr "Sostituzione finale"
+
+#. module: product_stock_unsafety
+#: code:addons/product_stock_unsafety/models/product.py:249
+#, python-format
+msgid "Not possible to assign %s as replacement product"
+msgstr "Non è possibile assegnare %s come prodotto sostitutivo"
