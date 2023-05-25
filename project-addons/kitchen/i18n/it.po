@@ -516,3 +516,14 @@ msgstr "Prodotto Ordine"
 #: model:ir.model.fields,field_description:kitchen.field_sale_order_skip_checking_previews
 msgid "Skip checking Previews"
 msgstr "Salta il controllo delle Previews"
+
+#. module: kitchen
+#: code:addons/kitchen/wizard/create_customization_wizard.py:137
+#, python-format
+msgid "There are no previews for this partner and these products:%s"
+msgstr "Non ci sono anteprime per questo partner e questi prodotti:%s"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_wizard_errors
+msgid "Errors"
+msgstr "Errori"

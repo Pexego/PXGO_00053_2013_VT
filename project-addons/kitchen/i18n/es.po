@@ -580,7 +580,7 @@ msgstr "Pendiente"
 #. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_kitchen_customization_line_photo
 #: model:ir.model.fields,field_description:kitchen.field_kitchen_customization_preview_photo
-#: model:ir.model.fields,field_description:kitchen.field_customization_line_preview_selector
+#: model:ir.model.fields,field_description:kitchen.field_customization_line_photo
 msgid "Photo"
 msgstr "Foto"
 
@@ -755,10 +755,21 @@ msgstr "No hay previews activas para estos productos: %s"
 #. module: kitchen
 #: code:addons/kitchen/models/kitchen_customization.py:170
 #: code:addons/kitchen/models/kitchen_customization.py:314
-#: code:addons/kitchen/wizard/create_customization_wizard.py:122
+#: code:addons/kitchen/wizard/create_customization_wizard.py:178
 #, python-format
 msgid "There are no previews for this partner and this product %s"
 msgstr "No hay previews para este cliente y producto %s"
+
+#. module: kitchen
+#: code:addons/kitchen/wizard/create_customization_wizard.py:137
+#, python-format
+msgid "There are no previews for this partner and these products:%s"
+msgstr "No hay previews para este cliente y producto/s:%s"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_wizard_errors
+msgid "Errors"
+msgstr "Errores"
 
 #. module: kitchen
 #: code:addons/kitchen/models/sale_order.py:32
