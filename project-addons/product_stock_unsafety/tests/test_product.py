@@ -1,4 +1,5 @@
 from odoo.tests.common import SavepointCase
+from odoo.exceptions import UserError
 
 
 class TestProductProduct(SavepointCase):
@@ -43,3 +44,17 @@ class TestProductProduct(SavepointCase):
     def test_search_cycles_with_no_cycles(self):
         obtained_result = self.product_4.search_cycle(self.product_4)
         self.assertFalse(obtained_result)
+
+    def test_check_cycles_with_cycles(self):
+        self.product_1.replacement_id = self.product_4
+        with self.assertRaisesRegex(
+            UserError, 'Not possible to assign product_4 as replacement product'
+        ):
+            self.product_1.with_context({'lang': 'en'}).check_cycles(self.product_1)
+
+    def test_check_cycles_with_no_cycles_and_no_possible_cycles(self):
+        self.product_4.with_context({'lang': 'en'}).check_cycles(self.product_4)
+
+    def test_check_cycles_with_no_cycles_and_possible_cycles(self):
+        self.product_3.replacement_id = self.product_4
+        self.product_3.with_context({'lang': 'en'}).check_cycles(self.product_3)
