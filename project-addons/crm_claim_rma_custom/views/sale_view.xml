@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_pending_rma_filter" model="ir.ui.view">
+    <record id="view_pending_rma_filter_order" model="ir.ui.view">
         <field name="name">view.pending.rma.filter</field>
         <field name="model">sale.order.claim.wizard</field>
         <field name="arch" type="xml">
@@ -21,12 +21,12 @@
         </field>
     </record>
 
-    <record id="action_show_pending_claims" model="ir.actions.act_window">
-        <field name="name">Pending RMA</field>
+    <record id="action_show_pending_claims_order" model="ir.actions.act_window">
+        <field name="name">Pending RMA Order</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.order.claim.wizard</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_pending_rma_filter"/>
+        <field name="view_id" ref="view_pending_rma_filter_order"/>
         <field name="target">new</field>
     </record>
 

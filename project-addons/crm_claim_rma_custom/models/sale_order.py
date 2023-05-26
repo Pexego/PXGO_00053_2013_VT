@@ -18,9 +18,7 @@ class SaleOrder(models.Model):
         stage_sale_attach_id = self.env['crm.claim.stage'].search([('name', '=', 'Adjuntar con pedido')]).id
         pending_rmas = self.env['crm.claim'].search(
             [('partner_id', '=', self.partner_id.id), ('stage_id', '=', stage_sale_attach_id)])
-
-        action = self.env.ref('crm_claim_rma_custom.action_show_pending_claims').read()[0]
-
+        action = self.env.ref('crm_claim_rma_custom.action_show_pending_claims_order').read()[0]
         if len(pending_rmas) > 0:
             action['domain'] = [('id', 'in', pending_rmas.mapped('id'))]
         else:
