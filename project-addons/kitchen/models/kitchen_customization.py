@@ -223,7 +223,9 @@ class KitchenCustomization(models.Model):
         }
         return self.customization_line.new(new_line)
 
-    def create_line(self, product_id, qty, line, previews=None, headers=None):
+
+
+    def create_line(self, product_id, qty, line):
         new_line = {
             'product_id': product_id.id,
             'product_qty': qty,
@@ -232,8 +234,8 @@ class KitchenCustomization(models.Model):
             'erase_logo': line.erase_logo,
             'type_ids': [(6, 0, line.type_ids.ids)]}
         line_c = self.env['kitchen.customization.line'].create(new_line)
-        if previews:
-            line_c.create_previews(previews, headers)
+        if line.preview_selector and line.preview_ids:
+            line_c.add_previews(line)
         return line
 
     @api.multi
@@ -451,18 +453,34 @@ class KitchenCustomizationLine(models.Model):
 
     def create_previews(self, previews, api_headers):
         for count, preview in enumerate(previews):
-            print(preview)
             if preview.get('status') == 'OldPreview':
                 new_preview = self.env['kitchen.customization.preview'].create(
                     {'line_id': self.id, 'name': _('OldPreview - Go to Sharepoint'),
-                     'url': 'The previews are on Sharepoint', 'state': 'OldPreview'})
+                     'url': 'The previews are on Sharepoint', 'status': 'OldPreview'})
             else:
                 photo = base64.b64encode(requests.get(preview.get('logo'),headers=api_headers).content)
                 new_preview = self.env['kitchen.customization.preview'].create(
                     {'line_id': self.id, 'photo': photo, 'name': 'Preview %s' % str(count + 1),
-                     'url': preview.get('urlView'), 'state': preview.get('status')})
+                     'url': preview.get('urlView'), 'status': preview.get('status')})
             if not self.preview_selector:
                 self.preview_selector = new_preview.id
+
+    def add_previews(self, wizard_line):
+        """
+            Create previews for the customization_line given
+        :param wizard_line: line of the wizard
+        :return: kitchen.customization.preview list created
+        """
+        previews = self.env['kitchen.customization.preview']
+        for preview in wizard_line.preview_ids:
+            preview_vals= {'line_id': self.id, 'name': preview.name,
+                 'url': preview.url, 'status': preview.status, 'photo':preview.photo}
+            new_preview = self.env['kitchen.customization.preview'].create(preview_vals)
+            preview.status = "used_to_create_preview"
+            previews |= new_preview
+            if preview == wizard_line.preview_selector:
+                self.preview_selector = new_preview.id
+        return previews
 
 
 class KitchenCustomizationPreview(models.Model):

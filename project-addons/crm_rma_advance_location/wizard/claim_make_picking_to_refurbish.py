@@ -6,6 +6,16 @@ import time
 class ClaimMakePickingToRefurbishWizard(models.TransientModel):
     _name = "claim.make.picking.to.refurbish.wizard"
 
+    @staticmethod
+    def get_lots_remaining_moves(move):
+        """ This function returns the lot_text not used in other moves
+        :param move: original stock.move from incoming picking
+        :return: set() set of lots text
+        """
+        lot_text = set(move.lots_text.split(','))
+        children_lots_text = set(move.child_move_ids.mapped('lots_text'))
+        return lot_text - children_lots_text
+
     @api.model
     def _get_picking_lines(self):
         wiz_lines = []
@@ -27,8 +37,15 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             if claim_id and len(claim_id) == 1:
                 new_line.update({'claim_id': claim_id.id})
             qty = move.product_uom_qty - move.qty_used
+            not_used_lots_text = set()
+            if move.lots_text:
+                not_used_lots_text = self.get_lots_remaining_moves(move)
             for __ in range(int(qty)):
-                wiz_lines.append(new_line)
+                new_line_dict = {}
+                if not_used_lots_text:
+                    new_line_dict = {'prodlot_id':not_used_lots_text.pop()}
+                new_line_dict.update(new_line)
+                wiz_lines.append(new_line_dict)
         if not wiz_lines:
             raise exceptions.UserError(_("All units are already processed"))
         return wiz_lines
@@ -101,7 +118,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'note': note,
                 'picking_type_id': type_ids and type_ids[0].id,
                 'product_uom_qty': 1,
-                'origin_move_id': wizard_move.id
+                'origin_move_id': wizard_move.id,
+                'lots_text':wizard_picking_line.prodlot_id
             }
             new_move = wizard_picking_line.move_id.copy(default_move_data)
             if wizard_move in moves_qty:

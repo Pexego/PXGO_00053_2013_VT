@@ -21,9 +21,11 @@ class ClaimMakePickingFromPicking(models.TransientModel):
 
     @api.multi
     def action_create_picking_from_picking(self):
+        #import wdb
+        #wdb.set_trace()
         for pick_line in self.picking_line_ids:
             move = pick_line.move_id
-            if move.product_id.track_serial and not move.claim_line_id.prodlot_id:
+            if move.product_id.track_serial and not move.claim_line_id.prodlot_id and not move.claim_line_id.product_id.bom_count > 0:
                 raise UserError(_("You must specify the serial number of the serial products"))
             elif move.claim_line_id.product_id.track_serial and move.claim_line_id.prodlot_id:
                 move.lots_text = move.claim_line_id.prodlot_id
@@ -37,6 +39,7 @@ class ClaimLine(models.Model):
 
     @api.onchange('prodlot_id')
     def onchange_prodlot_id(self):
+        super().onchange_prodlot_id()
         if self.product_id:
             products = self.env['sim.type'].search([('product_id', '=', self.product_id.id)])
             if products:

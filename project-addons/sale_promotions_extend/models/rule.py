@@ -186,6 +186,8 @@ class PromotionsRulesActions(models.Model):
              _('Products free per unit')),
             ('sale_points_programme_discount_on_brand',
              _('Sale points programme discount on Brand')),
+            ('sale_points_programme_discount_excluding_brands',
+             _('Sale points programme discount Excluding Brand')),
             ('disc_per_product',
              _('Discount line per each product')),
             ('fix_price_per_product',
@@ -247,7 +249,7 @@ class PromotionsRulesActions(models.Model):
             self.product_code = '"product_reference",..."'
             self.arguments = '{"product":qty, ...}'
 
-        elif self.action_type == 'sale_points_programme_discount_on_brand':
+        elif self.action_type in ('sale_points_programme_discount_on_brand', 'sale_points_programme_discount_excluding_brands'):
             self.product_code = '{brand_1: [categ1,categ2],brand_2: []}'
             self.arguments = '[sale_point_rule_name1,sale_point_rule_name2]'
 
@@ -513,69 +515,123 @@ class PromotionsRulesActions(models.Model):
         self.create_line(vals)
         return True
 
-    def action_sale_points_programme_discount_on_brand(self, order):
+    def apply_bags(self, order, points, bags):
         """
-        Action for: Sale points programme discount on a selected brand
-        variables:
-        ------------
-        product_code: dict[str, list[str]]  i.e.  {'brand_1':['categ_1','categ_2'], 'brand_2':['categ_3','categ_4']}
-               if the values for a certain key are empty ([]) it means that it applies to all categories for this brand
+            Creates a discount line, finished the bags and recalculate partner points accumulated
+        :param order: sale.order
+        :param points: point to discount
+        :param bags: bags to apply
+        """
+        self.create_y_line_sale_points_programme(order, points, bags)
+        bags.write({'applied_state': 'applied', 'order_applied_id': order.id})
+        self.env['res.partner.point.programme.bag'].sudo().\
+            with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(bags.mapped('point_rule_id'), order.partner_id)
+
+    def _get_max_bags_to_apply_points(self, bags, price_subtotal):
+        """
+            Get the maximum bags to apply dor this price_subtotal
+        :param bags:
+        :param price_subtotal:
+        :return:
+        """
+        bags_to_change_status = self.env['res.partner.point.programme.bag']
+        bag_obj = self.env['res.partner.point.programme.bag']
+        cont_point_applied = 0
+        for bag in bags:
+            rule = bag.point_rule_id
+            if price_subtotal <= cont_point_applied:
+                break
+            bag_points = bag.points
+            if cont_point_applied + bag_points <= price_subtotal:
+                cont_point_applied += bag_points
+                bags_to_change_status += bag
+            else:
+                diff = price_subtotal - cont_point_applied
+                old_points = bag.points
+                bag.points = diff
+                bag_obj.create({'name': rule.name,
+                                'point_rule_id': rule.id,
+                                'order_id': bag.order_id.id,
+                                'points': old_points - diff,
+                                'partner_id': bag.partner_id.id})
+                cont_point_applied = price_subtotal
+                bags_to_change_status += bag
+        return bags_to_change_status
+
+    def _apply_max_points(self, order, price_subtotal):
+        """ Apply max points given an order and a price_subtotal of the rules in self.arguments
+        :param order: sale.order
+        :param price_subtotal: max points to apply
+        :return: True if points are equals or less than 0
         """
         bag_obj = self.env['res.partner.point.programme.bag']
         rule_obj = self.env['sale.point.programme.rule']
+        rules = rule_obj.search([('name', 'in', eval(self.arguments))])
+        bags = bag_obj.search([('partner_id', '=', order.partner_id.id), ('point_rule_id', 'in', rules.ids),
+                               ('applied_state', '=', 'no')])
+        points = sum(bags.mapped('points'))
+        if points <= 0:
+            return True
+        if points <= price_subtotal:
+            self.apply_bags(order, points, bags)
+        else:
+            bags_to_change_status = self._get_max_bags_to_apply_points(bags, price_subtotal)
+            self.apply_bags(order, price_subtotal, bags_to_change_status)
+
+    def _get_subtotal_to_apply_points(self, order, mode):
+        """
+        variables:
+        ------------
+        self.product_code: dict[str, list[str]]  i.e.  {'brand_1':['categ_1','categ_2'], 'brand_2':['categ_3','categ_4']}
+            if mode = 'exclude'  if the values for a certain key are empty ([]) it means that it exclude all categories for this brand
+            if mode = 'include' if the values for a certain key are empty ([]) it means that it applies to all categories for this brand
+        :param order: sale.order
+        :param mode: it can be 'include' or 'exclude'.
+        :return: sum of the subtotal prices of the order lines of the order that applies the condition of excluding/including brands
+        """
         price_subtotal = 0
         brand_category_dict = eval(self.product_code)
         for line in order.order_line:
             product_brand = line.product_id.product_brand_id.code
-            if product_brand not in brand_category_dict:
+            categs = brand_category_dict.get(product_brand, False)
+            if ((mode == 'include' and product_brand not in brand_category_dict) or (
+                mode == 'exclude' and product_brand in brand_category_dict)) and not categs:
                 continue
-            categs = brand_category_dict.get(product_brand)
             eval_categ = not categs
             if categs:
                 categ_display_name = line.product_id.categ_id.display_name
-                eval_categ = any([c for c in categs if c in categ_display_name])
+                if mode == 'include':
+                    eval_categ = any([c in categ_display_name for c in categs])
+                else:
+                    eval_categ = all([c not in categ_display_name for c in categs])
             if eval_categ:
                 price_subtotal += line.price_subtotal
+        return price_subtotal
+
+    def _apply_sale_points_programme(self, order, mode):
+        """
+            Apply sale points programme to an order excluding/including brand
+        :param order: sale.order to apply points
+        :param mode: it can be 'include' or 'exclude'.
+        :return: True when finish
+        """
+        price_subtotal = self._get_subtotal_to_apply_points(order, mode)
         if price_subtotal == 0:
             return True
-        rules = rule_obj.search([('name', 'in', eval(self.arguments))])
-        bags = bag_obj.search([('partner_id','=',order.partner_id.id),('point_rule_id','in',rules.ids),('applied_state','=','no')])
-        points = sum([x.points for x in bags])
-        if points <= 0:
-            return True
-
-        if points <= price_subtotal:
-            self.create_y_line_sale_points_programme(order, points,bags)
-            bags.write({'applied_state':'applied', 'order_applied_id':order.id})
-            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
-        else:
-            bags_to_change_status = self.env['res.partner.point.programme.bag']
-            cont_point_applied = 0
-            for bag in bags:
-                rule = bag.point_rule_id
-                if price_subtotal<=cont_point_applied:
-                    break
-                bag_points=bag.points
-                if cont_point_applied + bag_points <= price_subtotal:
-                    cont_point_applied += bag_points
-                    bags_to_change_status += bag
-                else:
-                    diff = price_subtotal - cont_point_applied
-                    old_points = bag.points
-                    bag.points = diff
-                    bag_obj.create({'name': rule.name,
-                                    'point_rule_id': rule.id,
-                                    'order_id': bag.order_id.id,
-                                    'points': old_points-diff,
-                                    'partner_id': bag.partner_id.id})
-                    cont_point_applied = price_subtotal
-                    bags_to_change_status += bag
-            bags_to_change_status.write({'applied_state': 'applied', 'order_applied_id': order.id})
-            self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
-            bag_obj.sudo().with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(
-                bags_to_change_status.mapped('point_rule_id'), order.partner_id)
-
+        self._apply_max_points(order, price_subtotal)
         return True
+
+    def action_sale_points_programme_discount_on_brand(self, order):
+        """
+        Action for: Sale points programme discount on a selected brand
+        """
+        return self._apply_sale_points_programme(order, 'include')
+
+    def action_sale_points_programme_discount_excluding_brands(self, order):
+        """
+        Action for: Sale points programme discount excluding brands
+        """
+        return self._apply_sale_points_programme(order, 'exclude')
 
     def action_brand_price_disc_accumulated(self, order):
         for order_line in order.order_line:
