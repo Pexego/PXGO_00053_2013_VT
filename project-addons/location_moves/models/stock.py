@@ -20,6 +20,7 @@
 
 from odoo import models, api, _, fields
 from odoo.exceptions import ValidationError, Warning
+from datetime import datetime, timedelta
 
 
 class StockLocation(models.Model):
@@ -249,3 +250,23 @@ class StockMove(models.Model):
             wzd = wzd_obj.create({'qty': 1.0})
             wzd.with_context(active_id=move.id).action_move()
         return True
+
+
+class StockPicking(models.Model):
+    _inherit = "stock.picking"
+
+    @api.model
+    def cron_clean_internal_pickings(self):
+        one_week_ago = datetime.now() - timedelta(weeks=1)
+
+        transit_it_location = self.env['stock.location'].search([('name', '=', 'Tránsito Italia')]).id
+
+        pickings = self.env['stock.picking'].search([('state', 'in', ('draft', 'waiting', 'confirmed', 'assigned', 'partially_available')),
+                                                     ('location_id', '!=', transit_it_location),
+                                                     ('picking_type_id.code', '=', 'internal'),
+                                                     ('date', '<', one_week_ago.strftime('%Y-%m-%d'))])
+        pickings.action_cancel()
+
+        pickings_draft = pickings.filtered(lambda p: p.state == 'draft')
+        if pickings_draft:
+            pickings_draft.write({'state': 'cancel'})

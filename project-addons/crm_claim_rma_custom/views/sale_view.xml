@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_pending_rma_filter" model="ir.ui.view">
+    <record id="view_pending_rma_filter_order" model="ir.ui.view">
         <field name="name">view.pending.rma.filter</field>
         <field name="model">sale.order.claim.wizard</field>
         <field name="arch" type="xml">
@@ -21,12 +21,12 @@
         </field>
     </record>
 
-    <record id="action_show_pending_claims" model="ir.actions.act_window">
-        <field name="name">Pending RMA</field>
+    <record id="action_show_pending_claims_order" model="ir.actions.act_window">
+        <field name="name">Pending RMA Order</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.order.claim.wizard</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_pending_rma_filter"/>
+        <field name="view_id" ref="view_pending_rma_filter_order"/>
         <field name="target">new</field>
     </record>
 
@@ -37,12 +37,10 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_view_invoice']" position="before">
                 <button type="object" name="action_view_pending_rma"
-                        class="oe_stat_button"
-                        style="background-color: #ECDDE8;"
-                        attrs="{'invisible': ['|',('rma_pending_count','=',0),('state', 'not in', ['reserve','draft','sent'])]}">
-                    <i class="fa fa-wrench" style="font-size: 24px; color: #875A7B; padding:6px;"/>
-                    <label string="Attach RMA" style="font-weight: normal;"/>
-                    <field name="rma_pending_count" widget="statinfo" string="Adjuntar RMA" style="padding:6px;" attrs="{'invisible':True}"/>
+                        class="oe_stat_button button_rma_pending"
+                        icon="fa-wrench"
+                        attrs="{'invisible': [('rma_pending_count','=',0)]}">
+                    <field name="rma_pending_count" widget="statinfo" string="Attach RMA"/>
                 </button>
             </xpath>
         </field>

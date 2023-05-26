@@ -20,6 +20,7 @@
                     <tree create="false" delete="true" editable="top">
                         <field name="partner_id" readonly="True"/>
                         <field name="product_id" readonly="True"/>
+                        <field name="prodlot_id"/>
                         <field name="product_qty" />
                     </tree>
                 </field>
