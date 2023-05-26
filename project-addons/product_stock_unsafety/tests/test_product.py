@@ -58,3 +58,54 @@ class TestProductProduct(SavepointCase):
     def test_check_cycles_with_no_cycles_and_possible_cycles(self):
         self.product_3.replacement_id = self.product_4
         self.product_3.with_context({'lang': 'en'}).check_cycles(self.product_3)
+
+    def test_onchange_replacement_id_no_changing_final_replacement(self):
+        expected_final_replacement = self.product_1
+
+        self.product_3._origin = self.product_3
+        self.product_3.replacement_id = self.product_4
+        self.product_3.onchange_replacement_id()
+        obtained_final_replacement = self.product_3.final_replacement_id
+
+        self.assertEquals(expected_final_replacement, obtained_final_replacement)
+
+    def test_onchange_replacement_id_changing_final_replacement(self):
+        expected_final_replacement = self.product_1
+
+        self.product_5._origin = self.product_5
+        self.product_5.replacement_id = self.product_4
+        self.product_5.onchange_replacement_id()
+        obtained_final_replacement = self.product_5.final_replacement_id
+
+        self.assertEquals(expected_final_replacement, obtained_final_replacement)
+
+    def test_onchange_replacement_id_setting_empty_replacement(self):
+        empty_product = self.product_5.replacement_id
+        expected_final_replacement = empty_product
+
+        self.product_2._origin = self.product_2
+        self.product_2.replacement_id = False
+        self.product_2.onchange_replacement_id()
+        obtained_final_replacement = self.product_2.final_replacement_id
+
+        self.assertEquals(expected_final_replacement, obtained_final_replacement)
+
+    def test_onchange_replacement_id_setting_product_with_no_replacement(self):
+        expected_final_replacement = self.product_5
+
+        self.product_3._origin = self.product_3
+        self.product_3.replacement_id = self.product_5
+        self.product_3.onchange_replacement_id()
+        obtained_final_replacement = self.product_3.final_replacement_id
+
+        self.assertEquals(expected_final_replacement, obtained_final_replacement)
+
+    def test_onchange_replacement_id_setting_product_to_product_with_no_replacement(self):
+        expected_final_replacement = self.product_5
+
+        self.product_1._origin = self.product_1
+        self.product_1.replacement_id = self.product_5
+        self.product_1.onchange_replacement_id()
+        obtained_final_replacement = self.product_1.final_replacement_id
+
+        self.assertEquals(expected_final_replacement, obtained_final_replacement)
