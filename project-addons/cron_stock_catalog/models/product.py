@@ -65,7 +65,7 @@ class ProductProduct(models.Model):
                   ('product_tmpl_id', 'in', products_real_time_ids)]
 
         fields = ["display_name", "qty_available", "standard_price", "cost_method", "categ_id", "product_brand_id",
-                  "seller_ids", "last_supplier_id"]
+                  "last_supplier_id"]
         rows = []
         if to_date:
             products = self.env['product.product'].with_context(company_owned=True, owner_id=False,
