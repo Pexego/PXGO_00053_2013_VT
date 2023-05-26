@@ -37,8 +37,7 @@ class SaleOrder(models.Model):
 
         for line in lines:
             qty = line.qty if mode == "claim" else line.product_uom_qty
-            amount = line.sale_line_id.price_subtotal / (
-                    (line.sale_line_id.product_uom_qty * line.product_uom_qty) or 1) \
+            amount = line.sale_line_id.price_subtotal / (line.sale_line_id.product_uom_qty or 1) * line.product_uom_qty \
                 if mode == "move" else line.price_subtotal
             categ = line.product_id.categ_id.id
             product = line.product_id.id
