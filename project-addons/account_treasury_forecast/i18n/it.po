@@ -459,10 +459,16 @@ msgid "Transfers filters"
 msgstr "Filtri di trasferimento"
 
 #. module: account_treasury_forecast
-#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:48
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:150
 #, python-format
-msgid "Error!:: You must select one option for payment mode fields."
-msgstr "¡Errore!:: Selezionare una opzione nei campi di pagamento."
+msgid "Error!:: You must select one option for customer payment mode fields."
+msgstr "¡Error!:: Debe seleccionar una opción en los campos de método de pago de cliente."
+
+#. module: account_treasury_forecast
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:153
+#, python-format
+msgid "Error!:: You must select one option for supplier payment mode fields."
+msgstr "¡Error!:: Debe seleccionar una opción en los campos de método de pago de proveedor."
 
 #. module: account_treasury_forecast
 #: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:57

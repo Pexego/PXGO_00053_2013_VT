@@ -145,9 +145,12 @@ class AccountTreasuryForecast(models.Model):
                     'payment_mode_supplier_m2m', 'check_old_open_supplier',
                     'opened_start_date_customer', 'opened_start_date_supplier', 'start_date')
     def check_filter(self):
-        if not self.payment_mode_customer_m2m or not self.payment_mode_supplier_m2m:
+        if not self.payment_mode_customer_m2m:
             raise exceptions.Warning(
-                _('Error!:: You must select one option for payment mode fields.'))
+                _('Error!:: You must select one option for customer payment mode fields.'))
+        if not self.payment_mode_supplier_m2m:
+            raise exceptions.Warning(
+                _('Error!:: You must select one option for supplier payment mode fields.'))
         elif ('debit_receipt' not in self.payment_mode_customer_m2m.mapped('treasury_forecast_type')
               and self.check_old_open_customer
               and self.opened_start_date_customer >= self.start_date):
