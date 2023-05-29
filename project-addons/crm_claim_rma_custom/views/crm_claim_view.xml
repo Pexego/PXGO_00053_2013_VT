@@ -77,7 +77,7 @@
                 <field name="deposit_id" invisible="1" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 <field name="amazon_rma" attrs="{'invisible':['|',('partner_name','=',False),'!',('partner_name', 'like', 'amazon')]}"/>
                 <field name="partner_name" invisible="1"/>
-                <field name="advance_material" attrs="{'invisible':[('name','!=','rma')]}"/>
+                <field name="advance_material"/>
             </field>
             <field name="model_ref_id" position="after">
                 <field name="client_ref" />
