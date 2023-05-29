@@ -196,7 +196,7 @@ class ClaimLine(models.Model):
             help='The move line related to the returned product')
 
     move_ids = fields.One2many('stock.move', 'claim_line_id')
-    categ_id = fields.Many2one("product.category", "Product Category", readonly=True, related="product_id.categ_id")
+    categ_id = fields.Many2one("product.category", "Categoría de producto", readonly=True, related="product_id.categ_id")
 
     @api.onchange('prodlot_id')
     def onchange_prodlot_id(self):
