@@ -33,7 +33,7 @@ msgstr "RMA Recibidos"
 #. module: crm_claim_rma_custom
 #: model:ir.ui.menu,name:crm_claim_rma_custom.menu_crm_case_claims
 msgid "Received Claims"
-msgstr "RMAs Recividos"
+msgstr "RMAs Recibidos"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_bool_category_id
