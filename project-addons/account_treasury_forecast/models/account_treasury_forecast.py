@@ -141,8 +141,8 @@ class AccountTreasuryForecast(models.Model):
                 raise exceptions.Warning(_('Error!:: End date is lower than start date.'))
 
     @api.one
-    @api.constrains('payment_mode_customer_m2m', 'check_old_open_customer_m2m',
-                    'payment_mode_supplier', 'check_old_open_supplier',
+    @api.constrains('payment_mode_customer_m2m', 'check_old_open_customer',
+                    'payment_mode_supplier_m2m', 'check_old_open_supplier',
                     'opened_start_date_customer', 'opened_start_date_supplier', 'start_date')
     def check_filter(self):
         if not self.payment_mode_customer_m2m or not self.payment_mode_supplier_m2m:
