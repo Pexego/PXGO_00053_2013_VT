@@ -698,3 +698,20 @@ msgstr "Non ci sono prodotti con il nome %s"
 #: selection:promos.rules.conditions.exps,attribute:0
 msgid "Order Pricelist Brand"
 msgstr "Marca di listino"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Sale points programme discount on Brand"
+msgstr "Sconto per il programma di punti in marchi"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Sale points programme discount Excluding Brand"
+msgstr "Sconto per il programma di punti escluso marchi "
+
+#. module: sale_promotions_extend
+#: model:ir.model.fields,field_description:sale_promotions_extend.field_res_partner_no_promos
+msgid "Not apply promotions"
+msgstr "Non applicare promozioni"

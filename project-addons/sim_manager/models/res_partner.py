@@ -126,6 +126,12 @@ class ResPartner(models.Model):
                                     invoice.write({'payment_mode_id': rb_payment.id if rb_payment else rd_payment.id,
                                                    'partner_bank_id': valid_mandates[0].partner_bank_id.id,
                                                    'mandate_id': valid_mandates[0].id})
+                            end_month_30_days = self.env['account.payment.term'].search([('name', '=', '30 gg FM')])
+                            if (
+                                invoice.payment_mode_id.name == 'Ricevuta bancaria'
+                                and invoice.payment_term_id.name != end_month_30_days.name
+                            ):  # only in Italy
+                                invoice.write({'payment_term_id': end_month_30_days.id})
                             invoice.action_invoice_open()
                             if prepaid_condition and len(valid_mandates) <= 0:
                                 mail_bank_error_message += self.create_row_email(invoice.number, invoice.user_id.name, partner.name)
@@ -170,6 +176,7 @@ class ResPartner(models.Model):
                     <th>Comercial</th>
                     <th>Cliente</th>
                 <tr>"""
+
 
 class PartnerListener(Component):
     _inherit = 'partner.event.listener'
