@@ -890,6 +890,11 @@ BIC: CAIXESBBXXX
                                 <strong style="color:#6D6E70" t-field="o.number"/>
                             </div>
                         </t>
+                        <t t-if="o.origin and o.type == 'out_refund'">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Original invoice:
+                                <strong style="color:#6D6E70" t-field="o.origin"/>
+                            </div>
+                        </t>
                         <t t-if="o.partner_id.amazon_parent_id and o.partner_id.vat">
                             <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
                                 <span style="font-weight: normal; color:#6D6E70"

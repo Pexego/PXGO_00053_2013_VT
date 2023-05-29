@@ -1120,3 +1120,9 @@ msgstr "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924,
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "OFFER VALID FOR 30 DAYS"
 msgstr "OFFRE VALABLE PENDANT 30 JOURS"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_account_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Original invoice"
+msgstr "Facture originale"
