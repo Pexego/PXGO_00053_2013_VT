@@ -38,13 +38,10 @@ class SaleOrder(models.Model):
 
     @api.multi
     def compute_variables(self):
-        new = self.env['picking.rated.wizard'].create({'sale_order_id': self})
-        data_list = self.env['picking.rated.wizard.tree']
-        content = data_list.search([('order_id', '=', self.id)])
+        create_picking_rated_wizard = self.env['picking.rated.wizard'].create
         message_error = ""
-        if content:
-            content.unlink()
         for order in self:
+            new = create_picking_rated_wizard(order.get_picking_rated_attrs())
             shipment_groups = order.env['res.country.group'].search([
                 ('shipment', '=', True), ('country_ids', 'in', order.partner_shipping_id.country_id.id)
             ])
@@ -103,20 +100,12 @@ class SaleOrder(models.Model):
                             transporter_name=transporter.name,
                             message=e.message
                         )
+            if message_error:
+                new.message_error = message_error
 
-        if message_error:
-            new.message_error = message_error
-        return {
-            'name': 'Shipping Data Information',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'target': 'new',
-            'res_model': 'picking.rated.wizard',
-            'src_model': 'stock.picking',
-            'res_id': new.id,
-            'type': 'ir.actions.act_window',
-            'id': 'action_picking_rated_status',
-        }
+        action_to_return = self.env.ref('sale_order_board.action_open_picking_rated_wizard').read()[0]
+        action_to_return['res_id'] = new.id
+        return action_to_return
 
     def _add_services_cost_DHL(self, picking_rated, package_weight=0, **kwargs):
         """
@@ -692,6 +681,38 @@ class SaleOrder(models.Model):
         volume_weight_translator = self.sudo().transporter_id.weight_volume_translation
         volume_weight = self.get_sale_order_volume() * volume_weight_translator
         return max(volume_weight, self.get_sale_order_weight())
+
+    def get_picking_rated_attrs(self):
+        """
+        Returns a dictionary with all values needed from the sale_order to create a picking_rated_wizard
+        """
+        message_products_weight = ''
+        message_products_volume = ''
+        products_without_weight = self.get_product_list_without_weight()
+        products_without_volume = self.get_product_list_without_volume()
+        number_product_without_weight = len(products_without_weight)
+        number_product_without_volume = len(products_without_volume)
+        product_names_without_weight = ", ".join(products_without_weight.mapped('default_code'))
+        product_names_without_volume = ", ".join(products_without_volume.mapped('default_code'))
+
+        if number_product_without_weight != 0:
+            message_products_weight = (
+                                          "%s of the product(s) of the order don't have set the weights,"
+                                          " please take the shipping cost as an approximation"
+                                      ) % number_product_without_weight
+        if number_product_without_volume != 0:
+            message_products_volume = (
+                                          "%s of the product(s) of the order don't have set the volumes,"
+                                          " please take the shipping cost as an approximation"
+                                      ) % number_product_without_volume
+        return {
+            'total_weight': self.get_sale_order_weight(),
+            'message_products_weight': message_products_weight,
+            'product_names_without_weight': product_names_without_weight,
+            'total_volume': self.get_sale_order_volume(),
+            'message_products_volume': message_products_volume,
+            'product_names_without_volume': product_names_without_volume
+        }
 
 
 class TransportationTransporter(models.Model):
