@@ -289,21 +289,26 @@ class SaleOrder(models.Model):
         if isinstance(res, bool):
             for sale in self:
                 products_to_order = ''
+                partner_name = ''
                 for line in sale.order_line.filtered(lambda l: l.product_id.state == 'make_to_order'):
                     products_to_order = products_to_order + \
                                         line.product_id.default_code + ' -> ' + \
                                         str(line.product_uom_qty) + '    '
+
+                    partner_name = line.order_id.partner_id.name
+
                 if products_to_order:
-                    sale.send_email_to_purchases(products_to_order)
+                    sale.send_email_to_purchases(products_to_order, partner_name)
         return res
 
     @api.multi
-    def send_email_to_purchases(self, products_to_order):
+    def send_email_to_purchases(self, products_to_order, partner_name):
         self.ensure_one()
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
         context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         context['products_to_order'] = products_to_order
+        context['partner_name'] = partner_name
         context.pop('default_state', False)
 
         template_id = self.env.ref('sale_custom.email_template_purchase_product_to_order')
