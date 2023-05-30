@@ -87,13 +87,14 @@
                             <page string="Out invoices">
                                 <group colspan="4" col="4">
                                     <separator string="Payment mode" colspan="4"/>
-                                    <field name="payment_mode_customer" string="Choose the payment mode" colspan="4"/>
-                                    <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
+                                    <field name="payment_mode_customer_m2m" string="Choose the payment mode" colspan="4" widget="many2many_tags"/>
+                                    <field name="has_transfer_payments_customer" colspan="4" invisible="1"/>
+                                    <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('has_transfer_payments_customer', '=', False)]}"/>
                                     <group col="4" colspan="4">
-                                        <field name="account_bank" colspan="4" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
-                                        <field name="check_old_open_customer" colspan="2" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
+                                        <field name="account_bank" colspan="4" attrs="{'invisible':[('has_transfer_payments_customer', '=', False)]}"/>
+                                        <field name="check_old_open_customer" colspan="2" attrs="{'invisible':[('has_transfer_payments_customer', '=', False)]}"/>
                                         <field name="opened_start_date_customer" colspan="2" attrs="{'invisible':['|', ('check_old_open_customer', '=', False),
-                                                                                                               ('payment_mode_customer', '=', 'debit_receipt')],
+                                                                                                               ('has_transfer_payments_customer', '=', False)],
                                                                                                      'required': [('check_old_open_customer', '=', True)]}"/>
                                     </group>
                                     <separator string="" colspan="4" />
@@ -103,15 +104,16 @@
                             <page string="In invoices">
                                 <group colspan="4" col="4">
                                     <separator string="Payment mode" colspan="4"/>
-                                    <field name="payment_mode_supplier" string="Choose the payment mode" colspan="4"/>
-                                    <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
+                                    <field name="payment_mode_supplier_m2m" string="Choose the payment mode" colspan="4" widget="many2many_tags"/>
+                                    <field name="has_transfer_payments_supplier" colspan="4" invisible="1"/>
+                                    <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('has_transfer_payments_supplier', '=', False)]}"/>
                                     <group col="4" colspan="4">
                                         <group col="2" colspan="2">
-                                            <field name="check_old_open_supplier" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
-                                            <field name="not_bankable_supplier" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
+                                            <field name="check_old_open_supplier" attrs="{'invisible':[('has_transfer_payments_supplier', '=', False)]}"/>
+                                            <field name="not_bankable_supplier" attrs="{'invisible':[('has_transfer_payments_supplier', '=', False)]}"/>
                                         </group>
                                         <field name="opened_start_date_supplier" colspan="2" attrs="{'invisible':['|', ('check_old_open_supplier', '=', False),
-                                                                                                               ('payment_mode_supplier', '=', 'debit_receipt')],
+                                                                                                               ('has_transfer_payments_supplier', '=', False)],
                                                                                                      'required': [('check_old_open_supplier', '=', True)]}"/>
                                     </group>
                                     <separator string="" colspan="4" />
