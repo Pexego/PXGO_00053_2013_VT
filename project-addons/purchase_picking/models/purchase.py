@@ -164,7 +164,7 @@ class PurchaseOrder(models.Model):
         """
         super()._get_invoiced()
         for order in self:
-            if order.force_invoiced or all(line.qty_invoiced == line.product_qty for line in order.order_line):
+            if order.force_invoiced:
                 order.invoice_status = 'invoiced'
             elif order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
                 order.invoice_status = 'partially'
