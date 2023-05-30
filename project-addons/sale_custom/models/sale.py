@@ -123,7 +123,7 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     pricelist_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
-    force_generic_product = fields.Boolean(default=False)
+    force_generic_product = fields.Boolean(default=False, copy=False)
 
     is_editable = fields.Boolean(compute='_get_is_editable', default=True)
 
