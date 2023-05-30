@@ -958,3 +958,8 @@ msgstr "VISIOTECH - Produtos enviados"
 #: model:mail.template,report_name:crm_claim_rma.picking_done_template_claim
 msgid "Picking_${(object.name or '').replace('/','_')}"
 msgstr "Nota_${(object.name or '').replace('/','_')}"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_categ_id
+msgid "Product category"
+msgstr "Categoria de Produto"
