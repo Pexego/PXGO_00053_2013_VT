@@ -103,11 +103,21 @@ class ResPartnerRappelRel(models.Model):
     @staticmethod
     def _get_total_amount_for_lines(field, invoice_lines, refund_lines):
         """
+        Calculates total amount for given lines and field.
+        Total is the difference of the summations of invoice_lines and refund_lines.
 
-        :param field:
-        :param invoice_lines:
-        :param refund_lines:
-        :return:
+        Parameters:
+        ----------
+        field: str
+            Rappel field from where to calculate summations
+        invoice_lines: account.invoice.line
+            Lines from invoices
+        refund_lines: account.invoice.line
+            Lines from refund
+        Returns:
+        -------
+            Float
+        Difference of the summation of invoice_lines and the summation of refund_lines
         """
         invoice_lines_for_rappel_quantity = invoice_lines.filtered(
             lambda line: not line.no_rappel
@@ -122,12 +132,23 @@ class ResPartnerRappelRel(models.Model):
 
     def _compute_rappel_fixed_mode(self, rappel_info, field, invoice_lines, refund_lines):
         """
+        Calculates total_rappel and goal_percentage for fixed rappels
 
-        :param rappel_info:
-        :param field:
-        :param invoice_lines:
-        :param refund_lines:
-        :return:
+        Parameters:
+        ----------
+        rappel_info: Dict[str, Any]
+            Rappel fields in dictionary format
+        field: str
+            Rappel field to calculate total amount
+        invoice_lines: account.invoice.line
+            Lines from invoices
+        refund_lines: account.invoice.line
+            Lines from refund
+
+        Returns:
+        -------
+            Tuple[Float, Float]
+        Amounts of total_rappel and goal_percentage
         """
         total_rappel = 0.0
         total_rappel_est = 0.0
@@ -151,12 +172,23 @@ class ResPartnerRappelRel(models.Model):
 
     def _compute_rappel_variable_mode(self, rappel_info, field, invoice_lines, refund_lines):
         """
+        Calculates total_rappel and goal_percentage for variable rappels
 
-        :param rappel_info:
-        :param field:
-        :param invoice_lines:
-        :param refund_lines:
-        :return:
+        Parameters:
+        ----------
+        rappel_info: Dict[str, Any]
+            Rappel fields in dictionary format
+        field: str
+            Rappel field to calculate total amount
+        invoice_lines: account.invoice.line
+            Lines from invoices
+        refund_lines: account.invoice.line
+            Lines from refund
+
+        Returns:
+        -------
+            Tuple[Float, Float]
+        Amounts of total_rappel and goal_percentage
         """
         total_rappel = 0.0
         goal_percentage = 0
@@ -186,6 +218,7 @@ class ResPartnerRappelRel(models.Model):
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
         rappel_calculated_obj = self.env['rappel.calculated']
         for rappel in self:
+            # TODO: Añadir aqui las líneas que no entran por definición
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
                            'date_start': period[0],
