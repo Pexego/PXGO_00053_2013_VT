@@ -30,23 +30,40 @@ class ResPartnerRappelRel(models.Model):
             period = False
         return period
 
-    def _get_invoices(self, period, products):
-        super()._get_invoices(period, products)
+    def _get_invoices_for_rappel(self, period):
+        """
+        Returns invoices related to the rappel
+
+        Parameter:
+        ---------
+        period: List[datetime]
+            Invoice search period
+        Returns:
+        -------
+            Tuple[account.invoice]
+        Invoices and refunds
+        """
+        search_invoices = self.env['account.invoice'].search
         company_id = self.rappel_id.company_id.id
-        invoices = self.env['account.invoice'].search(
+        invoices = search_invoices(
             [('type', '=', 'out_invoice'),
              ('date_invoice', '>=', period[0]),
              ('date_invoice', '<=', period[1]),
              ('state', 'in', ['open', 'paid']),
              ('commercial_partner_id', '=', self.partner_id.id),
              ('company_id', '=', company_id)])
-        refunds = self.env['account.invoice'].search(
+        refunds = search_invoices(
             [('type', '=', 'out_refund'),
              ('date_invoice', '>=', period[0]),
              ('date_invoice', '<=', period[1]),
              ('state', 'in', ['open', 'paid']),
              ('commercial_partner_id', '=', self.partner_id.id),
              ('company_id', '=', company_id)])
+        return invoices, refunds
+
+    def _get_invoices(self, period, products):
+        super()._get_invoices(period, products)
+        invoices, refunds = self._get_invoices_for_rappel(period)
         pricelist_ids = tuple(self.rappel_id.pricelist_ids.ids)
         domain_lines = []
         if pricelist_ids:
