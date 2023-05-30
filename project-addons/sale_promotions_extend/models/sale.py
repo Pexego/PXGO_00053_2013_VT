@@ -91,6 +91,13 @@ class SaleOrder(models.Model):
         "Not apply promotions",
         help="Reload the prices after marking this check")
 
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        super().onchange_partner_id()
+        if self.partner_id:
+            self.no_promos = self.partner_id.no_promos
+
     def apply_commercial_rules(self):
         context2 = dict(self._context)
         context2.pop('default_state', False)

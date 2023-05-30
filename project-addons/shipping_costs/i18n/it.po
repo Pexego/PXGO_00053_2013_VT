@@ -39,6 +39,7 @@ msgstr "Nazioni"
 #: model:ir.model,name:shipping_costs.model_res_country
 #: model:ir.model.fields,field_description:shipping_costs.field_postal_code_format_country_ids
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_zone_country_id
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_country_id
 msgid "Country"
 msgstr "Nazione"
 
@@ -406,4 +407,47 @@ msgstr "transportation.transporter"
 #: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_weight_volume_translation
 msgid "Translation (kg/cbm)"
 msgstr "Conversione (kg/cbm)"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_shipping_weight
+msgid "Shipping weight (kg)"
+msgstr "Peso di spedizione (kg)"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_shipping_volume
+msgid "Shipping volume (m3)"
+msgstr "Volume di spedizione (m3)"
+
+#. module: shipping_costs
+#: model:ir.model.fields,field_description:shipping_costs.field_shipping_cost_calculator_zip_code
+msgid "Zip code"
+msgstr "Codice postale"
+
+#. module: shipping_costs
+#: model:ir.actions.act_window,name:shipping_costs.action_open_shipping_cost_calculator_view
+#: model:ir.ui.menu,name:shipping_costs.shipping_cost_calculator_item
+msgid "Shipping Costs Caculator"
+msgstr "Calcolatore dei costi di spedizione"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_calculator_form
+msgid "Calculate"
+msgstr "Calcolare"
+
+#. module: shipping_costs
+#: model:ir.ui.view,arch_db:shipping_costs.shipping_cost_calculator_form
+msgid "Cancel"
+msgstr "Annullamento"
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:276
+#, python-format
+msgid "Invalid values to calculate shipping costs. Please, try changing values."
+msgstr "Valori errati per il calcolo delle spese di spedizione. Provare a modificare i valori."
+
+#. module: shipping_costs
+#: code:addons/shipping_costs/models/shipping_cost.py:283
+#, python-format
+msgid "There are no zones embedding "%s". Please, try with another zip code."
+msgstr "Non ci sono aree contenenti "%s". Provare con un altro codice postale."
 

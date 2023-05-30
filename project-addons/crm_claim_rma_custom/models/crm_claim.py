@@ -122,8 +122,8 @@ class CrmClaimRma(models.Model):
             stage_ids.append(stage_repaired_id)
             stage_pending_shipping_id = self.env.ref('crm_claim_rma_custom.stage_claim6').id
             stage_ids.append(stage_pending_shipping_id)
+            stage_received_id = self.env.ref('crm_claim_rma_custom.stage_claim_received').id
 
-            stage_received_id = self.env['crm.claim.stage'].search([('name', '=', 'Recibido')]).id
             if vals['stage_id'] == stage_received_id and \
                     not (self.warehouse_location or vals.get('warehouse_location', False)):
                 raise exceptions.UserError(_('Please, select the warehouse location of the RMA'))
