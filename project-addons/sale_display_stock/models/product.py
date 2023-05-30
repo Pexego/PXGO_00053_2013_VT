@@ -208,11 +208,23 @@ class ProductProduct(models.Model):
 
     @api.multi
     def _compute_reservation_count(self):
-        super()._compute_reservation_count()
+        """
+            Overrides the original function in order to calculate the reservation_count as the sum of the
+            stock.reservation quantity of sale.orders + stock.move quantity of the mrp.productions
+            that are not in progress
+        """
         for product in self:
+            # Get the stock.reservation's quantity of sale.orders
+            domain_reser = [('product_id', '=', product.id),
+                            ('state', 'in', ['draft', 'confirmed', 'assigned', 'partially_available']),
+                            ('mrp_id', '=', False)]
+            reservations = self.env['stock.reservation'].search(domain_reser)
+            reservation_count = sum(reservations.mapped('product_qty'))
+            # Get the stock.move's quantity of the mrp.productions that are not in progress
             domain = [('product_id', 'in', product.product_variant_ids.ids),
                       ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
                       ('raw_material_production_id', '!=', False),
                       ('picking_id', '=', False)]
-            product.reservation_count += sum(
+            reservation_count += sum(
                 item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain, ['product_uom_qty']))
+            product.reservation_count = reservation_count
