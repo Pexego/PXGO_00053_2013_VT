@@ -15,4 +15,9 @@
         <field name="sequence">29</field>
         <field name="case_default" eval="True"/>
     </record>
+    <record model="crm.claim.stage" id="stage_claim_received">
+        <field name="name">Recibido a borrar</field>
+        <field name="sequence">30</field>
+        <field name="case_default" eval="True"/>
+    </record>
 </odoo>

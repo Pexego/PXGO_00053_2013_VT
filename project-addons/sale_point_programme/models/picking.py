@@ -43,10 +43,10 @@ class StockPicking(models.Model):
 
     @api.multi
     def action_cancel(self):
+        pickings = self.filtered(lambda p:p.sale_id and p.state!='cancel')
         res = super(StockPicking, self).action_cancel()
-        for picking in self:
-            if picking.sale_id:
-                picking.create_negative_points_programme_bag()
+        for picking in pickings:
+            picking.create_negative_points_programme_bag()
         return res
 
     @api.multi

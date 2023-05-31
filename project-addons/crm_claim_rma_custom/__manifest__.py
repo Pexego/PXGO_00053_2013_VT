@@ -43,6 +43,7 @@
     "data": [
              'views/assets.xml',
              'data/groups.xml',
+             'data/stage_data.xml',
              'views/crm_claim_view.xml',
              'data/substate_data.xml',
              'security/ir.model.access.csv',
@@ -51,7 +52,6 @@
              'wizard/claim_make_picking_from_picking_view.xml',
              'report/crm_claim_report_view.xml',
              'wizard/invoice_discount_wiz.xml',
-             'data/stage_data.xml',
              'views/res_users_view.xml',
              'data/email_layout.xml',
              'views/res_partner_view.xml',
