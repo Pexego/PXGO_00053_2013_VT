@@ -30,6 +30,35 @@ class ResPartnerRappelRel(models.Model):
             period = False
         return period
 
+    def _get_excluded_invoice_lines(self, period):
+        """
+        Returns excluded invoice lines from rappel because of the definition of the rappel
+
+        Parameter:
+        ---------
+        period: List[datetime]
+            Invoice search period
+
+        Returns:
+        -------
+            List[Int]
+        Excluded invoice lines
+        """
+        if self.rappel_id.global_application:
+            # if rappel has global_application there is nothing excluded
+            return []
+        invoices, refunds = self._get_invoices_for_rappel(period)
+        products = self.rappel_id.get_products()
+        domain_lines = [('invoice_id', 'in', refunds.ids + invoices.ids),
+                        ('product_id', 'not in', products)]
+
+        pricelist_ids = tuple(self.rappel_id.pricelist_ids.ids)
+        if pricelist_ids:
+            domain_lines += [('sale_line_ids.order_id.pricelist_id', 'in', pricelist_ids)]
+
+        invoice_lines = self.env['account.invoice.line'].search(domain_lines)
+        return invoice_lines.ids
+
     def _get_invoices_for_rappel(self, period):
         """
         Returns invoices related to the rappel
@@ -218,13 +247,14 @@ class ResPartnerRappelRel(models.Model):
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
         rappel_calculated_obj = self.env['rappel.calculated']
         for rappel in self:
-            # TODO: Añadir aqui las líneas que no entran por definición
+            excluded_line_ids = rappel._get_excluded_invoice_lines(period)
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
                            'date_start': period[0],
                            'amount': 0.0,
                            'amount_est': 0.0,
-                           'date_end': period[1]}
+                           'date_end': period[1],
+                           'excluded_invoice_line_ids': [(6, 0, excluded_line_ids)]}
             field = 'price_subtotal'
             if rappel.rappel_id.calc_mode == 'fixed':
                 total_rappel, goal_percentage = rappel._compute_rappel_fixed_mode(
@@ -252,7 +282,8 @@ class ResPartnerRappelRel(models.Model):
                         'quantity': total_rappel,
                         'rappel_id': rappel.rappel_id.id,
                         'goal_percentage': goal_percentage,
-                        'invoice_line_ids': total_invoice_ids
+                        'invoice_line_ids': total_invoice_ids,
+                        'excluded_invoice_line_ids': [(6, 0, excluded_line_ids)]
                     })
                     if rappel.rappel_id.discount_voucher and total_rappel > 0:
                         rappel_to_invoice = []

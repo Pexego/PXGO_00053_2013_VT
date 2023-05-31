@@ -235,6 +235,12 @@ msgstr "Líneas sin rappel"
 #. module: rappel_custom
 #: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
 #: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
+msgid "Excluded invoice lines"
+msgstr "Líneas excluídas por definición"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_calculated_form_extend
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_current_info_form
 msgid "Total qty"
 msgstr "Cantidad total"
 
