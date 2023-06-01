@@ -1,5 +1,7 @@
 from odoo import models, fields, api, _
 import math
+from odoo.exceptions import UserError
+from odoo.addons import decimal_precision as dp
 
 
 COMPARATORS = [
@@ -72,6 +74,42 @@ class ShippingCost(models.Model):
                         _('Error!:: Services must be offered by the transporter selected.')
                     )
 
+    def get_fee_price_by_weight(self, shipping_weight):
+        """
+        Searches among fees where type is weight and selects the one that fits more to the sale order
+        Returns the price of that fee.
+
+        Parameters:
+        ----------
+        shipping_weight:
+            Shipping weight
+        """
+        fee_ids = self.fee_ids.filtered(
+            lambda fee: fee.type == 'total_weight' and fee.max_qty >= shipping_weight
+        )
+        if len(fee_ids) == 0:
+            return None
+        fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
+        return fee_sorted[0].price
+
+    def get_fee_price_by_pallet(self, pallet_number):
+        """
+        Searches among fees where type is pallet and selects the one that fits more to the sale order
+        Returns the price of that fee.
+
+        Parameters:
+        ----------
+        pallet_number:
+            Number of pallets of the shipping
+        """
+        fee_ids = self.fee_ids.filtered(
+            lambda fee: fee.type == 'pallet' and fee.max_qty >= pallet_number
+        )
+        if len(fee_ids) == 0:
+            return None
+        fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
+        return fee_sorted[0].price
+
 
 class ShippingCostCondition(models.Model):
     """
@@ -136,74 +174,172 @@ class SaleOrderShippingCost(models.TransientModel):
 
     sale_order_id = fields.Many2one("sale.order", "Sale Order")
     shipping_cost_id = fields.Many2one("shipping.cost", "Shipping Cost")
-    pallet_number = fields.Integer(string="Pallet number", compute="_get_pallet_number")
-    sale_order_weight = fields.Float(string="Sale order weight", compute="_get_sale_order_weight")
-    sale_order_volume = fields.Float(string="Sale order volume", compute="_get_sale_order_volume")
 
-    def calculate_shipping_cost(self, pallet_mode=True):
+    def calculate_shipping_cost(self, shipping_volume, shipping_weight, mode):
         """
         Returns the final cost list of the sale order shipping
+
+        Parameters:
+        ----------
+        pallet_number:
+            Number of pallets of the shipping
+        shipping_weight:
+            Shipping weight
+        mode:
+            Tipe of price calculator
         """
-        if pallet_mode:
-            base_fee_price = self._get_fee_price(mode='pallet')
-        else:
-            base_fee_price = self._get_fee_price(mode='total_weight')
-        # if no base_fee_price, then no fee
+        base_fee_price = self.get_fee_price(
+            self._get_pallet_number(shipping_volume),
+            shipping_weight,
+            mode
+        )
         if base_fee_price is None:
             return []
+
+        return self.get_service_price_list(base_fee_price)
+
+    def get_service_price_list(self, base_fee_price):
+        """
+        Returns a list with services and its final price based on the price given.
+
+        Parameters:
+        ----------
+        base_fee_price:
+            Price on which fuel and supplements fees are going to be applied
+        """
 
         fuel_added_price = base_fee_price * (1 + self.shipping_cost_id.fuel / 100)
         service_price_list = [
             {
                 'price': round(fuel_added_price * (1 + supplement.added_percentage / 100), 2),
                 'service_name': f'{supplement.service_id.name}',
-                'sale_order_shipping_cost_id': self.id
+                'sale_order_shipping_cost_id': self.id,
+                'weight_volume_translation': self.shipping_cost_id.weight_volume_translation
             }
-            for supplement in self.sudo().shipping_cost_id.supplement_ids
+            for supplement in self.shipping_cost_id.supplement_ids
         ]
-
         return service_price_list
 
-    def _get_fee_price(self, mode):
+    def get_fee_price(self, pallet_number, shipping_weight, mode):
         """
-        Searches among fees where type is mode and selects the one that fits more to the sale order
-        Returns the price of that fee.
+        Calls the correct fee price calculator depending on mode.
+        Returns the fee price that fits the best to the parameters given
+
+        Parameters:
+        ----------
+        pallet_number:
+            Number of pallets of the shipping
+        shipping_weight:
+            Shipping weight
+        mode:
+            Tipe of price calculator
         """
-        fee_ids = self.sudo().shipping_cost_id.fee_ids.filtered(lambda fee: fee.type == mode)
         if mode == 'pallet':
-            fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sudo().pallet_number)
+            return self.shipping_cost_id.get_fee_price_by_pallet(pallet_number)
         if mode == 'total_weight':
-            fee_ids = fee_ids.sudo().filtered(lambda fee: fee.max_qty >= self.sale_order_id.get_shipping_weight())
-        if len(fee_ids) == 0:
-            return None
-        fee_sorted = fee_ids.sorted(lambda fee: fee.max_qty)
-        return fee_sorted[0].price
+            return self.shipping_cost_id.get_fee_price_by_weight(shipping_weight)
 
-    def _get_pallet_number(self):
+    def _get_pallet_number(self, shipping_volume):
         """
-        Returns the pallet number of the sale_order shipping
+        Returns the pallet number of the shipping. Divides the volume by pallet volume
+
+        Parameters:
+        ----------
+        shipping_volume:
+            Volume that the shipping has
         """
-        for so_shipping_cost in self:
-            try:
-                so_shipping_cost.pallet_number = math.ceil(
-                    so_shipping_cost.sale_order_volume * (
-                        1 / so_shipping_cost.shipping_cost_id.volume
-                    )
+        try:
+            return math.ceil(
+                shipping_volume * (
+                    1 / self.shipping_cost_id.volume
                 )
-            except ZeroDivisionError:
-                # we consider as default pallet volume 1 cbm
-                so_shipping_cost.pallet_number = so_shipping_cost.sale_order_volume
+            )
+        except ZeroDivisionError:
+            # we consider as default pallet volume 1 cbm
+            return shipping_volume
 
-    def _get_sale_order_weight(self):
-        """
-        Calculates sale_order weight
-        """
-        for so_shipping_cost in self:
-            so_shipping_cost.sale_order_weight = so_shipping_cost.sale_order_id.get_sale_order_weight()
 
-    def _get_sale_order_volume(self):
+class ShippingCostCalculator(models.TransientModel):
+    _name = 'shipping.cost.calculator'
+
+    shipping_weight = fields.Float(
+        'Shipping weight (kg)', required=True, digits=dp.get_precision('Stock Weight')
+    )
+    shipping_volume = fields.Float(
+        'Shipping volume (m3)', required=True, digits=dp.get_precision('Stock Weight')
+    )
+    zip_code = fields.Char('Zip code', required=True)
+    country_id = fields.Many2one('res.country', string='Country', required=True)
+
+    def calculate_shipping_cost(self):
         """
-        Calculates sale_order volume
+        Calculates shipping costs given shipping weight, shipping volume and
+        destination's zip code
+
+        Returns an action that opens a picking_rated_wizard model
         """
-        for so_shipping_cost in self:
-            so_shipping_cost.sale_order_volume = so_shipping_cost.sale_order_id.get_sale_order_volume()
+        if self.shipping_volume < 0 or self.shipping_weight < 0:
+            raise UserError(_(
+                'Invalid values to calculate shipping costs. Please, try changing values.'
+            ))
+        zones = self.env['shipping.zone'].sudo().search(
+            [('country_id', '=', self.country_id.id)]
+        ).filtered(
+            lambda zone: zone.is_postal_code_in_zone(self.zip_code)
+        )
+        if not zones:
+            raise UserError(_(
+                'There are no zones embedding "%s". Please, try with another zip code.'
+            ) % self.zip_code)
+
+        services = []
+        shipping_costs = self.env['shipping.cost'].sudo().search([('shipping_zone_id', 'in', zones.ids)])
+        create_so_sc = self.env['sale.order.shipping.cost'].create
+        picking_rated = self.env['picking.rated.wizard'].create({
+            'total_weight': self.shipping_weight,
+            'total_volume': self.shipping_volume,
+        })
+        action_to_return = self.env.ref('sale_order_board.action_open_picking_rated_wizard').read()[0]
+        action_to_return['res_id'] = picking_rated.id
+
+        for sc in shipping_costs:
+            new_so_sc = create_so_sc({'shipping_cost_id': sc.id})
+            shipping_weight = self.get_shipping_weight(sc.weight_volume_translation)
+            services += new_so_sc.sudo().calculate_shipping_cost(
+                self.shipping_volume,
+                shipping_weight,
+                mode='pallet'
+            )
+            services += new_so_sc.sudo().calculate_shipping_cost(
+                self.shipping_volume,
+                shipping_weight,
+                mode='total_weight'
+            )
+
+        services_to_add = [
+            (0, 0, {
+                'currency': 'EUR',
+                'transit_time': '',
+                'amount': service['price'],
+                'service': service['service_name'],
+                'shipping_weight': self.get_shipping_weight(service['weight_volume_translation']),
+                'wizard_id': picking_rated.id,
+                'sequence': 0
+            }) for service in services
+        ]
+        picking_rated.write({'data': services_to_add})
+        return action_to_return
+
+    def get_shipping_weight(self, weight_volume_translator):
+        """
+        Calculates the shipping weight. This will be the maximun of the shipping weight and
+        the volume weight
+
+        Parameters:
+        ----------
+        weight_volume_translator: Float
+            Translator to obtain volume_weight
+        """
+        volume_weight = self.shipping_volume * weight_volume_translator
+        return max(volume_weight, self.shipping_weight)
+

@@ -362,9 +362,9 @@
                                      'claim_type': ref('crm_claim_type.crm_claim_type_customer'),
                                      'default_claim_type': ref('crm_claim_type.crm_claim_type_customer')}"/>
         <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_customer')),
-                                    ('warehouse_location','!=','transit'),
-                                    ('stage_id.name', '=', 'Recibido'),
-                                    ('date_received','!=', False)]"/>
+                            ('warehouse_location','!=','transit'),
+                            ('date_received','!=', False),
+                            ('stage_id','=', ref('crm_claim_rma_custom.stage_claim_received'))]"/>
         <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
