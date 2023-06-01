@@ -33,7 +33,7 @@ msgstr "RMA Recibidos"
 #. module: crm_claim_rma_custom
 #: model:ir.ui.menu,name:crm_claim_rma_custom.menu_crm_case_claims
 msgid "Received Claims"
-msgstr "RMAs Recividos"
+msgstr "RMAs Recibidos"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_bool_category_id
@@ -617,6 +617,7 @@ msgstr "Crear abono"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_discount_wizard
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter_order
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
 msgid "Cancel"
 msgstr "Cancelar"
@@ -647,6 +648,7 @@ msgstr "\n Añadir %s  Ub.: %s"
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_choose
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_choose
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter_order
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
 msgid "Add"
 msgstr "Añadir"
@@ -658,7 +660,8 @@ msgid "Shipping"
 msgstr "Dir. Envío"
 
 #. module: crm_claim_rma_custom
-#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims_order
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter_order
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
 #: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims

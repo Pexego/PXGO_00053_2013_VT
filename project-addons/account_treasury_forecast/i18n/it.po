@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * account_treasury_forecast
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
@@ -442,35 +442,14 @@ msgid "Start Date"
 msgstr "Data di Inizio"
 
 #. module: account_treasury_forecast
-#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_payment_mode_customer
-msgid "Payment mode"
-msgstr "Metodo di pagamento"
-
-#. module: account_treasury_forecast
-#: selection:account.treasury.forecast,payment_mode_customer:0
-#: selection:account.treasury.forecast,payment_mode_supplier:0
-msgid "Transfer"
-msgstr "Trasferimento"
-
-#. module: account_treasury_forecast
-#: selection:account.treasury.forecast,payment_mode_customer:0
-#: selection:account.treasury.forecast,payment_mode_supplier:0
-msgid "Debit receipt"
-msgstr "Ricevuta addebito"
-
-#. module: account_treasury_forecast
-#: selection:account.treasury.forecast,payment_mode_customer:0
-#: selection:account.treasury.forecast,payment_mode_supplier:0
-msgid "Both"
-msgstr "Entrambi"
-
-#. module: account_treasury_forecast
 #: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view_add_filters
+#: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view
 msgid "Choose the payment mode"
 msgstr "Selezionare il metodo di pagamento"
 
 #. module: account_treasury_forecast
 #: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_payment_mode_customer_m2m
 msgid "Payment mode"
 msgstr "Metodo di pagamento"
 
@@ -480,10 +459,16 @@ msgid "Transfers filters"
 msgstr "Filtri di trasferimento"
 
 #. module: account_treasury_forecast
-#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:48
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:150
 #, python-format
-msgid "Error!:: You must select one option for payment mode fields."
-msgstr "¡Errore!:: Selezionare una opzione nei campi di pagamento."
+msgid "Error!:: You must select one option for customer payment mode fields."
+msgstr "¡Errore!:: È necessario selezionare un'opzione per i campi della modalità di pagamento del cliente."
+
+#. module: account_treasury_forecast
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:153
+#, python-format
+msgid "Error!:: You must select one option for supplier payment mode fields."
+msgstr "¡Errore!:: È necessario selezionare un'opzione per i campi relativi alla modalità di pagamento dei fornitori."
 
 #. module: account_treasury_forecast
 #: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:57
