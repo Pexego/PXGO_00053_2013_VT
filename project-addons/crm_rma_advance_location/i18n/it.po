@@ -337,6 +337,11 @@ msgid "Claim"
 msgstr "RMP"
 
 #. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_line_prodlot_id
+msgid "Product Lot / Serial"
+msgstr "Lotto / numero di serie del prodotto"
+
+#. module: crm_rma_advance_location
 #: code:addons/crm_rma_advance_location/wizard/claim_make_picking_to_refurbish.py:64
 #, python-format
 msgid "All products must have a description of the problem, please fill it out and try again"
@@ -369,10 +374,15 @@ msgid "All units are already processed"
 msgstr "Tutte le unità sono state elaborate"
 
 #. module: crm_rma_advance_location
-#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:130
+#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:131
 #: code:addons/crm_rma_advance_location/claim_make_picking_to_refurbish.py:89
 msgid "You cannot send more than %i of this product %s"
 msgstr "Non puoi inviare più di %i unità di questo prodotto %s"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:138
+msgid "Wrong number of serial numbers. Remember Separate them by commas"
+msgstr "Numero errato di numeri di serie. Ricorda di separarli con le virgole"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form

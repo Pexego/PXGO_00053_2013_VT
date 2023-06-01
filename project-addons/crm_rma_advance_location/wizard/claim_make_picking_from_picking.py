@@ -30,7 +30,7 @@ class ClaimMakePickingFromPickingLine(models.TransientModel):
     product_qty = fields.Float()
     partner_id = fields.Many2one(related='move_id.partner_id')
     move_id = fields.Many2one('stock.move')
-
+    prodlot_id = fields.Char("Product Lot / Serial")
 
 class ClaimMakePickingFromPicking(models.TransientModel):
     _name = "claim_make_picking_from_picking.wizard"
@@ -131,6 +131,12 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                 raise exceptions.UserError(_("You cannot send more than %i of this product %s")
                                            % (int(wizard_move.product_uom_qty - wizard_move.qty_used),
                                               wizard_move.product_id.default_code))
+
+            if wizard_picking_line.prodlot_id:
+                ids_prodlot = len(wizard_picking_line.prodlot_id.split(","))
+                if ids_prodlot != wizard_picking_line.product_qty:
+                    raise exceptions.UserError(_("Wrong number of serial numbers. Remember Separate them by commas"))
+
             default_move_data = {
                 'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
@@ -142,8 +148,10 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                 'note': note,
                 'picking_type_id': type_ids and type_ids[0].id,
                 'product_uom_qty': wizard_picking_line.product_qty,
-                'origin_move_id': wizard_move.id
+                'origin_move_id': wizard_move.id,
+                'lots_text': wizard_picking_line.prodlot_id
             }
+
             move_id = wizard_picking_line.move_id.copy(default_move_data)
             wizard_move.qty_used += wizard_picking_line.product_qty
             if wizard_move in moves_qty:

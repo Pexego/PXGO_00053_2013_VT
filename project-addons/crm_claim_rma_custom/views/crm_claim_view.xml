@@ -88,10 +88,19 @@
             </field>
             <field name="activity_summary" position="after">
                 <field name="att_order_id"/>
+                <field name="att_claim_id"/>
             </field>
             <field name="claim_type" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
+            <div name="buttons" position="inside">
+                <button type="object" name="action_view_pending_rma"
+                        class="oe_stat_button button_rma_pending"
+                        icon="fa-wrench"
+                        attrs="{'invisible': ['|',('rma_pending_count','=',0),('delivery_type','!=','shipping')]}">
+                    <field name="rma_pending_count" widget="statinfo" string="Attach RMA"/>
+                </button>
+            </div>
             <xpath expr="/form/sheet/group/notebook/page[2]" position="after">
                 <page string="Invoicing">
                     <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
@@ -352,9 +361,9 @@
                                      'claim_type': ref('crm_claim_type.crm_claim_type_customer'),
                                      'default_claim_type': ref('crm_claim_type.crm_claim_type_customer')}"/>
         <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_customer')),
-                                    ('warehouse_location','!=','transit'),
-                                    ('stage_id.name', '=', 'Recibido'),
-                                    ('date_received','!=', False)]"/>
+                            ('warehouse_location','!=','transit'),
+                            ('date_received','!=', False),
+                            ('stage_id','=', ref('crm_claim_rma_custom.stage_claim_received'))]"/>
         <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">

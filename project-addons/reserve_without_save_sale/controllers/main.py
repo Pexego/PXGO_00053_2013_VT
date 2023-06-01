@@ -11,12 +11,24 @@ _logger = logging.getLogger(__name__)
 
 class WebsiteReservation(http.Controller):
 
+    @staticmethod
+    def _get_date_validity(infinite_reservation):
+        """ Calculate the date validity of the reservation
+        :param infinite_reservation: it can be 'true' or 'false'
+        :return: Validity date based on inifine_reservation parameter
+        """
+        now = datetime.now()
+        if json.loads(infinite_reservation):
+            date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+        else:
+            days_release_reserve = request.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+            date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+        return date_validity
+
     @http.route(['/reservations/create'],
                 type='http', methods=['POST'], auth='user')
     def create_reservation(self, **post):
-        days_release_reserve = request.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
-        now = datetime.now()
-        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+        date_validity = self._get_date_validity(post.get('infinite_reservation','false'))
         warehouse = request.env['stock.warehouse'].browse(
             int(post['warehouse']))
         product = request.env['product.product'].browse(
@@ -60,9 +72,7 @@ class WebsiteReservation(http.Controller):
             una nueva.
             Si solo se modifica la cantidad se escribe.
         """
-        days_release_reserve = request.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
-        now = datetime.now()
-        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+        date_validity = self._get_date_validity(post.get('infinite_reservation','false'))
         if post.get('product_id', False):
             product = request.env['product.product'].browse(
                 int(post['product_id']))

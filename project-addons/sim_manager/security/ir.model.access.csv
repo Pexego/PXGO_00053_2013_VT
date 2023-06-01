@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sim_package,access_sim_package,model_sim_package,base.group_user,1,1,1,1
+access_sim_package,access_sim_package,model_sim_package,base.group_user,1,1,1,0
 access_sim_serial,access_sim_serial,model_sim_serial,base.group_user,1,1,1,1
 access_sim_type,access_sim_type,model_sim_type,base.group_user,1,1,1,1
 access_sim_partner_changer_wzd,access_sim_partner_changer_wzd,model_sim_partner_changer_wzd,base.group_user,1,1,1,1
+access_sim_package_admin,access_sim_package,model_sim_package,base.group_system,1,1,1,1
+access_sim_package_kitchen,access_sim_package,model_sim_package,kitchen.group_kitchen,1,1,1,1

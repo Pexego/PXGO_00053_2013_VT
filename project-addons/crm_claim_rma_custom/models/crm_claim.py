@@ -68,10 +68,43 @@ class CrmClaimRma(models.Model):
     deposit_id = fields.Many2many('stock.picking', string='Deposit')
 
     att_order_id = fields.Many2one('sale.order', string='Attach Sale')
+    att_claim_id = fields.Many2one('crm.claim', string='Attached Claim')
+    att_claim_ids = fields.One2many(
+        comodel_name='crm.claim',
+        inverse_name='att_claim_id',
+        string='Attached Claims',
+        required=False)
+    internal_notes = fields.Text(
+        'Claim description',
+        help="More precise description of the problem")
 
     amazon_rma = fields.Char("ID Amazon")
     partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
+
+    def _compute_rma_count(self):
+        for claim in self:
+            stage_sale_attach_id = self.env['crm.claim.stage'].search([('name', '=', 'Adjuntar con pedido')]).id
+            pending_rmas = self.env['crm.claim'].search_count(
+                [('partner_id', '=', claim.partner_id.id), ('stage_id', '=', stage_sale_attach_id),
+                 ('delivery_address_id', '=', claim.delivery_address_id.id),('id','!=',claim.id)])
+            claim.rma_pending_count = pending_rmas
+
+    rma_pending_count = fields.Integer(compute='_compute_rma_count', default=0)
+
+    def action_view_pending_rma(self):
+        stage_sale_attach_id = self.env['crm.claim.stage'].search([('name', '=', 'Adjuntar con pedido')]).id
+        pending_rmas = self.env['crm.claim'].search(
+                [('partner_id', '=', self.partner_id.id), ('stage_id', '=', stage_sale_attach_id),
+                 ('delivery_address_id', '=', self.delivery_address_id.id),('id','!=',self.id)])
+
+        action = self.env.ref('crm_claim_rma_custom.action_show_pending_claims').read()[0]
+
+        if len(pending_rmas) > 0:
+            action['domain'] = [('id', 'in', pending_rmas.ids)]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
     @api.multi
     def write(self, vals):
@@ -89,8 +122,8 @@ class CrmClaimRma(models.Model):
             stage_ids.append(stage_repaired_id)
             stage_pending_shipping_id = self.env.ref('crm_claim_rma_custom.stage_claim6').id
             stage_ids.append(stage_pending_shipping_id)
+            stage_received_id = self.env.ref('crm_claim_rma_custom.stage_claim_received').id
 
-            stage_received_id = self.env['crm.claim.stage'].search([('name', '=', 'Recibido')]).id
             if vals['stage_id'] == stage_received_id and \
                     not (self.warehouse_location or vals.get('warehouse_location', False)):
                 raise exceptions.UserError(_('Please, select the warehouse location of the RMA'))
