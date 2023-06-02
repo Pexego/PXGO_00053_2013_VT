@@ -9,6 +9,8 @@
             <field name="doall" position="after">
                 <field name="retry_on_exception"/>
                 <field name="retry_on_exception_time" attrs="{'invisible':[('retry_on_exception','=',False)]}"/>
+                <field name="current_retry" attrs="{'invisible':[('retry_on_exception','=',False)]}"/>
+                <field name="max_retries" attrs="{'invisible':[('retry_on_exception','=',False)]}"/>
             </field>
         </field>
     </record>

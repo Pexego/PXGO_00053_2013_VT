@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 11:01+0000\n"
-"PO-Revision-Date: 2023-05-09 11:01+0000\n"
+"POT-Creation-Date: 2023-06-02 08:12+0000\n"
+"PO-Revision-Date: 2023-06-02 08:12+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,19 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: retry_cron_on_exception
+#: model:ir.model.fields,field_description:retry_cron_on_exception.field_ir_cron_current_retry
+msgid "Current try"
+msgstr "Intento actual"
+
+#. module: retry_cron_on_exception
 #: model:ir.model.fields,help:retry_cron_on_exception.field_ir_cron_retry_on_exception
 msgid "If This field is checked, the cron will be retried if it fails"
-msgstr "Si este check está amrcado, el cron se reintentará si falla"
+msgstr "Si este check está marcado, el cron se reintentará si falla"
+
+#. module: retry_cron_on_exception
+#: model:ir.model.fields,field_description:retry_cron_on_exception.field_ir_cron_max_retries
+msgid "Max. retries"
+msgstr "Max. reintentos"
 
 #. module: retry_cron_on_exception
 #: model:ir.model.fields,field_description:retry_cron_on_exception.field_ir_cron_retry_on_exception
@@ -30,6 +40,17 @@ msgstr "Reintentar si falla"
 msgid "Retry On Exception Time"
 msgstr "Tiempo de reintento"
 
+#. module: retry_cron_on_exception
+#: model:ir.model,name:retry_cron_on_exception.model_ir_cron
+msgid "Scheduled Actions"
+msgstr "Acciones planificadas"
+
+#. module: retry_cron_on_exception
+#: model:ir.model.fields,help:retry_cron_on_exception.field_ir_cron_max_retries
+msgid "The cron will fail if the number of tries reach the max. retries.\n"
+"Retries are infinite when 0."
+msgstr "El cron fallará si el número de reintento actual alcanza el máximo.\n"
+"El número de reintentos será infinito si este valor es 0"
 
 #. module: retry_cron_on_exception
 #: model:ir.model.fields,help:retry_cron_on_exception.field_ir_cron_retry_on_exception_time
