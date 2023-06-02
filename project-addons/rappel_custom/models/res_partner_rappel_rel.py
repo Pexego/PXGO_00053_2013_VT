@@ -154,8 +154,8 @@ class ResPartnerRappelRel(models.Model):
         refund_lines_for_rappel_quantity = refund_lines.filtered(
             lambda line: not line.no_rappel
         )
-        total = sum([x[field] for x in invoice_lines_for_rappel_quantity]) - \
-                sum([x[field] for x in refund_lines_for_rappel_quantity])
+        total = sum(invoice_lines_for_rappel_quantity.mapped(field)) - \
+                sum(refund_lines_for_rappel_quantity.mapped(field))
 
         return total
 
