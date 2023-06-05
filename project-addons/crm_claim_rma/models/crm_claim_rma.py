@@ -204,8 +204,8 @@ class ClaimLine(models.Model):
         :return: ValidationError if the format is not correct
         """
         if self.prodlot_id:
-            self.prodlot_id = self.prodlot_id.replace(" ", "")
-            lots = self.prodlot_id.upper().split(',')
+            self.prodlot_id = self.prodlot_id.replace(" ", "").replace(",",", ")
+            lots = self.prodlot_id.split(',')
             if len(lots) != self.product_returned_quantity:
                 raise UserError(_("Wrong number of serial numbers. Remember Separate them by commas"))
 
