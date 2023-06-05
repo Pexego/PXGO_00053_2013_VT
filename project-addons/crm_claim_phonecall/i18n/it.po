@@ -200,6 +200,22 @@ msgstr "Richiesta registrazione DDNS"
 msgid "Enquiry about courses/certificates"
 msgstr "Consulenza su corsi/certificati"
 
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Start up"
+msgstr "Avviare"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Post-sale Incidence"
+msgstr "Incidenza post-vendita"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Pre-sale Consultation"
+msgstr "Consulenza prevendita"
+
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Others"

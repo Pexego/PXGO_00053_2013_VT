@@ -167,6 +167,26 @@ msgstr "Tipo de llamada"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
+msgid "Start up"
+msgstr "Puesta en marcha"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Post-sale Incidence"
+msgstr "Incidencia postventa"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Pre-sale Consultation"
+msgstr "Consulta preventa"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Others"
+msgstr "Otros"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
 msgid "Check RMA status"
 msgstr "Consulta de estado de RMA"
 
@@ -199,11 +219,6 @@ msgstr "Petición de alta en DDNS"
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Enquiry about courses/certificates"
 msgstr "Consulta sobre cursos/certificados"
-
-#. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Others"
-msgstr "Otros"
 
 #. module: crm_claim_phonecall
 #: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view_sat

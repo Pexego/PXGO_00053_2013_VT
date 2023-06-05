@@ -41,15 +41,10 @@ CALL_TYPE = [('check_stock', 'Check Stock'),
 CALL_STATE = [('recall_pending', 'Recall pending'),
               ('done', 'Done')]
 
-CALL_TYPE_SAT = [('check_status_rma', 'Check RMA status'),
-                 ('incidence_product', 'Incidence with product'),
-                 ('check_working', 'Post-sale question on operation'),
-                 ('counsel', 'Pre-sale query/advice'),
-                 ('sat_complain', 'SAT Complaint/claim'),
-                 ('ddns_registration', 'DDNS request for registration'),
-                 ('check_courses', 'Enquiry about courses/certificates'),
-                 ('others', 'Others'),
-                 ('none', 'N/A')]
+CALL_TYPE_SAT = [('start_up', 'Start up'),
+                 ('post_sale_incidence', 'Post-sale Incidence'),
+                 ('pre_sale_consultation', 'Pre-sale Consultation'),
+                 ('others', 'Others')]
 
 SCOPE = [('sales', 'Sales'),
          ('sat', 'SAT')]
@@ -75,7 +70,7 @@ class CrmPhonecall(models.Model):
     call_state = fields.Selection(CALL_STATE, 'State')
     partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
     scope = fields.Selection(SCOPE, 'Scope call')
-    call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
+    call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type')
     partner_country = fields.Many2one('res.country', related='partner_id.country_id', string='Country', readonly=True)
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', string='Brand')
