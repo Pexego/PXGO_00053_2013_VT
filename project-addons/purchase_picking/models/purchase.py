@@ -41,6 +41,8 @@ class PurchaseOrder(models.Model):
 
     container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers', search='_search_containers')
 
+    force_invoiced = fields.Boolean(states={'done': [('readonly', False)], 'purchase': [('readonly', False)]}, )
+
     @api.multi
     def _get_containers(self):
         for order in self:
@@ -162,9 +164,10 @@ class PurchaseOrder(models.Model):
         """
         super()._get_invoiced()
         for order in self:
-            if order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
+            if order.force_invoiced:
+                order.invoice_status = 'invoiced'
+            elif order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
                 order.invoice_status = 'partially'
-
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
