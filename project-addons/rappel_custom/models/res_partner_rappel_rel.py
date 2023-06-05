@@ -161,8 +161,10 @@ class ResPartnerRappelRel(models.Model):
                     })
                     if rappel.rappel_id.discount_voucher and total_rappel > 0:
                         rappel_to_invoice = []
+                        # search by name to avoid put different rappels in the same invoice
                         rappel_old = rappel_calculated_obj.search_read(
                             [('partner_id', '=', rappel.partner_id.id),
+                             ('rappel_id.name', '=', rappel.rappel_id.name),
                              ('rappel_id.discount_voucher', '=', True),
                              ('invoice_id', '=', False)], ['id', 'quantity'])
                         amount_total = 0
