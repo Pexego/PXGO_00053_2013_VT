@@ -174,10 +174,7 @@ class ProductPricelistItemListener(Component):
 
     def on_record_write(self, record, fields=None):
         if 'active' in fields:
-            if not record.active:
-                self._create_product_pricelist_items_works(record, [None], [None], "unlink")
-            else:
-                self._create_product_pricelist_items_works(record,  [None], [None], "export")
+            self._create_product_pricelist_items_works(record, [None], [None], "export" if record.active else "unlink")
         else:
             up_fields = ["fixed_price"]
             self._create_product_pricelist_items_works(record, up_fields, fields, "update")
