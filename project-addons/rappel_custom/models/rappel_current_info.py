@@ -22,6 +22,10 @@ class RappelCurrentInfo(models.Model):
         domain=[('no_rappel', '=', True)],
         readonly=True
     )
+    excluded_invoice_line_ids = fields.Many2many(
+        'account.invoice.line', 'rappel_current_info_excluded_invoice_line_rel',
+        'rappel_info_id', "invoice_line_id", "Excluded Lines"
+    )
 
     @api.model
     def send_rappel_info_mail(self):
