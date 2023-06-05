@@ -156,36 +156,34 @@ class PurchaseOrder(models.Model):
             return
         odoo_es = self._get_odoo_es()
         try:
-            for purchase in purchases_filtered:
-                purchase._create_invoice()
-                order_es_id = odoo_es.env['sale.order'].search([
-                    ('client_order_ref', '=', purchase.name), ('partner_id', '=', 245247)
-                ])
-                order_es = odoo_es.env['sale.order'].browse(order_es_id)
-                try:
-                    order_es.action_invoice_create()
-                    odoo_es.env.commit()
-                except Exception:
-                    raise OdooEsException(_('Error creating order %s invoice') % order_es.name)
-                self.env.cr.commit()
+            purchases_filtered._create_invoice_on_batch()
+            order_es_ids = odoo_es.env['sale.order'].search([
+                ('client_order_ref', 'in', purchases_filtered.mapped('name')), ('partner_id', '=', 245247)
+            ])
+            # FIXME: no funciona al pasarle una lista de ids
+            orders_es = odoo_es.env['sale.order'].browse(order_es_ids)
+            orders_es.action_invoice_create()
+            odoo_es.env.commit()
         except Exception:
             self.env.cr.rollback()
         finally:
             odoo_es.logout()
 
-    def _create_invoice(self):
+    def _create_invoice_on_batch(self):
         """
-        Creates an invoice associated to self
+        Creates an invoice with all purchase order lines.
+        Every purchase order have to have the same partner_id
         """
         invoices = self.env["account.invoice"]
         invoice = invoices.create({
-            "partner_id": self.partner_id.id,
+            "partner_id": self.mapped('partner_id').id,
             "type": "in_invoice",
         })
         invoice._onchange_partner_id()
-        invoice.currency_id = self.currency_id
-        invoice.purchase_id = self
-        invoice.purchase_order_change()
+        for po in self:
+            invoice.currency_id = po.currency_id
+            invoice.purchase_id = po
+            invoice.purchase_order_change()
         invoice.compute_taxes()
 
     def _get_odoo_es(self):
@@ -206,16 +204,3 @@ class PurchaseOrder(models.Model):
         odoo_es.login(server.server_db, server.login, server.password)
         odoo_es.config['auto_commit'] = False
         return odoo_es
-
-
-class OdooEsException(Exception):
-    """
-    This error should be raised when we have an exception while
-    doing something in Odoo Spain from other Odoo server
-    """
-
-    def __init__(self, response_url, *args):
-        self.response_url = response_url
-
-    def __str__(self):
-        return 'OdooEsException: ' + self.response_url
