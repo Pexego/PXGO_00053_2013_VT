@@ -84,3 +84,30 @@ msgstr "Has seleccionado más cantidad de la requerida en la reserva destino"
 #, python-format
 msgid "You have selected the same move in both"
 msgstr "Has seleccionado la misma reserva en ambas"
+
+#. module: move_reserves
+#: model:ir.actions.act_window,name:move_reserves.action_move_reserves_log
+#: model:ir.ui.menu,name:move_reserves.move_reserves_log_menu
+msgid "Move Reserves Log"
+msgstr "Log muovere riserva"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_date
+msgid "Date"
+msgstr "Data"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_move
+#: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
+msgid "Move"
+msgstr "Movimento"
+
+#. module: move_reserves
+#: model:ir.ui.view,arch_db:move_reserves.view_reserves_log
+msgid "Move reserves Log"
+msgstr "Log muovere riserva"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_user_id
+msgid "User"
+msgstr "Utente"
