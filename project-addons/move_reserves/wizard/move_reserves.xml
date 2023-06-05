@@ -66,7 +66,6 @@
 
     <menuitem id="move_reserves_log_menu" name="Move Reserves Log" parent="sale.menu_sale_report"
               action="action_move_reserves_log"
-              groups="base.group_system"
               sequence="10"/>
 
 </odoo>
