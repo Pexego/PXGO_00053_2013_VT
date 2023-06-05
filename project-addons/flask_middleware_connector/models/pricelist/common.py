@@ -173,8 +173,14 @@ class ProductPricelistItemListener(Component):
                         break
 
     def on_record_write(self, record, fields=None):
-        up_fields = ["fixed_price"]
-        self._create_product_pricelist_items_works(record, up_fields, fields, "update")
+        if 'active' in fields:
+            if not record.active:
+                self._create_product_pricelist_items_works(record, [None], [None], "unlink")
+            else:
+                self._create_product_pricelist_items_works(record,  [None], [None], "export")
+        else:
+            up_fields = ["fixed_price"]
+            self._create_product_pricelist_items_works(record, up_fields, fields, "update")
 
     def on_record_create(self, record, fields=None):
         up_fields = [
