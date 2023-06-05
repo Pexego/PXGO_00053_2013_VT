@@ -106,6 +106,32 @@ class ProductPricelistItem(models.Model):
 
         return pricelist_items
 
+    def get_related_cost_items(self, categ_id, brand_id, cost_field):
+        """
+            Get the pricelist items dependent on cost_field
+            :param categ_id product.category
+            :param brand_id product.brand
+            :param cost_field: field to search
+        """
+        pricelist_items = self.env['product.pricelist.item']
+        if cost_field == 'pricelist':
+            return pricelist_items
+
+        pricelist_processed = set()
+        items = self.env['product.pricelist.item'].search(['&',('base','=',cost_field),'|', ('applied_on', '=', '3_global'), '|', '&',
+                                                           ('applied_on', '=', '2_product_category'),
+                                                           ('categ_id', '=', categ_id.id), '&',
+                                                           ('applied_on', '=', '25_product_brand'),
+                                                           ('product_brand_id', '=', brand_id.id)])
+        for p in items:
+            if not p.pricelist_id.web or p.pricelist_id.id in pricelist_processed:
+                continue
+            pricelist_processed.add(p.pricelist_id.id)
+            pricelist_items |= p
+            pricelist_items |= p.get_related_web_items(categ_id, brand_id, pricelist_processed)
+
+        return pricelist_items
+
 class ProductPricelistItemListener(Component):
     _name = 'product.pricelist.item.event.listener'
     _inherit = 'base.event.listener'
@@ -147,8 +173,11 @@ class ProductPricelistItemListener(Component):
                         break
 
     def on_record_write(self, record, fields=None):
-        up_fields = ["fixed_price"]
-        self._create_product_pricelist_items_works(record, up_fields, fields, "update")
+        if 'active' in fields:
+            self._create_product_pricelist_items_works(record, [None], [None], "export" if record.active else "unlink")
+        else:
+            up_fields = ["fixed_price"]
+            self._create_product_pricelist_items_works(record, up_fields, fields, "update")
 
     def on_record_create(self, record, fields=None):
         up_fields = [

@@ -101,6 +101,8 @@ class ProductListener(Component):
                     record.with_delay(priority=11, eta=30).update_product()
                     break
 
+        self.env['product.product'].handle_pricelist_items_cost_field(record, record.product_brand_id, fields, "update")
+
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.id)]).mapped('bom_id')
         for pack in packs:
             min_stock = False
@@ -192,6 +194,20 @@ class ProductProduct(models.Model):
     date_next_incoming = fields.Datetime(compute="compute_next_incoming")
     qty_next_incoming = fields.Float(compute="compute_next_incoming")
 
+    def handle_pricelist_items_cost_field(self, product, brand, fields, mode):
+        """
+            Handles the creation of pricelist item jobs dependent on cost fields
+            :param product: product.product
+            :param brand: product.brand
+            :param fields: list of strings with the names of the updated fields. It may be []
+            :param mode: export,update or unlink
+        """
+        pricelist_update_fields = dict(self.env['product.pricelist.item']._fields['base'].selection).keys()
+        for field in pricelist_update_fields:
+            if not fields or field in fields:
+                items = self.env['product.pricelist.item'].get_related_cost_items(product.categ_id, brand, field)
+                for i in items:
+                    getattr(i.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(product, i.pricelist_id)
 
 class ProductCategoryListener(Component):
     _name = 'product.category.event.listener'
