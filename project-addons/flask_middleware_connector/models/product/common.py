@@ -88,7 +88,7 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
+            "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs", "tag_ids"
         ]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
@@ -112,10 +112,6 @@ class ProductListener(Component):
                     min_stock = product_stock_qty
             if min_stock:
                 pack.product_tmpl_id.product_variant_ids.with_delay(priority=11, eta=30).update_product()
-
-        if 'tag_ids' in fields:
-            record.with_delay(priority=11, eta=30).unlink_product_tag_rel()
-            record.with_delay(priority=11, eta=60).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay().unlink_product()
@@ -157,24 +153,6 @@ class ProductProduct(models.Model):
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
             return exporter.delete(self)
-        return True
-
-
-    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def export_product_tag_rel(self):
-        backend = self.env["middleware.backend"].search([])[0]
-        with backend.work_on(self._name) as work:
-            exporter = work.component(usage='record.exporter')
-            for tag in self.tag_ids:
-                exporter.insert_product_tag_rel(self, tag)
-        return True
-
-    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def unlink_product_tag_rel(self):
-        backend = self.env["middleware.backend"].search([])[0]
-        with backend.work_on(self._name) as work:
-            exporter = work.component(usage='record.exporter')
-            return exporter.delete_product_tag_rel(self)
         return True
 
     @api.multi
@@ -369,15 +347,13 @@ class ProductTagsListener(Component):
         record.with_delay(priority=11, eta=60).export_product_tag()
         if 'product_ids' in fields:
             for product in record.product_ids:
-                product.with_delay(priority=11, eta=30).unlink_product_tag_rel()
-                product.with_delay(priority=11, eta=150).export_product_tag_rel()
+                product.with_delay(priority=11, eta=30).update_product()
 
     def on_record_write(self, record, fields=None):
         record.with_delay(priority=11, eta=120).update_product_tag()
         if 'product_ids' in fields:
             for product in record.product_ids:
-                product.with_delay(priority=11).unlink_product_tag_rel()
-                product.with_delay(priority=11, eta=120).export_product_tag_rel()
+                product.with_delay(priority=11, eta=30).update_product()
 
     def on_record_unlink(self, record):
         record.with_delay(priority=11).unlink_product_tag()

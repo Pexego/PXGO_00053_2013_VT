@@ -35,7 +35,8 @@ class ResPartnerExporter(Component):
             "is_prepaid_payment_term":  binding.prepaid_payment_term(),
             "last_sale_date": binding.last_sale_date,
             "csv_connector_access": binding.csv_connector_access,
-            "brand_pricelist_ids": f'{binding.pricelist_brand_ids.ids or ""}'
+            "brand_pricelist_ids": f'{binding.pricelist_brand_ids.ids or ""}',
+            "tag_ids": f'{binding.category_id.ids or ""}'
         }
         if not vals['is_company'] and binding.parent_id:
             vals.update({"type": binding.type, "parent_id": binding.parent_id.id, "email": binding.email})
@@ -46,16 +47,6 @@ class ResPartnerExporter(Component):
 
     def delete(self, binding):
         return self.backend_adapter.remove(binding.id)
-
-    def insert_category_rel(self, partner_record, category_record):
-        vals = {"odoo_id": partner_record.id,
-                "customertag_id": category_record.id,
-                }
-        return self.backend_adapter.insert_rel('customertagcustomerrel', vals)
-
-    def delete_category_rel(self, partner_record_id):
-        return self.backend_adapter.remove_rel('customertagcustomerrel', partner_record_id)
-
 
 class ResPartnerAdapter(Component):
 
