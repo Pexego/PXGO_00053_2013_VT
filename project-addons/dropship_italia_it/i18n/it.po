@@ -102,3 +102,9 @@ msgstr "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucid
 "% endif\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordiali saluti,</p>\n"
 "            "
+
+#. module: dropship_italia_it
+#: code:addons/dropship_italia_it/models/sale.py:76
+#, python-format
+msgid "Error! A line cannot be dropship and deposit at the same time"
+msgstr "Errore! Una linea non può essere dropship e magazzino allo stesso tempo."
