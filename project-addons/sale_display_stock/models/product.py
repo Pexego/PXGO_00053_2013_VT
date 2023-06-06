@@ -21,7 +21,7 @@
 import math
 from odoo import models, fields, api
 import odoo.addons.decimal_precision as dp
-
+from collections import defaultdict
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -213,18 +213,26 @@ class ProductProduct(models.Model):
             stock.reservation quantity of sale.orders + stock.move quantity of the mrp.productions
             that are not in progress
         """
-        for product in self:
-            # Get the stock.reservation's quantity of sale.orders
-            domain_reser = [('product_id', '=', product.id),
-                            ('state', 'in', ['draft', 'confirmed', 'assigned', 'partially_available']),
-                            ('mrp_id', '=', False)]
-            reservations = self.env['stock.reservation'].search(domain_reser)
-            reservation_count = sum(reservations.mapped('product_qty'))
-            # Get the stock.move's quantity of the mrp.productions that are not in progress
-            domain = [('product_id', 'in', product.product_variant_ids.ids),
+        # Get the stock.reservation's quantity of sale.orders
+        reservations = self.env['stock.reservation'].read_group(
+            [('product_id', 'in', self.ids),
+             ('state', 'in', ['draft', 'confirmed', 'assigned', 'partially_available']),
+             ('mrp_id', '=', False)],
+            ['product_id', 'product_qty'],
+            groupby='product_id')
+        # Get the stock.move's quantity of the mrp.productions that are not in progress
+        moves =  self.env['stock.move'].read_group([('product_id', 'in', self.ids),
                       ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
                       ('raw_material_production_id', '!=', False),
-                      ('picking_id', '=', False)]
-            reservation_count += sum(
-                item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain, ['product_uom_qty']))
-            product.reservation_count = reservation_count
+                      ('picking_id', '=', False)],
+            ['product_id', 'product_uom_qty'],
+            groupby='product_id')
+        dicc = defaultdict(int)
+        for res in reservations:
+            product = res.get('product_id')[0]
+            dicc[product] += res.get('product_qty')
+        for move in moves:
+            product = move.get('product_id')[0]
+            dicc[product] += move.get('product_uom_qty')
+        for product in self:
+            product.reservation_count= dicc.get(product.id) or 0
