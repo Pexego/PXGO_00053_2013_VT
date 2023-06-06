@@ -291,7 +291,7 @@ class SaleOrder(models.Model):
         if isinstance(res, bool):
             for sale in self:
                 products_to_order = ''
-                partner_name = ''
+                partner_name = sale.partner_id.name
                 for line in sale.order_line.filtered(lambda l: l.product_id.state == 'make_to_order'):
                     products_to_order = products_to_order + \
                                         line.product_id.default_code + ' -> ' + \
