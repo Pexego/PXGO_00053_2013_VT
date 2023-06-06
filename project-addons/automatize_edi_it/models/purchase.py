@@ -160,9 +160,8 @@ class PurchaseOrder(models.Model):
             order_es_ids = odoo_es.env['sale.order'].search([
                 ('client_order_ref', 'in', purchases_filtered.mapped('name')), ('partner_id', '=', 245247)
             ])
-            # FIXME: no funciona al pasarle una lista de ids
-            orders_es = odoo_es.env['sale.order'].browse(order_es_ids)
-            orders_es.action_invoice_create()
+            orders_es = odoo_es.env['sale.order'].browse([])
+            orders_es.action_invoice_create_aux(order_es_ids)
             odoo_es.env.commit()
         except Exception:
             self.env.cr.rollback()
