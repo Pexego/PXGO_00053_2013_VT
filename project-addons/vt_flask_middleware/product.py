@@ -86,7 +86,7 @@ class Product(SyncModel):
     real_stock = FloatField(default=0.0)
     stock_available_es = FloatField(default=0.0)
     special_shipping_costs = BooleanField()
-
+    tag_ids = CharField(null=True)
 
     def __unicode__(self):
         return self.name
@@ -101,14 +101,4 @@ class ProductTag(SyncModel):
     def __unicode__(self):
         return self.name
 
-
-class ProductTagProductRel(SyncModel):
-
-    odoo_id = IntegerField()
-    producttag_id = ForeignKeyField(ProductTag, on_delete='CASCADE')
-
-    MOD_NAME = 'producttagproductrel'
-
-    def __unicode__(self):
-        return "Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
 
