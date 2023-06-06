@@ -1349,6 +1349,8 @@ msgstr "Coste total"
 msgid "Total return"
 msgstr "Total devuelto"
 
+
+
 #. module: crm_claim_rma
 #: code:addons/crm_claim_rma/crm_claim_rma.py:38
 #: selection:claim.line,repair_state:0
@@ -1650,3 +1652,8 @@ msgstr "Partes o accesorios faltantes"
 #, python-format
 msgid "Wrong number of serial numbers. Remember Separate them by commas"
 msgstr "Cantidad de Números de Serie incorrecto. Recuerda que van separados por comas"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_categ_id
+msgid "Product category"
+msgstr "Categoría de producto"

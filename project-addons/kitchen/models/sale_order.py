@@ -80,7 +80,7 @@ class SaleOrder(models.Model):
                 }).action_show()
         return super(SaleOrder, self).action_confirm()
 
-    skip_checking_previews = fields.Boolean("Skip checking Previews")
+    skip_checking_previews = fields.Boolean("Skip checking Previews", copy=False)
 
 
 class SaleOrderLine(models.Model):
