@@ -23,5 +23,5 @@ class ProductProduct(models.Model):
     @api.onchange('battery_mode')
     def onchange_product_battery(self):
         if self.battery_mode not in ('contains_battery', 'is_battery'):
-            self.num_batteries = '0'
+            self.num_batteries = 0.0
             self.battery_id = None
