@@ -27,7 +27,7 @@
     'website': '',
     "depends": ['base', 'product', 'sale', 'web', 'stock_custom',
                 'web_ir_actions_act_view_reload',
-                'web_ir_actions_act_multi'
+                'web_ir_actions_act_multi', "product_pricelist_custom"
                 ],
     "data": [
              'security/ir.model.access.csv',
