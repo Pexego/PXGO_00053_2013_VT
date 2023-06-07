@@ -311,16 +311,17 @@ class ProductProduct(models.Model):
         if 'replacement_id' in vals:
             new_final_replacement_id = vals.get('final_replacement_id')
             if new_final_replacement_id is not None:
-                if not new_final_replacement_id:
-                    new_final_replacement_id = self.id
+                for product in self:
+                    if not new_final_replacement_id:
+                        new_final_replacement_id = product.id
 
-                products_to_iterate = list(self.env['product.product'].search(
-                    [('replacement_id', '=', self.id)]
-                ))
-                self._set_final_replacement_recursive(
-                    products=products_to_iterate,
-                    replacement_product=new_final_replacement_id
-                )
+                    products_to_iterate = list(self.env['product.product'].search(
+                        [('replacement_id', '=', product.id)]
+                    ))
+                    self._set_final_replacement_recursive(
+                        products=products_to_iterate,
+                        replacement_product=new_final_replacement_id
+                    )
         return res
 
 
