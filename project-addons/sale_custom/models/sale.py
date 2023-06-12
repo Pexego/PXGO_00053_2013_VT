@@ -123,7 +123,7 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     pricelist_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
-    force_generic_product = fields.Boolean(default=False)
+    force_generic_product = fields.Boolean(default=False, copy=False)
 
     is_editable = fields.Boolean(compute='_get_is_editable', default=True)
 
@@ -291,21 +291,25 @@ class SaleOrder(models.Model):
         if isinstance(res, bool):
             for sale in self:
                 products_to_order = ''
+                partner_name = sale.partner_id.name
                 for line in sale.order_line.filtered(lambda l: l.product_id.state == 'make_to_order'):
                     products_to_order = products_to_order + \
                                         line.product_id.default_code + ' -> ' + \
                                         str(line.product_uom_qty) + '    '
+
+
                 if products_to_order:
-                    sale.send_email_to_purchases(products_to_order)
+                    sale.send_email_to_purchases(products_to_order, partner_name)
         return res
 
     @api.multi
-    def send_email_to_purchases(self, products_to_order):
+    def send_email_to_purchases(self, products_to_order, partner_name):
         self.ensure_one()
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
         context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         context['products_to_order'] = products_to_order
+        context['partner_name'] = partner_name
         context.pop('default_state', False)
 
         template_id = self.env.ref('sale_custom.email_template_purchase_product_to_order')

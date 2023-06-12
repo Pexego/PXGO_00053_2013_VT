@@ -12,7 +12,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         :param move: original stock.move from incoming picking
         :return: set() set of lots text
         """
-        lot_text = set(move.lots_text.split(','))
+        lot_text = set(move.lots_text.split(', '))
         children_lots_text = set(move.child_move_ids.mapped('lots_text'))
         return lot_text - children_lots_text
 
