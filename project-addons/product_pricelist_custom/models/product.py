@@ -437,6 +437,8 @@ class ProductProduct(models.Model):
                                                                         ('brand_group_id', '=', False)],
                                                                        order='sequence asc, id asc')
                 base_pricelists.create_base_pricelist_items(product_id)
+                brand = self.env['product.brand'].browse(brand_id)
+                self.env['product.product'].handle_pricelist_items_cost_field(product_id, brand, [], "export")
     @api.model
     def create(self, vals):
         """ This method create product pricelist if it has brand.
@@ -463,6 +465,8 @@ class ProductProduct(models.Model):
         for product in self:
             old_brand = old_brands[product]
             if 'product_brand_id' in vals and not brand:
+                if not product.item_brand_ids:
+                    self.env['product.product'].handle_pricelist_items_cost_field(product, old_brand, [], "unlink")
                 product.item_ids.with_context({'old_brand': old_brand}).unlink()
                 product.item_brand_ids.with_context({'old_brand': old_brand}).unlink()
                 continue
@@ -475,6 +479,7 @@ class ProductProduct(models.Model):
                 brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand)
                 if brand_pricelist_items:
                     product.item_ids.with_context({'old_brand': old_brand}).unlink()
+                    self.env['product.product'].handle_pricelist_items_cost_field(product, old_brand, [], "unlink")
                     product.create_product_pricelist_items(brand)
         if 'item_ids' in vals:
             prices_to_update = self.get_list_updated_prices()

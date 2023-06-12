@@ -86,6 +86,8 @@ class CrmClaimRma(models.Model):
     partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
+    advance_material = fields.Boolean(string="Advance Material")
+
     def _compute_rma_count(self):
         for claim in self:
             stage_sale_attach_id = self.env['crm.claim.stage'].search([('name', '=', 'Adjuntar con pedido')]).id
