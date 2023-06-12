@@ -93,7 +93,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def create(self, vals):
-        if 'partner_id' in vals:
+        if vals.get('partner_id'):
             vals['no_promos'] = self.env['res.partner'].browse(vals['partner_id']).no_promos
         return super().create(vals)
 
