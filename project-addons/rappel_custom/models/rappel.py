@@ -26,6 +26,9 @@ class Rappel(models.Model):
                                  default=lambda self: self.env['res.company']._company_default_get())
 
     def get_products(self):
+        """
+        Returns product.product.ids that verifies rappel filter
+        """
         product_obj = self.env['product.product']
         product_ids = self.env['product.product']
         for rappel in self:

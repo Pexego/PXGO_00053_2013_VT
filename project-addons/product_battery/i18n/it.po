@@ -75,3 +75,8 @@ msgid "\n"
 "The order can not be confirmed, there are products with batteries that can not be shipped by %s"
 msgstr "\n"
 "L'ordine non puo essere confirmato, ci sono prodotti con batterie che non possono essere spedite con %s"
+
+#. module: product_battery
+#: selection:product.template,battery_mode:0
+msgid "No battery"
+msgstr "No batteria"
