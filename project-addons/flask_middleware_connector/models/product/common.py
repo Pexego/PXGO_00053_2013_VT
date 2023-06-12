@@ -88,7 +88,8 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
+            "final_replacement_id", "weight", "volume", "standard_price_2_inc", "name",
+            "special_shipping_costs"
         ]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
