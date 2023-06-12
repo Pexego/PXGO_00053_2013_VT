@@ -18,7 +18,7 @@ msgstr ""
 #. module: move_reserves
 #: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
 msgid "<br/>Make sure you have permission to move the reserves, the move will be registered.<br/>"
-msgstr "<br/>Asegurate de tener permiso para mover las reservas, el movimiento será registrado.<br/>"
+msgstr "<br/>Assicurati che hai permesso per spostare, il movimento sarà registrato.<br/>"
 
 #. module: move_reserves
 #: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
@@ -65,25 +65,25 @@ msgstr "Riserva Origine"
 #: code:addons/move_reserves/wizard/move_reserves.py:83
 #, python-format
 msgid "There is been an error, try again later"
-msgstr "Ha habido un error, prueba de nuevo más tarde"
+msgstr "C'e stato un errore, prova di nuevo piu tardi"
 
 #. module: move_reserves
 #: code:addons/move_reserves/wizard/move_reserves.py:63
 #, python-format
 msgid "You have selected more quantity than is available in the origin reserve"
-msgstr "Has seleccionado más cantidad de la disponible en la reserva origen"
+msgstr "Hai selezionato piu cuantitá da quella disponibile in origine"
 
 #. module: move_reserves
 #: code:addons/move_reserves/wizard/move_reserves.py:65
 #, python-format
 msgid "You have selected more quantity than is in the destination reserve"
-msgstr "Has seleccionado más cantidad de la requerida en la reserva destino"
+msgstr "Hai selezionato piu cuantitá da quella disponibile in destinazione"
 
 #. module: move_reserves
 #: code:addons/move_reserves/wizard/move_reserves.py:61
 #, python-format
 msgid "You have selected the same move in both"
-msgstr "Has seleccionado la misma reserva en ambas"
+msgstr "Hai selezionato la stessa riserva in entrambi movimenti"
 
 #. module: move_reserves
 #: model:ir.actions.act_window,name:move_reserves.action_move_reserves_log
