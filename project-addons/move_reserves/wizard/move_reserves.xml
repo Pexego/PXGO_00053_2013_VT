@@ -11,7 +11,7 @@
                         <field name="qty" required="1"/>
                     </group>
                     <div>
-                        <br/>Make sure you have permission to move the reserves, the move will be registered. We'll be watching you. 🕵️‍♂️<br/>
+                        <br/>Make sure you have permission to move the reserves, the move will be registered.<br/>
                     </div>
                     <label for="reserves_origin_id"/>
                     <field name="reserves_origin_id" options="{'no_create': True, 'no_open': True}" col="4"/>

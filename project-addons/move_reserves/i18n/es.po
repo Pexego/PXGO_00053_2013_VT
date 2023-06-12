@@ -17,8 +17,8 @@ msgstr ""
 
 #. module: move_reserves
 #: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
-msgid "<br/>Make sure you have permission to move the reserves, the move will be registered. We'll be watching you. 🕵️‍♂️<br/>"
-msgstr "<br/>Asegúrate de tener permiso para mover las reservas, el movimiento será registrado. Te estamos vigilando. 🕵️‍♂️<br/>"
+msgid "<br/>Make sure you have permission to move the reserves, the move will be registered.<br/>"
+msgstr "<br/>Asegúrate de tener permiso para mover las reservas, el movimiento será registrado.<br/>"
 
 #. module: move_reserves
 #: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
