@@ -5,6 +5,9 @@
         <field name="model">sale.report</field>
         <field name="inherit_id" ref="sale.view_order_product_search"/>
         <field name="arch" type="xml">
+            <field name="categ_id" position="before">
+                <field name="product_brand_id"/>
+            </field>
             <field name="user_id" position="after">
                 <separator/>
                 <filter string="This Year" name="year2" domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"/>

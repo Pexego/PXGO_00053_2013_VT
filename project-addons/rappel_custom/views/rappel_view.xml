@@ -125,6 +125,16 @@
                             </tree>
                         </field>
                     </page>
+                    <page string="Excluded invoice lines">
+                        <field name="excluded_invoice_line_ids">
+                            <tree create="false" delete="false" edit="false">
+                                <field name="invoice_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total qty"/>
+                                <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
+                            </tree>
+                        </field>
+                    </page>
                 </notebook>
             </xpath>
         </field>
@@ -168,6 +178,16 @@
                                 <field name="quantity" sum="Total qty"/>
                                 <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
                                 <field name="no_rappel"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Excluded invoice lines">
+                        <field name="excluded_invoice_line_ids">
+                            <tree create="false" delete="false" edit="false">
+                                <field name="invoice_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total qty"/>
+                                <field name="price_subtotal_signed" string="Price" sum="Price Total"/>
                             </tree>
                         </field>
                     </page>
