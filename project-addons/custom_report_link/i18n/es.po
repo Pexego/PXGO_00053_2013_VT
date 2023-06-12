@@ -1222,3 +1222,12 @@ msgstr "OFERTA VÁLIDA 30 DÍAS"
 #: model:ir.model.fields,field_description:custom_report_link.field_res_partner_explode_kits_in_pdf
 msgid "Explode Kits In Pdf"
 msgstr "Desglosar Kits en PDFs"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Included\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Incluido\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"

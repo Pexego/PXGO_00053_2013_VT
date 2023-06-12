@@ -120,6 +120,13 @@
                                     </strong>
                                 </p>
                             </t>
+                            <t t-if="claim.internal_notes2">
+                                <p class="row">
+                                    <strong>Included
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
                         </div>
                         <!-- DATA -->
                         <div class="col-xs-2" style="color:#6D6E70">
@@ -135,6 +142,9 @@
                             <t t-if="claim.date">
                                 <p t-field="claim.date" t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"
                                    style="font-size:12px; white-space: nowrap;"/>
+                            </t>
+                            <t t-if="claim.internal_notes2">
+                                <p t-field="claim.internal_notes2"/>
                             </t>
                         </div>
                         <div class="col-xs-2" style="text-align:right; color:#da1f2e; margin-left: 5%;">

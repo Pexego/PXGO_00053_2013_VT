@@ -38,9 +38,12 @@ class CrmClaimPendingWizard(models.TransientModel):
         claim = self.env['crm.claim'].browse(self.env.context.get('active_ids'))
         state = self.env.ref('crm_claim_rma_custom.stage_claim_pending_rev')
         notes = claim.internal_notes or ''
+        notes2 = ''
         for rma in self.line_ids.filtered(lambda l: l.choose):
             notes += _('\n Add %s  Ub.: %s') % (rma.claim_id.number, rma.claim_id.location)
+            notes2 = notes2+rma.claim_id.number+' '
             rma.claim_id.stage_id = state.id
             rma.claim_id.att_claim_id = claim.id
         if notes:
             claim.internal_notes = notes
+            claim.internal_notes2 = notes2
