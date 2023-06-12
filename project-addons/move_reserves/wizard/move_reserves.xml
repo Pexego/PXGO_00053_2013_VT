@@ -26,6 +26,21 @@
         </field>
     </record>
 
+
+    <record id="view_reserves_log" model="ir.ui.view">
+        <field name="name">reserves.log.tree</field>
+        <field name="model">reserves.log</field>
+        <field name="arch" type="xml">
+            <tree string="Move reserves Log" create="false" edit="false">
+                <field name="move" readonly="1"/>
+                 <field name="product_id" readonly="1"/>
+                 <field name="qty" readonly="1"/>
+                 <field name="user_id" readonly="1"/>
+                 <field name="date" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="action_view_move_reserves" model="ir.actions.act_window">
         <field name="name">Move Reserves</field>
         <field name="type">ir.actions.act_window</field>
@@ -36,9 +51,21 @@
         <field name="target">new</field>
     </record>
 
+    <record id="action_move_reserves_log" model="ir.actions.act_window">
+        <field name="name">Move Reserves Log</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">reserves.log</field>
+        <field name="view_mode">tree</field>
+        <field name="view_type">form</field>
+    </record>
+
     <menuitem id="move_reserves_menu" name="Move Reserves" parent="sale.sale_order_menu"
               action="action_view_move_reserves"
               groups="base.group_system"
               sequence="5"/>
+
+    <menuitem id="move_reserves_log_menu" name="Move Reserves Log" parent="sale.menu_sale_report"
+              action="action_move_reserves_log"
+              sequence="10"/>
 
 </odoo>

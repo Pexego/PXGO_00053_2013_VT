@@ -10,7 +10,7 @@ class MoveReserves(models.TransientModel):
     product_id = fields.Many2one("product.product", "Product")
     qty = fields.Integer("Quantity")
 
-    reserves_origin_id = fields.Many2one("stock.move")  # TODO: filtrar esto por usuario, para que no puedan robar
+    reserves_origin_id = fields.Many2one("stock.move")
     reserves_dest_id = fields.Many2one("stock.move")
 
     @api.onchange('product_id', 'qty')
@@ -107,6 +107,13 @@ class MoveReserves(models.TransientModel):
             # 7. delete intermediate
             dummy_reserve.unlink()
 
+            # LOG
+            self.env['reserves.log'].create({'user_id': self.env.user.id,
+                                             'product_id': self.product_id.id,
+                                             'qty': self.qty,
+                                             'move': f'{self.reserves_origin_id.origin} -> {self.reserves_dest_id.origin}',
+                                             'date': datetime.now()})
+
         except:
             raise UserError(_('There is been an error, try again later'))
 
@@ -119,9 +126,21 @@ class StockMove(models.Model):
         result = []
         for move in self.filtered(lambda m: m.picking_type_id.code == 'outgoing' and m.state not in ['done', 'draft', 'cancel']):
             if move.picking_id:
-                name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or '_') + ' | ' + (move.picking_id.name or '_') + ' | ' + (move.user_id.name or '_')
+                name = f"{int(move.reserved_availability) or '_'} uds | {move.origin or '_'} | {move.picking_id.name or '_'} | {move.user_id.name or '_'}"
             else:
-                name = (str(int(move.reserved_availability)) or '_') + ' uds' + ' | ' + (move.origin or move.sale_id.name or '_') + ' | ' + (move.user_id.name or '_')
+                name = f"{int(move.reserved_availability) or '_'} uds | {move.origin or move.sale_id.name or '_'} | {move.user_id.name or '_'}"
             result.append((move.id, name))
         res = super(StockMove, self.filtered(lambda m: m.picking_type_id.code != 'outgoing' or m.state in ['done', 'draft', 'cancel'])).name_get()
         return result + res
+
+
+class ReservesLog(models.TransientModel):
+    _name = "reserves.log"
+    _transient_max_hours = 744  # one month
+    _transient_max_count = False
+
+    user_id = fields.Many2one("res.users", "User")
+    product_id = fields.Many2one("product.product", "Product")
+    qty = fields.Integer("Quantity")
+    move = fields.Char("Move")
+    date = fields.Datetime("Date")
