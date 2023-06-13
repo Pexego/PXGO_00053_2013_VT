@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ir_cron_view_add_retry_on_exception_field_form" model="ir.ui.view">
+        <field name="name">ir.cron.view.add.retry.on.exception.field.form</field>
+        <field name="model">ir.cron</field>
+        <field name="inherit_id" ref="base.ir_cron_view_form"/>
+        <field name="arch" type="xml">
+            <field name="doall" position="after">
+                <field name="retry_on_exception"/>
+                <field name="retry_on_exception_time" attrs="{'invisible':[('retry_on_exception','=',False)]}"/>
+                <field name="current_retry" attrs="{'invisible':[('retry_on_exception','=',False)]}"/>
+                <field name="max_retries" attrs="{'invisible':[('retry_on_exception','=',False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

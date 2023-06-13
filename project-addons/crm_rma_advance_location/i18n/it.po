@@ -250,6 +250,11 @@ msgid "Printed"
 msgstr "Stampato"
 
 #. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_sequence
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.print_damaged_products_form
 #: model:ir.actions.act_window,name:crm_rma_advance_location.print_damaged_products_action
 msgid "Print"
