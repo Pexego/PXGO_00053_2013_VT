@@ -166,19 +166,24 @@ msgid "Call type"
 msgstr "Tipo de llamada"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
+#: selection:crm.phonecall,call_type_sat_2:0
 msgid "Start up"
 msgstr "Puesta en marcha"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
+#: selection:crm.phonecall,call_type_sat_2:0
 msgid "Post-sale Incidence"
 msgstr "Incidencia postventa"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
+#: selection:crm.phonecall,call_type_sat_2:0
 msgid "Pre-sale Consultation"
 msgstr "Consulta preventa"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat_2:0
+msgid "Others"
+msgstr "Otros"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0

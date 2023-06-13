@@ -202,19 +202,24 @@ msgstr "Consulenza su corsi/certificati"
 
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
+#: selection:crm.phonecall,call_type_sat_2:0
 msgid "Start up"
 msgstr "Avviare"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
+#: selection:crm.phonecall,call_type_sat_2:0
 msgid "Post-sale Incidence"
 msgstr "Incidenza post-vendita"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat:0
+#: selection:crm.phonecall,call_type_sat_2:0
 msgid "Pre-sale Consultation"
 msgstr "Consulenza prevendita"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat_2:0
+msgid "Others"
+msgstr "Altri"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
