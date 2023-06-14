@@ -166,6 +166,11 @@ msgid "Call type"
 msgstr "Tipo di chiamata"
 
 #. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_call_reason
+msgid "Call reason"
+msgstr "Motivo della chiamata"
+
+#. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Check RMA status"
 msgstr "Controllo Stato RMA"
@@ -202,22 +207,22 @@ msgstr "Consulenza su corsi/certificati"
 
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat_2:0
+#: selection:crm.phonecall,call_reason:0
 msgid "Start up"
 msgstr "Avviare"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat_2:0
+#: selection:crm.phonecall,call_reason:0
 msgid "Post-sale Incidence"
 msgstr "Incidenza post-vendita"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat_2:0
+#: selection:crm.phonecall,call_reason:0
 msgid "Pre-sale Consultation"
 msgstr "Consulenza prevendita"
 
 #. module: crm_claim_phonecall
-#: selection:crm.phonecall,call_type_sat_2:0
+#: selection:crm.phonecall,call_reason:0
 msgid "Others"
 msgstr "Altri"
 

@@ -51,7 +51,7 @@ CALL_TYPE_SAT = [('check_status_rma', 'Check RMA status'),
                  ('others', 'Others'),
                  ('none', 'N/A')]
 
-CALL_TYPE_SAT_2 = [('start_up', 'Start up'),
+CALL_REASON = [('start_up', 'Start up'),
                    ('post_sale_incidence', 'Post-sale Incidence'),
                    ('pre_sale_consultation', 'Pre-sale Consultation'),
                    ('others', 'Others')]
@@ -81,7 +81,7 @@ class CrmPhonecall(models.Model):
     partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
     scope = fields.Selection(SCOPE, 'Scope call')
     call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
-    call_type_sat_2 = fields.Selection(CALL_TYPE_SAT_2, 'Call type')
+    call_reason = fields.Selection(CALL_REASON, 'Call reason')
     partner_country = fields.Many2one('res.country', related='partner_id.country_id', string='Country', readonly=True)
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', string='Brand')
