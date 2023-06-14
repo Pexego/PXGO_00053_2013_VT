@@ -198,22 +198,30 @@
                         </div>
                     </div>
                     <div class="row table-product-info">
-                        <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                        <table class="table table-condensed" style="font-size:12px; margin-top: 5%; width:100%;">
                             <thead>
                                 <tr style="font-weight: bold; background-color:#da1f2e; color:white;">
-                                    <th width="2%" style="vertical-align:middle;"></th>
-                                    <th width="12%" style="vertical-align:middle;">Product</th>
-                                    <th width="10%" style="vertical-align:middle;">Replacement Product</th>
-                                    <th width="7%" class="text-center" style="vertical-align:middle;">Quantity</th>
+                                    <th style="vertical-align:middle;"></th>
+                                    <th style="vertical-align:middle;">Product</th>
+                                    <th style="vertical-align:middle;">Replacement Product</th>
+                                    <th class="text-center" style="vertical-align:middle;">Quantity</th>
                                     <!--<th>Type</th>
                                     <th>Serial/Lot</th>-->
-                                    <th width="24%" style="vertical-align:middle;">Description</th>
-                                    <th width="44%" style="vertical-align:middle;">Internal Description</th>
+                                    <th style="vertical-align:middle;">Description</th>
+                                    <th style="vertical-align:middle;">Internal Description</th>
+
+                                    <t t-set="flag" t-value="true"/>
+                                    <t t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
+                                        <t t-if="line_id.pending_shipment_stock == true and flag==true">
+                                            <th style="vertical-align:middle;">Notes</th>
+                                            <t t-set="flag" t-value="false"/>
+                                        </t>
+                                    </t>
                                 </tr>
                             </thead>
                             <tbody class="body-product-info" style="font-size:12px; color:#6D6E70;">
                                 <tr t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
-                                    <td class="col-xs-1">
+                                    <td class="col-xs-0.5">
                                         <span t-field="line_id.sequence"/>
                                     </td>
                                     <td class="col-xs-2">
@@ -236,9 +244,12 @@
                                     <td class="col-xs-2" style="font-size:11px">
                                         <span t-field="line_id.name"/>
                                     </td>
-                                    <td class="col-xs-3" style="font-size:11px">
+                                    <td class="col-xs-2.5" style="font-size:11px">
                                         <span t-field="line_id.internal_description"/>
                                     </td>
+                                    <t t-if="line_id.pending_shipment_stock == true">
+                                        <td class="col-xs-2" style="font-size:11px">PENDIENTE DE ENVÍO POR FALTA DE STOCK</td>
+                                    </t>
                                 </tr>
                             </tbody>
                         </table>

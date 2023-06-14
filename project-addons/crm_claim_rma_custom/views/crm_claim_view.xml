@@ -206,6 +206,7 @@
                 <attribute name="context">{'search_product_id': product_id}</attribute>
             </field>
             <field name="internal_description" position="after">
+                <field name="pending_shipment_stock"/>
                 <field name="substate_id" options="{'no_open': True,'no_quick_create':True,'no_create_edit':True}"/>
                 <field name="write_date"/>
             </field>
