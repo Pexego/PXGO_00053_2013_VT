@@ -42,7 +42,7 @@ class EquivalentProductsWizard(models.TransientModel):
             'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier', 'customer']
                                                  and m.location_id.id != self.env.ref(
             'crm_rma_advance_location.stock_location_rma').id)
-        if moves and any([x.state == 'cancel' for x in moves]):
+        if moves and any([x.state != 'cancel' for x in moves]):
             raise exceptions.UserError(_("There are open pickings that contain this product"))
         else:
             self.line_id.equivalent_product_id = None
