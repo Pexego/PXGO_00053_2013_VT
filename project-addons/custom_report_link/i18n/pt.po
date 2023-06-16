@@ -1135,5 +1135,5 @@ msgstr "PROPOSTA VALIDA POR 30 DIAS"
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_account_invoice
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "Original invoice"
-msgstr "Fatura original"
+msgid "Original invoice:"
+msgstr "Fatura original:"

@@ -1124,5 +1124,5 @@ msgstr "OFFRE VALABLE PENDANT 30 JOURS"
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_account_invoice
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "Original invoice"
-msgstr "Facture originale"
+msgid "Original invoice:"
+msgstr "Facture originale:"

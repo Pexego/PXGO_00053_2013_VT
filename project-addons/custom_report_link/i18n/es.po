@@ -1226,5 +1226,5 @@ msgstr "Desglosar Kits en PDFs"
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_account_invoice
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "Original invoice"
-msgstr "Factura original"
+msgid "Original invoice:"
+msgstr "Factura original:"

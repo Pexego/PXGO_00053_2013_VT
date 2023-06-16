@@ -1127,5 +1127,5 @@ msgstr "ANGEBOT FÜR 30 TAGE GÜLTIG"
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_account_invoice
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "Original invoice"
-msgstr "Originalrechnung"
+msgid "Original invoice:"
+msgstr "Originalrechnung:"

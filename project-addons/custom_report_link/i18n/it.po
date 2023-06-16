@@ -1186,5 +1186,5 @@ msgstr "Scomponi i kit in PDF"
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_account_invoice
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "Original invoice"
-msgstr "Fattura originale"
+msgid "Original invoice:"
+msgstr "Fattura originale:"
