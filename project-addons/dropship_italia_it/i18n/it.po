@@ -107,4 +107,4 @@ msgstr "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucid
 #: code:addons/dropship_italia_it/models/sale.py:76
 #, python-format
 msgid "Error! A line cannot be dropship and deposit at the same time"
-msgstr "Errore! Una linea non può essere dropship e magazzino allo stesso tempo."
+msgstr "Errore! Una linea non può essere dropship e deposito allo stesso tempo."
