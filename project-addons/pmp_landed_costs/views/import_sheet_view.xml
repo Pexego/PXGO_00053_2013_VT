@@ -27,13 +27,18 @@
                     <field name="inspection"/>
                     <field name="arrival_cost"/>
                 </group>
+                <group>
+                    <field name="landed_cost_count" invisible="1"/>
+                    <button name="action_open_landed_cost_creator" string="Create landed costs"
+                            type="object" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
+                </group>
                 <separator string="Landed costs" colspan="4"/>
                 <field name="landed_cost_ids">
-                    <tree editable="bottom">
+                    <tree create="false" editable="true">
                         <field name="name"/>
                         <field name="date"/>
                         <field name="picking_ids" widget="many2many_tags"/>
-                        <field name="container_ids" widget="many2many_tags"/>
+                        <field name="container_ids" widget="many2many_tags" edit="false"/>
                         <field name="state"/>
                     </tree>
                 </field>
