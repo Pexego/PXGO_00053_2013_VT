@@ -13,6 +13,7 @@ class Partner(models.Model):
         ('carrier', 'Carrier - Customer'),
         ('installations', 'Pickup in installations')],
         'Delivery type', required=True, default='shipping')
+    country_group_id = fields.Many2one('res.country.group', 'Country Group')
 
     @api.multi
     @api.onchange('country_id')
