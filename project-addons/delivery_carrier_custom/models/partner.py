@@ -26,7 +26,7 @@ class Partner(models.Model):
         carrier_ids = [x.id for x in self.new_transporter_id.carrier_ids]
         if self.new_service_id.id not in carrier_ids:
             self.new_service_id = False
-        return {'domain': {'service_id': [('id', 'in', carrier_ids)]}}
+        return {'domain': {'new_service_id': [('id', 'in', carrier_ids)]}}
 
     @api.multi
     @api.onchange('delivery_type')
