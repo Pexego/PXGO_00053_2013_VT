@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_country_add_default_transporter" model="ir.ui.view">
+        <field name="name">res.country.add.default.transporter</field>
+        <field name="model">res.country</field>
+        <field name="inherit_id" ref="base.view_country_form"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name="new_default_transporter"/>
+            </field>
+        </field>
+    </record>
+</odoo>
