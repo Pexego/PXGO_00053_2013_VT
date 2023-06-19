@@ -5,6 +5,7 @@ from odoo import models, fields, api, exceptions, _
 from datetime import date
 from dateutil.relativedelta import relativedelta
 import odoorpc
+from odoo.tools import float_compare
 
 
 class PurchaseOrderLine(models.Model):
@@ -150,7 +151,9 @@ class PurchaseOrder(models.Model):
                                  ('date_order', '>=', search_date),
                                  ('partner_id', '=', 27),
                                  ('picking_type_id', 'in', picking_type_domain)])
-        purchases_filtered = purchases.filtered(lambda p: p.amount_total == p.amount_to_invoice_es)
+        purchases_filtered = purchases.filtered(
+            lambda p: float_compare(p.amount_total, p.amount_to_invoice_es, precision_digits=2) == 0
+        )
 
         if not purchases_filtered:
             return
