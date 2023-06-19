@@ -31,4 +31,22 @@
             </xpath>
         </field>
     </record>
+
+    <record id="res_partner_area_form_add_transporter" model="ir.ui.view">
+        <field name="name">res.partner.area.form.add.transporter</field>
+        <field name="model">res.partner.area</field>
+        <field name="inherit_id" ref="customer_area.res_partner_area_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]" position="after">
+                <group>
+                    <field name="transporter_rel_ids">
+                        <tree>
+                            <field name="transporter_id"/>
+                            <field name="ratio_shipping"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
 </odoo>

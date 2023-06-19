@@ -3,4 +3,5 @@ from . import (
     partner,
     country,
     sale,
+    area_transporter_rel
 )

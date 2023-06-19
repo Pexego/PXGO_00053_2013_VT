@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, exceptions, _
 
 
 class Partner(models.Model):
@@ -30,7 +30,28 @@ class Partner(models.Model):
         return {'domain': {'new_service_id': [('id', 'in', carrier_ids)]}}
 
     @api.multi
-    @api.onchange('delivery_type')
-    def new_onchange_delivery_type(self):
+    @api.onchange('delivery_carrier_type')
+    def onchange_delivery_carrier_type(self):
         # TODO: Falta por migrar
         pass
+
+
+class ResPartnerArea(models.Model):
+
+    _inherit = 'res.partner.area'
+
+    transporter_rel_ids = fields.One2many('area.transporter.rel',
+                                          'area_id', 'Transporters')
+
+    @api.onchange('transporter_rel_ids')
+    def onchange_transporter_rel(self):
+        for record in self.transporter_rel_ids:
+            if record.ratio_shipping == 0:
+                raise exceptions.except_orm(_('Value error'), _('the ratio can not be 0'))
+
+    @api.one
+    def write(self, values):
+        super().write(values)
+        for record in self.transporter_rel_ids:
+            if record.ratio_shipping == 0:
+                raise exceptions.except_orm(_('Value error'), _('the ratio can not be 0'))

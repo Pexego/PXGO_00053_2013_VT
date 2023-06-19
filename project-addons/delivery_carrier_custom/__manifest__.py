@@ -6,7 +6,8 @@
     'author': 'Visiotech',
     'depends': [
         'delivery_carrier_partner',
-        'sale_custom'
+        'sale_custom',
+        'customer_area'
     ],
     'data': [
         'views/partner_view.xml',
