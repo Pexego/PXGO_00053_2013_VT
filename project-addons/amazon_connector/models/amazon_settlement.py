@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from sp_api.api import Orders, Reports
+from sp_api.api import Reports
 from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
 from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
@@ -248,21 +248,7 @@ class AmazonSettlement(models.Model):
                 line_vals.update({'amazon_order_id': amazon_order.id,
                                   'destination_country_id': amazon_order.country_id.id})
             else:
-                amazon_time_rate_limit = float(
-                    self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-                credentials = self.env['amazon.sale.order']._get_credentials()
-                order_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-                read = False
-                while not read:
-                    try:
-                        order_address = order_obj.get_order_address(order_id=amazon_order_name).payload
-                        read = True
-                    except SellingApiRequestThrottledException:
-                        time.sleep(amazon_time_rate_limit)
-                        read = False
-                    except SellingApiException as e:
-                        raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (amazon_order_name, e))
-
+                order_address = self.env['amazon.sale.order'].call_api_order_method("get_order_address", amazon_order_name)
                 address = order_address.get('ShippingAddress', False)
                 if address.get('CountryCode', False):
                     line_vals.update({'destination_country_id': self.env['res.country'].search(

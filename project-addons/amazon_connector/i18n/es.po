@@ -71,8 +71,12 @@ msgid "Account Entry"
 msgstr "Asiento contable"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_address
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_address
+msgid "Billing Address"
+msgstr "Dirección de facturación"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_address
 msgid "Address"
 msgstr "Dirección"
 
@@ -104,15 +108,9 @@ msgstr "Transacción Publicidad"
 msgid "Amazon"
 msgstr "Amazon"
 
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:244
-#: code:addons/amazon_connector/models/amazon_sale_order.py:350
-#, python-format
-msgid "Amazon API Error. Buyer Info Request. Order %s. '%s' \n"
-msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:141
+#: code:addons/amazon_connector/models/amazon_sale_order.py:150
 #, python-format
 msgid "Amazon API Error. No order was created due to errors. '%s' \n"
 msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
@@ -124,14 +122,10 @@ msgid "Amazon API Error. No return was created due to errors. '%s' \n"
 msgstr "Amazon API Error. No return was created due to errors. '%s' \n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:183
-#: code:addons/amazon_connector/models/amazon_sale_order.py:208
-#: code:addons/amazon_connector/models/amazon_sale_order.py:297
-#: code:addons/amazon_connector/models/amazon_sale_order.py:316
-#: code:addons/amazon_connector/models/amazon_settlement.py:259
+#: code:addons/amazon_connector/models/amazon_sale_order.py:137
 #, python-format
-msgid "Amazon API Error. Order %s. '%s' \n"
-msgstr "Error API Amazon. Pedido %s. '%s'"
+msgid "Amazon API Error. Method: %s.Order %s. '%s' \n"
+msgstr "Error API Amazon. Llamada a la API: %s. Pedido %s. '%s' \n"
 
 #. module: amazon_connector
 #: code:addons/amazon_connector/models/amazon_returns.py:193
@@ -471,6 +465,11 @@ msgstr "Configuración"
 #: model:ir.model,name:amazon_connector.model_res_partner
 msgid "Contact"
 msgstr "Cliente"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_country_id
+msgid "Billing Country"
+msgstr "País de facturación"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_country_id
@@ -1073,7 +1072,7 @@ msgid "Pending Repackaging"
 msgstr "Pendiente de reempaquetar"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:321
+#: code:addons/amazon_connector/models/amazon_sale_order.py:305
 #, python-format
 msgid "Please add a valid fiscal position before retry this order"
 msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
@@ -1478,7 +1477,7 @@ msgid "Theoretical Total Taxes"
 msgstr "Impuestos aplicados por Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:574
+#: code:addons/amazon_connector/models/amazon_sale_order.py:494
 #, python-format
 msgid "There are no deposit for this order"
 msgstr "No hay depósitos para este pedido"
@@ -1490,8 +1489,7 @@ msgid "There aren't any invoices linked to this Amazon order"
 msgstr "No hay ninguna factura asociada a este pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:264
-#: code:addons/amazon_connector/models/amazon_sale_order.py:371
+#: code:addons/amazon_connector/models/amazon_sale_order.py:176
 #, python-format
 msgid "There country in VIES is diferent to Amazon order country"
 msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
@@ -1503,8 +1501,7 @@ msgid "There country in VIES is different to Amazon order country"
 msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:267
-#: code:addons/amazon_connector/models/amazon_sale_order.py:375
+#: code:addons/amazon_connector/models/amazon_sale_order.py:179
 #: code:addons/amazon_connector/wizard/create_full_invoices.py:48
 #, python-format
 msgid "There is no billing info in VIES"
@@ -1529,17 +1526,10 @@ msgid "There is no invoice for this order\n"
 msgstr "No hay factura para este pedido\n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:606
+#: code:addons/amazon_connector/models/amazon_sale_order.py:226
 #, python-format
 msgid "There is no vat in this Order"
 msgstr "Np hay CIF en este pedido"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:270
-#: code:addons/amazon_connector/models/amazon_sale_order.py:378
-#, python-format
-msgid "There is no vat in this order"
-msgstr "No hay CIF en este pedido"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_total
@@ -1557,9 +1547,7 @@ msgid "Total Amount Company Currency"
 msgstr "Importe total divisa compañia"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:228
-#: code:addons/amazon_connector/models/amazon_sale_order.py:333
-#: code:addons/amazon_connector/models/amazon_settlement.py:421
+#: code:addons/amazon_connector/models/amazon_sale_order.py:211
 #, python-format
 msgid "Total amount != Theoretical total amount (%f-%f)\n"
 msgstr "Total != Total enviado por Amazon (%f-%f)\n"
@@ -1772,8 +1760,7 @@ msgid "Retail Phone"
 msgstr "Teléfono Retail"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:262
-#: code:addons/amazon_connector/models/amazon_sale_order.py:374
+#: code:addons/amazon_connector/models/amazon_sale_order.py:192
 #, python-format
 msgid "There is a error calling vat service: %s"
 msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
