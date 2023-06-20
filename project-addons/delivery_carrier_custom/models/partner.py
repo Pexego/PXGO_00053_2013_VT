@@ -32,8 +32,22 @@ class Partner(models.Model):
     @api.multi
     @api.onchange('delivery_carrier_type')
     def onchange_delivery_carrier_type(self):
-        # TODO: Falta por migrar
-        pass
+        carrierServ_id = self.env['delivery.carrier'].search([('name', '=', 'Medios Propios')]).ids
+        carrierTrans_id = self.env['res.partner'].search([('name', '=', 'Medios Propios')]).ids  # TODO: ¿cambiar a LX?
+        installationServ_id = self.env['delivery.carrier'].search([('name', '=', 'Recoge agencia cliente')]).ids
+        installationTrans_id = self.env['res.partner'].search(
+            [('name', '=', 'Recoge agencia cliente')]).ids  # TODO: ¿Cambiar a LX?
+        if self.delivery_carrier_type == 'installations':
+            self.carrier_id = carrierServ_id[0]
+            self.new_transporter_id = carrierTrans_id[0]
+
+        if self.delivery_carrier_type == 'carrier':
+            self.carrier_id = installationServ_id[0]
+            self.new_transporter_id = installationTrans_id[0]
+
+        if self.delivery_carrier_type == 'shipping':
+            self.carrier_id = self.carrier_id.id
+            self.new_transporter_id = self.new_transporter_id.id
 
 
 class ResPartnerArea(models.Model):
