@@ -38,7 +38,7 @@ class EquivalentProductsWizard(models.TransientModel):
 
     @api.multi
     def delete_product(self):
-        moves = self.line_id.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+        moves = self.line_id.move_ids.filtered(lambda m: m.picking_code == 'outgoing'
             'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier', 'customer']
                                                  and m.location_id.id != self.env.ref(
             'crm_rma_advance_location.stock_location_rma').id)
