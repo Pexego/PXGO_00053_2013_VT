@@ -54,6 +54,13 @@ class AmazonSaleOrder(models.Model):
     billing_country_id = fields.Many2one('res.country', string='Billing Country')
     partner_id = fields.Many2one('res.partner')
     is_business_order = fields.Boolean()
+    ship_from_country_id = fields.Many2one('res.country', string='Ship From Country')
+    tax_address_role = fields.Selection([
+        ('ShipTo', 'ShipTo'),
+        ('ShipFrom', 'ShipFrom')])
+    seller_vat = fields.Char()
+    tax_country_id = fields.Many2one('res.country', string='Tax Country')
+    amazon_company_id = fields.Many2one('amazon.company')
 
     def _compute_count(self):
         for order in self:
@@ -236,11 +243,11 @@ class AmazonSaleOrder(models.Model):
 
         cols = ["Order ID", "Buyer Tax Registration", "Buyer Tax Registration Jurisdiction", "Order Date",
                 "VAT Invoice Number", "Transaction Type", "Ship To City", "Ship To State", "Ship To Country",
-                "Ship To Postal Code"
+                "Ship To Postal Code","Tax Address Role", "Jurisdiction Name", "Ship From Country", "Seller Tax Registration"
         ]
         #Read file with pandas
         csv_converted = StringIO(report_document.get('document'))
-        input_file = pd.read_csv(csv_converted, encoding='latin1', usecols=cols,na_values=False)
+        input_file = pd.read_csv(csv_converted, encoding='latin1', usecols=cols, na_filter=False)
         #Filter rows to get only shipments
         input_file = input_file[input_file["Transaction Type"] == 'SHIPMENT']
         orders_len = len(input_file.index)
@@ -254,7 +261,11 @@ class AmazonSaleOrder(models.Model):
             if not new_order:
                 continue
             country_id = self.env['res.country'].search([('code', '=', row["Ship To Country"])]).id
-            fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', country_id)])
+            tax_country = self.env['res.country'].with_context({'lang':'en_US'}).search([('name', '=ilike', row["Jurisdiction Name"])]).id
+            seller_vat = row["Seller Tax Registration"]
+            amazon_company_id = self.env['amazon.company'].search([('vat', '=', seller_vat)])
+            fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', tax_country)])
+
             amazon_order_values = {'name': order_name,
                                    'partner_vat': row["Buyer Tax Registration"],
                                    'vat_imputation_country': row["Buyer Tax Registration Jurisdiction"],
@@ -264,7 +275,11 @@ class AmazonSaleOrder(models.Model):
                                    'country_id': country_id,
                                    'state_id': row["Ship To State"],
                                    'zip': row["Ship To Postal Code"],
-                                   'fiscal_position_id': fiscal_position.id
+                                   'fiscal_position_id': fiscal_position.id,
+                                   'tax_address_role': row["Tax Address Role"],
+                                   'seller_vat': seller_vat,
+                                   'amazon_company_id': amazon_company_id.id,
+                                   'tax_country_id': tax_country
                                    }
             order_complete = self.call_api_order_method("get_order", order_name)
             amazon_order_values.update({
@@ -462,11 +477,14 @@ class AmazonSaleOrder(models.Model):
                 # Buscar el depósito, crear la venta, crear factura, ajustar precio de la factura generada con el de venta en amazon y validarla
                 deposits = self.env['stock.deposit']
                 if not order.deposits:
+                    if not order.amazon_company_id:
+                        raise UserError(_("There is no Amazon company linked to this order"))
+                    partner = order.amazon_company_id.partner_id
                     for line in order.order_line:
                         cont = 0
                         max = line.product_qty
                         deposits_part = self.env['stock.deposit'].search(
-                            [('partner_id.name', '=', 'Ventas Amazon'),
+                            [('partner_id', '=', partner.id),
                              ('state', '=', 'draft'),
                              ('product_id', '=', line.product_id.id)],
                             order='delivery_date asc')
@@ -596,13 +614,3 @@ class AmazonSaleOrderLine(models.Model):
                 'price_total': taxes['total_included'],
                 'price_subtotal': taxes['total_excluded'],
             })
-
-
-class AmazonMarketplace(models.Model):
-    _name = 'amazon.marketplace'
-
-    name = fields.Char(translate=True)
-    code = fields.Char()
-    amazon_name = fields.Char()
-    account_id = fields.Many2one("account.account")
-    color = fields.Integer()

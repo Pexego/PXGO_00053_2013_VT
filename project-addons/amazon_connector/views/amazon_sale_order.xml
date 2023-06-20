@@ -13,42 +13,6 @@
         </field>
     </record>
 
-    <record id="amazon_marketplace_tree" model="ir.ui.view">
-        <field name="name">amazon.marketplace.tree</field>
-        <field name="model">amazon.marketplace</field>
-        <field name="arch" type="xml">
-            <tree string="Marketplaces">
-                <field name="name"/>
-                <field name="code"/>
-                <field name="amazon_name"/>
-                <field name="account_id"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="amazon_marketplace_form" model="ir.ui.view">
-        <field name="name">amazon.marketplace.form</field>
-        <field name="model">amazon.marketplace</field>
-        <field name="arch" type="xml">
-            <form string="Marketplaces">
-                <group>
-                    <field name="name"/>
-                    <field name="code"/>
-                    <field name="amazon_name"/>
-                    <field name="account_id"/>
-                </group>
-            </form>
-        </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="action_show_marketplaces">
-        <field name="name">Marketplaces</field>
-        <field name="res_model">amazon.marketplace</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="amazon_marketplace_tree"/>
-    </record>
-
     <menuitem id="amazon_menu" name="Amazon" web_icon="amazon_connector,static/amazon_logo.png"
               sequence="4" action="action_show_amazon_orders" groups="amazon_connector.group_amazon"/>
 
@@ -60,9 +24,6 @@
 
     <menuitem id="config_amazon_menu" name="Configuration" sequence="3"
               parent="amazon_menu"/>
-
-    <menuitem id="marketplaces_menu" name="Marketplaces" sequence="1" action="action_show_marketplaces"
-              string="Marketplaces" parent="config_amazon_menu"/>
 
     <record id="amazon_sale_order_form" model="ir.ui.view">
         <field name="name">amazon.sale.order.form</field>
@@ -155,11 +116,9 @@
                         <page string="Buyer Info" name="buyer_info">
                             <group>
                                 <group string="General Info">
-                                    <field name="partner_vat"/>
                                     <field name="vat_imputation_country"/>
                                     <field name="buyer_email"/>
                                     <field name="buyer_name"/>
-                                    <field name="billing_name"/>
                                     <field name="partner_id"/>
                                 </group>
                             </group>
@@ -171,9 +130,15 @@
                                     <field name="country_id"/>
                                     <field name="zip"/>
                                 </group>
-                                <group string="Billing Address">
+                                <group string="Billing Information">
+                                    <field name="partner_vat"/>
+                                    <field name="billing_name"/>
                                     <field name="billing_address"/>
                                     <field name="billing_country_id"/>
+                                    <field name="tax_address_role"/>
+                                    <field name="tax_country_id"/>
+                                    <field name="seller_vat" readonly="1"/>
+                                    <field name="amazon_company_id"/>
                                 </group>
                             </group>
                         </page>

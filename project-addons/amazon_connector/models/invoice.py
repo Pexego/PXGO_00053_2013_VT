@@ -29,6 +29,16 @@ class AccountInvoice(models.Model):
             invoice.write({'name':amazon_order.name,'amazon_order':amazon_order.id,'amazon_invoice':amazon_order.amazon_invoice_name})
         return res
 
+    @api.multi
+    @api.depends('amazon_order', 'amazon_order.amazon_company_id','amazon_order.amazon_company_id.sii_enabled')
+    def _compute_sii_enabled(self):
+        """Inherit original function to disable sending to the sii depending on the amazon company"""
+        super()._compute_sii_enabled()
+        for invoice in self:
+            amazon_order = invoice.amazon_order
+            if amazon_order:
+                invoice.sii_enabled = not amazon_order.amazon_company_id or amazon_order.amazon_company_id.sii_enabled
+
 
 
 class AccountMove(models.Model):

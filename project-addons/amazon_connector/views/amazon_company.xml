@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="amazon_company_tree" model="ir.ui.view">
+        <field name="name">amazon.company.tree</field>
+        <field name="model">amazon.company</field>
+        <field name="arch" type="xml">
+            <tree string="Amazon Company">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="vat"/>
+                <field name="sii_enabled"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="amazon_company_form" model="ir.ui.view">
+        <field name="name">amazon.company.form</field>
+        <field name="model">amazon.company</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Company">
+                <group>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="vat"/>
+                    <field name="sii_enabled"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_show_companies">
+        <field name="name">Amazon Companies</field>
+        <field name="res_model">amazon.company</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="amazon_company_tree"/>
+    </record>
+
+    <menuitem id="amazon_companies_menu" name="Amazon Companies" sequence="1" action="action_show_companies"
+              string="Amazon Companies" parent="config_amazon_menu"/>
+</odoo>
