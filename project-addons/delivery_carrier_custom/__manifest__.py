@@ -13,7 +13,8 @@
         'views/partner_view.xml',
         'views/delivery_carrier.xml',
         'views/country_view.xml',
-        'views/sale_view.xml'
+        'views/sale_view.xml',
+        'wizard/picking_tracking_status_view.xml'
     ],
     'installable': True
 }
