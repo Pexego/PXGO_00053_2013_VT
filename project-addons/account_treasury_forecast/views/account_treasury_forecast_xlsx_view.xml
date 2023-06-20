@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <report
+        id="account_treasury_forecast_xlsx"
+        model="account.treasury.forecast"
+        string="Print invoices to XLSX"
+        report_type="xlsx"
+        name="account_treasury_forecast.account_treasury_forecast"
+        file="account_treasury_forecast_invoices"
+        attachment_use="False"
+    />
+</odoo>
