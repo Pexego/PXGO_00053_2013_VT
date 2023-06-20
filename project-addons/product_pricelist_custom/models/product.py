@@ -176,8 +176,10 @@ class ProductPricelistItem(models.Model):
     _inherit = 'product.pricelist.item'
 
     pricelist_calculated = fields.Many2one('product.pricelist', string="Calculated Pricelist")
-    pricelist_calculated_price = fields.Float("Price calculated", compute='_get_pricelist_calculated_price')
-    margin = fields.Float("Margin (%)", compute='_get_margin', readonly=True, store=True)
+    pricelist_calculated_price = fields.Float("Price calculated", compute='_get_pricelist_calculated_price',
+                                              compute_sudo=True)
+    margin = fields.Float("Margin (%)", compute='_get_margin', readonly=True,
+                          store=False, compute_sudo=True)
     name_pricelist = fields.Char(related='pricelist_id.name', readonly=True)
     base = fields.Selection(selection_add=[('standard_price_2_inc', 'Cost 2')])
     pricelist_sequence = fields.Integer(related='pricelist_id.sequence', readonly=True)
@@ -294,7 +296,7 @@ class ProductPricelistItem(models.Model):
                         item.pricelist_calculated_price = new_price
 
     @api.multi
-    @api.depends('fixed_price', 'product_id.standard_price_2', 'product_tmpl_id.standard_price_2', 'product_id.standard_price_2_inc')
+    @api.depends('fixed_price', 'product_id.standard_price_2_inc')
     def _get_margin(self):
         for item in self:
             product_id = item.product_tmpl_id or item.product_id.product_tmpl_id
@@ -305,6 +307,7 @@ class ProductPricelistItem(models.Model):
                     item.margin = 0
 
     def get_brand_pricelist_items(self,brand_id):
+        self = self.sudo()
         return self.env['product.pricelist.item'].search([('brand_group_id', '!=', False),
                                                           ('brand_group_id.brand_ids', '=', brand_id),
                                                           ('compute_price', '=', 'formula'),
@@ -357,6 +360,7 @@ class ProductProduct(models.Model):
 
     @api.multi
     def get_product_price_with_pricelist(self, pricelist_name):
+        self = self.sudo()
         pricelist = self.env['product.pricelist'].search([('name', '=', pricelist_name)])
         price = 0
         for product in self:
@@ -374,6 +378,7 @@ class ProductProduct(models.Model):
 
     @api.multi
     def get_list_updated_prices(self):
+        self = self.sudo()
         prices = {
             'list_price1': self.get_product_price_with_pricelist('PVPIberia'),
             'list_price2': self.get_product_price_with_pricelist('PVPEuropa'),
@@ -395,21 +400,26 @@ class ProductProduct(models.Model):
 
     relation_pvd_pvi_a = fields.Float(compute='_get_margins_relation',
                                       string='PVD/PVI Iberia relation',
-                                      digits=(5, 2), readonly=True)
+                                      digits=(5, 2), readonly=True,
+                                      compute_sudo=True)
     relation_pvd_pvi_b = fields.Float(compute='_get_margins_relation',
                                       string='PVD/PVI Europe relation',
-                                      digits=(5, 2), readonly=True)
+                                      digits=(5, 2), readonly=True,
+                                      compute_sudo=True)
     relation_pvd_pvi_c = fields.Float(compute='_get_margins_relation',
                                       string='PVD/PVI Italy relation',
-                                      digits=(5, 2), readonly=True)
+                                      digits=(5, 2), readonly=True,
+                                      compute_sudo=True)
     relation_pvd_pvi_d = fields.Float(compute='_get_margins_relation',
                                       string='PVD/PVI France relation',
-                                      digits=(5, 2), readonly=True)
+                                      digits=(5, 2), readonly=True,
+                                      compute_sudo=True)
 
     def create_brand_pricelist_items(self, brand_id):
         """ This method allows to create pricelists of a specified brand
             :param brand_id: brand of a product (ID)
         """
+        self = self.sudo()
         for product_id in self:
             brand_pricelist_items = self.env['product.pricelist.item'].get_brand_pricelist_items(brand_id)
             items = []
@@ -427,6 +437,7 @@ class ProductProduct(models.Model):
         """ This method allows to create pricelists of products
             :param brand_id: brand of products (ID)
         """
+        self = self.sudo()
         for product_id in self:
             base_brand_pricelists = self.env['product.pricelist'].get_base_brand_pricelists(brand_id)
             if base_brand_pricelists:
@@ -516,6 +527,7 @@ class ProductTemplate(models.Model):
                                      domain=['&', '|', '&', ('pricelist_id', '=', False),
                                              ('pricelist_calculated.brand_group_id', '!=', False),
                                              ('brand_group_id', '!=', False), ('pricelist_calculated', '!=', False)])
+
 
 class ProductBrand(models.Model):
     _inherit = 'product.brand'

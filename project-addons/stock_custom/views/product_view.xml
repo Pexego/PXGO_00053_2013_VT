@@ -42,6 +42,9 @@
         <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
         <field name="arch" type="xml">
             <xpath expr="//button[@name='%(stock.action_stock_level_forecast_report_product)d']" position="before">
+                <button class="oe_stat_button" name="action_view_deposit_stock_report" type="object" icon="fa-building-o" attrs="{'invisible':[('type', '=', 'service')]}">
+                    <field name="qty_available_deposit" widget="statinfo" string="On Deposit"/>
+                </button>
                 <button class="oe_inline oe_stat_button" name="action_view_moves"
                     string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
                 <button class="oe_inline oe_stat_button" type="action" name="%(product_graphic_stock_grouped)d"

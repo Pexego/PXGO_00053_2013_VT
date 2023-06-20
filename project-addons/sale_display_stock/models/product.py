@@ -28,7 +28,7 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def _get_no_wh_internal_stock(self):
-        for product in self:
+        for product in self.sudo():
             locs = []
             locs.append(self.env.ref('location_moves.stock_location_kitchen').id)
             locs.append(self.env.ref('location_moves.stock_location_pantry').id)

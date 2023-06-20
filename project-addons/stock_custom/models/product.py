@@ -1,6 +1,7 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models, _, exceptions
+import odoo.addons.decimal_precision as dp
 
 
 class ProductTemplate(models.Model):
@@ -47,9 +48,27 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
+    @api.multi
+    def _get_deposit_stock(self):
+        company = self.env.user.company_id
+        quants = self.env['stock.quant'].sudo().read_group(
+            [('product_id', 'in', self.ids),
+             ('location_id.usage', 'in', ['internal', 'transit']),
+             ('owner_id', '=', company.partner_id.id)],
+            ['product_id', 'quantity'], ['product_id'])
+        quants = {x['product_id'][0]: x['quantity'] for x in quants}
+        for product in self:
+            if quants.get(product.id):
+                product.qty_available_deposit = quants[product.id]
+            else:
+                product.qty_available_deposit = 0.0
+
     ref_visiotech = fields.Char('Visiotech reference')
     is_pack = fields.Boolean()
-
+    qty_available_deposit = fields.\
+        Float(string="Qty. on deposit", compute="_get_deposit_stock",
+              readonly=True,
+              digits=dp.get_precision('Product Unit of Measure'))
 
     def action_view_moves(self):
         return {
@@ -74,6 +93,18 @@ class ProductProduct(models.Model):
             'context': {'tree_view_ref': 'stock_custom.view_move_dates_tree',
                         'search_default_future_dates': 1},
             'res_model': 'stock.move',
+            'type': 'ir.actions.act_window',
+        }
+
+    def action_view_deposit_stock_report(self):
+        return {
+            'domain': [('product_id', '=', self.id),
+                       ('owner_id', '=',
+                        self.env.user.company_id.partner_id.id)],
+            'name': _('Deposit stock report'),
+            'view_mode': 'tree',
+            'view_type': 'form',
+            'res_model': 'stock.deposit.report',
             'type': 'ir.actions.act_window',
         }
 

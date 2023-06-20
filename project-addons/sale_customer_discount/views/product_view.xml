@@ -61,7 +61,13 @@
             </field>
         </record>
 
-
+        <record forcecreate="True" id="default_cost_increment" model="ir.property">
+            <field name="name">Cost Increment Property</field>
+            <field name="fields_id" search="[('model', '=', 'product.product'), ('name', '=', 'cost_increment')]"/>
+            <field name="value">1.0</field>
+            <field name="type">float</field>
+            <field name="company_id" eval="False"/>
+        </record>
 
     </data>
 </odoo>

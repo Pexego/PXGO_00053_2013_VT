@@ -22,6 +22,16 @@ from odoo import models, fields, api
 import odoo.addons.decimal_precision as dp
 
 
+class ResCompany(models.Model):
+
+    _inherit = 'res.company'
+
+    deposit_cost_multiplier = fields.Float(
+        "Deposit Cost Multipler", default=1.0,
+        digits=dp.get_precision('Product Price'),
+        help="This value will be multiplied by the cost of the owner")
+
+
 class ProductTemplate(models.Model):
 
     _inherit = "product.template"
@@ -31,33 +41,66 @@ class ProductTemplate(models.Model):
         string="Cost Price 2", company_dependent=True)
 
     def recalculate_standard_price_2(self):
+        pdp = self.env['decimal.precision'].search(
+            [('name', '=', 'Product Price')])
         for product in self:
+            # coste de los movimientos físicos
             moves = self.env['stock.move'].search(
                 [('product_id', 'in', product.product_variant_ids._ids),
-                ('remaining_qty', '>', 0)])
-            if sum(moves.mapped('remaining_qty')) != 0:
-                standard_price_2 = sum(moves.mapped('remaining_value')) / sum(moves.mapped('remaining_qty'))
-                dp = self.env['decimal.precision'].search([('name', '=', 'Product Price')])
-                standard_price_2 = round(standard_price_2, dp.digits)
-                if standard_price_2 != round(product.standard_price_2, dp.digits):
-                    product.standard_price_2 = standard_price_2 or product.standard_price
-                elif not standard_price_2:
-                    product.standard_price_2 = product.standard_price
+                 ('remaining_qty', '>', 0)])
+            # costes de los quants en depósito
+            owner_stock = self.env['stock.quant'].read_group(
+                [('product_id', 'in', product.product_variant_ids.ids),
+                 ('owner_id', '!=', False),
+                 ('owner_id', '!=',
+                  self.env.user.company_id.partner_id.id),
+                 ('location_id.usage', 'in', ['internal', 'transit'])],
+                ['owner_id', 'quantity'], ['owner_id'])
+            remaining_qty = sum(moves.mapped('remaining_qty'))
+            remaining_value = sum(moves.mapped('remaining_value'))
+            # PMP de los movimientos físicos
+            if remaining_qty and not owner_stock:
+                standard_price_2 = remaining_value / remaining_qty
+                standard_price_2 = round(standard_price_2, pdp.digits)
+                product.standard_price_2 = (
+                    standard_price_2 or product.standard_price)
+            # PMP de los movimientos físicos y de los quants en depósito
+            # incrementados con el incremento configurado en la compañía
+            elif owner_stock:
+                for owner in owner_stock:
+                    company = self.env['res.company'].sudo().search(
+                        [('partner_id', '=', owner['owner_id'][0])],
+                        limit=1)
+                    if company:
+                        company_standard_price = product.with_context(
+                            force_company=company.id).standard_price_2
+                        remaining_value += (
+                            company_standard_price * owner['quantity']) * \
+                            self.env.user.company_id.deposit_cost_multiplier
+                        remaining_qty += owner['quantity']
+                product.standard_price_2 = (
+                    round(remaining_value / remaining_qty, pdp.digits)
+                    or product.standard_price)
             else:
                 product.standard_price_2 = product.standard_price
             bom_ids = self.env['mrp.bom']
             if product.product_variant_ids.used_in_bom_count:
-                bom_ids += self.env['mrp.bom'].search([('bom_line_ids.product_id', '=', product.product_variant_ids.id)])
+                bom_ids += self.env['mrp.bom'].search(
+                    [('bom_line_ids.product_id', '=',
+                      product.product_variant_ids.id)])
             if product.product_variant_ids.bom_ids:
-                bom_ids += product.product_variant_ids.bom_ids.filtered(lambda b: b.product_tmpl_id)
+                bom_ids += product.product_variant_ids.bom_ids.filtered(
+                    lambda b: b.product_tmpl_id)
 
             if bom_ids:
                 for bom in bom_ids:
                     cost = 0.0
                     for bom_line in bom.bom_line_ids:
-                        cost += bom_line.product_id.standard_price_2 * bom_line.product_qty
+                        cost += (bom_line.product_id.
+                                 standard_price_2 * bom_line.product_qty)
                     bom.product_tmpl_id.write({'standard_price_2': cost})
-                    bom.product_tmpl_id.product_variant_ids._onchange_cost_increment()
+                    bom.product_tmpl_id.product_variant_ids.\
+                        _onchange_cost_increment()
 
             product.product_variant_ids._onchange_cost_increment()
 
@@ -68,8 +111,9 @@ class ProductProduct(models.Model):
     standard_price_2_inc = fields.Float(
         digits=dp.get_precision('Product Price'),
         string="Cost Price 2",
-        copy=False)
-    cost_increment = fields.Float("Increment", default=1.0)
+        copy=False, company_dependent=True)
+    cost_increment = fields.Float("Increment", default=1.0,
+                                  company_dependent=True)
 
     @api.onchange("cost_increment")
     def _onchange_cost_increment(self):

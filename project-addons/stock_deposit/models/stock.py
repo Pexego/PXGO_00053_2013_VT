@@ -69,7 +69,7 @@ class ProcurementRule(models.Model):
         vals = super(ProcurementRule, self)._get_stock_move_values(
             product_id, product_qty, product_uom,
             location_id, name, origin, values, group_id)
-        if self.env['sale.order.line'].browse(vals['sale_line_id']).deposit:
+        if vals.get('sale_line_id') and self.env['sale.order.line'].browse(vals['sale_line_id']).deposit:
             picking_type_id = self.env['stock.picking.type'].\
                 search([('name', '=', u'Depósitos')])
             vals['location_dest_id'] = self.env['sale.order.line'].\

@@ -109,8 +109,8 @@ class StockDaysPositive(models.Model):
                  FROM generate_series(0,200) AS sequence(day)
                  GROUP BY sequence.day
                  ORDER BY datum desc) as dates
-            WHERE location_id IN (SELECT id FROM stock_location WHERE usage = 'internal' and location_id in (%s))
+            WHERE location_id IN (SELECT id FROM stock_location WHERE usage = 'internal' and location_id in %s)
                 AND stock_history.date::DATE <= (dates.datum || ' 23:59:59')::DATE
             GROUP BY product_id,datum
             HAVING sum(quantity) > 0)
-            """ % tuple(location_ids))
+            """, (tuple(location_ids),))

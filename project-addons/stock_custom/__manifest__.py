@@ -18,6 +18,7 @@
              'security/stock_custom_security.xml',
              'stock_custom_report.xml',
              'report/stock_report.xml',
+             'report/stock_deposit_report_view.xml',
              'views/stock_view.xml',
              'views/partner_view.xml',
              'views/product_view.xml',

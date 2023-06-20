@@ -75,6 +75,9 @@ class StockPicking(models.Model):
 
     @api.multi
     def write(self, vals):
+        if ('partner_id' in vals and not vals['partner_id'] and self.env.
+                context.get('no_partner_id_update')):
+            del vals['partner_id']
         pickings_to_send = []
         for picking in self:
             if picking.check_send_email(vals):
@@ -123,6 +126,50 @@ class StockMoveLine(models.Model):
         return super()._compute_sale_order_line_fields()
 
 
+class StockQuant(models.Model):
+    _inherit = "stock.quant"
+
+    @api.model
+    def _update_available_quantity(self, product_id, location_id, quantity,
+                                   lot_id=None, package_id=None, owner_id=None,
+                                   in_date=None):
+        """Si se busca stock en una ubicación con owner, nos aseguramos de que
+        tenga owner puesto, por la contra si viene owner y la ubicación no lo
+        espera se le quita"""
+        if location_id.set_owner and location_id.partner_id and not owner_id:
+            owner_id = location_id.partner_id
+        elif (owner_id and location_id.company_id and owner_id == location_id.
+                company_id.partner_id):
+            owner_id = False
+        return super()._update_available_quantity(
+            product_id, location_id, quantity, lot_id=lot_id,
+            package_id=package_id, owner_id=owner_id, in_date=in_date)
+
+    @api.model
+    def _update_reserved_quantity(self, product_id, location_id, quantity,
+                                  lot_id=None, package_id=None, owner_id=None,
+                                  strict=False):
+        """Si se busca stock en una ubicación con owner, nos aseguramos de que
+        tenga owner puesto, por la contra si viene owner y la ubicación no lo
+        espera se le quita"""
+        if location_id.set_owner and location_id.partner_id and not owner_id:
+            owner_id = location_id.partner_id
+        elif (owner_id and location_id.company_id and owner_id == location_id.
+                company_id.partner_id):
+            owner_id = False
+        return super()._update_reserved_quantity(
+            product_id, location_id, quantity, lot_id=lot_id,
+            package_id=package_id, owner_id=owner_id, strict=strict)
+
+
+class StockLocation(models.Model):
+
+    _inherit = "stock.location"
+
+    set_owner = fields.Boolean(
+        "Set Owner", help="Set Owner with location's partner")
+
+
 class StockMove(models.Model):
     _inherit = "stock.move"
 
@@ -147,6 +194,13 @@ class StockMove(models.Model):
         for move in self:
             if move.picking_id.state == 'draft' or (move.picking_id.state in ('confirmed', 'assigned') and move.picking_id.picking_type_id.code == 'incoming'):
                 move.is_initial_demand_editable = True
+
+    @api.model
+    def _prepare_merge_moves_distinct_fields(self):
+        """We didn't want merge any move"""
+        merge_fields = super()._prepare_merge_moves_distinct_fields()
+        merge_fields.append('id')
+        return merge_fields
 
     def _compute_responsible(self):
         for move in self:
@@ -180,14 +234,14 @@ class StockMove(models.Model):
     @api.multi
     def _action_done(self):
         res = super()._action_done()
-        stock_loc = self.env.ref("stock.stock_location_stock")
         for move in self:
-            if (move.location_id.usage in ('supplier', 'production')) and \
-                    (move.product_id.cost_method == 'fifo'):
+            if (move.location_id.usage in ('supplier', 'production', 'transit')
+                    and move.product_id.cost_method == 'fifo'):
                 move.product_id.product_tmpl_id.recalculate_standard_price_2()
-            if move.location_dest_id == stock_loc:
+            if move.location_dest_id.usage == 'internal':
                 domain = [('state', 'in', ['confirmed',
                                            'partially_available']),
+                          ('location_id', 'child_of', [move.location_dest_id.id]),
                           ('picking_type_code', '=', 'outgoing'),
                           ('product_id', '=', move.product_id.id)]
                 confirmed_ids = self.\
@@ -198,7 +252,36 @@ class StockMove(models.Model):
             if move.location_dest_id.name == 'Tránsito Italia':
                 # TODO: revisar y permitir aplicar en otras circustancias para el futuro
                 self._push_apply()
+            if move.sudo().move_dest_ids:
+                move.sudo().move_dest_ids._action_assign()
         return res
+
+    def _action_cancel(self):
+        """Cuando no se cancela move_dest_ids por no tener marcado propagate
+        desasocia los movimientos y los pone como make_to_stock pero no
+        recalcula el nuevo estado del movimiento.
+        Por otra parte, si el movimiento tiene move_orig_ids y estos no están
+        cancelados queremos cancelarlos también"""
+        move_dest_ids = self.sudo().filtered(lambda x: not x.propagate).mapped(
+            'move_dest_ids').filtered(
+                lambda x: x.state not in ('done', 'cancel'))
+        move_orig_ids = self.sudo().mapped('move_orig_ids').filtered(
+            lambda x: x.state not in ('done', 'cancel'))
+        res = super()._action_cancel()
+        if move_dest_ids:
+            move_dest_ids._recompute_state()
+        if move_orig_ids:
+            move_orig_ids._action_cancel()
+        return res
+
+    def _assign_picking(self):
+        """contexto para que al actualizar no elimine el partner_id"""
+        return super(StockMove, self.with_context(no_partner_id_update=True)).\
+            _assign_picking()
+
+    def _push_apply(self):
+        """reglas push intercompañía"""
+        return super(StockMove, self.sudo())._push_apply()
 
     def _get_price_unit(self):
         res = super()._get_price_unit()

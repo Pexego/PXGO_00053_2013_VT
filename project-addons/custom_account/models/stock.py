@@ -38,6 +38,102 @@ class StockMove(models.Model):
 
         return res
 
+    def _is_out(self):
+        """se tienen en cuenta las salidas con owner y se evitan las salidas
+        a tránsito"""
+        res = super()._is_out()
+        if not res:
+            for move_line in self.move_line_ids.filtered('owner_id'):
+                if (move_line.location_id._should_be_valued()
+                        and not move_line.location_dest_id.
+                        _should_be_valued() and move_line.
+                        location_dest_id.usage != 'transit'):
+                    return True
+        else:
+            transit_lines = self.move_line_ids.filtered(
+                lambda x: x.location_dest_id.usage == 'transit')
+            if transit_lines:
+                return False
+        return res
+
+    def _is_in(self):
+        """se evitan las entradas desde tránsito"""
+        res = super()._is_in()
+        if res:
+            transit_lines = self.move_line_ids.filtered(
+                lambda x: x.location_id.usage == 'transit')
+            if transit_lines:
+                return False
+        return res
+
+    def _run_valuation(self, quantity=None):
+        value_to_return = super()._run_valuation(quantity=quantity)
+        if self._is_out():
+            valued_move_lines = self.move_line_ids.filtered(
+                lambda ml: ml.location_id._should_be_valued() and not ml.
+                location_dest_id._should_be_valued() and ml.owner_id)
+            valued_quantity = 0
+            company = False
+            for valued_move_line in valued_move_lines:
+                company = self.env['res.company'].search(
+                    [('partner_id', '=', valued_move_line.owner_id.id)],
+                    limit=1)
+                valued_quantity += valued_move_line.product_uom_id.\
+                    _compute_quantity(valued_move_line.qty_done,
+                                      self.product_id.uom_id)
+            if company:
+                value_to_return = self.env['stock.move'].\
+                    with_context(candidates_company=company.id)._run_fifo(
+                        self, quantity=valued_quantity)
+                if self.product_id.cost_method in ['standard', 'average']:
+                    curr_rounding = self.company_id.currency_id.rounding
+                    value = -float_round(
+                        self.product_id.standard_price * (valued_quantity
+                                                          if quantity is None
+                                                          else quantity),
+                        precision_rounding=curr_rounding)
+                    value_to_return = (
+                        value if quantity is None else self.value + value)
+                    self.write({
+                        'value': value_to_return,
+                        'price_unit': value / valued_quantity,
+                    })
+        return value_to_return
+
+    @api.model
+    def _run_fifo(self, move, quantity=None):
+        return super(StockMove, self.sudo())._run_fifo(move, quantity=quantity)
+
+    @api.multi
+    def _get_accounting_data_for_valuation(self):
+        if self._is_out() and self.move_line_ids.filtered('owner_id'):
+            company = self.env['res.company'].search(
+                [('partner_id', 'in',
+                  self.move_line_ids.mapped('owner_id').ids)], limit=1)
+            if company:
+                return super(StockMove,
+                             self.with_context(force_company=company.id)).\
+                    _get_accounting_data_for_valuation()
+        return super()._get_accounting_data_for_valuation()
+
+    def _create_account_move_line(self, credit_account_id, debit_account_id,
+                                  journal_id):
+        if self._is_out() and self.move_line_ids.filtered('owner_id'):
+            company = self.env['res.company'].search(
+                [('partner_id', 'in',
+                  self.move_line_ids.mapped('owner_id').ids)], limit=1)
+            if company:
+                return super(StockMove,
+                             self.with_context(force_company=company.id)).\
+                    _create_account_move_line(
+                        credit_account_id=credit_account_id,
+                        debit_account_id=debit_account_id,
+                        journal_id=journal_id)
+        return super()._create_account_move_line(
+            credit_account_id=credit_account_id,
+            debit_account_id=debit_account_id,
+            journal_id=journal_id)
+
 
 class ProductTemplate(models.Model):
 
@@ -62,6 +158,18 @@ class ProductProduct(models.Model):
         ('default_code_uniq', 'unique(default_code, active)',
          'The code of product must be unique.')
     ]
+
+    def _get_fifo_candidates_in_move(self):
+        candidates = super()._get_fifo_candidates_in_move()
+        if self.env.context.get('candidates_company'):
+            domain = [('product_id', '=', self.id),
+                      ('remaining_qty', '>', 0.0),
+                      ('company_id', '=',
+                       self.env.context['candidates_company'])] + self.\
+                env['stock.move']._get_in_base_domain()
+            candidates = self.env['stock.move'].search(
+                domain, order='date, id')
+        return candidates
 
     @api.multi
     def copy(self, default=None):

@@ -234,16 +234,14 @@ class ClaimLine(models.Model):
     @api.multi
     def _compute_move_in_customer_state(self):
         for line in self:
-            moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
-                'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
+            moves = line.move_ids.filtered(lambda m: m.picking_code == 'incoming' and m.location_dest_id == self.env.ref(
                 'crm_rma_advance_location.stock_location_rma'))
             line.move_in_customer_state = line._compute_move_ids_customer_state(moves)
 
     @api.multi
     def _compute_move_out_customer_state(self):
         for line in self:
-            moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
-                'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier', 'customer'])
+            moves = line.move_ids.filtered(lambda m: m.picking_code == 'outgoing' and m.location_dest_id.usage in ['supplier', 'customer'])
             line.move_out_customer_state = line._compute_move_ids_customer_state(moves)
 
     move_in_customer_state = fields.Selection(

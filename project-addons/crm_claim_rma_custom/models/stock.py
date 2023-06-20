@@ -29,6 +29,14 @@ class StockPicking(models.Model):
                                                "synced with Vstock",
                               copy=True)
 
+    @api.model
+    def create(self, vals):
+        if vals.get('company_id') and not vals.get('not_sync'):
+            company = self.env['res.company'].browse(vals['company_id'])
+            if company.no_sync_picking:
+                vals['not_sync'] = True
+        return super().create(vals)
+
     @api.multi
     def copy(self, default=None):
         default = default and default or {}

@@ -39,7 +39,7 @@ class ResPartner(models.Model):
             response = requests.get(web_endpoint, headers=headers, data=json.dumps({}), timeout=2)
             if response.status_code == 200:
                 num_active_sims = int(response.content)
-        except requests.exceptions.Timeout as e:
+        except Exception as e:
             pass
 
         self.sim_active_perc = round(num_active_sims * 100 / sim_count, 2)

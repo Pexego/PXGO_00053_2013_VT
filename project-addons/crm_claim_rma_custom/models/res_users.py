@@ -9,3 +9,10 @@ class ResUsers(models.Model):
                                            ('madrid3', 'Madrid - Vicálvaro'),
                                            ('italia', 'Italia - Arcore'),
                                            ('transit', 'In transit')], "Warehouse Location")
+
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    no_sync_picking = fields.Boolean("Not sync pickings", default=False)
+
