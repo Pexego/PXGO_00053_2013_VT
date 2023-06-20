@@ -5,7 +5,7 @@
            <field name="key">url.visiotech.web.tracking</field>
            <field name="value"></field>
         </record>
-        <record id="visiotech_web_tracking_p" model="ir.config_parameter">
+        <record id="visiotech_web_tracking_pass" model="ir.config_parameter">
            <field name="key">url.visiotech.web.tracking.pass</field>
            <field name="value"></field>
         </record>

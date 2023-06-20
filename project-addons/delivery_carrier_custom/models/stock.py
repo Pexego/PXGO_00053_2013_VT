@@ -49,16 +49,15 @@ class StockPicking(models.Model):
     @api.model
     def _get_default_uom(self):
         uom_categ_id = self.env.ref('product.product_uom_categ_kgm')
-        return self.env['product.uom'].search([('category_id', '=',
-                                                uom_categ_id.id),
-                                               ('factor', '=', 1)])[0]
+        return self.env['product.uom'].search([
+            ('category_id', '=', uom_categ_id.id), ('factor', '=', 1)])[0]
 
     @api.multi
     def button_check_tracking(self):
         # TODO: Revisar este botón al tener datos de tracking
         carrier_ref = self.carrier_tracking_ref
         carrier = self.carrier_name
-        status_list = self.env['picking.tracking.status.list']
+        status_list = self.env['picking.tracking.status.list.wizard']
         url = self.env['ir.config_parameter'].sudo().get_param('url.visiotech.web.tracking')
         password = self.env['ir.config_parameter'].sudo().get_param('url.visiotech.web.tracking.pass')
         language = self.env.user.lang or u'es_ES'
@@ -85,7 +84,7 @@ class StockPicking(models.Model):
         if info['Num_bags']:
             self.number_of_packages = info['Num_bags']
 
-        view_id = self.env['picking.tracking.status']
+        view_id = self.env['picking.tracking.status.wizard']
         ctx = {'information': info}
         new = view_id.with_context(ctx).create({})
         # Update wizard field "num packages"
@@ -126,7 +125,7 @@ class StockPicking(models.Model):
             'view_type': 'form',
             'view_mode': 'form',
             'target': 'new',
-            'res_model': 'picking.tracking.status',
+            'res_model': 'picking.tracking.status.wizard',
             'res_id': new.id,
             'src_model': 'stock.picking',
             'type': 'ir.actions.act_window',
@@ -144,8 +143,7 @@ class StockPicking(models.Model):
     volume = fields.Float('Volume', copy=False)
     total_cbm = fields.Float('Total CBM')
     weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))
-    weight_net_st = fields.\
-        Float(digits=dp.get_precision('Stock Weight'))
+    weight_net_st = fields.Float(digits=dp.get_precision('Stock Weight'))
     weight = fields.Float('Weight', compute='cal_weight', readonly=False,
                           digits=dp.get_precision('Stock Weight'))
     weight_net = fields.Float('Net Weight', compute="cal_weight", readonly=False,
@@ -175,13 +173,11 @@ class StockMove(models.Model):
             if move.weight_net_st:
                 move.weight_net = move.weight_net_st
 
-
     @api.model
     def _get_default_uom(self):
         uom_categ_id = self.env.ref('product.product_uom_categ_kgm')
-        return self.env['product.uom'].search([('category_id', '=',
-                                                uom_categ_id.id),
-                                               ('factor', '=', 1)])[0]
+        return self.env['product.uom'].search([
+            ('category_id', '=', uom_categ_id.id), ('factor', '=', 1)])[0]
 
     weight = fields.Float('Weight', compute='_cal_move_weight',
                           digits=dp.get_precision('Stock Weight'),
@@ -190,8 +186,7 @@ class StockMove(models.Model):
                               digits=dp.get_precision('Stock Weight'),
                               store=True, readonly=False)
     weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))
-    weight_net_st = fields.\
-        Float(digits=dp.get_precision('Stock Weight'))
+    weight_net_st = fields.Float(digits=dp.get_precision('Stock Weight'))
     weight_uom_id = fields.Many2one('product.uom', 'Unit of Measure',
                                     required=True, readonly="1",
                                     help="Unit of Measure (Unit of Measure) "
