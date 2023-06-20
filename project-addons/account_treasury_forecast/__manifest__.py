@@ -21,6 +21,7 @@
     "depends": [
         "account",
         "purchase",
+        "report_xlsx",
        # TODO -> Pendiente de migrar "custom_account"
     ],
     "author": "OdooMRP team,"
