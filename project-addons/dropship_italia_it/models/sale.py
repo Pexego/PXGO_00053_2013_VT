@@ -1,4 +1,5 @@
-from odoo import models, api, fields, exceptions, _
+from odoo import models, api, fields, _
+from odoo.exceptions import UserError, ValidationError
 
 
 class SaleOrder(models.Model):
@@ -24,7 +25,7 @@ class SaleOrder(models.Model):
                         "\nThe order can not be confirmed, there are products with batteries that can not be shipped by %s") \
                                 % transport_service.name
                     msg_error += msg
-                    raise exceptions.UserError(msg_error)
+                    raise UserError(msg_error)
 
             purchase = self.env['purchase.order'].search([('origin', '=', sale.name), ('state', '=', 'draft')])
             if purchase:
@@ -60,3 +61,17 @@ class SaleOrder(models.Model):
             return {'domain': {'service_ds_id': [('id', 'in', service_ids)]}}
         all_services = [x.id for x in self.env['transportation.service'].search([])]
         return {'domain': {'service_ds_id': [('id', 'in', all_services)]}}
+
+
+class SaleOrderLine(models.Model):
+
+    _inherit = "sale.order.line"
+
+    @api.constrains('route_id', 'deposit')
+    def check_deposit_dropship(self):
+        dropship_route = self.env.ref('stock_dropshipping.route_drop_shipping').id
+        for line in self:
+            if line.route_id.id == dropship_route and line.deposit:
+                raise ValidationError(
+                    _('Error! A line cannot be dropship and deposit at the same time'))
+        return True
