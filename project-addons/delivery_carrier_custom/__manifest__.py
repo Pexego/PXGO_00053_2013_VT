@@ -15,7 +15,8 @@
         'views/country_view.xml',
         'views/sale_view.xml',
         'wizard/picking_tracking_status_view.xml',
-        'data/parameters.xml'
+        'data/parameters.xml',
+        'security/ir.model.access.csv'
     ],
     'installable': True
 }
