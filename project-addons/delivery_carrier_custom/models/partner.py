@@ -6,7 +6,7 @@ class Partner(models.Model):
 
     carrier_ids = fields.One2many('delivery.carrier', 'partner_id', string='Services')
     new_transporter_id = fields.Many2one('res.partner', 'Transporter', domain=[('is_transporter', '=', True)])
-    new_service_id = fields.Many2one('delivery.carrier', 'Transport service')
+    carrier_id = fields.Many2one('delivery.carrier', 'Transport service')
     is_transporter = fields.Boolean('Transporter')
     delivery_carrier_type = fields.Selection([
         ('shipping', 'Shipping'),
@@ -25,9 +25,9 @@ class Partner(models.Model):
     @api.onchange('new_transporter_id')
     def onchange_new_transporter_id(self):
         carrier_ids = [x.id for x in self.new_transporter_id.carrier_ids]
-        if self.new_service_id.id not in carrier_ids:
-            self.new_service_id = False
-        return {'domain': {'new_service_id': [('id', 'in', carrier_ids)]}}
+        if self.carrier_id.id not in carrier_ids:
+            self.carrier_id = False
+        return {'domain': {'carrier_id': [('id', 'in', carrier_ids)]}}
 
     @api.multi
     @api.onchange('delivery_carrier_type')

@@ -8,7 +8,7 @@
             <field name="company_id" position="after">
                 <field name="is_transporter"/>
                 <field name="new_transporter_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
-                <field name="new_service_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
+                <field name="carrier_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
                 <field name="delivery_carrier_type" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
             </field>
         </field>

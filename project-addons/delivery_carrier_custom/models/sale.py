@@ -18,7 +18,7 @@ class SaleOrder(models.Model):
         super().onchange_partner_id()
         if self.partner_id:
             self.new_transporter_id = self.partner_id.new_transporter_id.id
-            self.carrier_id = self.partner_id.new_service_id.id
+            self.carrier_id = self.partner_id.carrier_id.id
             self.delivery_carrier_type = self.partner_id.delivery_carrier_type
 
     @api.multi
