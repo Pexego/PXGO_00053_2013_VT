@@ -1,10 +1,7 @@
+from .amazon_api_request import AmazonAPIRequest
 from odoo import models, fields, api, _
-from sp_api.api import Orders, Reports
-from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
-from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
 from odoo.exceptions import UserError
-import time
 from stdnum.eu import vat
 from zeep.exceptions import Fault
 from stdnum import exceptions as stdnumExceptions
@@ -127,48 +124,6 @@ class AmazonSaleOrder(models.Model):
     message_error = fields.Text()
     warning_price = fields.Boolean(default=False)
 
-    def call_api_order_method(self, order_method, order_name):
-        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-        credentials = self._get_credentials()
-        orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-        read = False
-        order_complete = {}
-        while not read:
-            try:
-                order_complete = getattr(orders_obj, order_method)(order_name).payload
-                read = True
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                read = False
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Method: %s.Order %s. '%s' \n") % (order_method, order_name, e))
-        return order_complete
-
-    def get_report_document(self, report_name, data_start_time, data_end_time, marketplaces):
-        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-        credentials = self._get_credentials()
-        reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
-        try:
-            report_created = reports_obj.create_report(reportType=report_name,
-                                                       marketplaceIds=marketplaces,
-                                                       dataStartTime=data_start_time,
-                                                       dataEndTime=data_end_time).payload
-        except SellingApiException as e:
-            raise UserError(_("Amazon API Error. No order was created due to errors. '%s' \n") % e)
-        report_state = ""
-        report = {}
-        while report_state != 'DONE':
-            try:
-                report = reports_obj.get_report(report_created.get('reportId')).payload
-                report_state = report.get("processingStatus")
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                continue
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
-
-        return reports_obj.get_report_document(report.get('reportDocumentId'), download=True, decrypt=True).payload
-
     def set_billing_data(self):
         for amazon_order in self:
             vies_response = amazon_order.get_data_from_vies()
@@ -219,11 +174,14 @@ class AmazonSaleOrder(models.Model):
                         amazon_order.amount_total, amazon_order.theoretical_total_amount)
                     amazon_order.warning_price = True
 
-    def add_billing_info(self):
+    def add_billing_info(self, amazon_api=None):
+        if not amazon_api:
+            amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+            amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
         for amazon_order in self:
             if (amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
                 or amazon_order.amount_tax == 0:
-                buyer_info = self.call_api_order_method("get_order_buyer_info", amazon_order.name)
+                buyer_info = amazon_api.get_order_buyer_info(amazon_order.name)
                 amazon_order.buyer_email = buyer_info.get('BuyerEmail', False)
                 amazon_order.buyer_name = buyer_info.get('BuyerName', False)
                 if amazon_order.partner_vat:
@@ -232,19 +190,25 @@ class AmazonSaleOrder(models.Model):
                     amazon_order.state = 'error'
                     amazon_order.message_error += _('There is no vat in this order')
 
+    @api.model
+    def _get_report_order_columns(self):
+        return ["Order ID", "Buyer Tax Registration", "Buyer Tax Registration Jurisdiction", "Order Date",
+                "VAT Invoice Number", "Transaction Type", "Ship To City", "Ship To State", "Ship To Country",
+                "Ship To Postal Code","Tax Address Role", "Jurisdiction Name", "Ship From Country", "Seller Tax Registration"
+                ]
+
     def cron_create_amazon_sale_orders(self, data_start_time=(datetime.utcnow() - timedelta(days=1)).isoformat(),
                                        data_end_time=datetime.utcnow().isoformat(), marketplaces=False,
                                        only_read=False):
         max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
-        if not marketplaces:
-            marketplaces = self._get_marketplaces()
+        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+        amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit, marketplaces)
 
-        report_document = self.get_report_document("SC_VAT_TAX_REPORT", data_start_time, data_end_time, marketplaces)
+        report_created = amazon_api.create_report("SC_VAT_TAX_REPORT", data_start_time, data_end_time)
+        report = amazon_api.get_report(report_created.get('reportId'))
+        report_document = amazon_api.get_report_document(report.get('reportDocumentId'))
 
-        cols = ["Order ID", "Buyer Tax Registration", "Buyer Tax Registration Jurisdiction", "Order Date",
-                "VAT Invoice Number", "Transaction Type", "Ship To City", "Ship To State", "Ship To Country",
-                "Ship To Postal Code","Tax Address Role", "Jurisdiction Name", "Ship From Country", "Seller Tax Registration"
-        ]
+        cols = self._get_report_order_columns()
         #Read file with pandas
         csv_converted = StringIO(report_document.get('document'))
         input_file = pd.read_csv(csv_converted, encoding='latin1', usecols=cols, na_filter=False)
@@ -257,7 +221,7 @@ class AmazonSaleOrder(models.Model):
             exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
             if exist_order:
                 continue
-            new_order = self.call_api_order_method("get_order_items", order_name)
+            new_order = amazon_api.get_order_items(order_name)
             if not new_order:
                 continue
             country_id = self.env['res.country'].search([('code', '=', row["Ship To Country"])]).id
@@ -281,7 +245,7 @@ class AmazonSaleOrder(models.Model):
                                    'amazon_company_id': amazon_company_id.id,
                                    'tax_country_id': tax_country
                                    }
-            order_complete = self.call_api_order_method("get_order", order_name)
+            order_complete = amazon_api.get_order(order_name)
             amazon_order_values.update({
                 'fulfillment': order_complete.get('FulfillmentChannel', False),
                 'sales_channel': self.env['amazon.marketplace'].search(
@@ -291,7 +255,7 @@ class AmazonSaleOrder(models.Model):
             amazon_order_values.update(amazon_order_values_lines)
             amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
             amazon_order.check_max_difference_allowed()
-            amazon_order.add_billing_info()
+            amazon_order.add_billing_info(amazon_api)
             if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
                 amazon_order.send_error_mail()
                 if (number >= max_commit_len and number % max_commit_len == 0) or number == orders_len:
@@ -304,8 +268,10 @@ class AmazonSaleOrder(models.Model):
 
     @api.multi
     def retry_order(self):
+        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+        amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
         for amazon_order in self:
-            order_header = self.call_api_order_method("get_order", amazon_order.name)
+            order_header = amazon_api.get_order(amazon_order.name)
             amazon_order.write({'fulfillment': order_header.get('FulfillmentChannel', False),
                                 'sales_channel': self.env['amazon.marketplace'].search(
                                     [('amazon_name', '=', order_header.get('SalesChannel', False))]).id,
@@ -313,7 +279,7 @@ class AmazonSaleOrder(models.Model):
                                 'is_business_order':order_header.get('IsBusinessOrder', False),
                                 'warning_price':False})
             amazon_order.message_error = ""
-            order = self.call_api_order_method("get_order_items", amazon_order.name)
+            order = amazon_api.get_order_items(amazon_order.name)
             if order:
                 amazon_order.order_line.unlink()
                 if not amazon_order.fiscal_position_id:
@@ -321,13 +287,10 @@ class AmazonSaleOrder(models.Model):
                 amazon_order_values = amazon_order._get_lines_values(order, amazon_order.fiscal_position_id)
                 amazon_order.write(amazon_order_values)
                 amazon_order.check_max_difference_allowed()
-                amazon_order.add_billing_info()
+                amazon_order.add_billing_info(amazon_api)
                 if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
                     amazon_order.send_error_mail()
 
-    def _get_marketplaces(self):
-        company = self.env.user.company_id
-        return company.marketplace_ids.mapped('code')
 
     def _get_lines_values(self, order, fiscal_position_id):
         amazon_order_values = {'order_line': [],
@@ -404,16 +367,6 @@ class AmazonSaleOrder(models.Model):
             amazon_order_values["state"] = "read"
         return amazon_order_values
 
-    def _get_credentials(self):
-        company = self.env.user.company_id
-        return dict(
-            refresh_token=company.refresh_token,
-            lwa_app_id=company.lwa_app_id,
-            lwa_client_secret=company.lwa_client_secret,
-            aws_secret_key=company.aws_secret_key,
-            aws_access_key=company.aws_access_key,
-            role_arn=company.role_arn,
-        )
     def recalculate_taxes(self):
         for order in self:
             taxes_obj = self.env['account.tax'].search(

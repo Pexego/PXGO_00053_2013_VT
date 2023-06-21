@@ -1424,7 +1424,7 @@ msgstr "Origen del Envío"
 #. module: amazon_connector
 #: selection:amazon.sale.order,tax_address_role:0
 msgid "ShipTo"
-msgstr "Destino dle Envío"
+msgstr "Destino del Envío"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_shipment_id
