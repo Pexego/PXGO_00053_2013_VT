@@ -18,7 +18,8 @@ Features:
                 "stock_reserve_sale",
                 "product_brand",
                 "sale_product_customize",
-                "sale_point_programme"],
+                "sale_point_programme",
+                "mail"],
     "data": [
         "views/sale_view.xml",
         "views/rule.xml",

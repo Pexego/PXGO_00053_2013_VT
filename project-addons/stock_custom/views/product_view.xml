@@ -169,6 +169,17 @@
         </field>
     </record>
 
+    <record id="product_product_add_last_landed_cost_date_view" model="ir.ui.view">
+        <field name="name">product.product.add.last.landed.cost.date.view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="last_purchase_price" position="after">
+                <field name="last_landed_cost_date"/>
+            </field>
+        </field>
+    </record>
+
     <record id="product_normal_form_view_custom" model="ir.ui.view">
         <field name="name">product.normal.form.view.custom</field>
         <field name="model">product.product</field>
@@ -180,7 +191,7 @@
             </field>
         </field>
     </record>
-     
+
     <record id="product_normal_form_view" model="ir.ui.view">
         <field name="name">product.normal.form.view</field>
         <field name="model">product.product</field>
