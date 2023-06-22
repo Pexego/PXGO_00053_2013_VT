@@ -37,6 +37,13 @@
                         <field name="state"/>
                     </tree>
                 </field>
+                <separator string="Invoices" colspan="4"/>
+                <field name="invoice_ids">
+                    <tree editable="bottom">
+                        <field name="state"/>
+                        <field name="reference"/>
+                    </tree>
+                </field>
             </form>
         </field>
     </record>
