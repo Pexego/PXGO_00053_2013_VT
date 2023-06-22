@@ -471,8 +471,8 @@ class AmazonSaleOrder(models.Model):
             if (order.partner_vat and order.vat_imputation_country and order.amount_total > 400) \
                     or order.amount_tax == 0:
                 partner = order.create_partner()
-                order.partner_id=partner.id
-                journal_id = self.env['account.journal'].search([('type', '=', 'sale')], order='id')[0]
+                order.partner_id = partner.id
+                journal_id = order.amazon_company_id.journal_id
                 invoices_ids = order.deposits.with_context({'force_partner_id': partner}).create_invoice(
                     journal_id=journal_id)
             else:

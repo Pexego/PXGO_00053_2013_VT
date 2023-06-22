@@ -1865,3 +1865,14 @@ msgstr "retry.amazon.orders.wizard"
 #: selection:amazon.return,reason:0
 msgid "undeliverable_carrier_miss_sorted"
 msgstr "undeliverable_carrier_miss_sorted"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: amazon_connector
+#: model:ir.model.fields,help:amazon_connector.field_amazon_company_journal_id
+msgid "Journal of full invoices"
+msgstr "Diarío para facturas completas"
+
