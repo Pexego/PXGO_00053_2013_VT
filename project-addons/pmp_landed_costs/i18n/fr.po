@@ -155,6 +155,10 @@ msgstr "Mise à jour"
 msgid "Landed costs"
 msgstr "Coûts cibles"
 
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
+msgid "Invoices"
+msgstr "Factures"
+
 #. module: pmp_landed_costs
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
 msgid "See landed costs"

@@ -277,6 +277,10 @@ msgstr "Actualizar"
 msgid "Landed costs"
 msgstr "Costes de destino"
 
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
+msgid "Invoices"
+msgstr "Facturas"
+
 #. module: pmp_landed_costs
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
 msgid "See landed costs"
