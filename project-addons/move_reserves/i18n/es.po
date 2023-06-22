@@ -18,7 +18,7 @@ msgstr ""
 #. module: move_reserves
 #: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
 msgid "<br/>Make sure you have permission to move the reserves, the move will be registered.<br/>"
-msgstr "<br/>Asegurate de tener permiso para mover las reservas, el movimiento será registrado.<br/>"
+msgstr "<br/>Asegúrate de tener permiso para mover las reservas, el movimiento será registrado.<br/>"
 
 #. module: move_reserves
 #: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
@@ -43,11 +43,13 @@ msgstr "Mover reservas"
 
 #. module: move_reserves
 #: model:ir.model.fields,field_description:move_reserves.field_move_reserves_product_id
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_product_id
 msgid "Product"
 msgstr "Producto"
 
 #. module: move_reserves
 #: model:ir.model.fields,field_description:move_reserves.field_move_reserves_qty
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_qty
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -90,3 +92,30 @@ msgstr "Has seleccionado la misma reserva en ambas"
 #, python-format
 msgid "You must select some quantity"
 msgstr "Tienes que seleccionar alguna cantidad"
+
+#. module: move_reserves
+#: model:ir.actions.act_window,name:move_reserves.action_move_reserves_log
+#: model:ir.ui.menu,name:move_reserves.move_reserves_log_menu
+msgid "Move Reserves Log"
+msgstr "Log mover reservas"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_move
+#: model:ir.ui.view,arch_db:move_reserves.view_move_reserves
+msgid "Move"
+msgstr "Movimiento"
+
+#. module: move_reserves
+#: model:ir.ui.view,arch_db:move_reserves.view_reserves_log
+msgid "Move reserves Log"
+msgstr "Log mover reservas"
+
+#. module: move_reserves
+#: model:ir.model.fields,field_description:move_reserves.field_reserves_log_user_id
+msgid "User"
+msgstr "Usuario"

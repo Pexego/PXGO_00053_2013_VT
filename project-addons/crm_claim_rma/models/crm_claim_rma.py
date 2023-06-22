@@ -197,6 +197,11 @@ class ClaimLine(models.Model):
 
     move_ids = fields.One2many('stock.move', 'claim_line_id')
 
+    categ_id = fields.Many2one(
+           "product.category",
+           string="Product category",
+           readonly=True,
+           related="product_id.categ_id")
 
     @api.onchange('prodlot_id')
     def onchange_prodlot_id(self):
@@ -204,8 +209,8 @@ class ClaimLine(models.Model):
         :return: ValidationError if the format is not correct
         """
         if self.prodlot_id:
-            self.prodlot_id = self.prodlot_id.replace(" ", "")
-            lots = self.prodlot_id.upper().split(',')
+            self.prodlot_id = self.prodlot_id.replace(" ", "").replace(",",", ")
+            lots = self.prodlot_id.split(',')
             if len(lots) != self.product_returned_quantity:
                 raise UserError(_("Wrong number of serial numbers. Remember Separate them by commas"))
 

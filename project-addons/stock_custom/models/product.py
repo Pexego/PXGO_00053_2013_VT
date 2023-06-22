@@ -49,7 +49,7 @@ class ProductProduct(models.Model):
 
     ref_visiotech = fields.Char('Visiotech reference')
     is_pack = fields.Boolean()
-        
+
 
     def action_view_moves(self):
         return {
@@ -127,6 +127,7 @@ class ProductProduct(models.Model):
     last_purchase_price = fields.Monetary(currency_field="currency_purchase_id", copy=False)
     last_supplier_id = fields.Many2one(
         comodel_name='res.partner', string='Last Supplier', copy=False)
+    last_landed_cost_date = fields.Date('Last LC date')
 
     @api.multi
     def set_product_last_purchase(self, order_id=False):
@@ -163,7 +164,7 @@ class ProductProduct(models.Model):
             elif product.type=='product':
                 product.invoice_policy = 'delivery'
 
-    
+
     @api.onchange('name')
     def onchange_product_default_code(self):
         for product in self:

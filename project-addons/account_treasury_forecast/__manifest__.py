@@ -21,6 +21,7 @@
     "depends": [
         "account",
         "purchase",
+        "report_xlsx",
        # TODO -> Pendiente de migrar "custom_account"
     ],
     "author": "OdooMRP team,"
@@ -38,6 +39,7 @@
         "wizard/wiz_create_invoice_view.xml",
         "views/account_treasury_forecast_view.xml",
         "views/account_treasury_forecast_template_view.xml",
+        "views/account_treasury_forecast_xlsx_view.xml",
     ],
     'demo': [],
     'installable': True,

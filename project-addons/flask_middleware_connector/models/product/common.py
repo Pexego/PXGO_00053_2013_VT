@@ -88,7 +88,8 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
+            "final_replacement_id", "weight", "volume", "standard_price_2_inc", "name",
+            "special_shipping_costs"
         ]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
@@ -100,6 +101,8 @@ class ProductListener(Component):
                 if record.sale_ok or "sale_ok" in fields or "name" in fields:
                     record.with_delay(priority=11, eta=30).update_product()
                     break
+
+        self.env['product.product'].handle_pricelist_items_cost_field(record, record.product_brand_id, fields, "update")
 
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.id)]).mapped('bom_id')
         for pack in packs:
@@ -176,7 +179,7 @@ class ProductProduct(models.Model):
         return True
 
     @api.multi
-    def compute_date_next_incoming(self):
+    def compute_next_incoming(self):
         for product in self:
             product.date_next_incoming = False
             moves = self.env['stock.move'].search(
@@ -187,9 +190,25 @@ class ProductProduct(models.Model):
                 key=lambda m: m.date_expected and m.date_reliability)
             if moves:
                 product.date_next_incoming = moves[0].date_expected
+                product.qty_next_incoming = moves[0].product_uom_qty
 
-    date_next_incoming = fields.Datetime(compute="compute_date_next_incoming")
+    date_next_incoming = fields.Datetime(compute="compute_next_incoming")
+    qty_next_incoming = fields.Float(compute="compute_next_incoming")
 
+    def handle_pricelist_items_cost_field(self, product, brand, fields, mode):
+        """
+            Handles the creation of pricelist item jobs dependent on cost fields
+            :param product: product.product
+            :param brand: product.brand
+            :param fields: list of strings with the names of the updated fields. It may be []
+            :param mode: export,update or unlink
+        """
+        pricelist_update_fields = dict(self.env['product.pricelist.item']._fields['base'].selection).keys()
+        for field in pricelist_update_fields:
+            if not fields or field in fields:
+                items = self.env['product.pricelist.item'].get_related_cost_items(product.categ_id, brand, field)
+                for i in items:
+                    getattr(i.with_delay(priority=11, eta=80), f'{mode}_pricelist_item')(product, i.pricelist_id)
 
 class ProductCategoryListener(Component):
     _name = 'product.category.event.listener'

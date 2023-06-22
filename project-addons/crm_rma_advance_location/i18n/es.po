@@ -219,6 +219,11 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: crm_rma_advance_location
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_prodlot_id
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_prodlot_id
 msgid "Product Lot / Serial"

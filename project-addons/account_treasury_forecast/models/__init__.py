@@ -15,6 +15,9 @@
 #
 ##############################################################################
 
-from . import account_payment_mode
-from . import account_treasury_forecast_template
-from . import account_treasury_forecast
+from . import (
+    account_payment_mode,
+    account_treasury_forecast_template,
+    account_treasury_forecast,
+    account_treasury_forecast_xlsx
+)

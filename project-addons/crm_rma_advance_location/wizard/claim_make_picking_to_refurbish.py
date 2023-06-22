@@ -12,7 +12,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         :param move: original stock.move from incoming picking
         :return: set() set of lots text
         """
-        lot_text = set(move.lots_text.split(','))
+        lot_text = set(move.lots_text.split(', '))
         children_lots_text = set(move.child_move_ids.mapped('lots_text'))
         return lot_text - children_lots_text
 
@@ -24,7 +24,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 continue
             new_line = {'product_id': move.product_id.id,
                         'move_id': move.id,
-                        'product_qty': 1}
+                        'product_qty': 1,
+                        'sequence':move.claim_line_id.sequence}
             product = move.product_id
             domain = [('claim_type', '=',
                        self.env.ref('crm_claim_type.crm_claim_type_supplier').id),
@@ -230,3 +231,5 @@ class ClaimMakePickingToRefurbishLine(models.TransientModel):
                                                                       'crm_claim_type.crm_claim_type_supplier').id),
                                                                  ('stage_id', '=',
                                                                   self.env.ref('crm_claim.stage_claim5').id)])
+    sequence = fields.Integer('Sequence')
+
