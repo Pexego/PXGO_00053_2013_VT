@@ -33,21 +33,19 @@ class SaleOrder(models.Model):
     @api.onchange('delivery_type')
     @api.multi
     def onchange_delivery_type(self):
-        carrierServ_id = self.env['transportation.service'].search([('name', '=', 'Medios Propios')]).ids
-        carrierTrans_id = self.env['transportation.transporter'].search([('name', '=', 'Medios Propios')]).ids
-        installationServ_id = self.env['transportation.service'].search([('name', '=', 'Recoge agencia cliente')]).ids
-        installationTrans_id = self.env['transportation.transporter'].search([('name', '=', 'Recoge agencia cliente')]).ids
+        carrierServ_id = self.env['delivery.carrier'].search([('name', '=', 'Medios Propios')]).ids
+        carrierTrans_id = self.env['res.partner'].search([('name', '=', 'Medios Propios')]).ids
+        installationServ_id = self.env['delivery.carrier'].search([('name', '=', 'Recoge agencia cliente')]).ids
+        installationTrans_id = self.env['res.partner'].search([('name', '=', 'Recoge agencia cliente')]).ids
 
         if self.delivery_type == 'installations':
-            self.service_id = carrierServ_id[0]
+            self.carrier_id = carrierServ_id[0]
             self.transporter_id = carrierTrans_id[0]
 
         if self.delivery_type == 'carrier':
-            self.service_id = installationServ_id[0]
+            self.carrier_id = installationServ_id[0]
             self.transporter_id = installationTrans_id[0]
 
         if self.delivery_type == 'shipping':
-            self.service_id = self.partner_id.service_id.id
+            self.carrier_id = self.partner_id.carrier_id.id
             self.transporter_id = self.partner_id.transporter_id.id
-
-
