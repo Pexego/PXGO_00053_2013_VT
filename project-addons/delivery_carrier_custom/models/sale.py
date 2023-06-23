@@ -5,7 +5,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     transporter_id = fields.Many2one('res.partner', 'Transporter',
-                                         domain=[('is_transporter', '=', True)])
+                                     domain=[('is_transporter', '=', True)])
     delivery_type = fields.Selection([
         ('shipping', 'Shipping'),
         ('carrier', 'Carrier - Customer'),
