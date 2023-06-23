@@ -27,7 +27,7 @@ class SaleOrderExporter(Component):
             'shipping_city': binding.partner_shipping_id.city,
             'shipping_state': binding.partner_shipping_id.state_id.name,
             'shipping_country': binding.partner_shipping_id.country_id.name,
-            'delivery_type': binding.delivery_type,
+            # 'delivery_type': binding.delivery_type,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
