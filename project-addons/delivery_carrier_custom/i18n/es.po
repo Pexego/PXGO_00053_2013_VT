@@ -31,8 +31,8 @@ msgid "Carrier"
 msgstr "Transportista"
 
 #. module: delivery_carrier_custom
-#: selection:res.partner,delivery_carrier_type:0
-#: selection:sale.order,delivery_carrier_type:0
+#: selection:res.partner,delivery_type:0
+#: selection:sale.order,delivery_type:0
 msgid "Carrier - Customer"
 msgstr "Transportista - Client"
 
@@ -77,14 +77,14 @@ msgid "Date"
 msgstr "Fecha"
 
 #. module: delivery_carrier_custom
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_country_new_default_transporter
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_country_default_transporter
 msgid "Default transporter"
 msgstr "Transportista por defecto"
 
 #. module: delivery_carrier_custom
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_delivery_carrier_type
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_delivery_carrier_type
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_sale_order_delivery_carrier_type
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_delivery_type
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_delivery_type
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_sale_order_delivery_type
 msgid "Delivery type"
 msgstr "Tipo de envío"
 
@@ -139,8 +139,8 @@ msgid "Picking"
 msgstr "Albarán"
 
 #. module: delivery_carrier_custom
-#: selection:res.partner,delivery_carrier_type:0
-#: selection:sale.order,delivery_carrier_type:0
+#: selection:res.partner,delivery_type:0
+#: selection:sale.order,delivery_type:0
 msgid "Pickup in installations"
 msgstr "Recogida en instalaciones"
 
@@ -172,8 +172,8 @@ msgid "Services"
 msgstr "Servicios"
 
 #. module: delivery_carrier_custom
-#: selection:res.partner,delivery_carrier_type:0
-#: selection:sale.order,delivery_carrier_type:0
+#: selection:res.partner,delivery_type:0
+#: selection:sale.order,delivery_type:0
 msgid "Shipping"
 msgstr "Envío"
 
@@ -212,10 +212,10 @@ msgstr "Transporte"
 #. module: delivery_carrier_custom
 #: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_transporter_id
 #: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_is_transporter
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_new_transporter_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_transporter_id
 #: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_is_transporter
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_new_transporter_id
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_sale_order_new_transporter_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_transporter_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_sale_order_transporter_id
 msgid "Transporter"
 msgstr "Transportista"
 

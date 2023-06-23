@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.view_country_form"/>
         <field name="arch" type="xml">
             <field name="code" position="after">
-                <field name="new_default_transporter"/>
+                <field name="default_transporter"/>
             </field>
         </field>
     </record>

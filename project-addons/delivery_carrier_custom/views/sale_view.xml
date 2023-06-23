@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="pricelist_id" position="after">
-                    <field name="new_transporter_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
+                    <field name="transporter_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
                     <field name="carrier_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
                 </field>
             </field>
