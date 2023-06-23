@@ -367,13 +367,17 @@ class StockProductionLot(models.Model):
 
     partner_id = fields.Many2one(
         'res.partner', string='Customer',
-        compute='_compute_partner_id',
+        compute='_compute_partner_id', compute_sudo=True,
         help='The last customer in possession of the product')
     lot_notes = fields.Text('Notes')
-    order_id= fields.Many2one('sale.order',string='Order',compute='_compute_partner_id')
-    picking_id = fields.Many2one('stock.picking',string='Picking',compute='_compute_partner_id')
+    order_id= fields.Many2one(
+        'sale.order', string='Order', compute='_compute_partner_id',
+        compute_sudo=True)
+    picking_id = fields.Many2one(
+        'stock.picking', string='Picking', compute='_compute_partner_id',
+        compute_sudo=True)
+
     def _compute_partner_id(self):
-        pass
         for lot in self:
             move_line = self.env['stock.move.line'].search(
                 [('lot_id', '=', lot.id)], order="id desc", limit=1)

@@ -139,7 +139,8 @@ class CreatePickingMove(models.TransientModel):
         pickings = []
         if all_moves:
             for (key, value) in all_moves.items():
-                picking_vals = {
+                picking_vals = value[0]._get_new_picking_values()
+                picking_vals.update({
                     'picking_type_id': type_id.id,
                     'move_lines': [(6, 0, [x.id for x in value])],
                     'origin': ', '.join(value.mapped('purchase_line_id.order_id.name')),
@@ -147,7 +148,7 @@ class CreatePickingMove(models.TransientModel):
                     'location_id': type_id.default_location_src_id.id,
                     'location_dest_id': type_id.default_location_dest_id.id,
                     'temp': True
-                }
+                })
                 if self.supplier_mode and key in partners:
                     picking_vals['partner_id'] = key
                 else:
