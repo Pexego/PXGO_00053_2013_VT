@@ -44,13 +44,9 @@ class StockPickingReport(models.Model):
     origin = fields.Char('Origin', readonly=True)
     location_dest_name = fields.Char('Location Destination Name', readonly=True)
     product_pricelist = fields.Many2one('product.pricelist', 'Pricelist', readonly=True)
-    product_battery = fields.Many2one('product.battery', readonly=True)
-    product_battery_mode = fields.Char(readonly=True)
     product_country_origin_id = fields.Many2one('res.country',readonly=True)
-    product_num_batteries = fields.Float('Num Batteries', readonly=True)
     product_weight = fields.Float('Weight', readonly=True)
     weight_total = fields.Float('Total Weight', readonly=True)
-    num_batteries_total = fields.Float('Num. Batteries Total', readonly=True)
     country_dest_id = fields.Many2one('res.country', readonly=True)
 
     def _select(self):
@@ -90,12 +86,8 @@ class StockPickingReport(models.Model):
                     sl.name as location_dest_name,
                     so.pricelist_id as product_pricelist,
                     t.origin_country_id as product_country_origin_id,
-                    t.battery_id as product_battery,
-                    t.battery_mode as product_battery_mode,
-                    t.num_batteries as product_num_batteries,
                     t.weight as product_weight,
                     t.weight * sm.product_qty as weight_total,
-                    t.num_batteries * sm.product_qty as num_batteries_total,
                     r.country_id as country_dest_id
 
         """
@@ -162,9 +154,6 @@ class StockPickingReport(models.Model):
                     so.pricelist_id,
                     p.id,
                     t.origin_country_id,
-                    t.battery_id,
-                    t.battery_mode,
-                    t.num_batteries,
                     t.weight,
                     r.country_id
         """
