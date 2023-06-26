@@ -109,6 +109,7 @@
                     <field name="product_id" string="Product" options="{'no_create': True}"/>
                     <field name="brand_id" options="{'no_create': True}"/>
                     <field name="category_id"/>
+                    <field name="call_reason" widget="radio"/>
                     <field name="subject" string="Subject"/>
                     <field name="description"/>
                     <field name="call_state" string="State"/>
@@ -154,6 +155,7 @@
                 <field name="product_id" string="Product"/>
                 <field name="brand_id" options="{'no_create': True}"/>
                 <field name="category_id"/>
+                <field name="call_reason"/>
                 <field name="subject" string="Subject"/>
                 <field name="description"/>
                 <field name="call_state" string="State"/>
