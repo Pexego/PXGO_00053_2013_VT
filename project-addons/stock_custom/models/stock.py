@@ -161,6 +161,20 @@ class StockQuant(models.Model):
             product_id, location_id, quantity, lot_id=lot_id,
             package_id=package_id, owner_id=owner_id, strict=strict)
 
+    @api.model
+    def _get_available_quantity(self, product_id, location_id, lot_id=None,
+                                package_id=None, owner_id=None, strict=False,
+                                allow_negative=False):
+        if location_id.set_owner and location_id.partner_id and not owner_id:
+            owner_id = location_id.partner_id
+        elif (owner_id and location_id.company_id and owner_id == location_id.
+                company_id.partner_id):
+            owner_id = False
+        return super()._get_available_quantity(
+            product_id, location_id, lot_id=lot_id,
+            package_id=package_id, owner_id=owner_id, strict=strict,
+            allow_negative=allow_negative)
+
 
 class StockLocation(models.Model):
 
