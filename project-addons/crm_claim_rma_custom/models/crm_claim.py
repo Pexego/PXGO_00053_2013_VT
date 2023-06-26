@@ -78,10 +78,6 @@ class CrmClaimRma(models.Model):
         'Claim description',
         help="More precise description of the problem")
 
-    internal_notes2 = fields.Text(
-        'Claim description',
-        help="More precise description of the problem")
-
     amazon_rma = fields.Char("ID Amazon")
     partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']

@@ -16,15 +16,6 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_report_link
-#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
-msgid "<strong>Included\n"
-"                                        <span>:</span>\n"
-"                                    </strong>"
-msgstr "<strong>Incluso\n"
-"                                        <span>:</span>\n"
-"                                    </strong>"
-
-#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "+33434226281"
 msgstr "+33434226281"
@@ -41,8 +32,10 @@ msgstr "0694803224"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
-msgid "<b>IMPORTANT NOTE</b><span>: </span>"
-msgstr "<b>IMPORTANT NOTE</b><span>: </span>"
+msgid "<b style=\"color:#da1f2e;\">IMPORTANT NOTE:</b>\n"
+"                        <span>Included </span>"
+msgstr "<b style=\"color:#da1f2e;\">Nota importante:</b>\n"
+"                        <span>Incluso </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
