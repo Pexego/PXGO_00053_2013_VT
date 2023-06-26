@@ -42,7 +42,7 @@ class ProductOutletReverseWizard(models.TransientModel):
     def make_reverse_move(self):
 
         loss_location = self.env.ref('product_outlet.stock_location_outlet_changes')
-        stock_location = self.env.ref('stock.stock_location_stock')
+        stock_location = self.warehouse_id.lot_stock_id
         move_obj = self.env['stock.move']
         product = self.with_context(
             warehouse=self.warehouse_id.id,
