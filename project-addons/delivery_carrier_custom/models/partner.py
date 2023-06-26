@@ -32,10 +32,10 @@ class Partner(models.Model):
     @api.onchange('delivery_type')
     def onchange_delivery_type(self):
         carrierServ_id = self.env['delivery.carrier'].search([('name', '=', 'Medios Propios')]).ids
-        carrierTrans_id = self.env['res.partner'].search([('name', '=', 'Medios Propios')]).ids  # TODO: ¿cambiar a LX?
+        carrierTrans_id = self.env['res.partner'].search([('name', '=', 'Medios Propios')]).ids
         installationServ_id = self.env['delivery.carrier'].search([('name', '=', 'Recoge agencia cliente')]).ids
         installationTrans_id = self.env['res.partner'].search(
-            [('name', '=', 'Recoge agencia cliente')]).ids  # TODO: ¿Cambiar a LX?
+            [('name', '=', 'LONG XIANG EXPORTACION IMPORTACION S.L.')]).ids
         if self.delivery_type == 'installations':
             self.property_delivery_carrier_id = carrierServ_id[0]
             self.transporter_id = carrierTrans_id[0]

@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
         carrierServ_id = self.env['delivery.carrier'].search([('name', '=', 'Medios Propios')]).ids
         carrierTrans_id = self.env['res.partner'].search([('name', '=', 'Medios Propios')]).ids
         installationServ_id = self.env['delivery.carrier'].search([('name', '=', 'Recoge agencia cliente')]).ids
-        installationTrans_id = self.env['res.partner'].search([('name', '=', 'Recoge agencia cliente')]).ids
+        installationTrans_id = self.env['res.partner'].search([('name', '=', 'LONG XIANG EXPORTACION IMPORTACION S.L.')]).ids
 
         if self.delivery_type == 'installations':
             self.carrier_id = carrierServ_id[0]
@@ -47,5 +47,5 @@ class SaleOrder(models.Model):
             self.transporter_id = installationTrans_id[0]
 
         if self.delivery_type == 'shipping':
-            self.carrier_id = self.partner_id.carrier_id.id
+            self.carrier_id = self.partner_id.property_delivery_carrier_id.id
             self.transporter_id = self.partner_id.transporter_id.id
