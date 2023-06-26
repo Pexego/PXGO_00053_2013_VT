@@ -1614,7 +1614,7 @@ BIC: CAIXESBBXXX
             </div>
         </div>
 
-        <div class="article" style="margin-bottom: 300px">
+        <div class="article">
             <t t-raw="0"/>
             <t t-if="claim.att_claim_id.number">
                 <div class="pull-left col-xs-6" style="margin-top: 70%;">

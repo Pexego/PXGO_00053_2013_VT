@@ -31,11 +31,6 @@ msgid "0694803224"
 msgstr "0694803224"
 
 #. module: custom_report_link
-#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
-msgid "<b>IMPORTANT NOTE</b><span>: </span>"
-msgstr "<b>IMPORTANT NOTE</b><span>: </span>"
-
-#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 msgid "<span style=\"font-weight: bold; color:#da1f2e\">To: </span>"
 msgstr "<span style=\"font-weight: bold; color:#da1f2e\">To: </span>"
