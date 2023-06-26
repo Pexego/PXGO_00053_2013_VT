@@ -9,7 +9,7 @@
                 <field name="is_transporter"/>
                 <field name="transporter_id" attrs="{'invisible': [('is_transporter', '=', True)],
                 'required': [('is_company', '=', True),('customer','=', True),('active', '=', True), ('is_transporter', '=', False)]}"/>
-                <field name="carrier_id" attrs="{'invisible': [('is_transporter', '=', True)],
+                <field name="property_delivery_carrier_id" attrs="{'invisible': [('is_transporter', '=', True)],
                 'required': [('is_company', '=', True),('customer','=', True),('active', '=', True), ('is_transporter', '=', False)]}"/>
                 <field name="delivery_type" attrs="{'invisible': [('is_transporter', '=', True)],
                 'required': [('is_company', '=', True),('customer','=', True),('active', '=', True), ('is_transporter', '=', False)]}"/>

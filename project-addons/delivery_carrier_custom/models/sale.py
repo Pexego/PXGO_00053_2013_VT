@@ -12,13 +12,11 @@ class SaleOrder(models.Model):
         ('installations', 'Pickup in installations')],
         'Delivery type', required=True, default='shipping')
 
-    @api.multi
     @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        super().onchange_partner_id()
+    def onchange_partner_id_carrier_id(self):
+        super().onchange_partner_id_carrier_id()
         if self.partner_id:
             self.transporter_id = self.partner_id.transporter_id.id
-            self.carrier_id = self.partner_id.carrier_id.id
             self.delivery_type = self.partner_id.delivery_type
 
     @api.multi
@@ -29,7 +27,7 @@ class SaleOrder(models.Model):
             ('country_group_id.country_ids', 'in', [self.partner_shipping_id.country_id.id])
         ])
         if transporter_ids:
-            if self.transporter_id not in transporter_ids:
+            if self.transporter_id.id not in transporter_ids:
                 self.transporter_id = False
             return {'domain': {'transporter_id': [('id', 'in', transporter_ids.mapped("id"))]}}
         all_transporters_ids = self.env['res.partner'].search([('is_transporter', '=', True)])

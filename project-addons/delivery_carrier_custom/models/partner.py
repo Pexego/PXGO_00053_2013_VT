@@ -6,7 +6,6 @@ class Partner(models.Model):
 
     carrier_ids = fields.One2many('delivery.carrier', 'partner_id', string='Services')
     transporter_id = fields.Many2one('res.partner', 'Transporter', domain=[('is_transporter', '=', True)])
-    carrier_id = fields.Many2one('delivery.carrier', 'Transport service')
     is_transporter = fields.Boolean('Transporter')
     delivery_type = fields.Selection([
         ('shipping', 'Shipping'),
@@ -25,9 +24,9 @@ class Partner(models.Model):
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
         carrier_ids = [x.id for x in self.transporter_id.carrier_ids]
-        if self.carrier_id.id not in carrier_ids:
-            self.carrier_id = False
-        return {'domain': {'carrier_id': [('id', 'in', carrier_ids)]}}
+        if self.property_delivery_carrier_id.id not in carrier_ids:
+            self.property_delivery_carrier_id = False
+        return {'domain': {'property_delivery_carrier_id': [('id', 'in', carrier_ids)]}}
 
     @api.multi
     @api.onchange('delivery_type')
@@ -38,15 +37,15 @@ class Partner(models.Model):
         installationTrans_id = self.env['res.partner'].search(
             [('name', '=', 'Recoge agencia cliente')]).ids  # TODO: ¿Cambiar a LX?
         if self.delivery_type == 'installations':
-            self.carrier_id = carrierServ_id[0]
+            self.property_delivery_carrier_id = carrierServ_id[0]
             self.transporter_id = carrierTrans_id[0]
 
         if self.delivery_type == 'carrier':
-            self.carrier_id = installationServ_id[0]
+            self.property_delivery_carrier_id = installationServ_id[0]
             self.transporter_id = installationTrans_id[0]
 
         if self.delivery_type == 'shipping':
-            self.carrier_id = self.carrier_id.id
+            self.property_delivery_carrier_id = self.property_delivery_carrier_id.id
             self.transporter_id = self.transporter_id.id
 
 
