@@ -247,5 +247,6 @@ class SaleOrderLine(models.Model):
         res = super()._prepare_stock_reservation(date_validity, note)
         if not res.get('sale_id',False) and self.order_id:
             res['sale_id'] = self.order_id.id
+        res['location_id'] = self.order_id.warehouse_id.lot_stock_id.id
         return res
 
