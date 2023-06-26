@@ -91,6 +91,12 @@ class SaleOrder(models.Model):
         "Not apply promotions",
         help="Reload the prices after marking this check")
 
+    @api.model
+    def create(self, vals):
+        if vals.get('partner_id'):
+            vals['no_promos'] = self.env['res.partner'].browse(vals['partner_id']).no_promos
+        return super().create(vals)
+
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
