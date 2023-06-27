@@ -248,3 +248,85 @@ msgstr "Ratio"
 msgid "the ratio can not be 0"
 msgstr "El ratio no puede ser 0"
 
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_carrier_tracking_ref
+msgid "Carrier Tracking Ref"
+msgstr "Seguimiento transportista"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_carrier_name
+msgid "Carrier name"
+msgstr "Nombre transportista"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_carrier_service
+msgid "Carrier service"
+msgstr "Servicio transporte"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_weight_net
+msgid "Net Weight"
+msgstr "Peso neto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_move_weight_net
+msgid "Net weight"
+msgstr "Peso neto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_number_of_packages
+msgid "Number of Packages"
+msgstr "Número de bultos"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_stock_picking
+msgid "Picking List"
+msgstr "Albarán"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_move_weight_uom_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_weight_uom_id
+msgid "Unit of Measure"
+msgstr "Unidad de medida"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,help:delivery_carrier_custom.field_stock_move_weight_uom_id
+msgid "Unit of Measure (Unit of Measure) is the unit of measurement for Weight"
+msgstr "La unidad de medida es la unidad de medición del peso"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,help:delivery_carrier_custom.field_stock_picking_weight_uom_id
+msgid "Unit of measurement for Weight"
+msgstr "Unidad de medida para el peso"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_volume
+msgid "Volume"
+msgstr "Volumen"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_move_weight
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_weight
+msgid "Weight"
+msgstr "Peso"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+msgid "Carrier Information"
+msgstr "Información del transportista"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+msgid "Weight Net"
+msgstr "Peso neto"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+msgid "Check tracking status"
+msgstr "Comprobar estado del envío"
