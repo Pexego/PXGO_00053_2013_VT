@@ -652,3 +652,32 @@ msgstr "<ul><li> Responsabile: %s</il><li> Data di ricezione finale: %s <b>&rarr
 #, python-format
 msgid "<ul><li> Officer: %s</il><li> Received Date: %s <b>&rarr;</b> %s</il></ul>"
 msgstr "<ul><li> Responsabile: %s</il><li> Data di ricezione: %s <b>&rarr;</b> %s</il></ul>"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Riga fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_open_partner_invoice_lines
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_lines_claim_invoice_line_qty_tree_search_view
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_partner_form_add_invoice_lines_widget
+msgid "Invoice Lines"
+msgstr "Righe fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_claim_invoice_line_qty
+#: model:ir.ui.view,arch_db:invoice_lines_claim_invoice_line_qty_tree
+msgid "Claim Invoice Line Qty"
+msgstr "Importo utilizzato in RMA"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_type
+#: model:ir.ui.view,arch_db:invoice_lines_claim_invoice_line_qty_tree_search_view
+msgid "Type"
+msgstr "Tipo di fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:invoice_lines_claim_invoice_line_qty_tree_search_view
+msgid "Invoice"
+msgstr "Fattura"
