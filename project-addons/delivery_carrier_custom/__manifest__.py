@@ -14,6 +14,7 @@
         'views/delivery_carrier.xml',
         'views/country_view.xml',
         'views/sale_view.xml',
+        'views/stock_view.xml',
         'wizard/picking_tracking_status_view.xml',
         'data/parameters.xml',
         'security/ir.model.access.csv'

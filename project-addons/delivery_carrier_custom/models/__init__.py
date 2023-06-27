@@ -3,5 +3,6 @@ from . import (
     partner,
     country,
     sale,
-    area_transporter_rel
+    area_transporter_rel,
+    stock,
 )
