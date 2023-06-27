@@ -21,14 +21,14 @@ class AmazonAPIRequest(object):
         return self.company_id.marketplace_ids.mapped('code')
 
     def _get_credentials(self):
-        return dict(
-            refresh_token=self.company_id.refresh_token,
-            lwa_app_id=self.company_id.lwa_app_id,
-            lwa_client_secret=self.company_id.lwa_client_secret,
-            aws_secret_key=self.company_id.aws_secret_key,
-            aws_access_key=self.company_id.aws_access_key,
-            role_arn=self.company_id.role_arn,
-        )
+        return {
+            'refresh_token': self.company_id.refresh_token,
+            'lwa_app_id': self.company_id.lwa_app_id,
+            'lwa_client_secret': self.company_id.lwa_client_secret,
+            'aws_secret_key': self.company_id.aws_secret_key,
+            'aws_access_key': self.company_id.aws_access_key,
+            'role_arn': self.company_id.role_arn,
+        }
 
     def create_report(self, report_name, data_start_time, data_end_time):
         try:
@@ -48,7 +48,6 @@ class AmazonAPIRequest(object):
                 report_state = report.get("processingStatus")
             except SellingApiRequestThrottledException:
                 time.sleep(self.rate_time_limit)
-                continue
             except SellingApiException as e:
                 raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_id, e))
         return report
@@ -63,7 +62,7 @@ class AmazonAPIRequest(object):
             except SellingApiException as e:
                 raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_document_id, e))
 
-    def call_api_order_method(self, order_method, order_name):
+    def _call_api_order_method(self, order_method, order_name):
         while True:
             try:
                 return getattr(self.orders_obj, order_method)(order_id=order_name).payload
@@ -73,21 +72,20 @@ class AmazonAPIRequest(object):
                 raise UserError(_("Amazon API Error. Method: %s.Order %s. '%s' \n") % (order_method, order_name, e))
 
     def get_order_buyer_info(self, order_name):
-        return self.call_api_order_method("get_order_buyer_info", order_name)
+        return self._call_api_order_method("get_order_buyer_info", order_name)
 
     def get_order_items(self, order_name):
-        return self.call_api_order_method("get_order_items", order_name)
+        return self._call_api_order_method("get_order_items", order_name)
 
     def get_order(self, order_name):
-        return self.call_api_order_method("get_order", order_name)
+        return self._call_api_order_method("get_order", order_name)
 
     def get_order_address(self, order_name):
-        return self.call_api_order_method("get_order_address", order_name)
+        return self._call_api_order_method("get_order_address", order_name)
 
     def get_reports(self, report_types, created_since, page_size, next_token=False):
         if next_token:
-            reports_res = self.reports_obj.get_reports(next_token=next_token)
+            return self.reports_obj.get_reports(next_token=next_token)
         else:
-            reports_res = self.reports_obj.get_reports(reportTypes=report_types,
+            return self.reports_obj.get_reports(reportTypes=report_types,
                                                        createdSince=created_since, pageSize=page_size)
-        return reports_res
