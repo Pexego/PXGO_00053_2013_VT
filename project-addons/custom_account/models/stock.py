@@ -84,7 +84,8 @@ class StockMove(models.Model):
             if company:
                 value_to_return = self.env['stock.move'].\
                     with_context(candidates_company=company.id)._run_fifo(
-                        self, quantity=valued_quantity)
+                        self.with_context(candidates_company=company.id),
+                        quantity=valued_quantity)
                 if self.product_id.cost_method in ['standard', 'average']:
                     curr_rounding = self.company_id.currency_id.rounding
                     value = -float_round(
@@ -165,9 +166,8 @@ class ProductProduct(models.Model):
             domain = [('product_id', '=', self.id),
                       ('remaining_qty', '>', 0.0),
                       ('company_id', '=',
-                       self.env.context['candidates_company'])] + self.\
-                env['stock.move']._get_in_base_domain()
-            candidates = self.env['stock.move'].search(
+                       self.env.context['candidates_company'])]
+            candidates = self.env['stock.move'].sudo().search(
                 domain, order='date, id')
         return candidates
 
