@@ -152,7 +152,7 @@ class PurchaseOrder(models.Model):
                                  ('partner_id', '=', 27),
                                  ('picking_type_id', 'in', picking_type_domain)])
         purchases_filtered = purchases.filtered(
-            lambda p: float_compare(p.amount_total, p.amount_to_invoice_es, precision_digits=2) == 0
+            lambda p: float_compare(p.amount_to_invoice_it, p.amount_to_invoice_es, precision_digits=2) == 0
         )
 
         if not purchases_filtered:
