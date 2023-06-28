@@ -16,9 +16,9 @@ class Partner(models.Model):
 
     @api.multi
     @api.onchange('country_id')
-    def new_onchange_country_id(self):
+    def onchange_country_id(self):
         for partner in self:
-            partner.transporter_id = partner.country_id.new_default_transporter
+            partner.transporter_id = partner.country_id.default_transporter
 
     @api.multi
     @api.onchange('transporter_id')
