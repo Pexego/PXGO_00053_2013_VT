@@ -36,7 +36,7 @@
                 <page string="Transportation" attrs="{'invisible': [('is_transporter', '=', False)]}">
                     <separator string="Services"/>
                     <field name="carrier_ids">
-                        <tree string="Service">
+                        <tree string="Service" create="false" edit="false" delete="false">
                             <field name="name"/>
                         </tree>
                     </field>
