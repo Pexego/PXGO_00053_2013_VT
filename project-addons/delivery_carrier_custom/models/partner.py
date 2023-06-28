@@ -23,7 +23,7 @@ class Partner(models.Model):
     @api.multi
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
-        carrier_ids = [x.id for x in self.transporter_id.carrier_ids]
+        carrier_ids = self.transporter_id.carrier_ids.ids
         if self.property_delivery_carrier_id.id not in carrier_ids:
             self.property_delivery_carrier_id = False
         return {'domain': {'property_delivery_carrier_id': [('id', 'in', carrier_ids)]}}

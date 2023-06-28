@@ -36,10 +36,7 @@ class SaleOrder(models.Model):
     @api.multi
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
-        carrier_ids = [x.id for x in self.transporter_id.carrier_ids]
-        if carrier_ids:
-            if self.carrier_id.id not in carrier_ids:
-                self.carrier_id = False
-            return {'domain': {'carrier_id': [('id', 'in', carrier_ids)]}}
-        all_carriers = [x.id for x in self.env['delivery.carrier'].search([])]
-        return {'domain': {'carrier_id': [('id', 'in', all_carriers)]}}
+        carrier_ids = self.transporter_id.carrier_ids.ids
+        if self.carrier_id.id not in carrier_ids:
+            self.carrier_id = False
+        return {'domain': {'carrier_id': [('id', 'in', carrier_ids)]}}
