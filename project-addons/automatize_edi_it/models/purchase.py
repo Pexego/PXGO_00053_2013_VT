@@ -167,8 +167,9 @@ class PurchaseOrder(models.Model):
             orders_es.action_invoice_create_aux(order_es_ids)
             odoo_es.env.commit()
             self.env.cr.commit()
-        except Exception:
+        except Exception as e:
             self.env.cr.rollback()
+            raise e
         finally:
             odoo_es.logout()
 
