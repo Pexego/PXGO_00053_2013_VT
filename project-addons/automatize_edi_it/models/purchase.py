@@ -166,6 +166,7 @@ class PurchaseOrder(models.Model):
             orders_es = odoo_es.env['sale.order'].browse([])
             orders_es.action_invoice_create_aux(order_es_ids)
             odoo_es.env.commit()
+            self.env.cr.commit()
         except Exception:
             self.env.cr.rollback()
         finally:
