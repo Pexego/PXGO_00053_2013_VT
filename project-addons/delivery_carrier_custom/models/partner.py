@@ -31,22 +31,25 @@ class Partner(models.Model):
     @api.multi
     @api.onchange('delivery_type')
     def onchange_delivery_type(self):
-        carrierServ_id = self.env['delivery.carrier'].search([('name', '=', 'Medios Propios')]).ids
-        carrierTrans_id = self.env['res.partner'].search([('name', '=', 'Medios Propios')]).ids
-        installationServ_id = self.env['delivery.carrier'].search([('name', '=', 'Recoge agencia cliente')]).ids
-        installationTrans_id = self.env['res.partner'].search(
-            [('name', '=', 'LONG XIANG EXPORTACION IMPORTACION S.L.')]).ids
+        carrier_to_set = False
+        transporter_to_set = False
+
         if self.delivery_type == 'installations':
-            self.property_delivery_carrier_id = carrierServ_id[0]
-            self.transporter_id = carrierTrans_id[0]
+            carrierServ_id = self.env.ref('delivery_carrier_custom.delivery_carrier_carrier')
+            carrier_to_set = carrierServ_id.id
+            transporter_to_set = carrierServ_id.partner_id.id
 
-        if self.delivery_type == 'carrier':
-            self.property_delivery_carrier_id = installationServ_id[0]
-            self.transporter_id = installationTrans_id[0]
+        elif self.delivery_type == 'carrier':
+            installationServ_id = self.env.ref('delivery_carrier_custom.delivery_carrier_installations')
+            carrier_to_set = installationServ_id.id
+            transporter_to_set = installationServ_id.partner_id.id
 
-        if self.delivery_type == 'shipping':
-            self.property_delivery_carrier_id = self.property_delivery_carrier_id.id
-            self.transporter_id = self.transporter_id.id
+        elif self.delivery_type == 'shipping':
+            carrier_to_set = self.property_delivery_carrier_id.id
+            transporter_to_set = self.transporter_id.id
+
+        self.property_delivery_carrier_id = carrier_to_set
+        self.transporter_id = transporter_to_set
 
 
 class ResPartnerArea(models.Model):
