@@ -207,5 +207,5 @@ class PurchaseOrder(models.Model):
         # Login
         odoo_es.login(server.server_db, server.login, server.password)
         odoo_es.config['auto_commit'] = False
-        odoo_es.config['timeout'] = 600
+        odoo_es.config['timeout'] = 1500
         return odoo_es
