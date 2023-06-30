@@ -1,4 +1,5 @@
-from odoo import fields, models, api, exceptions, _
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
 
 
 class Partner(models.Model):
@@ -63,11 +64,11 @@ class ResPartnerArea(models.Model):
     def onchange_transporter_rel(self):
         for record in self.transporter_rel_ids:
             if record.ratio_shipping == 0:
-                raise exceptions.except_orm(_('Value error'), _('the ratio can not be 0'))
+                raise UserError(_('Value error'), _('the ratio can not be 0'))
 
     @api.one
     def write(self, values):
         super().write(values)
         for record in self.transporter_rel_ids:
             if record.ratio_shipping == 0:
-                raise exceptions.except_orm(_('Value error'), _('the ratio can not be 0'))
+                raise UserError(_('Value error'), _('the ratio can not be 0'))

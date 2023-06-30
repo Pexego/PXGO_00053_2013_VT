@@ -21,17 +21,17 @@ class SaleOrder(models.Model):
 
     @api.multi
     @api.onchange('partner_shipping_id')
-    def new_onchange_partner_id_transporter(self):
+    def onchange_partner_id_transporter(self):
         transporter_ids = self.env['res.partner'].search([
             ('is_transporter', '=', True),
-            ('country_group_id.country_ids', 'in', [self.partner_shipping_id.country_id.id])
+            ('country_group_id.country_ids', '=', self.partner_shipping_id.country_id.id)
         ])
         if transporter_ids:
             if self.transporter_id.id not in transporter_ids:
                 self.transporter_id = False
-            return {'domain': {'transporter_id': [('id', 'in', transporter_ids.mapped("id"))]}}
+            return {'domain': {'transporter_id': [('id', 'in', transporter_ids.ids)]}}
         all_transporters_ids = self.env['res.partner'].search([('is_transporter', '=', True)])
-        return {'domain': {'transporter_id': [('id', 'in', all_transporters_ids.mapped("id"))]}}
+        return {'domain': {'transporter_id': [('id', 'in', all_transporters_ids.ids)]}}
 
     @api.multi
     @api.onchange('transporter_id')

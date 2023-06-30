@@ -1,11 +1,6 @@
 from odoo import models, fields, api
 
 
-CHECK_ERROR = {('0', 'Error Request'),
-               ('1', 'Information Available'),
-               ('-1', 'No Information')}
-
-
 class PickingTrackingStatus(models.TransientModel):
 
     _name = "picking.tracking.status.wizard"
@@ -14,24 +9,22 @@ class PickingTrackingStatus(models.TransientModel):
     @api.model
     def _default_status_picking(self):
         context = self.env.context
-        if 'information' in context and context['information'].get('Package_status'):
+        res = False
+        if context.get('information', {}).get('Package_status'):
             res = context['information'].get('Package_status').upper()
-        else:
-            res = False
         return res
 
     @api.model
     def _default_status_request(self):
         context = self.env.context
-        if 'information' in context and context['information'].get('Bags'):
-            info = context.get('information')
-        else:
-            return '-1'
-        res = str(info["Status"])
+        res = '-1'
+        if context.get('information', {}).get('Bags'):
+            res = str(context.get('information').get('Status'))
         return res
 
     status_picking = fields.Char(string='STATUS', default=_default_status_picking, readonly=True)
-    status_request = fields.Selection(CHECK_ERROR, string='Status request',
+    status_request = fields.Selection([('0', 'Error Request'), ('1', 'Information Available'),
+                                      ('-1', 'No Information')], string='Status request',
                                       default=_default_status_request, readonly=True)
     status_list = fields.One2many('picking.tracking.status.list.wizard', 'wizard_id', string='STATUS LIST', readonly=True)
     num_packages = fields.Integer(string='Num Packages', readonly=True)
