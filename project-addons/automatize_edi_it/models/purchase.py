@@ -165,8 +165,8 @@ class PurchaseOrder(models.Model):
             ])
             orders_es = odoo_es.env['sale.order'].browse([])
             orders_es.action_invoice_create_aux(order_es_ids)
-            odoo_es.env.commit()
             self.env.cr.commit()
+            odoo_es.env.commit()
         except Exception as e:
             self.env.cr.rollback()
             raise e
@@ -207,4 +207,5 @@ class PurchaseOrder(models.Model):
         # Login
         odoo_es.login(server.server_db, server.login, server.password)
         odoo_es.config['auto_commit'] = False
+        odoo_es.config['timeout'] = 600
         return odoo_es
