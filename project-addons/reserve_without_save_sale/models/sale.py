@@ -242,3 +242,10 @@ class SaleOrderLine(models.Model):
             line.hide_reserve_buttons = not(line.order_id.partner_id.user_id.id == line.env.user.id \
                     or line.env.user.has_group('reserve_without_save_sale.reserves_editor'))
 
+    @api.multi
+    def _prepare_stock_reservation(self, date_validity=False, note=False):
+        res = super()._prepare_stock_reservation(date_validity, note)
+        if not res.get('sale_id',False) and self.order_id:
+            res['sale_id'] = self.order_id.id
+        return res
+

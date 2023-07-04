@@ -13,6 +13,7 @@
 <p>Hello,</p>
 <p>The sale ${object.name} has been created. There are some products to make the order: </p>
 <p>${ctx['products_to_order']}</p>
+<p>The client is ${ctx['partner_name']}</p>
 <p>The order is assigned to ${object.user_id.name}</p>
 <p>Regards.</p>
 ]]>

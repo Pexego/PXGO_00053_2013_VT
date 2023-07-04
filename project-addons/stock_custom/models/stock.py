@@ -18,6 +18,7 @@
 #
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
+from datetime import date
 
 
 class StockPicking(models.Model):
@@ -312,7 +313,21 @@ class StockLandedCost(models.Model):
             filtered(lambda line: line.move_id)
         valuation_lines.mapped('move_id.product_id.product_tmpl_id').\
             recalculate_standard_price_2()
+        self.update_last_landed_cost_date_product(date.today())
         return res
+
+    def update_last_landed_cost_date_product(self, date_to_set):
+        """
+        Updates last_landed_cost_date to date_to_set in landed cost's
+        associated products
+
+        Parameter:
+        ---------
+        date_date_to_set: datetime.date
+            Date to set
+        """
+        for product in self.mapped('valuation_adjustment_lines.product_id'):
+            product.last_landed_cost_date = date_to_set
 
 
 class PushedFlow(models.Model):

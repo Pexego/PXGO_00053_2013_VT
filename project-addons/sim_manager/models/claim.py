@@ -43,7 +43,7 @@ class ClaimLine(models.Model):
         if self.product_id:
             products = self.env['sim.type'].search([('product_id', '=', self.product_id.id)])
             if products:
-                sims = self.prodlot_id.upper().replace(" ", "").split(',')
+                sims = self.prodlot_id.upper().split(', ')
                 sim_packages = self.env['sim.package'].search([('code', 'in', sims)])
                 if not sim_packages or len(sim_packages) != len(sims) or len(sim_packages) != self.product_returned_quantity:
                     raise UserError(_("The serial numbers cannot be found in the system. Check the serials and the format."))

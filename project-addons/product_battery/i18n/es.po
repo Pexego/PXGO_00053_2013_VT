@@ -95,3 +95,8 @@ msgstr "Número de Baterias"
 #: model:ir.model.fields,field_description:product_battery.field_product_template_battery_mode
 msgid "Battery Mode"
 msgstr "Modo de Batería"
+
+#. module: product_battery
+#: selection:product.template,battery_mode:0
+msgid "No battery"
+msgstr "Sin batería"

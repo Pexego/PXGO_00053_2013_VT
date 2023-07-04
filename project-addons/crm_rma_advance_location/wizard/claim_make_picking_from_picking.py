@@ -133,7 +133,7 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                                               wizard_move.product_id.default_code))
 
             if wizard_picking_line.prodlot_id:
-                ids_prodlot = len(wizard_picking_line.prodlot_id.split(","))
+                ids_prodlot = len(wizard_picking_line.prodlot_id.split(', '))
                 if ids_prodlot != wizard_picking_line.product_qty:
                     raise exceptions.UserError(_("Wrong number of serial numbers. Remember Separate them by commas"))
 

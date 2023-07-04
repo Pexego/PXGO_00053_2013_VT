@@ -35,6 +35,7 @@
                     <field name="guarantee_limit" select='1'/>
                     <field name="return_value" select='1'/>
                     <field name="name" select='1'/>
+                    <field name="categ_id" select="1"/>
                 </group>
                 <newline/>
                 <group expand="0" string="Group By...">

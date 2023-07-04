@@ -163,3 +163,4 @@ shipping_costs
 move_reserves
 web_custom
 cron_endmonth
+retry_cron_on_exception

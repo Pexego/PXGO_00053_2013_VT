@@ -5,7 +5,7 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    allow_ship_battery = fields.Boolean("Allow ship batteries")
+    allow_ship_battery = fields.Boolean("Allow ship batteries", copy=False)
 
     @api.multi
     def action_confirm(self):
