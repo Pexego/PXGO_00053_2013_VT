@@ -655,5 +655,6 @@ msgstr "<ul><li> Responsabile: %s</il><li> Data di ricezione: %s <b>&rarr;</b> %
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Shipping pending for lack of stock"
 msgstr "In sospeso per mancanza di disponibilitá"

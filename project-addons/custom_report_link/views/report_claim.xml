@@ -248,7 +248,10 @@
                                         <span t-field="line_id.internal_description"/>
                                     </td>
                                     <t t-if="line_id.pending_shipment_stock == true">
-                                        <td class="col-xs-2" style="font-size:11px">PENDIENTE DE ENVÍO POR FALTA DE STOCK</td>
+                                        <td class="col-xs-2" style="font-size:11px">SHIPPING PENDING FOR LACK OF STOCK</td>
+                                    </t>
+                                    <t t-if="line_id.pending_shipment_stock == false">
+                                        <td/>
                                     </t>
                                 </tr>
                             </tbody>
