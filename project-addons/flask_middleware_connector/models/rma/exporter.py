@@ -64,6 +64,7 @@ class ClaimLineExporter(Component):
             "status_id": binding.substate_id.id,
             "prodlot_id": binding.prodlot_id,
             "invoice_id": binding.invoice_id.number,
+            "pending_shipment_stock": binding.pending_shipment_stock
         }
 
         if mode == "insert":

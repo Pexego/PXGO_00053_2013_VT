@@ -35,3 +35,8 @@ msgstr "<p>Caro cliente,</p> <p>Informamos que recebemos os produtos corresponde
 #: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
 msgid "Visiotech - RMA received"
 msgstr "Visiotech - RMA recebido"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+msgid "Shipping pending for lack of stock"
+msgstr "O envio está a aguardar disponibilidad"
