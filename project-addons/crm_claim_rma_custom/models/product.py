@@ -28,10 +28,6 @@ class ProductProduct(models.Model):
 
     @api.multi
     def _get_incidences_warn_description(self):
-
-        import wdb
-        wdb.set_trace()
-
         description = ""
         for product in self:
             incidences = product.incidence_ids.filtered(lambda i: i.warn)
