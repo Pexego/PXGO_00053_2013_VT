@@ -229,7 +229,7 @@ class AmazonSaleOrder(models.Model):
             seller_vat = row["Seller Tax Registration"]
             amazon_company_id = self.env['amazon.company'].search([('vat', '=', seller_vat)])
             fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', tax_country)])
-
+            ship_from_country_id = self.env['res.country'].search([('code', '=', row["Ship From Country"])]).id
             amazon_order_values = {'name': order_name,
                                    'partner_vat': row["Buyer Tax Registration"],
                                    'vat_imputation_country': row["Buyer Tax Registration Jurisdiction"],
@@ -243,7 +243,8 @@ class AmazonSaleOrder(models.Model):
                                    'tax_address_role': row["Tax Address Role"],
                                    'seller_vat': seller_vat,
                                    'amazon_company_id': amazon_company_id.id,
-                                   'tax_country_id': tax_country
+                                   'tax_country_id': tax_country,
+                                   'ship_from_country_id': ship_from_country_id
                                    }
             order_complete = amazon_api.get_order(order_name)
             amazon_order_values.update({

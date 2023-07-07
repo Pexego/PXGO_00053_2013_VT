@@ -84,6 +84,7 @@
                             <field name="is_business_order" readonly="1"/>
                             <field name="purchase_date" readonly="1"/>
                             <field name="fiscal_position_id" attrs="{'readonly':[('state','!=','error')]}"/>
+                            <field name="ship_from_country_id" readonly="1"/>
                         </group>
                     </group>
                     <notebook>
