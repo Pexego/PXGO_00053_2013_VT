@@ -207,5 +207,6 @@ class PurchaseOrder(models.Model):
         # Login
         odoo_es.login(server.server_db, server.login, server.password)
         odoo_es.config['auto_commit'] = False
-        odoo_es.config['timeout'] = 1500
+        timeout_mins = int(self.env['ir.config_parameter'].sudo().get_param('es_timeout_request_minutes'))
+        odoo_es.config['timeout'] = timeout_mins * 60  # needed to be in seconds
         return odoo_es

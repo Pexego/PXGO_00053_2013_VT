@@ -61,5 +61,8 @@
         <field name="state">code</field>
         <field name="code">model.cron_automate_invoicing_lx()</field>
     </record>
-
+    <record id="es_timeout_request_minutes" model="ir.config_parameter">
+        <field name="key">es_timeout_request_minutes</field>
+        <field name="value">60</field>
+    </record>
 </odoo>
