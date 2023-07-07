@@ -36,5 +36,9 @@ class SaleOrder(models.Model):
         sale_order_ids: List[Int]
             sale.order ids to be invoiced
         """
-        sales = self.env['sale.order'].browse(sale_order_ids)
-        sales.action_invoice_create()
+        try:
+            sales = self.env['sale.order'].browse(sale_order_ids)
+            sales.action_invoice_create()
+        except Exception as e:
+            self.env.cr.rollback()
+            raise e
