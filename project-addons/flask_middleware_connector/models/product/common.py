@@ -456,3 +456,15 @@ class ProductBrandGroupListener(Component):
 
     def on_record_unlink(self, record):
         record.with_delay(priority=11, eta=120).unlink_brand_group()
+
+
+class ProductEquivalentListener(Component):
+    _name = 'product.equivalent.event.listener'
+    _inherit = 'base.event.listener'
+    _apply_on = ['product.equivalent']
+
+    def on_record_create(self, record, fields=None):
+        record.product_id.with_delay(priority=11, eta=30).update_product()
+
+    def on_record_unlink(self, record):
+        record.product_id.with_delay(priority=11, eta=30).update_product()
