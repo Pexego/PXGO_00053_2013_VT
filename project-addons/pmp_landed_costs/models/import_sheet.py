@@ -51,6 +51,8 @@ class ImportSheet(models.Model):
     landed_cost_ids = fields.One2many("stock.landed.cost", "import_sheet_id", string="Landed costs")
     landed_cost_count = fields.Integer("Landed cost count", compute="_get_landed_cost_count", default=0)
 
+    invoice_ids = fields.Many2many('account.invoice', string='Invoices', domain=[('type', '=', 'in_invoice')])
+
     def _get_landed_cost_count(self):
         """
         Calculates count of landed costs that are associated to this import sheet
