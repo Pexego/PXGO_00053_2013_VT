@@ -168,6 +168,30 @@ class PurchaseOrder(models.Model):
                 order.invoice_status = 'invoiced'
             elif order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
                 order.invoice_status = 'partially'
+
+    @api.multi
+    def button_confirm(self):
+        # Vamos a utilizar un parámetro del contexto para controlar cuando lanzar el wizard
+        #
+        # Si viene a false o no viene -> lanzamos el wizard
+        # Cuando pulsamos al okey del wizard -> lanzamos button_confirm con bypass = true
+
+        if self.env.context.get('bypass_po_check_lines'):
+            return super().button_confirm()
+        for order in self:
+            # check lines with no price
+            lines_with_no_price = order.order_line.filtered(lambda l: l.price_unit == 0)
+            # check lines with big variation on price
+
+            # construct wizard with that product lines
+            wizard = self.env['confirm.purchase.lines.checker'].create({
+                'purchase_lines_with_no_price': [(6, 0, lines_with_no_price.ids)]
+            })
+        action = self.env.ref('purchase_picking.action_open_purchase_lines_checker').read()[0]
+        action['res_id'] = wizard.id
+        return action
+
+
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
