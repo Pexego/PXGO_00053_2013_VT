@@ -185,7 +185,8 @@ class PurchaseOrder(models.Model):
 
             # construct wizard with that product lines
             wizard = self.env['confirm.purchase.lines.checker'].create({
-                'purchase_lines_with_no_price': [(6, 0, lines_with_no_price.ids)]
+                'purchase_lines_with_no_price': [(6, 0, lines_with_no_price.ids)],
+                'purchase_id': order.id
             })
         action = self.env.ref('purchase_picking.action_open_purchase_lines_checker').read()[0]
         action['res_id'] = wizard.id
