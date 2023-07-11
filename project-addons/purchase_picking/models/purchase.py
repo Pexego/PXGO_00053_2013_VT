@@ -182,12 +182,12 @@ class PurchaseOrder(models.Model):
             # check lines with no price
             lines_with_no_price = order.order_line.filtered(lambda l: l.price_unit == 0)
             # check lines with big variation on price
-            lines_with_high_price_variation = order.get_lines_with_high_price_variation()
+            lines_with_high_price_variation_ids = order.get_lines_with_high_price_variation()
 
             # construct wizard with that product lines
             wizard = self.env['confirm.purchase.lines.checker'].create({
                 'purchase_lines_with_no_price': [(6, 0, lines_with_no_price.ids)],
-                'purchase_lines_with_price_variance': [(6, 0, lines_with_high_price_variation.ids)],
+                'purchase_lines_with_price_variance': [(6, 0, lines_with_high_price_variation_ids)],
                 'purchase_id': order.id
             })
         action = self.env.ref('purchase_picking.action_open_purchase_lines_checker').read()[0]
@@ -196,21 +196,21 @@ class PurchaseOrder(models.Model):
 
     def get_lines_with_high_price_variation(self):
         """
-        Returns lines that have a product price variation
+        Returns id lines that have a bigger product price variation than umbral
 
         Return:
         ------
-        List[purchase.order.line]
+        List[Int]
         """
         lines_with_high_price_variation = []
         umbral = 0  # ¿param del sistema?
         for line in self.order_line:
             product = line.product_id
-            last_purchase_price = product.get_last_purchase_price()
+            last_purchase_price = product.get_last_purchase_price()  # field in stock_custom
             if last_purchase_price:
                 price_variation = product.calculate_product_price_variation(last_purchase_price, line.price_unit)
                 if price_variation > umbral:
-                    lines_with_high_price_variation.append(line)
+                    lines_with_high_price_variation.append(line.id)
         return lines_with_high_price_variation
 
 
