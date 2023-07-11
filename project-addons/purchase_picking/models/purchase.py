@@ -180,7 +180,7 @@ class PurchaseOrder(models.Model):
             return super().button_confirm()
         for order in self:
             # check lines with no price
-            lines_with_no_price = order.order_line.filtered(lambda l: l.price_unit == 0)
+            lines_with_no_price = order.order_line.filtered(lambda l: l.price_subtotal == 0)
             # check lines with big variation on price
             lines_with_high_price_variation_ids = order.get_lines_with_high_price_variation()
 
