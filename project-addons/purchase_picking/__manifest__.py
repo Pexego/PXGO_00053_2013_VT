@@ -41,6 +41,7 @@
              'wizard/cancel_moves_view.xml',
              'templates/assets.xml',
              'views/warehouse_view.xml',
-             'wizard/purchase_lines_checker_view.xml'],
+             'wizard/purchase_lines_checker_view.xml',
+             'data/parameters.xml'],
     "installable": True
 }

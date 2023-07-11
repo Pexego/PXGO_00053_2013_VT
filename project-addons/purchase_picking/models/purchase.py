@@ -203,7 +203,9 @@ class PurchaseOrder(models.Model):
         List[Int]
         """
         lines_with_high_price_variation = []
-        umbral = 0  # ¿param del sistema?
+        umbral = float(self.env['ir.config_parameter'].sudo().get_param(
+            'max_product_purchase_price_diff_perc'
+        ))
         for line in self.order_line:
             product = line.product_id
             last_purchase_price = product.get_last_purchase_price()  # field in stock_custom
