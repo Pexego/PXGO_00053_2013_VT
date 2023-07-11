@@ -87,10 +87,11 @@ class Product(SyncModel):
     real_stock = FloatField(default=0.0)
     stock_available_es = FloatField(default=0.0)
     special_shipping_costs = BooleanField()
-
+    equivalent_products = CharField(null=True)
 
     def __unicode__(self):
         return self.name
+
 
 class ProductTag(SyncModel):
 
