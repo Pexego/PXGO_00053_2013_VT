@@ -21,7 +21,7 @@ class ProductProduct(models.Model):
         return last_line.price_unit
 
     @staticmethod
-    def get_lines_with_high_price_variation(old_price, new_price):
+    def calculate_product_price_variation(old_price, new_price):
         """
         FIXME: ¿con get_last_purchase_price en una sola función que las englobe?
         Returns the percentage of variation between old price and new_price
