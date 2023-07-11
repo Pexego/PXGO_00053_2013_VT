@@ -20,7 +20,6 @@ class ProductProduct(models.Model):
     @staticmethod
     def calculate_product_price_variation(old_price, new_price):
         """
-        FIXME: ¿con get_last_purchase_price en una sola función que las englobe?
         Returns the percentage of variation between old price and new_price
 
         Parameters:
