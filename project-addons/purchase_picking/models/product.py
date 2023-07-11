@@ -12,12 +12,9 @@ class ProductProduct(models.Model):
         ------
         Float
         """
-        # buscamos en las compras que estén confirmadas que tengan ese producto
         res = self.env['purchase.order.line'].search([('product_id', '=', self.id)])
         res_filtered = res.filtered(lambda self: self.order_id.state in ['purchase', 'purchase_order'])
-        # buscamos la más nueva de todas
         last_line = res_filtered.sorted(key=lambda self: self.order_id.write_date, reverse=True)[0]
-        # cogemos el pre3cio de esa línea
         return last_line.price_unit
 
     @staticmethod
