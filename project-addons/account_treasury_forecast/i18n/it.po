@@ -536,3 +536,8 @@ msgstr "Mesi"
 #: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_line_paid
 msgid "Paid"
 msgstr "Pagato"
+
+#. module: account_treasury_forecast
+#: model:ir.actions.report,name:account_treasury_forecast.account_treasury_forecast_xlsx
+msgid "Print invoices to XLSX"
+msgstr "Stampa di fatture in XLSX"

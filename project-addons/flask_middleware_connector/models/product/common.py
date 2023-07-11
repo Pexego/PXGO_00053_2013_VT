@@ -88,7 +88,8 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume", "standard_price_2_inc", "name", "special_shipping_costs"
+            "final_replacement_id", "weight", "volume", "standard_price_2_inc", "name",
+            "special_shipping_costs"
         ]
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
@@ -455,3 +456,15 @@ class ProductBrandGroupListener(Component):
 
     def on_record_unlink(self, record):
         record.with_delay(priority=11, eta=120).unlink_brand_group()
+
+
+class ProductEquivalentListener(Component):
+    _name = 'product.equivalent.event.listener'
+    _inherit = 'base.event.listener'
+    _apply_on = ['product.equivalent']
+
+    def on_record_create(self, record, fields=None):
+        record.product_id.with_delay(priority=11, eta=30).update_product()
+
+    def on_record_unlink(self, record):
+        record.product_id.with_delay(priority=11, eta=30).update_product()

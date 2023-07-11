@@ -24,7 +24,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 continue
             new_line = {'product_id': move.product_id.id,
                         'move_id': move.id,
-                        'product_qty': 1}
+                        'product_qty': 1,
+                        'sequence':move.claim_line_id.sequence}
             product = move.product_id
             domain = [('claim_type', '=',
                        self.env.ref('crm_claim_type.crm_claim_type_supplier').id),
@@ -230,3 +231,5 @@ class ClaimMakePickingToRefurbishLine(models.TransientModel):
                                                                       'crm_claim_type.crm_claim_type_supplier').id),
                                                                  ('stage_id', '=',
                                                                   self.env.ref('crm_claim.stage_claim5').id)])
+    sequence = fields.Integer('Sequence')
+
