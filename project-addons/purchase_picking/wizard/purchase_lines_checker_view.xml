@@ -36,7 +36,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="action_open_purchase_lines_checker">
-        <field name="name">Open purchase lines checker</field>
+        <field name="name">Purchase lines checker</field>
         <field name="res_model">confirm.purchase.lines.checker</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
