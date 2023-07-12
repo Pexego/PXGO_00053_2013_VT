@@ -114,6 +114,16 @@ msgid "With incidences"
 msgstr "Con incidencias"
 
 #. module: picking_incidences
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_picking_add_notes
+msgid "Copy Notes"
+msgstr "Copiar notas"
+
+#. module: picking_incidences
+#: model:ir.model.fields,help:picking_incidences.field_stock_picking_add_notes
+msgid "When checked, the notes will be in the new picking"
+msgstr "Al marcarlo, se pasarán las notas al nuevo albarán"
+
+#. module: picking_incidences
 #: selection:stock.picking,state:0
 msgid "Partially Available"
 msgstr "Parcialmente disponible"
