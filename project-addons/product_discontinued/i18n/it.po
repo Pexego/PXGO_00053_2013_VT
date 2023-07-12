@@ -23,13 +23,13 @@ msgid "Discontinued"
 msgstr "Fuori catalogo"
 
 #. module: product_discontinued
-#: code:addons/product_discontinued/models/product.py:21
+#: code:addons/product_discontinued/models/product.py:17
 #, python-format
 msgid "The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"
 msgstr "Il prodotto non soddisfa i requisiti per essere sospeso. Lo stock esistente o il suo stato attuale non è 'Ciclo di fine vita'."
 
 #. module: product_discontinued
-#: code:addons/product_discontinued/models/product.py:33
+#: code:addons/product_discontinued/models/product.py:37
 #, python-format
 msgid "The product does not have stock."
 msgstr "Il prodotto non è in stock."
