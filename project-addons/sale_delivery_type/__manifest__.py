@@ -34,7 +34,6 @@ Sales delivery type
         "base",
         "sale",
         "crm_claim_rma",
-        "delivery_carrier_custom"
     ],
     "data": [
         "views/sale_view.xml",
