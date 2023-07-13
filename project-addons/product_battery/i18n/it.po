@@ -69,7 +69,7 @@ msgid "Allow ship batteries"
 msgstr "Permettere spedizione di batterie"
 
 #. module: product_battery
-#: code:addons/product_battery/models/sale.py:20
+#: code:addons/product_battery/models/sale.py:24
 #, python-format
 msgid "\n"
 "The order can not be confirmed, there are products with batteries that can not be shipped by %s"
