@@ -10,4 +10,19 @@
             </field>
         </field>
     </record>
+
+    <record model="ir.ui.view" id="view_partner_form_add_invoice_lines_widget">
+        <field name="name">view.partner.form.add.invoice.lines.widget</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action"
+                        name="%(action_open_partner_invoice_lines)d"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o"
+                        string="Invoice Lines"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

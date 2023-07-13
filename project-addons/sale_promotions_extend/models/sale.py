@@ -94,14 +94,16 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('partner_id'):
-            vals['no_promos'] = self.env['res.partner'].browse(vals['partner_id']).no_promos
+            partner_promos = self.env['res.partner'].browse(vals['partner_id']).no_promos
+            if partner_promos:  # only when partner has no_promos checked
+                vals['no_promos'] = partner_promos
         return super().create(vals)
 
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
         super().onchange_partner_id()
-        if self.partner_id:
+        if self.partner_id and self.partner_id.no_promos:  # only when partner has no_promos checked
             self.no_promos = self.partner_id.no_promos
 
     def apply_commercial_rules(self):
