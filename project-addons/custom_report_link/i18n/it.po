@@ -16,6 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_account_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Original invoice:"
+msgstr "Fattura originale:"
+
+#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "+33434226281"
 msgstr "+33434226281"
@@ -1182,9 +1188,3 @@ msgstr "OFFERTA VALIDA 30 GIORNI"
 #: model:ir.model.fields,field_description:custom_report_link.field_res_partner_explode_kits_in_pdf
 msgid "Explode Kits In Pdf"
 msgstr "Scomponi i kit in PDF"
-
-#. module: custom_report_link
-#: model:ir.model,name:custom_report_link.model_account_invoice
-#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "Original invoice:"
-msgstr "Fattura originale:"
