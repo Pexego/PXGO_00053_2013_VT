@@ -38,8 +38,10 @@ msgstr "0694803224"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
-msgid "<b>IMPORTANT NOTE</b><span>: </span>"
-msgstr "<b>IMPORTANT NOTE</b><span>: </span>"
+msgid "<b style=\"color:#da1f2e;\">IMPORTANT NOTE:</b>\n"
+"                        <span>Included </span>"
+msgstr "<b style=\"color:#da1f2e;\">Nota importante:</b>\n"
+"                        <span>Incluído </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -1137,3 +1139,8 @@ msgstr "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924,
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "OFFER VALID FOR 30 DAYS"
 msgstr "PROPOSTA VALIDA POR 30 DIAS"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "SHIPPING PENDING FOR LACK OF STOCK"
+msgstr "O ENVIO ESTÁ A AGUARDAR DISPONIBILIDAD DE STOCK"

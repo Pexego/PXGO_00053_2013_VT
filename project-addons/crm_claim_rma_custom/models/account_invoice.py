@@ -61,4 +61,6 @@ class AccountInvoiceLine(models.Model):
                 domain += [('id','!=',self.env.context.get('not_id',False))]
             invoice.claim_invoice_line_qty = sum(self.env['claim.invoice.line'].search(domain).mapped('qty'))
 
-    claim_invoice_line_qty = fields.Float(compute="_compute_claim_invoice_line")
+    claim_invoice_line_qty = fields.Float(compute="_compute_claim_invoice_line", string="Claim Invoice Line Qty")
+
+    type = fields.Selection(related="invoice_id.type", string="Type")
