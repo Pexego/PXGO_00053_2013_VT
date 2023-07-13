@@ -33,7 +33,7 @@ class SaleOrder(models.Model):
             if vals.get('is_special_shipping_costs', False):
                 vals['delivery_type'] = 'shipping'
                 vals['transporter_id'] = transporter_id.id
-                vals['service_id'] = self.env.ref('advise_special_shipping_costs.palletized_shipping_service').id
+                vals['carrier_id'] = self.env.ref('advise_special_shipping_costs.palletized_shipping_service').id
             elif (
                 'is_special_shipping_costs' in vals
                 and
@@ -43,7 +43,7 @@ class SaleOrder(models.Model):
             ):
                 vals['delivery_type'] = order.partner_id.delivery_type
                 vals['transporter_id'] = order.partner_id.transporter_id.id
-                vals['service_id'] = order.partner_id.service_id.id
+                vals['carrier_id'] = order.partner_id.property_delivery_carrier_id.id
         return super()._write(vals)
 
     @api.multi
@@ -51,10 +51,13 @@ class SaleOrder(models.Model):
         res = super().write(vals)
         for order in self:
             if 'order_line' in vals:
-                order.is_special_shipping_costs = bool(
-                    order.delivery_type == 'shipping' and order.order_line
-                    and order.order_line.filtered(lambda l: l.product_id.special_shipping_costs)
-                )
+                order._compute_is_special_shipping_costs()
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        res._compute_is_special_shipping_costs()
         return res
 
 

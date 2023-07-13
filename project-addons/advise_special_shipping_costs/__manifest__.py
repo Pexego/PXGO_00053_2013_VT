@@ -8,6 +8,6 @@
         "views/sale_view.xml",
         "views/assets.xml"
     ],
-    "depends": ['product','sale','stock','transportation', 'sale_order_board'],
+    "depends": ['product','sale','stock','delivery_carrier_custom', 'sale_order_board'],
     "installable": True,
 }
