@@ -932,3 +932,23 @@ class Followers(models.Model):
                 for p in dups:
                     p.sudo().unlink()
         return super(Followers, self).create(vals)
+
+
+class ResPartnerCategory(models.Model):
+    _inherit = "res.partner.category"
+
+    def _select_color(self):
+
+        import wdb
+        wdb.set_trace()
+
+        for etiquette in self:
+            if etiquette.parent_id and etiquette.color_2 < 1:
+                etiquette.color = self.env['res.partner.category'].browse(etiquette.parent_id).id.color
+                etiquette.color_2 = etiquette.color #ver si sobra o no
+            else:
+                etiquette.color = etiquette.color_2
+
+    color = fields.Integer(string='Color Index', compute='_select_color')
+
+    color_2 = fields.Integer(string='Color Index Childs')
