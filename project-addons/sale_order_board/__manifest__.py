@@ -7,11 +7,11 @@
     'author': 'Jesús García Manzanas',
     'website': 'http://www.visiotech.es',
     'category': 'crm',
-    'depends': ['sale', 'transportation'],
+    'depends': ['sale', 'delivery_carrier_custom'],
     'data': [
         'views/sale_order_board_view.xml',
         'wizard/picking_rated_wizard_view.xml',
-        'views/transportation_view.xml'
+        'views/res_partner_view.xml'
     ],
     'installable': True,
 }
