@@ -4,7 +4,7 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     battery_id = fields.Many2one('product.battery', 'Battery Type')
-    num_batteries = fields.Float(string='Num. Batteries')
+    num_batteries = fields.Integer(string='Num. Batteries')
 
     battery_mode = fields.Selection(
         string='Battery Mode',
@@ -18,10 +18,12 @@ class ProductTemplate(models.Model):
                    ('intra', 'Intra Community'),
                    ('national', 'National')])
 
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
+
     @api.onchange('battery_mode')
     def onchange_product_battery(self):
         if self.battery_mode not in ('contains_battery', 'is_battery'):
-            self.num_batteries = 0.0
+            self.num_batteries = 0
             self.battery_id = None
