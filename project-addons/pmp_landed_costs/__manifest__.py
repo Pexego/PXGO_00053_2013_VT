@@ -10,7 +10,6 @@
     'website': 'www.comunitea.com',
     "depends": ['stock_landed_costs',
                 'stock_account',
-                'transportation',
                 'product_harmonized_system',
                 'purchase',
                 'intrastat_product',
