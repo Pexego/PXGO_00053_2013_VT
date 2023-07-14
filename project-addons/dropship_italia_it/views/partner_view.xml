@@ -2,16 +2,16 @@
 <odoo>
     <record id="transporter_form_dropship" model="ir.ui.view">
         <field name="name">transporter.form.dropship</field>
-        <field name="model">transportation.transporter</field>
-        <field name="inherit_id" ref="transportation.transporter_form"/>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="delivery_carrier_custom.res_partner_add_transporter_page"/>
         <field name="arch" type="xml">
-            <field name="service_ids" position="after">
+            <field name="carrier_ids" position="after">
                 <field name="dropship"/>
             </field>
-            <xpath expr="//field[@name='service_ids']/tree/field[@name='name']" position="after">
+            <xpath expr="//field[@name='carrier_ids']/tree/field[@name='name']" position="after">
                 <field name="dropship"/>
             </xpath>
-            <xpath expr="//field[@name='service_ids']/form/field[@name='name']" position="after">
+            <xpath expr="//field[@name='carrier_ids']/form/field[@name='name']" position="after">
                 <label for="dropship"/>
                 <field name="dropship"/>
             </xpath>

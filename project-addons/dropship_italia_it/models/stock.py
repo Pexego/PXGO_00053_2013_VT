@@ -1,4 +1,5 @@
-from odoo import models, api, fields, exceptions, _
+from odoo import models, api, fields, _
+from odoo.exceptions import UserError
 import odoorpc
 
 
@@ -23,7 +24,7 @@ class StockPicking(models.Model):
             try:
                 picking_es.action_cancel()
             except:
-                raise exceptions.UserError(_('The order cannot be canceled'))
+                raise UserError(_('The order cannot be canceled'))
 
     @api.multi
     def action_cancel(self):
@@ -38,7 +39,9 @@ class StockPicking(models.Model):
 
     def get_email_template(self):
         if self.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
-            return self.env.ref('dropship_italia_it.picking_done_dropship_template').with_context(lang=self.sale_id.partner_id.lang)
+            return self.env.ref('dropship_italia_it.picking_done_dropship_template').with_context(
+                lang=self.sale_id.partner_id.lang
+            )
         return super(StockPicking, self).get_email_template()
 
     def check_send_email_base(self, vals):
