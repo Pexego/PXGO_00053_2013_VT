@@ -3,9 +3,9 @@
     <record model="ir.ui.view" id="crm_claim_line_tree_add_pritable">
         <field name="name">CRM - Claims Tree invisible states</field>
         <field name="model">claim.line</field>
-        <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view"/>
+        <field name="inherit_id" ref="crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states"/>
         <field name="arch" type="xml">
-            <field name="internal_description" position="after">
+            <field name="pending_shipment_stock" position="after">
                 <field name="printable"/>
             </field>
         </field>
