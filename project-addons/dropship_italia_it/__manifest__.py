@@ -13,7 +13,7 @@
     'data': [
         'views/sale_view.xml',
         'views/picking_view.xml',
-        'views/partner.xml',
+        'views/partner_view.xml',
         'data/email_templates.xml'
     ],
     'installable': True,

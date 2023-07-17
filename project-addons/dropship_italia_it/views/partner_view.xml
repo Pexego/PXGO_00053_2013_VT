@@ -5,14 +5,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="delivery_carrier_custom.res_partner_add_transporter_page"/>
         <field name="arch" type="xml">
-            <field name="carrier_ids" position="after">
-                <field name="dropship"/>
+            <field name="carrier_ids" position="before">
+                <group>
+                    <field name="dropship"/>
+                </group>
             </field>
             <xpath expr="//field[@name='carrier_ids']/tree/field[@name='name']" position="after">
-                <field name="dropship"/>
-            </xpath>
-            <xpath expr="//field[@name='carrier_ids']/form/field[@name='name']" position="after">
-                <label for="dropship"/>
                 <field name="dropship"/>
             </xpath>
         </field>
