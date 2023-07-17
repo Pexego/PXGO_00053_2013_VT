@@ -1125,3 +1125,8 @@ msgid "<b style=\"color:#da1f2e;\">IMPORTANT NOTE:</b>\n"
 "                        <span>Included </span>"
 msgstr "<b style=\"color:#da1f2e;\">Wichtiger Hinweis:</b>\n"
 "                        <span>Inbegriffen </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "SHIPPING PENDING FOR LACK OF STOCK"
+msgstr "Ausstehende Lieferung aufgrund von fehlendem Lagerbestand"
