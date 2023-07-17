@@ -61,7 +61,7 @@ class SaleOrder(models.Model):
             if self.service_ds_id.id not in service_ids:
                 self.service_ds_id = False
             return {'domain': {'service_ds_id': [('id', 'in', service_ids)]}}
-        all_services = [x.id for x in self.env['transportation.service'].search([])]
+        all_services = [x.id for x in self.env['delivery.carrier'].search([])]
         return {'domain': {'service_ds_id': [('id', 'in', all_services)]}}
 
 
