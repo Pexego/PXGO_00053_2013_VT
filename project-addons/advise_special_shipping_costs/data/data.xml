@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo noupdate="1">
-    <record model="transportation.transporter" id="palletized_shipping_transporter">
+    <record model="res.partner" id="palletized_shipping_transporter">
         <field name="name">Envío Paletizado</field>
+        <field name="customer" eval="False"/>
+        <field name="is_transporter" eval="True"/>
     </record>
-    <record model="transportation.service" id="palletized_shipping_service">
+    <record model="delivery.carrier" id="palletized_shipping_service">
         <field name="name">Envío Paletizado</field>
-        <field name="transporter_ids" eval="[(4, ref('advise_special_shipping_costs.palletized_shipping_transporter'))]"/>
+        <field name="partner_id" eval="ref('advise_special_shipping_costs.palletized_shipping_transporter')"/>
+        <field name="product_id" ref="delivery.product_product_delivery"/>
     </record>
 
     <record id="advise_special_shipping_email" model="ir.config_parameter">
