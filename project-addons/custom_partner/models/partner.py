@@ -20,13 +20,13 @@
 
 from odoo import models, fields, api, exceptions, _
 from odoo.exceptions import Warning
-#TODO: (Ahora es account_credit_control) from openerp.addons.account_followup.report import account_followup_print
+# TODO: (Ahora es account_credit_control) from openerp.addons.account_followup.report import account_followup_print
 from collections import defaultdict
 import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-import dateutil.relativedelta,re
+import dateutil.relativedelta, re
 from calendar import monthrange
 from odoo.addons.phone_validation.tools import phone_validation
 
@@ -36,6 +36,7 @@ class ResPartnerInvoiceType(models.Model):
 
     name = fields.Char("Name", required=True)
     journal_id = fields.Many2one('account.journal', string="Journal")
+
 
 class PhoneValidationMixin(models.AbstractModel):
     _inherit = 'phone.validation.mixin'
@@ -60,13 +61,13 @@ class ResPartner(models.Model):
 
     @api.model
     def _search_pricelist_name(self, operator, operand):
-        pricelists = self.env['product.pricelist'].\
+        pricelists = self.env['product.pricelist']. \
             search([('name', operator, operand)])
         if pricelists:
-            field = self.env['ir.model.fields'].\
+            field = self.env['ir.model.fields']. \
                 search([('name', '=', 'property_product_pricelist'),
                         ('model', '=', 'res.partner')], limit=1)
-            properties = self.env['ir.property'].\
+            properties = self.env['ir.property']. \
                 search([('fields_id', '=', field.id),
                         ('value_reference', 'in',
                          ['product.pricelist,' + str(x.id) for
@@ -86,7 +87,7 @@ class ResPartner(models.Model):
     current_employees = fields.Integer("Current year employees", default=0)
     past_year_employees = fields.Integer("Past year employees", default=0)
     ref_supplier = fields.Char("Ref. Supplier", size=3)
-    property_product_pricelist = fields.\
+    property_product_pricelist = fields. \
         Many2one(search="_search_pricelist_name")
     forwarder = fields.Boolean(string="Forwarder")
     no_auto_invoice = fields.Boolean(string="No auto invoice")
@@ -98,7 +99,6 @@ class ResPartner(models.Model):
         res = self.env['product.pricelist']._get_partner_pricelist_multi_2(ids)
         for partner in self:
             partner.property_product_pricelist = res.get(partner.id if self.ids else self._origin.id)
-
 
     @api.model
     def _calculate_annual_invoiced(self):
@@ -172,7 +172,8 @@ class ResPartner(models.Model):
             order_lines_year = o_lines.filtered(lambda l: start_year <= l.order_id.date_order <= end_year)
             order_lines_past_year = o_lines.filtered(lambda l: start_past_year <= l.order_id.date_order <= end_year)
             order_lines_month = o_lines.filtered(lambda l: start_month <= l.order_id.date_order <= end_month)
-            order_lines_past_month = o_lines.filtered(lambda l: start_past_month <= l.order_id.date_order <= end_past_month)
+            order_lines_past_month = o_lines.filtered(
+                lambda l: start_past_month <= l.order_id.date_order <= end_past_month)
 
             annual_invoiced = 0.0
             past_year_invoiced = 0.0
@@ -348,8 +349,6 @@ class ResPartner(models.Model):
 
                 partner.average_margin = margin_avg
 
-
-
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute='_get_products_sold',
@@ -375,7 +374,9 @@ class ResPartner(models.Model):
                                                     domain=[('full_reconcile_id', '=', False),
                                                             ('account_id.internal_type', '=', 'payable'),
                                                             ('move_id.state', '!=', 'draft')])
-    created_by_web = fields.Boolean("Created by web", default=lambda self: self.env['ir.config_parameter'].sudo().get_param('web.user.buyer') == self.env.user.login)
+    created_by_web = fields.Boolean("Created by web",
+                                    default=lambda self: self.env['ir.config_parameter'].sudo().get_param(
+                                        'web.user.buyer') == self.env.user.login)
 
     @api.model
     def _commercial_fields(self):
@@ -456,22 +457,23 @@ class ResPartner(models.Model):
                         ValidationError(_('VAT must be unique'))
 
     def check_email(self, email):
-        any_char="^\s\t\r\n\(\)\<\>\,\:\;\[\]Çç\%\&@á-źÁ-Ź"
-        return not re.match('^(['+any_char+']+@['+any_char+'\.]+(\.['+any_char+'\.]+)+;?)+$', email) and email!="-" and email!="."
+        any_char = "^\s\t\r\n\(\)\<\>\,\:\;\[\]Çç\%\&@á-źÁ-Ź"
+        return not re.match('^([' + any_char + ']+@[' + any_char + '\.]+(\.[' + any_char + '\.]+)+;?)+$',
+                            email) and email != "-" and email != "."
 
     @api.constrains('email', 'email2', 'email_web')
     def check_emails(self):
         email = self.email
         email2 = self.email2
         email_web = self.email_web
-        message = _('[Partner "%s"] The e-mail format is incorrect: ') %self.name
+        message = _('[Partner "%s"] The e-mail format is incorrect: ') % self.name
         if email:
             not_correct = self.check_email(email)
             if not_correct:
                 message += ' "%s" (Email)' % email
                 raise exceptions.ValidationError(message)
             if email[-1] == ';':
-                self.email=email[:-1]
+                self.email = email[:-1]
         if email2:
             not_correct = self.check_email(email2)
             if not_correct:
@@ -486,6 +488,7 @@ class ResPartner(models.Model):
                 raise exceptions.ValidationError(message)
             if email_web[-1] == ';':
                 self.email_web = email_web[:-1]
+
     @api.multi
     def name_get(self):
         res = []
@@ -745,7 +748,7 @@ class ResPartner(models.Model):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
         record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' \
-                              + str(order_view_id) + '&active_id=' + str(self.id)
+                     + str(order_view_id) + '&active_id=' + str(self.id)
         return {
             'name': 'Phone Calls',
             'view_type': 'tree',
@@ -753,10 +756,11 @@ class ResPartner(models.Model):
             'url': record_url,
             'context': self.env.context,
             'target': 'new',
-            }
+        }
 
     @api.multi
-    @api.depends('company_credit_limit', 'insurance_credit_limit','fidelity_credit_limit','fidelity_credit_limit_include')
+    @api.depends('company_credit_limit', 'insurance_credit_limit', 'fidelity_credit_limit',
+                 'fidelity_credit_limit_include')
     def _compute_credit_limit(self):
         res = super(ResPartner, self)._compute_credit_limit()
         partners = self.filtered(lambda p: p.fidelity_credit_limit_include)
@@ -765,7 +769,8 @@ class ResPartner(models.Model):
         return res
 
     def _calculate_fidelity_credit_limit(self):
-        partners = self.env['res.partner'].search([('parent_id','=',False),('customer','=',True),('fidelity_credit_limit_include', '=', True)])
+        partners = self.env['res.partner'].search(
+            [('parent_id', '=', False), ('customer', '=', True), ('fidelity_credit_limit_include', '=', True)])
         partners.compute_fidelity_credit_limit()
 
     @api.multi
@@ -804,7 +809,8 @@ class ResPartner(models.Model):
             partner.fidelity_credit_limit = benefit if benefit >= 0 else 0
 
     fidelity_credit_limit = fields.Float("Fidelity Credit Limit",
-                                        help='Profit of the last x months' ,compute="compute_fidelity_credit_limit", store=True)
+                                         help='Profit of the last x months', compute="compute_fidelity_credit_limit",
+                                         store=True)
     fidelity_credit_limit_include = fields.Boolean("Include fidelity credit limit",
                                                    help="If this field is checked, the fidelity credit limit will be added to credit limit ")
     mail_count = fields.Integer(compute="_compute_mail_count")
@@ -824,7 +830,7 @@ class ResPartner(models.Model):
                 set_emails.update(';'.join(partner.child_ids.filtered(lambda c: c.email).mapped('email')).split(';'))
             domain = ['|'] * len(set_emails)
             for email in set_emails:
-                domain += [('email_to','like',email)]
+                domain += [('email_to', 'like', email)]
             domain += [('recipient_ids', 'in', ids)]
             partner.mail_count = self.env['mail.mail'].search_count(domain)
 
@@ -884,7 +890,6 @@ class AccountPayment(models.Model):
         return move
 
 
-
 class AccountPaymentOrder(models.Model):
     _inherit = 'account.payment.order'
 
@@ -896,9 +901,9 @@ class AccountPaymentOrder(models.Model):
 
     @api.multi
     def _prepare_move_line_offsetting_account(
-            self, amount_company_currency, amount_payment_currency,
-            bank_lines):
-        vals = super().\
+        self, amount_company_currency, amount_payment_currency,
+        bank_lines):
+        vals = super(). \
             _prepare_move_line_offsetting_account(amount_company_currency,
                                                   amount_payment_currency,
                                                   bank_lines)
@@ -926,8 +931,8 @@ class Followers(models.Model):
     def create(self, vals):
         if 'res_model' in vals and 'res_id' in vals and 'partner_id' in vals:
             dups = self.env['mail.followers'].search([('res_model', '=', vals.get('res_model')),
-                                           ('res_id', '=', vals.get('res_id')),
-                                           ('partner_id', '=', vals.get('partner_id'))])
+                                                      ('res_id', '=', vals.get('res_id')),
+                                                      ('partner_id', '=', vals.get('partner_id'))])
             if len(dups):
                 for p in dups:
                     p.sudo().unlink()
@@ -937,18 +942,24 @@ class Followers(models.Model):
 class ResPartnerCategory(models.Model):
     _inherit = "res.partner.category"
 
-    def _select_color(self):
-
-        import wdb
-        wdb.set_trace()
-
-        for etiquette in self:
-            if etiquette.parent_id and etiquette.color_2 < 1:
-                etiquette.color = self.env['res.partner.category'].browse(etiquette.parent_id).id.color
-                etiquette.color_2 = etiquette.color #ver si sobra o no
-            else:
-                etiquette.color = etiquette.color_2
-
     color = fields.Integer(string='Color Index', compute='_select_color')
 
-    color_2 = fields.Integer(string='Color Index Childs')
+    color_selection = fields.Selection(
+        [(1, 'Red'),
+         (2, 'Orange'),
+         (3, 'Yellow'),
+         (4, 'Light blue'),
+         (5, 'Dark purple'),
+         (6, 'Salmon pink'),
+         (7, 'Medium blue'),
+         (8, 'Dark blue'),
+         (9, 'Fushia'),
+         (10, 'Green')],
+        string="Color Index")
+
+    def _select_color(self):
+        for etiquette in self:
+            if etiquette.parent_id and etiquette.color_selection is False:
+                etiquette.color = self.env['res.partner.category'].browse(etiquette.parent_id).id.color
+            else:
+                etiquette.color = etiquette.color_selection
