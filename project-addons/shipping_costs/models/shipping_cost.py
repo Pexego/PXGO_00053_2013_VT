@@ -26,7 +26,7 @@ class ShippingCost(models.Model):
 
     cost_name = fields.Char(string="Name")
     is_active = fields.Boolean(string="Active")
-    transporter_id = fields.Many2one("transportation.transporter", string="Transporter")
+    transporter_id = fields.Many2one("res.partner", string="Transporter")
     fuel = fields.Float(string="Fuel", related="transporter_id.fuel", readonly=True)
     sequence = fields.Integer(string="Sequence")
     volume = fields.Float(string="Max volume/pallet")
@@ -67,9 +67,9 @@ class ShippingCost(models.Model):
                 raise Warning(
                     _('Error!:: Shipping zone assigned is not for the transporter selected.')
                 )
-            transporter_services = shipping_cost.transporter_id.service_ids.ids
+            transporter_services = shipping_cost.transporter_id.carrier_ids.ids
             for supplement in shipping_cost.supplement_ids:
-                if supplement.service_id.id not in transporter_services:
+                if supplement.carrier_id.id not in transporter_services:
                     raise Warning(
                         _('Error!:: Services must be offered by the transporter selected.')
                     )
@@ -159,8 +159,8 @@ class ShippingCostSupplement(models.Model):
     _name = "shipping.cost.supplement"
 
     shipping_cost_id = fields.Many2one("shipping.cost", string="Shipping cost")
-    service_id = fields.Many2one(
-        "transportation.service",
+    carrier_id = fields.Many2one(
+        "delivery.carrier",
         string="Service"
     )
     added_percentage = fields.Float(string="Added percentage")
@@ -212,7 +212,7 @@ class SaleOrderShippingCost(models.TransientModel):
         service_price_list = [
             {
                 'price': round(fuel_added_price * (1 + supplement.added_percentage / 100), 2),
-                'service_name': f'{supplement.service_id.name}',
+                'service_name': f'{supplement.carrier_id.name}',
                 'sale_order_shipping_cost_id': self.id,
                 'weight_volume_translation': self.shipping_cost_id.weight_volume_translation
             }
@@ -332,7 +332,7 @@ class ShippingCostCalculator(models.TransientModel):
 
     def get_shipping_weight(self, weight_volume_translator):
         """
-        Calculates the shipping weight. This will be the maximun of the shipping weight and
+        Calculates the shipping weight. This will be the maximum of the shipping weight and
         the volume weight
 
         Parameters:
