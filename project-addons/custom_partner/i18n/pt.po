@@ -38,3 +38,62 @@ msgstr ' "%s" (Email de contabilidade)'
 #: model:ir.model.fields,field_description:custom_partner.field_res_users_forwarder
 msgid "Forwarder"
 msgstr "Despachante"
+
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form
+msgid "Color selection"
+msgstr "Seleção de cores"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Red"
+msgstr "Vermelho"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Orange"
+msgstr "Laranja"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Yellow"
+msgstr "Amarelo"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Light blue"
+msgstr "Azul claro"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Dark purple"
+msgstr "Violeta escuro"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Salmon pink"
+msgstr "Salmão"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Medium blue"
+msgstr "Turquesa"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Dark blue"
+msgstr "Azul escuro"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Fuchsia"
+msgstr "Fúcsia"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Green"
+msgstr "Verde"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Purple"
+msgstr "Violeta"

@@ -953,8 +953,9 @@ class ResPartnerCategory(models.Model):
          (6, 'Salmon pink'),
          (7, 'Medium blue'),
          (8, 'Dark blue'),
-         (9, 'Fushia'),
-         (10, 'Green')],
+         (9, 'Fuchsia'),
+         (10, 'Green'),
+         (11, 'Purple')],
         string="Color Index")
 
     def _select_color(self):
