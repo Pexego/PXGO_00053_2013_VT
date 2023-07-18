@@ -12,7 +12,7 @@
                             <group>
                                 <separator string="Shipping"/>
                                 <field name="all_dropship"/>
-                                <field name="transporter_ds_id" domain="[('dropship', '=', True)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                <field name="transporter_ds_id" domain="[('transporter_dropship', '=', True)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
                                 <field name="service_ds_id" domain="[('dropship', '=', True)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
                                 <separator string="Shipping Info"/>
                             </group>
