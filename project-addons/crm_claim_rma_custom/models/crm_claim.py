@@ -62,6 +62,8 @@ class CrmClaimRma(models.Model):
     t_incidence_picking = fields.Char('Trp. inc. picking')
     warehouse_location = fields.Selection([('madrid1', 'Madrid - Vicálvaro'),
                                            ('italia', 'Italia - Arcore'),
+                                           ('francia', 'Francia – Lyon'),
+                                           ('portugal', 'Portugal – Lisboa'),
                                            ('transit', 'In transit')], "Warehouse Location")
     client_ref = fields.Char('Client Ref')
     warehouse_date = fields.Date('Final Received Date')
