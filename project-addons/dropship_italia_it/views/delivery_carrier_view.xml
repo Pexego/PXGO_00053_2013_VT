@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="delivery_carrier_add_dropship_form" model="ir.ui.view">
+        <field name="name">delivery.carrier.add.dropship.form</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery_carrier_custom.delivery_carrier_add_by_air"/>
+        <field name="arch" type="xml">
+            <field name="by_air" position="after">
+                <field name="dropship"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="delivery_carrier_add_dropship_tree" model="ir.ui.view">
+        <field name="name">delivery.carrier.add.dropship.tree</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_tree"/>
+        <field name="arch" type="xml">
+            <field name="delivery_type" position="after">
+                <field name="dropship"/>
+            </field>
+        </field>
+    </record>
+</odoo>

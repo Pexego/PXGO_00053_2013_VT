@@ -14,6 +14,7 @@
         'views/sale_view.xml',
         'views/picking_view.xml',
         'views/partner_view.xml',
+        'views/delivery_carrier_view.xml',
         'data/email_templates.xml'
     ],
     'installable': True,
