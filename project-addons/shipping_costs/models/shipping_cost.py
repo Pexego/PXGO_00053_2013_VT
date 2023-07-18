@@ -26,7 +26,7 @@ class ShippingCost(models.Model):
 
     cost_name = fields.Char(string="Name")
     is_active = fields.Boolean(string="Active")
-    transporter_id = fields.Many2one("res.partner", string="Transporter")
+    transporter_id = fields.Many2one("res.partner", string="Transporter", domain=[('is_transporter', '=', True)])
     fuel = fields.Float(string="Fuel", related="transporter_id.fuel", readonly=True)
     sequence = fields.Integer(string="Sequence")
     volume = fields.Float(string="Max volume/pallet")

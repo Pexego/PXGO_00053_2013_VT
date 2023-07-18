@@ -10,7 +10,7 @@ class ShippingZone(models.Model):
     _name = 'shipping.zone'
 
     name = fields.Char(string='Name')
-    transporter_id = fields.Many2one('res.partner', string='Transporter')
+    transporter_id = fields.Many2one('res.partner', string='Transporter', domain=[('is_transporter', '=', True)])
     country_id = fields.Many2one('res.country', string='Country')
     postal_code_ids = fields.One2many('postal.code.range', 'shipping_zone_id', string='Postal Codes')
     shipping_cost_ids = fields.One2many('shipping.cost', 'shipping_zone_id', string='Shipping costs')
