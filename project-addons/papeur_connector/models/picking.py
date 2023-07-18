@@ -122,40 +122,41 @@ class StockPicking(models.Model):
     @api.multi
     def write(self, vals):
         res = super().write(vals)
-        web_endpoint = None
-        if vals.get('date_done_vstock', False):
-            ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-            web_endpoint = f'{ppu_endpoint}/ready'
-            self.cancel_order_urgent()
-            self.with_delay(priority=1, eta=1800).auto_deliver_order()
-        elif 'state_vstock' in vals:
-            if vals.get('state_vstock') == 'En preparación':
+        for picking in self:
+            web_endpoint = None
+            if vals.get('date_done_vstock', False):
                 ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-                web_endpoint = f'{ppu_endpoint}/doing'
-            elif vals.get('state_vstock') != 'En preparación' and self.state_papeur:
+                web_endpoint = f'{ppu_endpoint}/ready'
+                picking.cancel_order_urgent()
+                picking.with_delay(priority=1, eta=1800).auto_deliver_order()
+            elif 'state_vstock' in vals:
+                if vals.get('state_vstock') == 'En preparación':
+                    ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
+                    web_endpoint = f'{ppu_endpoint}/doing'
+                elif vals.get('state_vstock') != 'En preparación' and picking.state_papeur:
+                    ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
+                    web_endpoint = f'{ppu_endpoint}/notified'
+            elif vals.get('state_papeur', '') == 'notified':
                 ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
                 web_endpoint = f'{ppu_endpoint}/notified'
-        elif vals.get('state_papeur', '') == 'notified':
-            ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-            web_endpoint = f'{ppu_endpoint}/notified'
 
-        if web_endpoint:
-            data = {
-                "name": f"{self.origin or ''} - {self.name}",
-                "odoo_id": self.id
-            }
-            try:
-                response = requests.post(web_endpoint, json=data)
-            except:
-                raise UserError(_("Something went wrong"))
+            if web_endpoint:
+                data = {
+                    "name": f"{picking.origin or ''} - {picking.name}",
+                    "odoo_id": picking.id
+                }
+                try:
+                    response = requests.post(web_endpoint, json=data)
+                except:
+                    raise UserError(_("Something went wrong"))
 
-        if vals.get('user_vstock') and self.state_papeur:
-            self.notify_user()
+            if vals.get('user_vstock') and picking.state_papeur:
+                picking.notify_user()
 
-        if vals.get('id_vstock'):
-            ppu_auto_notify = eval(self.env['ir.config_parameter'].sudo().get_param('papeur.auto.notify.array'))
-            if self.partner_id in ppu_auto_notify:
-                self.prepare_order()
+            if vals.get('id_vstock'):
+                ppu_auto_notify = eval(self.env['ir.config_parameter'].sudo().get_param('papeur.auto.notify.array'))
+                if picking.partner_id in ppu_auto_notify:
+                    picking.prepare_order()
 
         return res
 
