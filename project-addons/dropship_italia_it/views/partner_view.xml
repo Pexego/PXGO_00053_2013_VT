@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <field name="carrier_ids" position="before">
                 <group>
-                    <field name="dropship"/>
+                    <field name="transporter_dropship"/>
                 </group>
             </field>
             <xpath expr="//field[@name='carrier_ids']/tree/field[@name='name']" position="after">
