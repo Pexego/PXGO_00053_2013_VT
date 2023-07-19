@@ -1,2 +1,5 @@
-from . import stock
-from . import transport
+from . import (
+    stock,
+    partner,
+    delivery_carrier,
+)
