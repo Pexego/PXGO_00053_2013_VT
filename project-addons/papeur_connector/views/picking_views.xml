@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_urgent_orders" model="ir.ui.view">
+        <field name="name">view.urgent.orders</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <tree string="Urgent Orders" create="false" edit="false" decoration-info="state_papeur == 'notified'" decoration-warning="state_papeur == 'urgent'">
+                <field name="name"/>
+                <field name="origin"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="state_vstock"/>
+                <field name="state_papeur"/>
+                <field name="id_vstock"/>
+                <field name="date_done_vstock" invisible="1"/>
+                <button name="prepare_order" string="Prepare" type="object" icon="fa-bell text-success" attrs="{'invisible':['|',('state_papeur','in',('notified','urgent')),('date_done_vstock','!=',False)]}"/>
+                <button name="prepare_order_urgent" string="Urgent" type="object" icon="fa-warning text-warning" attrs="{'invisible':['|',('state_papeur','!=','notified'),('date_done_vstock','!=',False)]}"/>
+                <button name="cancel_order_urgent" string="Cancel" type="object" icon="fa-times-circle text-danger" attrs="{'invisible':['|',('state_papeur','not in',('notified', 'urgent')),('date_done_vstock','!=',False)]}"/>
+                <button name="deliver_order" string="Deliver" type="object" icon="fa-sign-out text-info" attrs="{'invisible':[('date_done_vstock','=',False)]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_urgent_orders" model="ir.actions.act_window">
+        <field name="name">Urgent Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_urgent_orders"/>
+        <field name="domain">[('state','=','assigned'),('picking_type_code', '=', 'outgoing')]</field>
+    </record>
+
+    <menuitem id="menu_urgent_orders" action="action_urgent_orders" name="Urgent Orders"
+              parent="sale.sale_order_menu" groups="papeur_connector.group_urgent_orders" sequence="4"/>
+</odoo>

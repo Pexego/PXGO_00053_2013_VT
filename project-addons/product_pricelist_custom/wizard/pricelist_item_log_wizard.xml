@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_pricelist_item_log" model="ir.ui.view">
+        <field name="name">product.pricelist.item.log.tree</field>
+        <field name="model">product.pricelist.item.log</field>
+        <field name="arch" type="xml">
+            <tree string="Product Pricelist Item Log" create="false" edit="false">
+                <field name="product_id" readonly="1"/>
+                <field name="old_fixed_price" readonly="1"/>
+                <field name="new_fixed_price" readonly="1"/>
+                <field name="user_id" readonly="1"/>
+                <field name="date" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_product_pricelist_item_log" model="ir.actions.act_window">
+        <field name="name">Product Pricelist Item Log</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.pricelist.item.log</field>
+        <field name="view_mode">tree</field>
+        <field name="view_type">form</field>
+    </record>
+
+    <menuitem id="move_product_pricelist_item_log_menu" name="Product Pricelist Item Log" parent="sale.menu_sale_report"
+              action="action_product_pricelist_item_log" groups="base.group_system"
+              sequence="10"/>
+
+</odoo>
