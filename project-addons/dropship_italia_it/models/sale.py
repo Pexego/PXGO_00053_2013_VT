@@ -8,8 +8,8 @@ class SaleOrder(models.Model):
 
     all_dropship = fields.Boolean("All Dropship")
 
-    transporter_ds_id = fields.Many2one('transportation.transporter', "Transporter")
-    service_ds_id = fields.Many2one('transportation.service', "Service")
+    transporter_ds_id = fields.Many2one('res.partner', "Transporter", domain=[('is_transporter', '=', True)])
+    service_ds_id = fields.Many2one('delivery.carrier', "Service")
 
     def action_confirm(self):
         res = super().action_confirm()
@@ -22,8 +22,8 @@ class SaleOrder(models.Model):
                         msg += "\n %s - %s" % (line.product_id.default_code, line.product_id.battery_id.name)
                 if msg:
                     msg_error = _(
-                        "\nThe order can not be confirmed, there are products with batteries that can not be shipped by %s") \
-                                % transport_service.name
+                        "\nThe order can not be confirmed, there are products with"
+                        " batteries that can not be shipped by %s") % transport_service.name
                     msg_error += msg
                     raise UserError(msg_error)
 
@@ -35,7 +35,9 @@ class SaleOrder(models.Model):
 
     def action_cancel(self):
         res = super().action_cancel()
-        purchase = self.env['purchase.order'].search([('origin', '=', self.name), ('state', 'in', ('done', 'purchase'))])
+        purchase = self.env['purchase.order'].search([
+            ('origin', '=', self.name), ('state', 'in', ('done', 'purchase'))
+        ])
         if purchase:
             purchase[0].sudo().button_cancel()
         return res
@@ -54,12 +56,12 @@ class SaleOrder(models.Model):
     @api.multi
     @api.onchange('transporter_ds_id')
     def onchange_transporter_ds_id(self):
-        service_ids = [x.id for x in self.transporter_ds_id.service_ids]
+        service_ids = [x.id for x in self.transporter_ds_id.carrier_ids]
         if service_ids:
             if self.service_ds_id.id not in service_ids:
                 self.service_ds_id = False
             return {'domain': {'service_ds_id': [('id', 'in', service_ids)]}}
-        all_services = [x.id for x in self.env['transportation.service'].search([])]
+        all_services = [x.id for x in self.env['delivery.carrier'].search([])]
         return {'domain': {'service_ds_id': [('id', 'in', all_services)]}}
 
 
