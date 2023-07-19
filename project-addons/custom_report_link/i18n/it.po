@@ -1184,3 +1184,8 @@ msgstr "OFFERTA VALIDA 30 GIORNI"
 #: model:ir.model.fields,field_description:custom_report_link.field_res_partner_explode_kits_in_pdf
 msgid "Explode Kits In Pdf"
 msgstr "Scomponi i kit in PDF"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "SHIPPING PENDING FOR LACK OF STOCK"
+msgstr "IN SOSPESO PER MANCANZA DI DISPONIBILITÀ"
