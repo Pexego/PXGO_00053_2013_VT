@@ -1,0 +1,80 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* papeur_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-03 09:28+0000\n"
+"PO-Revision-Date: 2023-07-03 09:28+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: papeur_connector
+#: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_date_done_vstock
+msgid "Date Done Vstock"
+msgstr "Fecha finalizado vstock"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_id_vstock
+msgid "Id Vstock"
+msgstr "ID Vstock"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_last_date_vstock
+msgid "Last Date Vstock"
+msgstr "Última fecha vstock"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_state_papeur
+#: selection:stock.picking,state_papeur:0
+msgid "Notified"
+msgstr "Notificado"
+
+#. module: papeur_connector
+#: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
+msgid "Prepare"
+msgstr "Preparar"
+
+#. module: papeur_connector
+#: code:addons/papeur_connector/models/picking.py:30
+#: code:addons/papeur_connector/models/picking.py:45
+#: code:addons/papeur_connector/models/picking.py:60
+#: code:addons/papeur_connector/models/picking.py:111
+#, python-format
+msgid "Something went wrong"
+msgstr "Algo ha ido mal"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_state_vstock
+msgid "State Vstock"
+msgstr "Estado vstock"
+
+#. module: papeur_connector
+#: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
+#: selection:stock.picking,state_papeur:0
+msgid "Urgent"
+msgstr "Urgente"
+
+#. module: papeur_connector
+#: model:ir.actions.act_window,name:papeur_connector.action_urgent_orders
+#: model:ir.ui.menu,name:papeur_connector.menu_urgent_orders
+#: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
+msgid "Urgent Orders"
+msgstr "Pedidos Urgentes"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_user_vstock
+msgid "User Vstock"
+msgstr "Usuario vstock"
+

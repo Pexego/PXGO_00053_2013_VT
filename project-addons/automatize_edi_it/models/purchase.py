@@ -5,6 +5,7 @@ from odoo import models, fields, api, exceptions, _
 from datetime import date
 from dateutil.relativedelta import relativedelta
 import odoorpc
+from odoo.tools import float_compare
 
 
 class PurchaseOrderLine(models.Model):
@@ -134,5 +135,78 @@ class PurchaseOrder(models.Model):
                 mail_id = self.env['mail.mail'].sudo().create(vals)
                 mail_id.sudo().send()
 
+    def cron_automate_invoicing_lx(self, months=2):
+        """
+        Creates invoices for purchases and for the related sales in Odoo Spain
 
+        Parameters:
+        ----------
+        months: Int
+            Number of months to search purchases
+        """
+        search_date = (date.today() - relativedelta(months=months)).strftime("%Y-%m-%d")
+        picking_type_domain = (self.env.ref('stock.picking_type_in').id,
+                               self.env.ref('stock_dropshipping.picking_type_dropship').id)
+        purchases = self.search([('invoice_status', '=', 'to invoice'),
+                                 ('date_order', '>=', search_date),
+                                 ('partner_id', '=', 27),
+                                 ('picking_type_id', 'in', picking_type_domain)])
+        purchases_filtered = purchases.filtered(
+            lambda p: float_compare(p.amount_to_invoice_it, p.amount_to_invoice_es, precision_digits=2) == 0
+        )
 
+        if not purchases_filtered:
+            return
+        odoo_es = self._get_odoo_es()
+        try:
+            purchases_filtered._create_invoice_on_batch()
+            order_es_ids = odoo_es.env['sale.order'].search([
+                ('client_order_ref', 'in', purchases_filtered.mapped('name')), ('partner_id', '=', 245247)
+            ])
+            orders_es = odoo_es.env['sale.order'].browse([])
+            orders_es.action_invoice_create_aux(order_es_ids)
+            self.env.cr.commit()
+            odoo_es.env.commit()
+        except Exception as e:
+            self.env.cr.rollback()
+            raise e
+        finally:
+            odoo_es.logout()
+
+    def _create_invoice_on_batch(self):
+        """
+        Creates an invoice with all purchase order lines.
+        Every purchase order have to have the same partner_id
+        """
+        invoices = self.env["account.invoice"]
+        invoice = invoices.create({
+            "partner_id": self.mapped('partner_id').id,
+            "type": "in_invoice",
+        })
+        invoice._onchange_partner_id()
+        for po in self:
+            invoice.currency_id = po.currency_id
+            invoice.purchase_id = po
+            invoice.purchase_order_change()
+        invoice.compute_taxes()
+
+    def _get_odoo_es(self):
+        """
+        Connects with Odoo Spain Server and logs in and returns the
+        connection with the server.
+
+        This connection deactivates auto_commit.
+
+        Returns:
+        -------
+            Odoo Spain server connection
+        """
+        server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
+        # Prepare the connection to the server
+        odoo_es = odoorpc.ODOO(server.server_url, port=server.server_port)
+        # Login
+        odoo_es.login(server.server_db, server.login, server.password)
+        odoo_es.config['auto_commit'] = False
+        timeout_mins = int(self.env['ir.config_parameter'].sudo().get_param('es_timeout_request_minutes'))
+        odoo_es.config['timeout'] = timeout_mins * 60  # needed to be in seconds
+        return odoo_es
