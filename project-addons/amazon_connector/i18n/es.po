@@ -1777,3 +1777,13 @@ msgstr "Teléfono Retail"
 #, python-format
 msgid "There is a error calling vat service: %s"
 msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_number
+msgid "Invoice number"
+msgstr "Número de factura"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_state
+msgid "Invoice state"
+msgstr "Estado de factura"
