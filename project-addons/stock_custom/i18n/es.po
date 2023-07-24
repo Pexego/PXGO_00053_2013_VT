@@ -724,3 +724,24 @@ msgstr "País de Destino"
 #: model:ir.model.fields,field_description:stock_custom.field_product_product_last_landed_cost_date
 msgid "Last LC date"
 msgstr "Último día LC"
+
+#. module: stock_custom
+#: model:mail.template,subject:stock_custom.purchase_order_received_template
+msgid "Visiotech - Order received"
+msgstr "Visiotech - Pedido recibido"
+
+#. module: stock_custom
+#: code:addons/stock_custom/models/stock.py:120
+#, python-format
+msgid "<p>Dear Supplier,</p> "
+"<p>We inform you that we have received the products corresponding to %s.</p>"
+"<p>Please send us the corresponding invoice as soon as possible, so that we can "
+"enter it in our system and proceed with the payment under the agreed conditions.</p>"
+"<p>Sincerely,</p>"
+"<p>VISIOTECH</p>"
+msgstr "<p>Querido Proveedor,</p> "
+"<p>Le informamos que hemos recibido los productos correspondientes a %s.</p>"
+"<p>Rogamos nos envíen la factura correspondiente a la mayor brevedad, para poder contabilizarla"
+"en nuestro sistema y proceder al pago de la misma en las condiciones acordadas.</p>"
+"<p>Atentamente,</p>"
+"<p>VISIOTECH</p>"
