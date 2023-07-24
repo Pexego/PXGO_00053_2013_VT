@@ -13,7 +13,7 @@ class ProductTemplate(models.Model):
                     """
                     SELECT pol.id FROM purchase_order_line pol
                     JOIN purchase_order po ON po.id = pol.order_id
-                    WHERE pol.state = 'purchase_order' AND po.completed_purchase is False 
+                    WHERE pol.state = 'purchase_order' AND po.completed_purchase is False
                     AND pol.company_id = %s AND pol.product_id in %s
                     """, (self.env.user.company_id.id, tuple(product.product_variant_ids.ids))
                 )
@@ -29,14 +29,30 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     @api.multi
-    def _split_purchase_count(self):
+    def _purchase_count(self):
+
         domain = [
             ('order_id.state', '=', 'purchase_order'),
             ('product_id', 'in', self.mapped('id')),
         ]
-        PurchaseOrderLines = self.env['purchase.order.line'].search(domain)
-        for product in self:
-            product.split_purchase_count = len(
-                PurchaseOrderLines.filtered(lambda r: r.product_id == product).mapped('order_id'))
+        domain2 = [
+            ('state', 'in', ['purchase', 'done']),
+            ('product_id', 'in', self.mapped('id')),
+        ]
 
-    split_purchase_count = fields.Integer(compute='_split_purchase_count')
+        purchaseOrderLines = self.env['purchase.order.line'].search(domain)
+        purchaseOrderLines2 = self.env['purchase.order.line'].search(domain2)
+        product_qty1 = 0
+        product_qty2 = 0
+
+        for line in purchaseOrderLines:
+            product_qty1 = product_qty1 + line.product_qty
+        for line in purchaseOrderLines2:
+            product_qty2 = product_qty2 + line.product_qty
+
+        for product in self:
+            product.split_purchase_count = product_qty1
+            product.purchase_count = product_qty2
+
+    purchase_count = fields.Integer(compute='_purchase_count')
+    split_purchase_count = fields.Integer(compute='_purchase_count')
