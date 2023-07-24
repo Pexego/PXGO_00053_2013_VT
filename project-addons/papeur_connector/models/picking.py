@@ -8,28 +8,35 @@ class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
-    state_papeur = fields.Selection([('notified', 'Notified'), ('urgent', 'Urgent')],
-                                    string="Notified")
-    id_vstock = fields.Char()
-    state_vstock = fields.Char()
-    user_vstock = fields.Char()
-    last_date_vstock = fields.Datetime(default=lambda self: fields.Datetime.now())
-    date_done_vstock = fields.Datetime()
+    state_papeur = fields.Selection(related="vstock_data.state_papeur", readonly=True)
+    id_vstock = fields.Char(related='vstock_data.id_vstock', readonly=True)
+    state_vstock = fields.Char(related='vstock_data.state_vstock', readonly=True)
+    user_vstock = fields.Char(related='vstock_data.user_vstock', readonly=True)
+    last_date_vstock = fields.Datetime(related='vstock_data.last_date_vstock', readonly=True)
+    date_done_vstock = fields.Datetime(related='vstock_data.date_done_vstock', readonly=True)
+
+    vstock_data = fields.One2many('stock.picking.vstock', 'picking_id')
 
     @api.multi
     def prepare_order(self):
         ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
         web_endpoint = f'{ppu_endpoint}/prepare_order'
+        web_endpoint_reception = f'{ppu_endpoint}/notified'
         for picking in self:
             data = {
                 "name": f"{picking.id_vstock} - {picking.name} - {picking.origin or ''} - {picking.partner_id.commercial_partner_id.name}",
                 "odoo_id": picking.id,
             }
+            data_reception = {
+                "name": f"{picking.origin or ''} - {picking.name}",
+                "odoo_id": picking.id
+            }
             try:
                 response = requests.post(web_endpoint, json=data)
+                response_reception = requests.post(web_endpoint_reception, json=data_reception)
+                picking.vstock_data.state_papeur = 'notified'
             except:
                 raise UserError(_("Something went wrong"))
-            picking.state_papeur = 'notified'
 
     @api.multi
     def prepare_order_urgent(self):
@@ -42,9 +49,9 @@ class StockPicking(models.Model):
             }
             try:
                 response = requests.post(web_endpoint, json=data)
+                picking.vstock_data.state_papeur = 'urgent'
             except:
                 raise UserError(_("Something went wrong"))
-            picking.state_papeur = 'urgent'
 
     @api.multi
     def cancel_order_urgent(self):
@@ -65,7 +72,7 @@ class StockPicking(models.Model):
                 response = requests.post(web_endpoint_reception, json=data_reception)
             except:
                 raise UserError(_("Something went wrong"))
-            picking.state_papeur = False
+            picking.vstock_data.state_papeur = False
 
     @api.multi
     def deliver_order(self):
@@ -99,8 +106,9 @@ class StockPicking(models.Model):
     @api.model
     def return_orders(self):
         pickings = self.env['stock.picking'].search([('state', '=', 'assigned'),
-                                                    ('picking_type_code', '=', 'outgoing'),
-                                                    ('state_papeur', '!=', False)])
+                                                     ('picking_type_code', '=', 'outgoing'),
+                                                     ('state_papeur', '!=', False),
+                                                     ('state_papeur', '!=', 'done')])
 
         orders = [{"name": f"{picking.id_vstock} - {picking.name} - {picking.origin or ''} - {picking.partner_id.commercial_partner_id.name}",
                    "odoo_id": picking.id,
@@ -112,53 +120,13 @@ class StockPicking(models.Model):
     def return_orders_reception(self):
         pickings = self.env['stock.picking'].search([('state', '=', 'assigned'),
                                                      ('picking_type_code', '=', 'outgoing'),
-                                                     ('state_papeur', '!=', False)])
+                                                     ('state_papeur', '!=', False),
+                                                     ('state_papeur', '!=', 'done')])
         orders = [{"name": f"{picking.origin or ''} - {picking.name}",
                    "odoo_id": picking.id,
                    "state": picking.state_papeur,
                    "state_vstock": picking.state_vstock} for picking in pickings]
         return orders
-
-    @api.multi
-    def write(self, vals):
-        res = super().write(vals)
-        for picking in self:
-            web_endpoint = None
-            if vals.get('date_done_vstock', False):
-                ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-                web_endpoint = f'{ppu_endpoint}/ready'
-                picking.cancel_order_urgent()
-                picking.with_delay(priority=1, eta=1800).auto_deliver_order()
-            elif 'state_vstock' in vals:
-                if vals.get('state_vstock') == 'En preparación':
-                    ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-                    web_endpoint = f'{ppu_endpoint}/doing'
-                elif vals.get('state_vstock') != 'En preparación' and picking.state_papeur:
-                    ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-                    web_endpoint = f'{ppu_endpoint}/notified'
-            elif vals.get('state_papeur', '') == 'notified':
-                ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
-                web_endpoint = f'{ppu_endpoint}/notified'
-
-            if web_endpoint:
-                data = {
-                    "name": f"{picking.origin or ''} - {picking.name}",
-                    "odoo_id": picking.id
-                }
-                try:
-                    response = requests.post(web_endpoint, json=data)
-                except:
-                    raise UserError(_("Something went wrong"))
-
-            if vals.get('user_vstock') and picking.state_papeur:
-                picking.notify_user()
-
-            if vals.get('id_vstock'):
-                ppu_auto_notify = eval(self.env['ir.config_parameter'].sudo().get_param('papeur.auto.notify.array'))
-                if picking.partner_id in ppu_auto_notify:
-                    picking.prepare_order()
-
-        return res
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60})
     @api.multi

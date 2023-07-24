@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 09:28+0000\n"
-"PO-Revision-Date: 2023-07-03 09:28+0000\n"
+"POT-Creation-Date: 2023-07-24 10:02+0000\n"
+"PO-Revision-Date: 2023-07-24 10:02+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,24 +22,49 @@ msgstr "Cancelar"
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_date_done_vstock
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_date_done_vstock
 msgid "Date Done Vstock"
-msgstr "Fecha finalizado vstock"
+msgstr "Fecha finalizado Vstock"
+
+#. module: papeur_connector
+#: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
+msgid "Deliver"
+msgstr "Entregar"
+
+#. module: papeur_connector
+#: selection:stock.picking.vstock,state_papeur:0
+msgid "Done"
+msgstr "Hecho"
+
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_id_vstock
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_id_vstock
 msgid "Id Vstock"
-msgstr "ID Vstock"
+msgstr "Id Vstock"
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_last_date_vstock
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_last_date_vstock
 msgid "Last Date Vstock"
-msgstr "Última fecha vstock"
+msgstr "Ultima fecha Vstock"
+
+#. module: papeur_connector
+#: model:res.groups,name:papeur_connector.group_urgent_orders
+msgid "Manage Urgent Orders"
+msgstr "Gestionar pedidos urgentes"
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_state_papeur
-#: selection:stock.picking,state_papeur:0
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_state_papeur
+#: selection:stock.picking.vstock,state_papeur:0
 msgid "Notified"
 msgstr "Notificado"
+
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_picking_id
+msgid "Picking"
+msgstr "Albarán"
 
 #. module: papeur_connector
 #: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
@@ -47,22 +72,30 @@ msgid "Prepare"
 msgstr "Preparar"
 
 #. module: papeur_connector
-#: code:addons/papeur_connector/models/picking.py:30
-#: code:addons/papeur_connector/models/picking.py:45
-#: code:addons/papeur_connector/models/picking.py:60
-#: code:addons/papeur_connector/models/picking.py:111
+#: code:addons/papeur_connector/models/picking.py:39
+#: code:addons/papeur_connector/models/picking.py:54
+#: code:addons/papeur_connector/models/picking.py:74
+#: code:addons/papeur_connector/models/picking.py:89
+#: code:addons/papeur_connector/models/picking.py:104
+#: code:addons/papeur_connector/models/picking_vstock.py:50
 #, python-format
 msgid "Something went wrong"
 msgstr "Algo ha ido mal"
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_state_vstock
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_state_vstock
 msgid "State Vstock"
-msgstr "Estado vstock"
+msgstr "Estado Vstock"
+
+#. module: papeur_connector
+#: model:ir.model,name:papeur_connector.model_stock_picking
+msgid "Transfer"
+msgstr ""
 
 #. module: papeur_connector
 #: model:ir.ui.view,arch_db:papeur_connector.view_urgent_orders
-#: selection:stock.picking,state_papeur:0
+#: selection:stock.picking.vstock,state_papeur:0
 msgid "Urgent"
 msgstr "Urgente"
 
@@ -75,6 +108,11 @@ msgstr "Pedidos Urgentes"
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_user_vstock
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_user_vstock
 msgid "User Vstock"
-msgstr "Usuario vstock"
+msgstr "Usuario Vstock"
 
+#. module: papeur_connector
+#: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_vstock_data
+msgid "Vstock Data"
+msgstr "Datos Vstock"
