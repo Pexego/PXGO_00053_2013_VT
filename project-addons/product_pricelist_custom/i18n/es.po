@@ -271,3 +271,41 @@ msgstr "No se puede marcar más de una tarifa especial de marca por defecto para
 #, python-format
 msgid "You cannot add a pricelist (%s) which sales team (%s) != partner sales team (%s)"
 msgstr "No puedes añadir una tarifa (%s) cuyo equipo de ventas (%s)  sea distinto del equipo de ventas del cliente (%s)"
+
+#. module: product_pricelist_custom
+#: model:ir.actions.act_window,name:product_pricelist_custom.action_product_pricelist_item_log
+#: model:ir.ui.menu,name:product_pricelist_custom.move_product_pricelist_item_log_menu
+#: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
+msgid "Product Pricelist Item Log"
+msgstr "Log cambios de Precios"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_log_date
+#: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
+msgid "Date"
+msgstr "Fecha"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_log_product_id
+#: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
+msgid "Product"
+msgstr "Producto"
+
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_log_user_id
+#: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
+msgid "User"
+msgstr "Usuario"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_log_old_fixed_price
+#: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
+msgid "Old Fixed Price"
+msgstr "Precio antiguo"
+
+#. module: product_pricelist_custom
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_log_new_fixed_price
+#: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
+msgid "New Fixed Price"
+msgstr "Nuevo precio"
