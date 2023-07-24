@@ -72,15 +72,15 @@ msgid "Prepare"
 msgstr "Preparar"
 
 #. module: papeur_connector
-#: code:addons/papeur_connector/models/picking.py:39
-#: code:addons/papeur_connector/models/picking.py:54
-#: code:addons/papeur_connector/models/picking.py:74
-#: code:addons/papeur_connector/models/picking.py:89
-#: code:addons/papeur_connector/models/picking.py:104
+#: code:addons/papeur_connector/models/picking.py:41
+#: code:addons/papeur_connector/models/picking.py:57
+#: code:addons/papeur_connector/models/picking.py:79
+#: code:addons/papeur_connector/models/picking.py:95
+#: code:addons/papeur_connector/models/picking.py:111
 #: code:addons/papeur_connector/models/picking_vstock.py:50
 #, python-format
-msgid "Something went wrong"
-msgstr "Algo ha ido mal"
+msgid "Something went wrong: %s"
+msgstr "Algo ha ido mal: %s"
 
 #. module: papeur_connector
 #: model:ir.model.fields,field_description:papeur_connector.field_stock_picking_state_vstock

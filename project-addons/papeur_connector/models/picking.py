@@ -34,9 +34,11 @@ class StockPicking(models.Model):
             try:
                 response = requests.post(web_endpoint, json=data)
                 response_reception = requests.post(web_endpoint_reception, json=data_reception)
+                response.raise_for_status()
+                response_reception.raise_for_status()
                 picking.vstock_data.state_papeur = 'notified'
-            except:
-                raise UserError(_("Something went wrong"))
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
 
     @api.multi
     def prepare_order_urgent(self):
@@ -49,9 +51,10 @@ class StockPicking(models.Model):
             }
             try:
                 response = requests.post(web_endpoint, json=data)
+                response.raise_for_status()
                 picking.vstock_data.state_papeur = 'urgent'
-            except:
-                raise UserError(_("Something went wrong"))
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
 
     @api.multi
     def cancel_order_urgent(self):
@@ -69,9 +72,11 @@ class StockPicking(models.Model):
             }
             try:
                 response = requests.post(web_endpoint, json=data)
-                response = requests.post(web_endpoint_reception, json=data_reception)
-            except:
-                raise UserError(_("Something went wrong"))
+                response_reception = requests.post(web_endpoint_reception, json=data_reception)
+                response.raise_for_status()
+                response_reception.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
             picking.vstock_data.state_papeur = False
 
     @api.multi
@@ -85,8 +90,9 @@ class StockPicking(models.Model):
             }
             try:
                 response = requests.post(web_endpoint, json=data)
-            except:
-                raise UserError(_("Something went wrong"))
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
 
     @api.multi
     def notify_user(self):
@@ -100,8 +106,9 @@ class StockPicking(models.Model):
             }
             try:
                 response = requests.post(web_endpoint, json=data)
-            except:
-                raise UserError(_("Something went wrong"))
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
 
     @api.model
     def return_orders(self):

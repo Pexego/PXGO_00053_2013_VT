@@ -14,13 +14,12 @@ class StockPickingVstock(models.Model):
     id_vstock = fields.Char()
     state_vstock = fields.Char()
     user_vstock = fields.Char()
-    last_date_vstock = fields.Datetime(default=lambda self: fields.Datetime.now())
+    last_date_vstock = fields.Datetime(default=fields.Datetime.now)
     date_done_vstock = fields.Datetime()
     picking_id = fields.Many2one('stock.picking')
 
     @api.multi
     def write(self, vals):
-        print(vals)
         res = super().write(vals)
         for picking_data in self:
             web_endpoint = None
@@ -46,8 +45,9 @@ class StockPickingVstock(models.Model):
                 }
                 try:
                     response = requests.post(web_endpoint, json=data)
-                except:
-                    raise UserError(_("Something went wrong"))
+                    response.raise_for_status()
+                except requests.exceptions.RequestException as e:
+                    raise UserError(_("Something went wrong: %s" % e))
 
             if vals.get('user_vstock') and picking_data.state_papeur in ('notified', 'urgent'):
                 picking_data.picking_id.notify_user()
