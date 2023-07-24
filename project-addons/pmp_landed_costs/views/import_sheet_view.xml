@@ -6,49 +6,54 @@
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
             <form string="Import Sheet">
-                <group col="2" string="General">
-                    <field name="dua"/>
-                    <field name="container_id" readonly="1"/>
-                    <field name="dua_date"/>
-                    <field name="treasury"/>
-                </group>
-                <group col="4" string="Characteristics">
-                    <field name="kgs"/>
-                    <field name="cbm"/>
-                    <field name="incoterm"/>
-                    <field name="destination_port"/>
-                    <field name="forwarder_comercial"/>
-                    <field name="container_type"/>
-                    <field name="channel"/>
-                </group>
-                <group col="4" string="Costs">
-                    <field name="freight"/>
-                    <field name="fee"/>
-                    <field name="inspection"/>
-                    <field name="arrival_cost"/>
-                </group>
-                <separator string="Landed costs" colspan="4"/>
-                <group>
-                    <field name="landed_cost_count" invisible="1"/>
-                    <button name="action_open_landed_cost_creator" string="Create landed costs"
-                            type="object" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
-                </group>
-                <field name="landed_cost_ids">
-                    <tree create="false" editable="true">
-                        <field name="name"/>
-                        <field name="date"/>
-                        <field name="picking_ids" widget="many2many_tags"/>
-                        <field name="container_ids" widget="many2many_tags" edit="false"/>
-                        <field name="state"/>
-                    </tree>
-                </field>
-                <separator string="Invoices" colspan="4"/>
-                <field name="invoice_ids">
-                    <tree editable="bottom">
-                        <field name="state" invisible="1"/>
-                        <field name="reference"/>
-                    </tree>
-                </field>
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,in_process,done" clickable="True"/>
+                </header>
+                <sheet>
+                    <group col="2" string="General">
+                        <field name="dua"/>
+                        <field name="container_id" readonly="1"/>
+                        <field name="dua_date"/>
+                        <field name="treasury"/>
+                    </group>
+                    <group col="4" string="Characteristics">
+                        <field name="kgs"/>
+                        <field name="cbm"/>
+                        <field name="incoterm"/>
+                        <field name="destination_port"/>
+                        <field name="forwarder_comercial"/>
+                        <field name="container_type"/>
+                        <field name="channel"/>
+                    </group>
+                    <group col="4" string="Costs">
+                        <field name="freight"/>
+                        <field name="fee"/>
+                        <field name="inspection"/>
+                        <field name="arrival_cost"/>
+                    </group>
+                    <separator string="Landed costs" colspan="4"/>
+                    <group>
+                        <field name="landed_cost_count" invisible="1"/>
+                        <button name="action_open_landed_cost_creator" string="Create landed costs"
+                                type="object" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
+                    </group>
+                    <field name="landed_cost_ids">
+                        <tree create="false" editable="true">
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="picking_ids" widget="many2many_tags"/>
+                            <field name="container_ids" widget="many2many_tags" edit="false"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                    <separator string="Invoices" colspan="4"/>
+                    <field name="invoice_ids">
+                        <tree editable="bottom">
+                            <field name="state" invisible="1"/>
+                            <field name="reference"/>
+                        </tree>
+                    </field>
+                </sheet>
             </form>
         </field>
     </record>
@@ -57,7 +62,7 @@
         <field name="name">import.sheet.tree</field>
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
-            <tree default_order="dua asc">
+            <tree default_order="treasury desc">
                 <field name="dua"/>
                 <field name="container_id"/>
                 <field name="dua_date"/>
@@ -73,6 +78,7 @@
                 <field name="fee"/>
                 <field name="inspection"/>
                 <field name="arrival_cost"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>

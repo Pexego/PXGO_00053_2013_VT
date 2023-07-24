@@ -53,10 +53,33 @@ class ImportSheet(models.Model):
 
     invoice_ids = fields.Many2many('account.invoice', string='Invoices', domain=[('type', '=', 'in_invoice')])
 
+    state = fields.Selection([
+        ('pending', 'Pending'),
+        ('in_process', 'In process'),
+        ('done', 'Done')],
+        string='Status', default='pending', compute='_compute_state')
+
+    def _compute_state(self):
+
+        import wdb
+        wdb.set_trace()
+
+        for sheet in self:
+            if sheet.landed_cost_ids:
+                if sheet.landed_cost_ids[0].state == 'draft':
+                    sheet.state = 'in_process'
+                elif sheet.landed_cost_ids[0].state == 'done':
+                    sheet.state = 'done'
+            else:
+                sheet.state = 'pending'''
+
     def _get_landed_cost_count(self):
         """
         Calculates count of landed costs that are associated to this import sheet
         """
+        import wdb
+        wdb.set_trace()
+
         for sheet in self:
             count = self.env['stock.landed.cost'].search_count([('import_sheet_id', '=', sheet.id)])
             sheet.landed_cost_count = count
