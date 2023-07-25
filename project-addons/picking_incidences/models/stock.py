@@ -57,6 +57,10 @@ class StockPicking(models.Model):
 
     state = fields.Selection(selection_add=[('partially_available', 'Partially Available')])
 
+    internal_notes = fields.Text("Internal Notes", copy=False)
+
+    add_notes = fields.Boolean("Copy Notes", copy=False, help="When checked, the notes will be in the new picking", default=True)
+
     @api.multi
     def _compute_show_check_availability(self):
         for picking in self:
@@ -219,6 +223,8 @@ class StockPicking(models.Model):
                 new_moves = self.env['stock.move'].browse(new_moves)
                 bck = self._create_backorder_incidences(new_moves)
                 bck.write({'move_type': 'one'})
+                if self.add_notes:
+                    bck.write({'internal_notes': self.internal_notes})
                 self.action_assign()
                 pick.move_lines.write({'state': 'assigned'})
                 result |= bck

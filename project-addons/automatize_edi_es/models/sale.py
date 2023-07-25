@@ -25,3 +25,20 @@ class SaleOrder(models.Model):
             oline.product_uom_qty,
             qty_precision=qty_precision, price_precision=price_precision,
             version=version)
+
+    def action_invoice_create_aux(self, sale_order_ids):
+        """
+        Calls actions_invoice_create with the sale.order passed in sale_order_ids.
+        This function is done because browse odoorpc method raises expected singleton
+
+        Parameter:
+        ---------
+        sale_order_ids: List[Int]
+            sale.order ids to be invoiced
+        """
+        try:
+            sales = self.env['sale.order'].browse(sale_order_ids)
+            sales.action_invoice_create()
+        except Exception as e:
+            self.env.cr.rollback()
+            raise e

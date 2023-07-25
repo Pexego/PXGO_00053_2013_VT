@@ -16,7 +16,8 @@
         "views/product_view.xml",
         "views/partner_view.xml",
         "security/product_pricelist_custom.xml",
-        "views/sale_view.xml"
+        "views/sale_view.xml",
+        "wizard/pricelist_item_log_wizard.xml"
     ],
     "demo": [],
     'auto_install': False,
