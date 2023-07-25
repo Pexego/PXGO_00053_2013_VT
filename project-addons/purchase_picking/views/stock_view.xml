@@ -95,7 +95,10 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="vpicktree_add_shipping_id"/>
-        <field name="domain">[('picking_type_code', '=', 'incoming')]</field>
+        <field name="domain" eval="['&amp;', ('picking_type_code', '=', 'incoming'), '|',
+                                    ('partner_id.property_account_position_id', '=', ref('purchase_picking.national_fiscal_position')),
+                                    ('partner_id.property_account_position_id', '=', ref('purchase_picking.communitarian_fiscal_position'))
+                                    ]"/>
     </record>
 
     <record id="action_receive_move" model="ir.actions.act_window">
