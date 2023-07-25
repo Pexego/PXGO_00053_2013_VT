@@ -88,6 +88,16 @@
         </field>
     </record-->
 
+    <record id="action_open_national_arrivals" model="ir.actions.act_window">
+        <field name="name">National arrivals</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="vpicktree_add_shipping_id"/>
+        <field name="domain">[('picking_type_code', '=', 'incoming')]</field>
+    </record>
+
     <record id="action_receive_move" model="ir.actions.act_window">
             <field name="name">Receipts</field>
             <field name="res_model">stock.move</field>
@@ -484,6 +494,6 @@
             parent="shipping_menu" action="act_stock_container_status"/>
 
     <menuitem id="national_incoming_picking_menu" name="National arrivals"
-            parent="purchase.menu_purchase_control" action="act_stock_container_status"/>
+            parent="purchase.menu_purchase_control" action="action_open_national_arrivals"/>
 
 </odoo>
