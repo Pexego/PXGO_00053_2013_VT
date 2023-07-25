@@ -116,6 +116,7 @@ msgstr "Feuille d'importation"
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_create_landed_cost_wizard_form
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_landed_cost_creator_wizard_import_sheet_id
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_import_sheet_id
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
 msgid "Create landed costs"
 msgstr "Créer des coûts cibles"
 
@@ -154,6 +155,10 @@ msgstr "Mise à jour"
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
 msgid "Landed costs"
 msgstr "Coûts cibles"
+
+#: model:ir.ui.view,arch_db:pmp_landed_costs.view_import_sheet_form
+msgid "Invoices"
+msgstr "Factures"
 
 #. module: pmp_landed_costs
 #: model:ir.ui.view,arch_db:pmp_landed_costs.view_stock_container_add_import_sheets_form
