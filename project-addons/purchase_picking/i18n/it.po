@@ -580,3 +580,8 @@ msgstr "Canale"
 #: model:ir.actions.act_window,name:purchase_picking.action_open_national_arrivals
 msgid "National arrival"
 msgstr "Arrivi nazionali"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.search_last_7_days_picking
+msgid "Last 7 days"
+msgstr "Ultimi 7 giorni"
