@@ -1787,3 +1787,13 @@ msgstr "Número de factura"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_state
 msgid "Invoice state"
 msgstr "Estado de factura"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Paid"
+msgstr "Pagada"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Open"
+msgstr "Abierta"

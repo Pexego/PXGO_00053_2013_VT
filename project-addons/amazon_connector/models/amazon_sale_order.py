@@ -53,20 +53,19 @@ class AmazonSaleOrder(models.Model):
     partner_id = fields.Many2one('res.partner')
     is_business_order = fields.Boolean()
 
-    invoice = fields.One2many('account.invoice', 'amazon_order', string='Invoice')
+    invoice_ids = fields.One2many('account.invoice', 'amazon_order', string='Invoice')
     invoice_number = fields.Char(compute='_compute_invoice', string="Invoice number")
-    invoice_state = fields.Char(compute='_compute_invoice', string="Invoice state")
+    invoice_state = fields.Selection([
+        ('paid', 'Paid'),
+        ('open', 'Open')
+    ], compute='_compute_invoice', string='Invoice state')
 
     def _compute_invoice(self):
-        for order in self.filtered(lambda l: l.invoice_deposits_count > 0):
-            for invoice in order.invoice.filtered(lambda l: l.type == 'out_invoice'):
-                if invoice.state == 'paid':
-                    order.invoice_number = invoice.number
-                    order.invoice_state = invoice.state
-                    break
-                elif invoice.state == 'open' and order.invoice_state is None:
-                    order.invoice_number = invoice.number
-                    order.invoice_state = invoice.state
+        for order in self:
+            if order.invoice_deposits:
+                invoice = order.invoice_ids.filtered(lambda l: l.type == 'out_invoice' and l.state in ['paid', 'open'])
+                order.invoice_number = invoice[0].number
+                order.invoice_state = invoice[0].state
 
     def _compute_count(self):
         for order in self:
