@@ -623,5 +623,6 @@ msgstr "Canal"
 
 #. module: purchase_picking
 #: model:ir.ui.menu,name:purchase_picking.national_incoming_picking_menu
+#: model:ir.actions.act_window,name:purchase_picking.action_open_national_arrivals
 msgid "National arrival"
 msgstr "Llegadas nacionales"
