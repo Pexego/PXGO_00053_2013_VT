@@ -8,7 +8,7 @@ import odoo.addons.decimal_precision as dp
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    reservation = fields.Integer(string="Reservation")
+    reservation = fields.Float(string="Reservation")
 
     reservation_count = fields.Float(
         compute='_compute_reservation_count',
@@ -64,7 +64,8 @@ class ProductProduct(models.Model):
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
         products = self.env['product.product'].with_context({'lang': 'es_ES'}).search_read(domain,
-                                                                                           fields + ["seller_id"])
+                                                                                           fields + ["seller_id",
+                                                                                                     "reservation_count", "outgoing_picking_reserved_qty"])
 
         for product in products:
             product_fields = []
@@ -83,8 +84,8 @@ class ProductProduct(models.Model):
                 elif field == 'last_purchase_date':
                     product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
                 elif field == 'reservation':
-                    product_fields.append(product['reservation_count'][1] +
-                                          product['outgoing_picking_reserved_qty'][1])
+                    product_fields.append(product['reservation_count'] +
+                                          product['outgoing_picking_reserved_qty'])
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
