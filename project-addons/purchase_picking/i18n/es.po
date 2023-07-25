@@ -620,3 +620,8 @@ msgstr "Referencia Proveedor"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_customs_channel
 msgid "Customs Channel"
 msgstr "Canal"
+
+#. module: purchase_picking
+#: model:ir.ui.menu,name:purchase_picking.national_incoming_picking_menu
+msgid "National arrival"
+msgstr "Llegadas nacionales"

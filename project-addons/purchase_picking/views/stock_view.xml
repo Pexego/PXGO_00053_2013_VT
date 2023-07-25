@@ -483,4 +483,7 @@
     <menuitem id="shipping_menu_status" name="Status"
             parent="shipping_menu" action="act_stock_container_status"/>
 
+    <menuitem id="national_incoming_picking_menu" name="National arrivals"
+            parent="purchase.menu_purchase_control" action="act_stock_container_status"/>
+
 </odoo>
