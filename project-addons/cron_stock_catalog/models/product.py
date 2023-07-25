@@ -2,12 +2,45 @@ from odoo import api, fields, models, _, exceptions, tools
 import base64
 from datetime import datetime, timedelta
 import xlsxwriter
+import odoo.addons.decimal_precision as dp
 
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
+    reservation = fields.Integer(string="Reservation")
+
+    reservation_count = fields.Float(
+        compute='_compute_reservation_count',
+        string='# Sales')
+
+    outgoing_picking_reserved_qty = fields.Float(
+        compute='_get_outgoing_picking_qty', readonly=True,
+        digits=dp.get_precision('Product Unit of Measure'))
+
+    @api.multi
+    def _get_outgoing_picking_qty(self):
+        for product in self:
+            domain = [('product_id', 'in', product.product_variant_ids.ids),
+                      ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
+                      ('picking_id', '!=', False),
+                      ('location_id', '=', self.env.ref('stock.stock_location_stock').id)]
+            product.outgoing_picking_reserved_qty = sum(
+                item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain, ['product_uom_qty']))
+    @api.multi
+    def _compute_reservation_count(self):
+        for product in self:
+            domain = [('product_id', '=', product.id),
+                      ('state', 'in', ['draft', 'confirmed', 'assigned',
+                                       'partially_available'])]
+            reservations = self.env['stock.reservation'].search(domain)
+            product.reservation_count = sum(reservations.mapped('product_qty'))
+
     def cron_stock_catalog(self):
+
+        import wdb
+        wdb.set_trace()
+
         """
             This method build a XLS File with information of products and email purchasing team
         """
@@ -16,7 +49,7 @@ class ProductProduct(models.Model):
                    "Cant. pedido más grande", "Días de stock restantes", "Días de stock restantes (real)",
                    "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
-                   "Última fecha de compra", "Reemplazado por", "Estado"]
+                   "Última fecha de compra", "Reemplazado por", "Estado", "Reservas"]
 
         domain = [('custom', '=', False), ('type', '!=', 'service'),
                   ("categ_id.name", "not in", ["Outlet", "O1", "O2", "Descatalogados"])]
@@ -24,13 +57,15 @@ class ProductProduct(models.Model):
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
                   "remaining_days_sale", "real_remaining_days_sale", "qty_available_input_loc", "average_margin",
-                  "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state"]
+                  "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state",
+                  "reservation"]
         rows = []
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
         products = self.env['product.product'].with_context({'lang': 'es_ES'}).search_read(domain,
                                                                                            fields + ["seller_id"])
+
         for product in products:
             product_fields = []
             for field in fields:
@@ -47,6 +82,9 @@ class ProductProduct(models.Model):
                     product_fields.append(round(product[field], 2))
                 elif field == 'last_purchase_date':
                     product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
+                elif field == 'reservation':
+                    product_fields.append(product['reservation_count'][1] +
+                                          product['outgoing_picking_reserved_qty'][1])
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
