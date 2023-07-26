@@ -64,8 +64,8 @@ class AmazonSaleOrder(models.Model):
 
     def _compute_invoice(self):
         for order in self:
-            if order.invoice_deposits:
-                invoice = order.invoice_deposits.filtered(lambda l: l.type == 'out_invoice' and l.state != 'cancel')
+            if order.deposits:
+                invoice = order.invoice_ids.filtered(lambda l: l.type == 'out_invoice' and l.state != 'cancel')
                 order.invoice_number = invoice[0].number
                 order.invoice_state = invoice[0].state
 

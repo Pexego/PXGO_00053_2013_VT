@@ -1797,3 +1797,14 @@ msgstr "Pagada"
 #: selection:amazon.sale.order,invoice_state:0
 msgid "Open"
 msgstr "Abierta"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "History"
+msgstr "Historial"
+
