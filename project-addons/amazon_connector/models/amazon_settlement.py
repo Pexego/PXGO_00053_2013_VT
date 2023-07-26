@@ -541,6 +541,9 @@ class AmazonSettlementLine(models.Model):
                              copy=False,
                              index=True, track_visibility='onchange', default='read')
     refund_invoice_id = fields.Many2one('account.invoice')
+    refund_amount_untaxed = fields.Monetary(related="refund_invoice_id.amount_untaxed")
+    refund_amount_total = fields.Monetary(related="refund_invoice_id.amount_total")
+    refund_state = fields.Selection(related="refund_invoice_id.state")
     error = fields.Char()
     destination_country_id = fields.Many2one('res.country')
     move_id = fields.Many2one('account.move')
