@@ -369,3 +369,29 @@ msgstr "Cancelado"
 #: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_italy
 msgid "Qty. available Italy"
 msgstr "Stock Italia"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_view_stock_wizard_qty
+#: model:ir.model.fields,field_description:sale_display_stock.field_view_stock_lines_qty
+msgid "Qty"
+msgstr "Cantidad"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_view_stock_wizard_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_view_stock_lines_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.view_stock_wizard_form
+msgid "View Stock"
+msgstr "Stock"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.view_stock_wizard_form
+msgid "Close"
+msgstr "Cerrar"
