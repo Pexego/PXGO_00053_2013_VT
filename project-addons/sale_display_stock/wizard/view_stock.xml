@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_wizard_form" model="ir.ui.view">
+        <field name="name">view.stock.wizard.form</field>
+        <field name="model">view.stock.wizard</field>
+        <field name="arch" type="xml">
+            <form string="View Stock">
+                <group>
+                    <field name="product_id" readonly="1"/>
+                    <field name="qty" readonly="1"/>
+                </group>
+                <field name="line_ids" readonly="1">
+                    <tree>
+                        <button name="open_element" type="object"
+                                            class="oe_link"
+                                            icon="fa fa-external-link"
+                                            style="font-size: 16px;"/>
+                        <field name="name"/>
+                        <field name="qty" sum="Total Qty"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button string="Close" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+</odoo>
