@@ -1792,7 +1792,7 @@ msgstr "Estado del abono"
 #: model:ir.ui.menu,name:amazon_connector.settlement_amazon_refund_menu
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_line_tree
 msgid "Refunds"
-msgstr "Estado del abono"
+msgstr "Abonos"
 
 #. module: amazon_connector
 #: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
