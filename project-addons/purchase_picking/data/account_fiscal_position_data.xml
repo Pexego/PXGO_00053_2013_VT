@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<odoo noupdate="1">
     <record id="national_fiscal_position" model="account.fiscal.position">
         <field name="name">A borrar - regimen nacional</field>
         <field name="active">false</field>
