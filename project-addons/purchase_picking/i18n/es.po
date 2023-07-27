@@ -643,3 +643,9 @@ msgstr "Comprobación de líneas de compra"
 #: model:ir.ui.view,arch_db:purchase_picking.purchase_lines_checker_view
 msgid "Continue"
 msgstr "Continuar"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/product.py:48
+#, python-format
+msgid "The product "%s" has not last purchase"
+msgstr "El producto "%s" no tiene última compra"
