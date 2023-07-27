@@ -49,7 +49,7 @@ class ProductProduct(models.Model):
                    "Cant. pedido más grande", "Días de stock restantes", "Días de stock restantes (real)",
                    "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
-                   "Última fecha de compra", "Reemplazado por", "Estado", "Reservas"]
+                   "Última fecha de compra", "Reemplazado por", "Estado", "Reservas", "Reservas confirmadas"]
 
         domain = [('custom', '=', False), ('type', '!=', 'service'),
                   ("categ_id.name", "not in", ["Outlet", "O1", "O2", "Descatalogados"])]
@@ -58,7 +58,7 @@ class ProductProduct(models.Model):
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
                   "remaining_days_sale", "real_remaining_days_sale", "qty_available_input_loc", "average_margin",
                   "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state",
-                  "reservation"]
+                  "reservation", "confirmed_reservation"]
         rows = []
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
@@ -86,6 +86,8 @@ class ProductProduct(models.Model):
                 elif field == 'reservation':
                     product_fields.append(product['reservation_count'] +
                                           product['outgoing_picking_reserved_qty'])
+                elif field == 'confirmed_reservation':
+                    product_fields.append(product['outgoing_picking_reserved_qty'])
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
