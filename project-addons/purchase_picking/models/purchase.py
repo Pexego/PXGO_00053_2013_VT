@@ -21,6 +21,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import except_orm,UserError
 from odoo.tools.float_utils import float_is_zero, float_compare
+from odoo.addons.purchase_picking.models.product import NoLastPurchaseException
 
 
 class PurchaseOrder(models.Model):
@@ -203,12 +204,15 @@ class PurchaseOrder(models.Model):
             'max_product_purchase_price_diff_perc'
         ))
         for line in self.order_line:
-            product = line.product_id
-            last_purchase_price = product.get_last_purchase_price()  # field in stock_custom
-            if last_purchase_price:
-                price_variation = product.calculate_product_price_variation(last_purchase_price, line.price_unit)
-                if price_variation > umbral:
-                    lines_with_high_price_variation.append(line.id)
+            try:
+                product = line.product_id
+                last_purchase_price = product.get_last_purchase_price()  # field in stock_custom
+                if last_purchase_price:
+                    price_variation = product.calculate_product_price_variation(last_purchase_price, line.price_unit)
+                    if price_variation > umbral:
+                        lines_with_high_price_variation.append(line.id)
+            except NoLastPurchaseException:
+                continue
         return lines_with_high_price_variation
 
 

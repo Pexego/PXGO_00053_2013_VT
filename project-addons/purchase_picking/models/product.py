@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, _
 
 
 class ProductProduct(models.Model):
@@ -6,7 +6,8 @@ class ProductProduct(models.Model):
 
     def get_last_purchase_price(self):
         """
-        Calculates last purchase price of the product
+        Calculates last purchase price of the product.
+        If there is no last purchase raises NoLastPurchaseException
 
         Return:
         ------
@@ -14,6 +15,8 @@ class ProductProduct(models.Model):
         """
         res = self.env['purchase.order.line'].search([('product_id', '=', self.id)])
         res_filtered = res.filtered(lambda self: self.order_id.state in ['purchase', 'purchase_order'])
+        if not res_filtered:
+            raise NoLastPurchaseException(self.default_code)
         last_line = res_filtered.sorted(key=lambda self: self.order_id.write_date, reverse=True)[0]
         return last_line.price_unit
 
@@ -35,3 +38,14 @@ class ProductProduct(models.Model):
             100 * abs(old_price - new_price) / old_price
         """
         return abs(old_price - new_price) / old_price * 100
+
+
+class NoLastPurchaseException(Exception):
+    """
+    This error should be raised when a product does not belong to any purchase order line
+    """
+    def __init__(self, product_code, *args):
+        self.message = _('The product "%s" has not last purchase') % product_code
+
+    def __str__(self):
+        return 'NoLastPurchaseException: ' + self.message
