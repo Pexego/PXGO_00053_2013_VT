@@ -276,9 +276,7 @@ class EdifMenssage(models.Model):
         msg_count = msg.count("'") + 1
         msg += self.UNT(str(msg_count), msg_ref)
 
-        import wdb
-        wdb.set_trace()
-        #return msg
+        return msg
 
     def parse_order(self, order_file):
         parse_errors = ""
