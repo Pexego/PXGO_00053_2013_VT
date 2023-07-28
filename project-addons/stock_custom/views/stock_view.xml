@@ -34,7 +34,7 @@
         <field name="arch" type="xml">
             <field name="note" position="replace">
                 <field name="note" placeholder="Terms and conditions..." class="oe_inline"/>
-                <field name="internal_notes" placeholder="Internal Notess..." class="oe_inline"/>
+                <field name="internal_notes" placeholder="Internal Notes..." class="oe_inline"/>
             </field>
             <field name="company_id" position="after">
                 <field name="commercial"/>
