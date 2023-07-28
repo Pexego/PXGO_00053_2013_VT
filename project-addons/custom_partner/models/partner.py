@@ -29,7 +29,7 @@ from datetime import datetime, timedelta
 import dateutil.relativedelta,re
 from calendar import monthrange
 from odoo.addons.phone_validation.tools import phone_validation
-
+import sys
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
@@ -937,7 +937,7 @@ class Followers(models.Model):
 class ResPartnerCategory(models.Model):
     _inherit = "res.partner.category"
 
-    color = fields.Integer(string='Color Index', compute='_select_color')
+    color = fields.Integer(string='Color Index')
 
     color_selection = fields.Selection(
         [(1, 'Red'),
@@ -953,9 +953,33 @@ class ResPartnerCategory(models.Model):
          (11, 'Purple')],
         string="Color Index")
 
-    def _select_color(self):
+    def select_color(self):
+
+        import wdb
+        wdb.set_trace()
+
         for etiquette in self:
             if etiquette.parent_id and etiquette.color_selection is False:
                 etiquette.color = self.env['res.partner.category'].browse(etiquette.parent_id).id.color
             else:
                 etiquette.color = etiquette.color_selection
+
+    @api.model
+    def create(self, vals):
+
+        import wdb
+        wdb.set_trace()
+
+        category = super(ResPartnerCategory, self).create(vals)
+        category.select_color()
+        return category
+
+    @api.onchange('color_selection')
+    def onchange_color(self):
+
+        import wdb
+        wdb.set_trace()
+
+        for etiquette in self:
+            self.env['res.partner.category'].search([('name', '=', self.name)]).update({'color': etiquette.color_selection})
+           # self.env['res.partner.category'].search([('name', '=', self.name)]).update({'color': self.color_selection})

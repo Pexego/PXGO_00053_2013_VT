@@ -589,18 +589,14 @@
         <menuitem id="contacts.menu_localisation" name="Localization"
             parent="crm.crm_menu_config" sequence="5"/>
 
-        <record id="view_partner_category_form" model="ir.ui.view">
-            <field name="name">Contact Tags</field>
+        <record id="view_partner_category_form_extended" model="ir.ui.view">
+            <field name="name">Contact Tags Extended</field>
             <field name="model">res.partner.category</field>
+            <field name="inherit_id" ref="base.view_partner_category_form"/>
             <field name="arch" type="xml">
-                <form string="Contact Tag">
-                    <group col="4">
-                        <field name="name"/>
-                        <field name="active"/>
-                        <field name="parent_id"/>
-                        <field name="color_selection" string="Color selection"/>
-                    </group>
-                </form>
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="color_selection" string="Color selection"/>
+                </xpath>
             </field>
         </record>
 
