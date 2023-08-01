@@ -953,33 +953,31 @@ class ResPartnerCategory(models.Model):
          (11, 'Purple')],
         string="Color Index")
 
-    def select_color(self):
+    @api.model
+    def create(self, vals):
+        category = super(ResPartnerCategory, self).create(vals)
 
-        import wdb
-        wdb.set_trace()
-
-        for etiquette in self:
+        for etiquette in category:
             if etiquette.parent_id and etiquette.color_selection is False:
-                etiquette.color = self.env['res.partner.category'].browse(etiquette.parent_id).id.color
+                etiquette.color = category.env['res.partner.category'].browse(etiquette.parent_id).id.color
             else:
                 etiquette.color = etiquette.color_selection
 
-    @api.model
-    def create(self, vals):
-
-        import wdb
-        wdb.set_trace()
-
-        category = super(ResPartnerCategory, self).create(vals)
-        category.select_color()
         return category
 
-    @api.onchange('color_selection')
-    def onchange_color(self):
+    @api.multi
+    def write(self, vals):
+        if vals.get('color_selection'):
+            vals['color'] = vals.get('color_selection')
 
-        import wdb
-        wdb.set_trace()
+            parent = self.env['res.partner.category'].search([('name', '=', self.name)])
 
-        for etiquette in self:
-            self.env['res.partner.category'].search([('name', '=', self.name)]).update({'color': etiquette.color_selection})
-           # self.env['res.partner.category'].search([('name', '=', self.name)]).update({'color': self.color_selection})
+            child_etiquettes = self.env['res.partner.category'].search([('parent_id', '=', parent.id)])
+
+            for ch_etiquette in child_etiquettes.filtered(lambda l: l.parent_id and l.color_selection is False):
+                ch_etiquette.color = vals.get('color_selection')
+
+        res = super(ResPartnerCategory, self).write(vals)
+
+        return res
+
