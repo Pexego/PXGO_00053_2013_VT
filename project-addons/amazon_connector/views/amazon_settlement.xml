@@ -13,6 +13,40 @@
     <menuitem id="settlement_amazon_report_menu" name="Settlements" sequence="1" action="action_show_settlements"
               parent="settlement_amazon_menu"/>
 
+    <record id="amazon_settlement_line_tree" model="ir.ui.view">
+        <field name="name">amazon.settlement.line.tree</field>
+        <field name="model">amazon.settlement.line</field>
+        <field name="arch" type="xml">
+            <tree string="Refunds" create="false" edit="false" default_order="posted_date desc">
+                <field name="currency_id" invisible="1"/>
+                <field name="amazon_order_id"/>
+                <field name="amazon_order_name"/>
+                <field name="settlement_id"/>
+                <field name="marketplace_id" />
+                <field name="posted_date" />
+                <field name="refund_invoice_id"/>
+                <field name="refund_amount_untaxed" sum="Amount Untaxed" />
+                <field name="refund_amount_total" sum="Amount total" />
+                <field name="amount_items_positive_events" sum="Amount total Amazon" />
+                <field name="refund_state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_show_refunds" model="ir.actions.act_window">
+        <field name="name">Amazon Refunds</field>
+        <field name="res_model">amazon.settlement.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[("type", "=", "Refund")]</field>
+        <field name="view_id" ref="amazon_settlement_line_tree"/>
+    </record>
+
+
+    <menuitem id="settlement_amazon_refund_menu" name="Refunds" sequence="2" action="action_show_refunds"
+              parent="settlement_amazon_menu"/>
+
     <record id="amazon_settlement_form" model="ir.ui.view">
         <field name="name">amazon.settlement.form</field>
         <field name="model">amazon.settlement</field>
