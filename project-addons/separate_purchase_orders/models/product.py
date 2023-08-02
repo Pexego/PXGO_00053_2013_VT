@@ -38,7 +38,7 @@ class ProductProduct(models.Model):
         for product in self:
             purchase_order_lines = self.env['purchase.order.line'].search_read(domain, ['product_qty', 'state'])
             product.split_purchase_count = sum(item['product_qty'] for item in purchase_order_lines
-                                               if item['state'] in ['purchase_order'])
+                                               if item['state'] == 'purchase_order')
             product.purchase_count = sum(item['product_qty'] for item in purchase_order_lines
                                          if item['state'] in ['purchase', 'done'])
 
