@@ -30,29 +30,17 @@ class ProductProduct(models.Model):
 
     @api.multi
     def _purchase_count(self):
-
         domain = [
-            ('order_id.state', '=', 'purchase_order'),
-            ('product_id', 'in', self.mapped('id')),
+            ('product_id', 'in', self.ids),
+            ('state', 'in', ['purchase', 'done', 'purchase_order'])
         ]
-        domain2 = [
-            ('state', 'in', ['purchase', 'done']),
-            ('product_id', 'in', self.mapped('id')),
-        ]
-
-        purchaseOrderLines = self.env['purchase.order.line'].search(domain)
-        purchaseOrderLines2 = self.env['purchase.order.line'].search(domain2)
-        product_qty1 = 0
-        product_qty2 = 0
-
-        for line in purchaseOrderLines:
-            product_qty1 = product_qty1 + line.product_qty
-        for line in purchaseOrderLines2:
-            product_qty2 = product_qty2 + line.product_qty
 
         for product in self:
-            product.split_purchase_count = product_qty1
-            product.purchase_count = product_qty2
+            purchase_order_lines = self.env['purchase.order.line'].search_read(domain, ['product_qty', 'state'])
+            product.split_purchase_count = sum(item['product_qty'] for item in purchase_order_lines
+                                               if item['state'] in ['purchase_order'])
+            product.purchase_count = sum(item['product_qty'] for item in purchase_order_lines
+                                         if item['state'] in ['purchase', 'done'])
 
     purchase_count = fields.Integer(compute='_purchase_count')
     split_purchase_count = fields.Integer(compute='_purchase_count')
