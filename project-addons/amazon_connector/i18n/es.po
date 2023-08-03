@@ -1779,7 +1779,7 @@ msgid "There is a error calling vat service: %s"
 msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_number
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_id
 msgid "Invoice number"
 msgstr "Número de factura"
 
