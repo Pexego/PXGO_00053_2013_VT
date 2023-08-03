@@ -78,9 +78,9 @@ class CustomizationLine(models.TransientModel):
                     }
             preview_types = product.customization_type_ids.filtered(lambda t: t.preview)
             if not line.order_id.skip_checking_previews and preview_types:
-                previews_url, headers = self.env['kitchen.customization']._get_previews_params()
-                req = post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                    line.order_id.partner_id.ref, product.default_code), headers=headers)
+                base_url, headers = self.env['kitchen.customization']._get_previews_params()
+                url = f'{base_url}GetCreatedPreview?idOdooClient={line.order_id.partner_id.ref}&reference={product.default_code}'
+                req = post(url, headers=headers)
                 if req.status_code != codes.ok or len(req.json()) == 0:
                     dicc['preview_error'] = True
                     return dicc
