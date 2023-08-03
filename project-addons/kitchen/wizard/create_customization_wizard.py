@@ -83,6 +83,7 @@ class CustomizationLine(models.TransientModel):
                     line.order_id.partner_id.ref, product.default_code), headers=headers)
                 if req.status_code != codes.ok or len(req.json()) == 0:
                     dicc['preview_error'] = True
+                    return dicc
                 previews = req.json()
                 new_previews = [x for x in previews if x.get('status') in ['Approved', 'OldPreview']]
                 if new_previews:
@@ -130,12 +131,10 @@ class CustomizationWizard(models.TransientModel):
         """ Calculate the products that do not have a preview in rubrika"""
         for wiz in self:
             errors = ''
-            products = ''
-            for line in wiz.customization_line:
-                if line.preview_error and line.type_ids.filtered(lambda t:t.preview):
-                    products += f' {line.original_product_id.default_code},'
+            products = ", ".join(line.original_product_id.default_code % line for line in wiz.customization_line if
+                                 line.preview_error and line.type_ids.filtered(lambda t: t.preview))
             if products:
-                errors += _("There are no previews for this partner and these products:%s") % products
+                errors += _("There are no previews for this partner and these products: %s") % products
             wiz.errors = errors
 
     errors = fields.Text(compute=_get_errors, store=True)
