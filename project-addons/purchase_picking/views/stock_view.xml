@@ -88,35 +88,6 @@
         </field>
     </record-->
 
-    <record model="ir.ui.view" id="search_last_7_days_picking">
-        <field name="name">Last 7 days</field>
-        <field name="model">stock.picking</field>
-        <field name="arch" type="xml">
-            <search string="Last 7 days">
-                <field name="scheduled_date"/>
-                <filter string="Last 7 days" name="last7days" domain="[
-                ('scheduled_date', '&gt;=', ((context_today()-datetime.timedelta(days=7)).strftime('%Y-%m-%d')))
-                ]"/>
-            </search>
-        </field>
-    </record>
-
-    <record id="action_open_national_arrivals" model="ir.actions.act_window">
-        <field name="name">National arrivals</field>
-        <field name="res_model">stock.picking</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="vpicktree_add_shipping_id"/>
-        <field name="domain" eval="['&amp;', ('picking_type_code', '=', 'incoming'),
-                                    ('partner_id.property_account_position_id', 'in', (
-                                        ref('l10n_es.1_fp_nacional'),
-                                        ref('l10n_es.1_fp_intra')
-                                    ))]"/>
-        <field name="context">{'search_default_last7days':1}</field>
-        <field name="search_view_id" ref="search_last_7_days_picking"/>
-    </record>
-
     <record id="action_receive_move" model="ir.actions.act_window">
             <field name="name">Receipts</field>
             <field name="res_model">stock.move</field>
@@ -511,8 +482,5 @@
 
     <menuitem id="shipping_menu_status" name="Status"
             parent="shipping_menu" action="act_stock_container_status"/>
-
-    <menuitem id="national_incoming_picking_menu" name="National arrivals"
-            parent="purchase.menu_purchase_control" action="action_open_national_arrivals"/>
 
 </odoo>
