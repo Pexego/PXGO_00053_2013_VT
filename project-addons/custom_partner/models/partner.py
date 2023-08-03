@@ -968,6 +968,7 @@ class ResPartnerCategory(models.Model):
     @api.multi
     def write(self, vals):
         if vals.get('color_selection'):
+
             vals['color'] = vals.get('color_selection')
 
             parent = self.env['res.partner.category'].search([('name', '=', self.name)])
