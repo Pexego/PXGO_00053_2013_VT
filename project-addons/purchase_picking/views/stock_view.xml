@@ -110,8 +110,8 @@
         <field name="view_id" ref="vpicktree_add_shipping_id"/>
         <field name="domain" eval="['&amp;', ('picking_type_code', '=', 'incoming'),
                                     ('partner_id.property_account_position_id', 'in', (
-                                        ref('purchase_picking.national_fiscal_position'),
-                                        ref('purchase_picking.communitarian_fiscal_position')
+                                        ref('l10n_es.1_fp_nacional'),
+                                        ref('l10n_es.1_fp_intra')
                                     ))]"/>
         <field name="context">{'search_default_last7days':1}</field>
         <field name="search_view_id" ref="search_last_7_days_picking"/>
