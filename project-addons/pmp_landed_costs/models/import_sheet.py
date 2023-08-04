@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class ImportSheet(models.Model):
@@ -53,33 +53,30 @@ class ImportSheet(models.Model):
 
     invoice_ids = fields.Many2many('account.invoice', string='Invoices', domain=[('type', '=', 'in_invoice')])
 
-    state = fields.Selection([
+    sheet_state = fields.Selection([
         ('pending', 'Pending'),
         ('in_process', 'In process'),
         ('done', 'Done')],
-        string='Status', default='pending', compute='_compute_state')
+        string='Status', default='pending')
 
-    def _compute_state(self):
-
+    @api.onchange('invoice_ids', 'landed_cost_ids')
+    def onchange_state(self):
         import wdb
         wdb.set_trace()
 
-        for sheet in self:
-            if sheet.landed_cost_ids:
-                if sheet.landed_cost_ids[0].state == 'draft':
-                    sheet.state = 'in_process'
-                elif sheet.landed_cost_ids[0].state == 'done':
-                    sheet.state = 'done'
-            else:
-                sheet.state = 'pending'''
+        val = len(self.invoice_ids) - 1
+
+        if self.landed_cost_ids.state == 'done' and self.invoice_ids[val].state in ['paid', 'open']:
+            self.sheet_state = 'done'
+        elif self.invoice_ids or self.landed_cost_ids:
+            self.sheet_state = 'in_process'
+        else:
+            self.sheet_state = 'pending'
 
     def _get_landed_cost_count(self):
         """
         Calculates count of landed costs that are associated to this import sheet
         """
-        import wdb
-        wdb.set_trace()
-
         for sheet in self:
             count = self.env['stock.landed.cost'].search_count([('import_sheet_id', '=', sheet.id)])
             sheet.landed_cost_count = count

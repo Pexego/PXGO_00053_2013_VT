@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="Import Sheet">
                 <header>
-                    <field name="state" widget="statusbar" statusbar_visible="pending,in_process,done" clickable="True"/>
+                    <field name="sheet_state" widget="statusbar" statusbar_visible="pending,in_process,done" clickable="True"/>
                 </header>
                 <sheet>
                     <group col="2" string="General">
@@ -78,7 +78,6 @@
                 <field name="fee"/>
                 <field name="inspection"/>
                 <field name="arrival_cost"/>
-                <field name="state"/>
             </tree>
         </field>
     </record>
