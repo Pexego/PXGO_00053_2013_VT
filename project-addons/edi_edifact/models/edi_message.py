@@ -71,7 +71,7 @@ class EdifMenssage(models.Model):
 
     def NAD(self, typ, code, **kwargs):
         msg = "NAD+{}+{}::9".format(typ, code)
-        if typ in ('SCO', 'BCO'):  # Razón social del Proveedor/Cliente
+        if typ in ('SCO', 'BCO', 'PR'):  # Razón social del Proveedor/Cliente
             name = kwargs.get('name', None)
             msg += "++{}".format(name[:35])
             msg += ":{}".format(name[35:])
@@ -85,7 +85,21 @@ class EdifMenssage(models.Model):
             msg += "+{}".format(city)
             pc = kwargs.get('pc', None)
             msg += "++{}".format(pc)
-            msg += "+ES"
+            if typ != 'PR':
+                msg += "+ES"
+        return msg + "'\n"
+
+    def NAD_LM_IV(self, typ, code, **kwargs):
+        msg = "NAD+{}+{}::9".format(typ, code)
+        name = kwargs.get('name', None)
+        msg += "++{}".format(name[:35])
+        msg += ":{}".format(name[35:])
+        street = kwargs.get('street', None)
+        msg += "+{}".format(street)
+        city = kwargs.get('city', None)
+        msg += "+{}".format(city)
+        pc = kwargs.get('pc', None)
+        msg += "++{}".format(pc)
         return msg + "'\n"
 
     def CUX(self):
@@ -152,6 +166,8 @@ class EdifMenssage(models.Model):
         length = 35
         street_partner = invoice.partner_id.commercial_partner_id.street
         street_partner_cut = [street_partner[i:i+length] for i in range(0, len(street_partner), length)]
+        street_partner_inv = invoice.partner_final_invoicing_id.street or invoice.partner_shipping_id.street
+        street_partner_inv_cut = [street_partner_inv[i:i + length] for i in range(0, len(street_partner_inv), length)]
 
         msg += self.UNH(msg_ref, 'INVOIC')
         if invoice.type == 'out_invoice':
@@ -173,14 +189,34 @@ class EdifMenssage(models.Model):
                         pc=invoice.company_id.zip)
         msg += self.RFF('VA', self.env.user.company_id.vat)
         # msg += self.NAD('II') # Mismo que SCO
-        msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
+        if invoice.partner_id.commercial_partner_id.ean == '8424019100001':  # LM
+            msg += self.NAD_LM_IV('IV', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean,
+                            name=invoice.partner_final_invoicing_id.name or invoice.partner_shipping_id.name,
+                            street=':'.join(street_partner_inv_cut),
+                            city=invoice.partner_final_invoicing_id.city or invoice.partner_shipping_id.city,
+                            pc=invoice.partner_final_invoicing_id.zip or invoice.partner_shipping_id.zip)
+        else:
+            msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
         msg += self.NAD('DP', invoice.partner_shipping_id.ean)
         msg += self.NAD('BY', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean)
-        msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
-                        name=invoice.partner_id.commercial_partner_id.name,
-                        street=':'.join(street_partner_cut),
-                        city=invoice.partner_id.commercial_partner_id.city,
-                        pc=invoice.partner_id.commercial_partner_id.zip)
+        if invoice.partner_id.commercial_partner_id.ean == '8424019100001':  # LM
+            msg += self.NAD('BCO', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean,
+                            name=invoice.partner_final_invoicing_id.name or invoice.partner_shipping_id.name,
+                            street=':'.join(street_partner_inv_cut),
+                            city=invoice.partner_final_invoicing_id.city or invoice.partner_shipping_id.city,
+                            pc=invoice.partner_final_invoicing_id.zip or invoice.partner_shipping_id.zip)
+        else:
+            msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
+                            name=invoice.partner_id.commercial_partner_id.name,
+                            street=':'.join(street_partner_cut),
+                            city=invoice.partner_id.commercial_partner_id.city,
+                            pc=invoice.partner_id.commercial_partner_id.zip)
+        if invoice.partner_id.commercial_partner_id.ean == '8424019100001':  # LM
+            msg += self.NAD('PR', invoice.partner_id.commercial_partner_id.ean,
+                            name=invoice.partner_id.commercial_partner_id.name,
+                            street=':'.join(street_partner_cut),
+                            city=invoice.partner_id.commercial_partner_id.city,
+                            pc=invoice.partner_id.commercial_partner_id.zip)
         msg += self.RFF('VA', invoice.partner_id.commercial_partner_id.vat)
 
         msg += self.CUX()
