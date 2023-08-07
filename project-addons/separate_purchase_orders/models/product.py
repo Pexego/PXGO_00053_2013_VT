@@ -35,12 +35,13 @@ class ProductProduct(models.Model):
             ('state', 'in', ['purchase', 'done', 'purchase_order'])
         ]
 
+        purchase_order_lines = self.env['purchase.order.line'].read_group(domain,
+                                                                          ['product_qty', 'product_id', 'state'],
+                                                                          ['product_id', 'state'], lazy=False)
         for product in self:
-            purchase_order_lines = self.env['purchase.order.line'].search_read(domain, ['product_qty', 'state'])
-            product.split_purchase_count = sum(item['product_qty'] for item in purchase_order_lines
-                                               if item['state'] == 'purchase_order')
-            product.purchase_count = sum(item['product_qty'] for item in purchase_order_lines
-                                         if item['state'] in ['purchase', 'done'])
+            if product.id == purchase_order_lines[0]['product_id'][0]:
+                product.split_purchase_count = purchase_order_lines[1]['product_qty']
+                product.purchase_count = purchase_order_lines[0]['product_qty']
 
     purchase_count = fields.Integer(compute='_purchase_count')
     split_purchase_count = fields.Integer(compute='_purchase_count')
