@@ -955,10 +955,6 @@ class ResPartnerCategory(models.Model):
 
     @api.model
     def create(self, vals):
-
-        import wdb
-        wdb.set_trace()
-
         if not vals['color_selection'] and vals['parent_id']:
             vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
         else:
@@ -970,14 +966,8 @@ class ResPartnerCategory(models.Model):
 
     @api.multi
     def write(self, vals):
-
-        import wdb
-        wdb.set_trace()
-
         if vals.get('color_selection'):
-
             vals['color'] = vals['color_selection']
-
             self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
 
         res = super(ResPartnerCategory, self).write(vals)
