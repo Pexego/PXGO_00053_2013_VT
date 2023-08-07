@@ -593,6 +593,8 @@ class PromotionsRulesActions(models.Model):
         brand_category_dict = eval(self.product_code)
         for line in order.order_line:
             product_brand = line.product_id.product_brand_id.code
+            if not product_brand:
+                continue
             categs = brand_category_dict.get(product_brand, False)
             if ((mode == 'include' and product_brand not in brand_category_dict) or (
                 mode == 'exclude' and product_brand in brand_category_dict)) and not categs:
@@ -616,7 +618,7 @@ class PromotionsRulesActions(models.Model):
         :return: True when finish
         """
         price_subtotal = self._get_subtotal_to_apply_points(order, mode)
-        if price_subtotal == 0:
+        if price_subtotal <= 0:
             return True
         self._apply_max_points(order, price_subtotal)
         return True

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="papeur_url" model="ir.config_parameter">
+        <field name="key">papeur.url</field>
+        <field name="value"></field>
+    </record>
+    <record id="papeur_auto_notify" model="ir.config_parameter">
+        <field name="key">papeur.auto.notify.array</field>
+        <field name="value"></field>
+    </record>
+</odoo>

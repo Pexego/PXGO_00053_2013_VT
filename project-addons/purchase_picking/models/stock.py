@@ -185,7 +185,7 @@ class StockPicking(models.Model):
     @api.model
     def create(self, vals):
         res = super().create(vals)
-        if not res.shipping_identifier and res.container_ids:
+        if res.container_ids:
             res.shipping_identifier = ''.join(res.container_ids.mapped('name'))
         return res
 
