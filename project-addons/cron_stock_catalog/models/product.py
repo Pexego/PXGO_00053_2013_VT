@@ -10,6 +10,8 @@ class ProductProduct(models.Model):
 
     reservation = fields.Float(string="Reservation")
 
+    confirmed_reservation = fields.Float(string="Confirmed Reservation")
+
     reservation_count = fields.Float(
         compute='_compute_reservation_count',
         string='# Sales')
