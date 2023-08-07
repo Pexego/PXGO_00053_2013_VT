@@ -955,28 +955,30 @@ class ResPartnerCategory(models.Model):
 
     @api.model
     def create(self, vals):
-        category = super(ResPartnerCategory, self).create(vals)
 
-        for etiquette in category:
-            if etiquette.parent_id and etiquette.color_selection is False:
-                etiquette.color = category.env['res.partner.category'].browse(etiquette.parent_id).id.color
-            else:
-                etiquette.color = etiquette.color_selection
+        import wdb
+        wdb.set_trace()
+
+        if not vals['color_selection'] and vals['parent_id']:
+            vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
+        else:
+            vals['color'] = vals['color_selection']
+
+        category = super(ResPartnerCategory, self).create(vals)
 
         return category
 
     @api.multi
     def write(self, vals):
+
+        import wdb
+        wdb.set_trace()
+
         if vals.get('color_selection'):
 
-            vals['color'] = vals.get('color_selection')
+            vals['color'] = vals['color_selection']
 
-            parent = self.env['res.partner.category'].search([('name', '=', self.name)])
-
-            child_etiquettes = self.env['res.partner.category'].search([('parent_id', '=', parent.id)])
-
-            for ch_etiquette in child_etiquettes.filtered(lambda l: l.parent_id and l.color_selection is False):
-                ch_etiquette.color = vals.get('color_selection')
+            self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
 
         res = super(ResPartnerCategory, self).write(vals)
 
