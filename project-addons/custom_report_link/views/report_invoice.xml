@@ -146,10 +146,10 @@
                                             <t t-if="print_hs_code">
                                                 <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                             </t>
-                                            <t t-if="l1.product_id.description_editable">
+                                            <t t-if="l1.product_id.description_editable or not l1.product_id">
                                                 <td style="font-size:11px"><span t-field="l1.name"/></td>
                                             </t>
-                                            <t t-if="not l1.product_id.description_editable">
+                                            <t t-if="l1.product_id and not l1.product_id.description_editable">
                                                 <td style="font-size:11px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                             </t>
                                             <t t-set="decimal" t-value="l1.quantity % 1"/>
