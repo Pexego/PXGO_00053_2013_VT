@@ -54,6 +54,8 @@ class KitchenCustomization(models.Model):
     scheduled_shipping_date = fields.Datetime('Scheduled shipping date', related='order_id.scheduled_date',
                                               readonly=True, store=True)
 
+    old_state = fields.Text(string='Old state')
+
     def _compute_products_format(self):
         for customization in self:
             customization.products_qty_format = ""
@@ -161,6 +163,7 @@ class KitchenCustomization(models.Model):
                     context.update({'picking_message': True})
                 template = self.env.ref('kitchen.send_mail_cancel_customization')
                 template.with_context(context).send_mail(customization.id)
+            customization.old_state = customization.state
             customization.state = 'cancel'
             # If we have previews, delete the unselected photos
             customization.delete_unselected_photos()
@@ -339,6 +342,9 @@ class KitchenCustomization(models.Model):
                 for preview in line.preview_ids.filtered(lambda p, l=line: l.preview_selector != p):
                     preview.photo = False
 
+    def action_recover_request(self):
+        for customization in self:
+            customization.state = customization.old_state
 
 class KitchenCustomizationLine(models.Model):
     _name = 'kitchen.customization.line'
