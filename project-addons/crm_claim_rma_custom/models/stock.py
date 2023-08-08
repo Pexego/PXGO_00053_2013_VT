@@ -23,7 +23,6 @@ from odoo import models, fields, api
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    internal_notes = fields.Text("Internal Notes", copy=False)
     odoo_management = fields.Boolean("Odoo management", readonly=True,
                                      copy=False)
     not_sync = fields.Boolean("Not sync", help="This picking not will be "

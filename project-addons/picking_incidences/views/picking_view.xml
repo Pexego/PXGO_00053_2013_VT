@@ -20,6 +20,9 @@
                 <field name="with_incidences"/>
                 <field name="block_picking" readonly="1"/>
             </field>
+            <field name="move_type" position="after">
+                <field name="add_notes" attrs="{'invisible': [('move_type', 'not in', ['direct'])]}"/>
+            </field>
             <button name="do_unreserve" position="attributes">
                 <attribute name="attrs">{'invisible': [('block_picking', '=', True)]}</attribute>
             </button>
@@ -34,6 +37,9 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
+                 <xpath expr="//field[@name='move_lines']/tree" position="attributes">
+                     <attribute name="delete">false</attribute>
+                 </xpath>
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='product_id']" position="after">
                     <field name="location_id"/>
                     <field name="location_dest_id"/>

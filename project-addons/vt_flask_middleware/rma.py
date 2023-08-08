@@ -1,5 +1,5 @@
 from peewee import CharField, FloatField, IntegerField, ForeignKeyField, \
-    DateTimeField
+    DateTimeField, BooleanField
 from app import app
 from database import SyncModel
 from customer import Customer
@@ -65,6 +65,7 @@ class RmaProduct(SyncModel):
     status_id = ForeignKeyField(RmaStatus, on_delete='CASCADE', null=True)
     prodlot_id = CharField(max_length=45)
     invoice_id = CharField(max_length=45)
+    pending_shipment_stock = BooleanField(default=False)
 
     MOD_NAME = 'rmaproduct'
 
