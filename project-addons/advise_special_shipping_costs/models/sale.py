@@ -46,15 +46,19 @@ class SaleOrder(models.Model):
                 vals['service_id'] = order.partner_id.service_id.id
         return super()._write(vals)
 
+
     @api.multi
     def write(self, vals):
         res = super().write(vals)
         for order in self:
             if 'order_line' in vals:
-                order.is_special_shipping_costs = bool(
-                    order.delivery_type == 'shipping' and order.order_line
-                    and order.order_line.filtered(lambda l: l.product_id.special_shipping_costs)
-                )
+                order._compute_is_special_shipping_costs()
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        res._compute_is_special_shipping_costs()
         return res
 
 
