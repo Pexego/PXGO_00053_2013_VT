@@ -56,7 +56,6 @@ class AmazonSaleOrder(models.Model):
     invoice_id = fields.Many2one(
         'account.invoice',
         compute='_compute_invoice',
-        required=True,
         string="Invoice number"
     )
     invoice_state = fields.Selection(
@@ -69,7 +68,6 @@ class AmazonSaleOrder(models.Model):
             invoice = order.invoice_deposits.filtered(lambda l: l.type == 'out_invoice' and l.state != 'cancel')
             if invoice:
                 order.invoice_id = invoice[0]
-                order.invoice_state = invoice[0].state
 
     def _compute_count(self):
         for order in self:
