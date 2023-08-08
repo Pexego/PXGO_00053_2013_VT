@@ -12,14 +12,6 @@ class ProductProduct(models.Model):
 
     confirmed_reservation = fields.Float(string="Confirmed Reservation")
 
-    reservation_count = fields.Float(
-        compute='_compute_reservation_count',
-        string='# Sales')
-
-    outgoing_picking_reserved_qty = fields.Float(
-        compute='_get_outgoing_picking_qty', readonly=True,
-        digits=dp.get_precision('Product Unit of Measure'))
-
     @api.multi
     def _get_outgoing_picking_qty(self):
         for product in self:
@@ -39,10 +31,6 @@ class ProductProduct(models.Model):
             product.reservation_count = sum(reservations.mapped('product_qty'))
 
     def cron_stock_catalog(self):
-
-        import wdb
-        wdb.set_trace()
-
         """
             This method build a XLS File with information of products and email purchasing team
         """
