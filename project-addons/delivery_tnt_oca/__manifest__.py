@@ -10,7 +10,6 @@
     "license": "AGPL-3",
     "depends": [
         "delivery",
-        "delivery_package_number",
         "delivery_state",
         "product_dimension",
         "base_sparse_field",
