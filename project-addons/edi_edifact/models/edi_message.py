@@ -279,23 +279,25 @@ class EdifMenssage(models.Model):
         return msg
 
     def parse_order(self, order_file):
-        parse_errors = ""
-        order_vals = {
-            'state': 'reserve',
-            'sale_notes': '',
-            'order_line': []
-        }
-        line = {}
         ref_message = ""
-        total_net = 0.0
-        client_ref = ""
         for long_segment in order_file.split("'"):
             segment = re.split("\+|:", long_segment.replace("\n", ""))
             if segment[0] == 'UNH':
-                ref_message = segment[1]
                 if segment[2] != 'ORDERS':
                     parse_errors += _('The message does not contain an order')
                     break
+                else:
+                    # Beginning of the order, reset all the variables
+                    ref_message = segment[1]
+                    parse_errors = ""
+                    order_vals = {
+                        'state': 'reserve',
+                        'sale_notes': '',
+                        'order_line': []
+                    }
+                    line = {}
+                    total_net = 0.0
+                    client_ref = ""
             elif segment[0] == 'BGM':
                 if segment[1] == '220':
                     order_vals['client_order_ref'] = segment[2]
@@ -377,41 +379,42 @@ class EdifMenssage(models.Model):
                 if ref_message != segment[2]:
                     parse_errors += _('Message identifier does not match')
                     break
+                else:
+                    # End of order, then create it
+                    order_vals['no_promos'] = True
+                    if not parse_errors:
+                        shipping_prod = self.env['product.product'].search([('default_code', '=', 'GASTOS DE ENVIO')])
+                        sale = self.env['sale.order'].create(order_vals)
+                        if sale:
+                            shipping_vals = {
+                                'product_id': shipping_prod.id,
+                                'name': shipping_prod.default_code,
+                                'product_uom_qty': 1,
+                                'product_uom': 1,
+                                'price_unit': 7,
+                                'discount': 100,
+                                'order_id': sale.id
+                            }
+                            self.env['sale.order.line'].create(shipping_vals)
+                            sale.onchange_partner_id()
+                            sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
+                            sale.apply_commercial_rules()
 
-        order_vals['no_promos'] = True
-        if not parse_errors:
-            shipping_prod = self.env['product.product'].search([('default_code', '=', 'GASTOS DE ENVIO')])
-            sale = self.env['sale.order'].create(order_vals)
-            if sale:
-                shipping_vals = {
-                    'product_id': shipping_prod.id,
-                    'name': shipping_prod.default_code,
-                    'product_uom_qty': 1,
-                    'product_uom': 1,
-                    'price_unit': 7,
-                    'discount': 100,
-                    'order_id': sale.id
-                }
-                self.env['sale.order.line'].create(shipping_vals)
-                sale.onchange_partner_id()
-                sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
-                sale.apply_commercial_rules()
+                            # Add the read data to the attachment
 
-                # Add the read data to the attachment
-
-                fileb = io.BytesIO()
-                fileb.write(order_file.encode('latin-1'))
-                fileb.seek(0)
-                filename = "{}-{}.EDI".format(sale.name, client_ref)
-                ctx = {}
-                self.env['ir.attachment'].with_context(ctx).create({
-                    'name': filename,
-                    'res_id': sale.id,
-                    'res_model': str(sale._name),
-                    'datas': base64.b64encode(fileb.getvalue()),
-                    'datas_fname': filename,
-                    'type': 'binary',
-                })
+                            fileb = io.BytesIO()
+                            fileb.write(order_file.encode('latin-1'))
+                            fileb.seek(0)
+                            filename = "{}-{}.EDI".format(sale.name, client_ref)
+                            ctx = {}
+                            self.env['ir.attachment'].with_context(ctx).create({
+                                'name': filename,
+                                'res_id': sale.id,
+                                'res_model': str(sale._name),
+                                'datas': base64.b64encode(fileb.getvalue()),
+                                'datas_fname': filename,
+                                'type': 'binary',
+                            })
 
         return parse_errors
 
