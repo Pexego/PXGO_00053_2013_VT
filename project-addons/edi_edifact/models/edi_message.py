@@ -415,6 +415,7 @@ class EdifMenssage(models.Model):
                                 'datas_fname': filename,
                                 'type': 'binary',
                             })
+                            fileb.close()
 
         return parse_errors
 
