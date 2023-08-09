@@ -3,14 +3,14 @@
 {
     "name": "Delivery Correos Express",
     "summary": "Delivery Carrier implementation for Correos Express using their API",
-    "version": "14.0.1.0.1",
+    "version": "11.0.1.0.1",
     "category": "Stock",
     "website": "https://github.com/OCA/delivery-carrier",
     "author": "Studio73, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["delivery_package_number", "delivery_state"],
+    "depends": ["delivery", "delivery_state"],
     "external_dependencies": {"python": ["unidecode"]},
     "data": ["views/delivery_carrier_view.xml", "views/stock_picking_views.xml"],
 }
