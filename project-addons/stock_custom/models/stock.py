@@ -309,6 +309,15 @@ class StockLandedCost(models.Model):
 
     def button_validate(self):
         res = super().button_validate()
+
+        sheet = self.env['import.sheet'].browse(self.import_sheet_id.id)
+        position = len(sheet.invoice_ids) - 1
+
+        if sheet.invoice_ids and sheet.invoice_ids[position].state in ['paid', 'open']:
+            sheet.sheet_state = 'done'
+        else:
+            sheet.sheet_state = 'in_process'
+
         valuation_lines = self.valuation_adjustment_lines.\
             filtered(lambda line: line.move_id)
         valuation_lines.mapped('move_id.product_id.product_tmpl_id').\

@@ -343,17 +343,8 @@ class LandedCostCreator(models.TransientModel):
         Creates landed cost associated to import_sheet_id.
         This landed cost has two cost lines.
         """
-
-        import wdb
-        wdb.set_trace()
-
-        sheet = self.env['import.sheet'].search([('id', '=', self.import_sheet_id.id)])
-        val = len(self.invoice_ids)-1
-
-        if sheet.landed_cost_ids.state == 'done' and sheet.invoice_ids[val].state in ['paid', 'open']:
-            sheet.sheet_state = 'done'
-        else:
-            sheet.sheet_state = 'in_process'
+        sheet = self.env['import.sheet'].browse(self.import_sheet_id.id)
+        sheet.sheet_state = 'in_process'
 
         landed_cost = self.env['stock.landed.cost'].create({
             'date': datetime.date.today(),

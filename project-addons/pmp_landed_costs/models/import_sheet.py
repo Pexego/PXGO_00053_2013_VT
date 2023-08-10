@@ -53,25 +53,22 @@ class ImportSheet(models.Model):
 
     invoice_ids = fields.Many2many('account.invoice', string='Invoices', domain=[('type', '=', 'in_invoice')])
 
-    sheet_state = fields.Selection([
-        ('pending', 'Pending'),
-        ('in_process', 'In process'),
-        ('done', 'Done')],
-        string='Status', default='pending')
+    sheet_state = fields.Selection([('pending', 'Pending'), ('in_process', 'In process'), ('done', 'Done')],
+                                   string='Status', default='pending')
 
     @api.onchange('invoice_ids', 'landed_cost_ids')
     def onchange_state(self):
-        import wdb
-        wdb.set_trace()
+        """
+        position field is used to locate the last invoice included
+        """
+        position = len(self.invoice_ids) - 1
 
-        val = len(self.invoice_ids) - 1
-
-        if self.landed_cost_ids.state == 'done' and self.invoice_ids[val].state in ['paid', 'open']:
-            self.sheet_state = 'done'
-        elif self.invoice_ids or self.landed_cost_ids:
-            self.sheet_state = 'in_process'
-        else:
+        if self.landed_cost_ids.state not in ('draft', 'done') and (not self.invoice_ids or self.invoice_ids[position].state not in ['draft', 'paid', 'open']):
             self.sheet_state = 'pending'
+        elif self.landed_cost_ids.state == 'done' and self.invoice_ids[position].state in ['paid', 'open']:
+            self.sheet_state = 'done'
+        else:
+            self.sheet_state = 'in_process'
 
     def _get_landed_cost_count(self):
         """
