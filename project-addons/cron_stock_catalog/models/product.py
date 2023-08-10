@@ -10,24 +10,6 @@ class ProductProduct(models.Model):
 
     confirmed_reservation = fields.Float(string="Confirmed Reservation")
 
-    @api.multi
-    def _get_outgoing_picking_qty(self):
-        for product in self:
-            domain = [('product_id', 'in', product.product_variant_ids.ids),
-                      ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
-                      ('picking_id', '!=', False),
-                      ('location_id', '=', self.env.ref('stock.stock_location_stock').id)]
-            product.outgoing_picking_reserved_qty = sum(
-                item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain, ['product_uom_qty']))
-    @api.multi
-    def _compute_reservation_count(self):
-        for product in self:
-            domain = [('product_id', '=', product.id),
-                      ('state', 'in', ['draft', 'confirmed', 'assigned',
-                                       'partially_available'])]
-            reservations = self.env['stock.reservation'].search(domain)
-            product.reservation_count = sum(reservations.mapped('product_qty'))
-
     def cron_stock_catalog(self):
         """
             This method build a XLS File with information of products and email purchasing team
