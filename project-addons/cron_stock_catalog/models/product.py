@@ -2,8 +2,6 @@ from odoo import api, fields, models, _, exceptions, tools
 import base64
 from datetime import datetime, timedelta
 import xlsxwriter
-import odoo.addons.decimal_precision as dp
-
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
