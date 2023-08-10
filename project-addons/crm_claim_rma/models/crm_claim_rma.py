@@ -293,6 +293,8 @@ class ClaimLine(models.Model):
 
     internal_description = fields.Text(string='Internal Description')
 
+    pending_shipment_stock = fields.Boolean(string='Pending shipment due to lack of stock')
+
     @api.onchange('product_id')
     def _get_default_supplier(self):
         if self.product_id and len(self.product_id.seller_ids):

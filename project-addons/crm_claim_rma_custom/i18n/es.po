@@ -273,6 +273,7 @@ msgstr "Gestionado en Odoo"
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_res_partner
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_pending_wizard_line_partner_id
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_lines_claim_invoice_line_qty_tree_search_view
 msgid "Partner"
 msgstr "Empresa"
 
@@ -733,6 +734,7 @@ msgstr "Fecha de Creación"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_product_incidence_product_id
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_lines_claim_invoice_line_qty_tree_search_view
 msgid "Product"
 msgstr "Producto"
 
@@ -757,3 +759,38 @@ msgstr "<ul><li> Responsable: %s</il><li> Fecha Recepción Final: %s <b>&rarr;</
 #, python-format
 msgid "<ul><li> Officer: %s</il><li> Received Date: %s <b>&rarr;</b> %s</il></ul>"
 msgstr "<ul><li> Responsable: %s</il><li> Fecha Recepción: %s <b>&rarr;</b> %s</il></ul>"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Línea de factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_open_partner_invoice_lines
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_lines_claim_invoice_line_qty_tree_search_view
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_partner_form_add_invoice_lines_widget
+msgid "Invoice Lines"
+msgstr "Líneas de factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_claim_invoice_line_qty
+#: model:ir.ui.view,arch_db:invoice_lines_claim_invoice_line_qty_tree
+msgid "Claim Invoice Line Qty"
+msgstr "Cantidad usada en RMA"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_type
+#: model:ir.ui.view,arch_db:invoice_lines_claim_invoice_line_qty_tree_search_view
+msgid "Type"
+msgstr "Tipo de Factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:invoice_lines_claim_invoice_line_qty_tree_search_view
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
+msgid "Shipping pending for lack of stock"
+msgstr "Pendiente de envío por falta de stock"

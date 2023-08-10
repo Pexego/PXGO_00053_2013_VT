@@ -636,3 +636,8 @@ msgstr "Questa nota è per le osservazioni sul prodotto."
 #: model:ir.model.fields,help:stock_custom.field_product_template_observations
 msgid "Aditional notes for the product."
 msgstr "Note aggiuntive per il prodotto."
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_last_landed_cost_date
+msgid "Last LC date"
+msgstr "Ultimo giorno LC"

@@ -55,3 +55,9 @@ msgstr "Info de envío"
 #: model:ir.model.fields,field_description:dropship_italia_it.field_sale_order_transporter_ds_id
 msgid "Transporter"
 msgstr "Transportista"
+
+#. module: dropship_italia_it
+#: code:addons/dropship_italia_it/models/sale.py:76
+#, python-format
+msgid "Error! A line cannot be dropship and deposit at the same time"
+msgstr "Error! Una linea no puede ser dropship y depósito a la vez"

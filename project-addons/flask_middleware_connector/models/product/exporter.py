@@ -40,6 +40,7 @@ class ProductProductExporter(Component):
             'state': binding.state,
             'sale_in_groups_of': binding.sale_in_groups_of,
             'replacement_id': binding.replacement_id.id,
+            'final_replacement_id': binding.final_replacement_id.id,
             'date_next_incoming': binding.date_next_incoming if binding.date_next_incoming else (
                     datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S"),
             'weight': binding.weight,
@@ -48,6 +49,7 @@ class ProductProductExporter(Component):
             'real_stock': binding.qty_available,
             'special_shipping_costs': binding.special_shipping_costs,
             "tag_ids": f'{binding.tag_ids.ids or ""}'
+            'equivalent_products':  str(binding.equivalent_product_ids.mapped("product_name"))
         }
         if binding.show_stock_outside:
             stock_qty = eval(

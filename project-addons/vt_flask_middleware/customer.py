@@ -61,6 +61,7 @@ class Customer(SyncModel):
     csv_connector_access = BooleanField(default=False)
     brand_pricelist_ids = CharField(null=True)
     tag_ids = CharField(null=True)
+    email_sat = CharField(max_length=70, null=True)
 
     MOD_NAME = 'customer'
 

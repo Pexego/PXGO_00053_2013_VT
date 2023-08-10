@@ -541,6 +541,9 @@ class AmazonSettlementLine(models.Model):
                              copy=False,
                              index=True, track_visibility='onchange', default='read')
     refund_invoice_id = fields.Many2one('account.invoice')
+    refund_amount_untaxed = fields.Monetary(related="refund_invoice_id.amount_untaxed")
+    refund_amount_total = fields.Monetary(related="refund_invoice_id.amount_total")
+    refund_state = fields.Selection(related="refund_invoice_id.state")
     error = fields.Char()
     destination_country_id = fields.Many2one('res.country')
     move_id = fields.Many2one('account.move')
@@ -709,11 +712,12 @@ class AmazonSettlementLine(models.Model):
                 lines_commit = self.env['amazon.settlement.line']
 
     @api.multi
-    def check_other_settlement(self, settlement_id):
+    def check_other_settlement(self, settlement):
         amazon_max_difference_allowed = float(
             self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
         partner_lines ={}
         partner_amount= {}
+        partner_difference = {}
         for line in self.filtered(lambda l: l.type == 'Order'):
             equal_lines = self.env['amazon.settlement.line'].search(
                 [('amazon_order_name', '=', line.amazon_order_name), ('settlement_id', '!=', line.settlement_id.id),
@@ -728,8 +732,11 @@ class AmazonSettlementLine(models.Model):
                     line.settlement_id.currency_id)
                 positive_events = (abs(line.amount_items_positive_events) + abs(
                     sum(equal_lines.mapped('amount_items_positive_events')))) / rate
+                difference = abs(theoretical_amount) - positive_events
+                allow_difference = difference <= amazon_max_difference_allowed
+                different_currency = line.settlement_id.currency_id != line.settlement_id.company_currency_id
                 ls = equal_lines + line
-                if abs(theoretical_amount) - positive_events <= amazon_max_difference_allowed:
+                if allow_difference or different_currency:
                     ls.write({'error': _(
                         'Reconciled with more lines of the same order in other settlements %s') % ls.mapped(
                         'settlement_id.name')})
@@ -738,24 +745,27 @@ class AmazonSettlementLine(models.Model):
                     if partner_lines.get(invoice_partner, False):
                         partner_lines[invoice_partner] |= line
                         partner_amount[invoice_partner] += theoretical_amount
+                        if different_currency and difference != 0:
+                            partner_difference[invoice_partner] += difference
                     else:
                         partner_lines[invoice_partner] = line
                         partner_amount[invoice_partner] = theoretical_amount
+                        if different_currency and difference != 0:
+                            partner_difference[invoice_partner] = difference
                 else:
                     if theoretical_amount > 0:
                         ls.write({'error': _(
                             'Total amount != Theoretical total amount (%f-%f). (There are more lines in settlement %s)\n') % (
                                                abs(theoretical_amount), positive_events,
                                                ls.mapped('settlement_id.name'))})
-                    theoretical_amount = 0
                 equal_lines.write({'state': "reconciled"})
         for p, lines_group_by_partner in partner_lines.items():
             total_amount = partner_amount.get(p)
             if total_amount > 0:
-                move = settlement_id._create_move(total_amount, p)
+                total_difference = partner_difference.get(p, False)
+                move = settlement._create_move(total_amount, total_difference, p)
                 lines_group_by_partner.write({'move_id': move.id})
                 lines_group_by_partner.reconcile_order_lines(move)
-
 
 class AmazonSettlementItem(models.Model):
     _name = 'amazon.settlement.item'

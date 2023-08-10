@@ -28,6 +28,7 @@ class ResPartnerExporter(Component):
             binding.property_product_pricelist.name or "",
             "state": binding.state_id and binding.state_id.name or "",
             "email": binding.email_web or "",
+            "email_sat": binding.email3 or "",
             "prospective": binding.prospective,
             "lang": binding.lang and binding.lang.split("_")[0] or 'es',
             "phone1": binding.phone,

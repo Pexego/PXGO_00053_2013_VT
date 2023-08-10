@@ -79,6 +79,7 @@ class Product(SyncModel):
     state = CharField(max_length=50)
     sale_in_groups_of = FloatField(default=1.0)
     replacement_id = IntegerField()
+    final_replacement_id = IntegerField()
     date_next_incoming = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     weight = FloatField(default=0.0)
     volume = FloatField(default=0.0)
@@ -87,9 +88,11 @@ class Product(SyncModel):
     stock_available_es = FloatField(default=0.0)
     special_shipping_costs = BooleanField()
     tag_ids = CharField(null=True)
+    equivalent_products = CharField(null=True)
 
     def __unicode__(self):
         return self.name
+
 
 class ProductTag(SyncModel):
 
