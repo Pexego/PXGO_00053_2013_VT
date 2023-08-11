@@ -763,8 +763,8 @@ msgstr "No hay previews para este cliente y producto %s"
 #. module: kitchen
 #: code:addons/kitchen/wizard/create_customization_wizard.py:137
 #, python-format
-msgid "There are no previews for this partner and these products:%s"
-msgstr "No hay previews para este cliente y producto/s:%s"
+msgid "There are no previews for this partner and these products: %s"
+msgstr "No hay previews para este cliente y producto/s: %s"
 
 #. module: kitchen
 #: model:ir.model.fields,field_description:kitchen.field_customization_wizard_errors
