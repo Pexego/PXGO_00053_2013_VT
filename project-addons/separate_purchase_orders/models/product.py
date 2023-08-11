@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-
+from collections import defaultdict
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -30,6 +30,7 @@ class ProductProduct(models.Model):
 
     @api.multi
     def _purchase_count(self):
+
         domain = [
             ('product_id', 'in', self.ids),
             ('state', 'in', ['purchase', 'done', 'purchase_order'])
@@ -38,10 +39,21 @@ class ProductProduct(models.Model):
         purchase_order_lines = self.env['purchase.order.line'].read_group(domain,
                                                                           ['product_qty', 'product_id', 'state'],
                                                                           ['product_id', 'state'], lazy=False)
-        for product in self:
-            if product.id == purchase_order_lines[0]['product_id'][0]:
-                product.split_purchase_count = purchase_order_lines[1]['product_qty']
-                product.purchase_count = purchase_order_lines[0]['product_qty']
+
+        if purchase_order_lines:
+            dicc_qty1 = defaultdict(int)
+            dicc_qty2 = defaultdict(int)
+
+            for purchase in purchase_order_lines:
+                product = purchase.get('product_id')[0]
+                if purchase.get('state') == 'purchase_order':
+                    dicc_qty1[product] += purchase.get('product_qty')
+                else:
+                    dicc_qty2[product] += purchase.get('product_qty')
+
+            for product in self:
+                product.split_purchase_count = dicc_qty1.get(product.id) or 0
+                product.purchase_count = dicc_qty2.get(product.id) or 0
 
     purchase_count = fields.Integer(compute='_purchase_count')
     split_purchase_count = fields.Integer(compute='_purchase_count')
