@@ -48,7 +48,7 @@ class ProductProductExporter(Component):
             'cost_price': binding.standard_price_2_inc,
             'real_stock': binding.qty_available,
             'special_shipping_costs': binding.special_shipping_costs,
-            "tag_ids": f'{binding.tag_ids.ids or ""}'
+            "tag_ids": f'{binding.tag_ids.ids or ""}',
             'equivalent_products':  str(binding.equivalent_product_ids.mapped("product_name"))
         }
         if binding.show_stock_outside:
