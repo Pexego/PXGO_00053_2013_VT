@@ -111,28 +111,11 @@ class MoveReserves(models.TransientModel):
             self.env['reserves.log'].create({'user_id': self.env.user.id,
                                              'product_id': self.product_id.id,
                                              'qty': self.qty,
-                                             'move': f'{self.reserves_origin_id.origin} -> {self.reserves_dest_id.origin}',
+                                             'move': f'{self.reserves_origin_id.get_move_order_name()} -> {self.reserves_dest_id.get_move_order_name()}',
                                              'date': datetime.now()})
 
         except:
             raise UserError(_('There is been an error, try again later'))
-
-
-class StockMove(models.Model):
-    _inherit = "stock.move"
-
-    @api.multi
-    def name_get(self):
-        result = []
-        for move in self.filtered(lambda m: m.picking_type_id.code == 'outgoing' and m.state not in ['done', 'draft', 'cancel']):
-            if move.picking_id:
-                name = f"{int(move.reserved_availability) or '_'} uds | {move.origin or '_'} | {move.picking_id.name or '_'} | {move.user_id.name or '_'}"
-            else:
-                name = f"{int(move.reserved_availability) or '_'} uds | {move.origin or move.sale_id.name or '_'} | {move.user_id.name or '_'}"
-            result.append((move.id, name))
-        res = super(StockMove, self.filtered(lambda m: m.picking_type_id.code != 'outgoing' or m.state in ['done', 'draft', 'cancel'])).name_get()
-        return result + res
-
 
 class ReservesLog(models.TransientModel):
     _name = "reserves.log"
