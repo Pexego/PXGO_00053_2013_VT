@@ -27,6 +27,15 @@ class SaleOrder(models.Model):
     invoice_type_id = fields.Many2one('res.partner.invoice.type', "Invoice type")
 
     @api.multi
+    def _prepare_invoice(self):
+        """ Force the date invoice """
+        inv_vals = super()._prepare_invoice()
+        force_time = self.env.context.get('force_time')
+        if force_time:
+            inv_vals['date_invoice'] = force_time
+        return inv_vals
+
+    @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
         super().onchange_partner_id()
