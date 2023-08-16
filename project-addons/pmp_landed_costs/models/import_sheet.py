@@ -54,21 +54,37 @@ class ImportSheet(models.Model):
     invoice_ids = fields.Many2many('account.invoice', string='Invoices', domain=[('type', '=', 'in_invoice')])
 
     sheet_state = fields.Selection([('pending', 'Pending'), ('in_process', 'In process'), ('done', 'Done')],
-                                   string='Status', default='pending')
+                                   string='Status', default='pending', compute="_get_sheet_state", store=True)
 
-    @api.onchange('invoice_ids', 'landed_cost_ids')
-    def onchange_state(self):
-        """
-        position field is used to locate the last invoice included
-        """
-        position = len(self.invoice_ids) - 1
+    @api.multi
+    @api.depends("landed_cost_ids.state", "invoice_ids.state")
+    def _get_sheet_state(self):
+        cost_state = self.calculate_sheet_state(self.landed_cost_ids)
+        invoice_state = self.calculate_sheet_state(self.invoice_ids)
 
-        if self.landed_cost_ids.state not in ('draft', 'done') and (not self.invoice_ids or self.invoice_ids[position].state not in ['draft', 'paid', 'open']):
-            self.sheet_state = 'pending'
-        elif self.landed_cost_ids.state == 'done' and self.invoice_ids[position].state in ['paid', 'open']:
+        if cost_state == 'done' and invoice_state == 'done':
             self.sheet_state = 'done'
-        else:
+        elif cost_state in ('done', 'in_process') or invoice_state in ('done', 'in_process'):
             self.sheet_state = 'in_process'
+        else:
+            self.sheet_state = 'pending'
+
+    @staticmethod
+    def calculate_sheet_state(sheet_list):
+        line_done = False
+        line_state = ''
+
+        for line in sheet_list:
+            if line.state == 'draft':
+                line_state = 'in_process'
+                break
+            elif line.state in ('cancel', 'history') and not line_done:
+                line_state = 'pending'
+            else:
+                line_state = 'done'
+                line_done = True
+
+        return line_state
 
     def _get_landed_cost_count(self):
         """
@@ -194,7 +210,7 @@ class ImportSheetXlsx(models.AbstractModel):
         row_dict = {
             'Import Sheets': [
                 (
-                    sheet.dua, sheet.container_id.name,  sheet.dua_date, sheet.treasury,
+                    sheet.dua, sheet.container_id.name, sheet.dua_date, sheet.treasury,
                     sheet.kgs, sheet.cbm, sheet.incoterm, sheet.destination_port,
                     sheet.forwarder_comercial, sheet.container_type, sheet.channel, sheet.freight,
                     sheet.fee, sheet.inspection, sheet.arrival_cost

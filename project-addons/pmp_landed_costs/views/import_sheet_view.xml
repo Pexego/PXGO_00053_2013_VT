@@ -34,7 +34,7 @@
                 <group>
                     <field name="landed_cost_count" invisible="1"/>
                     <button name="action_open_landed_cost_creator" string="Create landed costs"
-                            type="object" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
+                            type="object"/>
                 </group>
                 <field name="landed_cost_ids">
                     <tree create="false" editable="true">

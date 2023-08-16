@@ -343,9 +343,6 @@ class LandedCostCreator(models.TransientModel):
         Creates landed cost associated to import_sheet_id.
         This landed cost has two cost lines.
         """
-        sheet = self.env['import.sheet'].browse(self.import_sheet_id.id)
-        sheet.sheet_state = 'in_process'
-
         landed_cost = self.env['stock.landed.cost'].create({
             'date': datetime.date.today(),
             'picking_ids': [(6, 0, self.container_id.picking_ids.ids)],
