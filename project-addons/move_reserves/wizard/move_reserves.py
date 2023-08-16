@@ -67,6 +67,9 @@ class MoveReserves(models.TransientModel):
             raise UserError(_('You have selected more quantity than is in the destination reserve'))
         if self.qty == 0:
             raise UserError(_('You must select some quantity'))
+        if (self.reserves_origin_id.picking_id and self.reserves_origin_id.picking_id.block_picking)\
+            or (self.reserves_dest_id.picking_id and self.reserves_dest_id.picking_id.block_picking):
+            raise UserError(_('The origin or destination is already process by vstock'))
 
         # 1. create reserve intermediate
         dummy_reserve = self.create_dummy_reserve(self.product_id, self.qty)
