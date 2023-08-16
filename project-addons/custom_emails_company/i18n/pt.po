@@ -986,3 +986,42 @@ msgstr "Empresas"
 msgid "Quotation"
 msgstr "Quotation"
 
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "<span>Dear Sir or Madam:</span>"
+msgstr "<span>Muitos senhores nossos:</span>"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Amount"
+msgstr "Montante"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Date"
+msgstr "Data"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Invoice number"
+msgstr "N.º de fatura"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "The destination bank account is:"
+msgstr "A conta bancária de destino é:"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Total amount:"
+msgstr "Montante total:"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "We would like to inform you that we have issued a direct debit receipt with the due date(s) corresponding to the invoice(s) detailed below:"
+msgstr "Informamos que emitimos recibo de débito direto com a(s) data(s) de vencimento correspondente(s) à(s) fatura(s) abaixo discriminada(s):"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Yours sincerely."
+msgstr "Com os melhores cumprimentos."
