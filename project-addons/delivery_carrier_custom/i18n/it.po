@@ -274,11 +274,6 @@ msgid "Net weight"
 msgstr "Peso netto"
 
 #. module: delivery_carrier_custom
-#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_number_of_packages
-msgid "Number of Packages"
-msgstr "Numero all'ingrosso dei pacchi"
-
-#. module: delivery_carrier_custom
 #: model:ir.model,name:delivery_carrier_custom.model_stock_picking
 msgid "Picking List"
 msgstr "Bolla"
