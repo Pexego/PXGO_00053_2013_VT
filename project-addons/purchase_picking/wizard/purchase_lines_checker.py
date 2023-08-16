@@ -6,13 +6,13 @@ class ConfirmPurchaseConfirmLinesChecker(models.TransientModel):
 
     purchase_lines_with_no_price = fields.Many2many(
         'purchase.order.line',
-        string='Lines with no price',
-        domain=[('price_subtotal', '=', 0)]
+        'purchase_line_checker_purchase_lines_with_no_price_rel',
+        string='Lines with no price'
     )
     purchase_lines_with_price_variance = fields.Many2many(
         'purchase.order.line',
-        string='Product with high price variance',
-        domain=[('price_subtotal', '!=', 0)]
+        'purchase_line_checker_purchase_lines_with_variance_rel',
+        string='Product with high price variance'
     )
     purchase_id = fields.Many2one('purchase.order', 'Purchase Order')
 
