@@ -7,7 +7,8 @@
             <search string="Last 7 days">
                 <field name="scheduled_date"/>
                 <filter string="Last 7 days" name="last7days" domain="[
-                ('scheduled_date', '&gt;=', ((context_today()-datetime.timedelta(days=7)).strftime('%Y-%m-%d')))
+                ('scheduled_date', '&gt;=', ((context_today()-datetime.timedelta(days=7)).strftime('%Y-%m-%d'))),
+                ('state', 'not in', ('cancel', 'done'))
                 ]"/>
             </search>
         </field>
