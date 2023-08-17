@@ -146,7 +146,8 @@ class CreatePickingMove(models.TransientModel):
                     'scheduled_date': self.date_picking,
                     'location_id': type_id.default_location_src_id.id,
                     'location_dest_id': type_id.default_location_dest_id.id,
-                    'temp': True
+                    'temp': True,
+                    'shipping_identifier': value.mapped('purchase_line_id.order_id.partner_ref')[0]  # suposed to have at least '' or False in the list
                 }
                 if self.supplier_mode and key in partners:
                     picking_vals['partner_id'] = key

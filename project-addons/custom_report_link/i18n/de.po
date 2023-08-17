@@ -16,6 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_account_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Original invoice:"
+msgstr "Originalrechnung:"
+
+#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "+33434226281"
 msgstr "+33434226281"
@@ -1125,3 +1131,8 @@ msgid "<b style=\"color:#da1f2e;\">IMPORTANT NOTE:</b>\n"
 "                        <span>Included </span>"
 msgstr "<b style=\"color:#da1f2e;\">Wichtiger Hinweis:</b>\n"
 "                        <span>Inbegriffen </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "SHIPPING PENDING FOR LACK OF STOCK"
+msgstr "Ausstehende Lieferung aufgrund von fehlendem Lagerbestand"

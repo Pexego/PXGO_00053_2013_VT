@@ -1876,3 +1876,60 @@ msgstr "Diario"
 msgid "Journal of full invoices"
 msgstr "Diarío para facturas completas"
 
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:262
+#: code:addons/amazon_connector/models/amazon_sale_order.py:374
+#, python-format
+msgid "There is a error calling vat service: %s"
+msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_id
+msgid "Invoice number"
+msgstr "Número de factura"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_state
+msgid "Invoice state"
+msgstr "Estado de factura"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Paid"
+msgstr "Pagada"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Open"
+msgstr "Abierta"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "History"
+msgstr "Historial"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_refund_amount_untaxed
+msgid "Untaxed Amount"
+msgstr "Cantidad sin impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_refund_state
+msgid "Status"
+msgstr "Estado del abono"
+
+#. module: amazon_connector
+#: model:ir.ui.menu,name:amazon_connector.settlement_amazon_refund_menu
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_line_tree
+msgid "Refunds"
+msgstr "Abonos"
+
+#. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
+msgid "Amazon Refunds"
+msgstr "Abonos Amazon"

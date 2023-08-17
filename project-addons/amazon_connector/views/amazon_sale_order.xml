@@ -163,9 +163,13 @@
                 <field name="fulfillment"/>
                 <field name="sales_channel"/>
                 <field name="purchase_date"/>
+                <field name="amount_untaxed"/>
+                <field name="amount_total"/>
                 <field name="state"/>
                 <field name="warning_price"/>
                 <field name="message_error"/>
+                <field name="invoice_id"/>
+                <field name="invoice_state"/>
             </tree>
         </field>
     </record>

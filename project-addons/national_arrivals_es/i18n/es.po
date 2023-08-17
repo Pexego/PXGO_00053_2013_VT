@@ -1,0 +1,28 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * national_arrivals_es
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:24+0000\n"
+"PO-Revision-Date: 2014-12-17 16:24+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+
+#. module: national_arrivals_es
+#: model:ir.ui.menu,name:national_arrivals_es.national_incoming_picking_menu
+#: model:ir.actions.act_window,name:national_arrivals_es.action_open_national_arrivals
+msgid "National arrival"
+msgstr "Llegadas nacionales"
+
+#. module: national_arrivals_es
+#: model:ir.ui.view,arch_db:national_arrivals_es.search_last_7_days_picking
+msgid "Last 7 days"
+msgstr "Últimos 7 días"
