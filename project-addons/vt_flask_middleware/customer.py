@@ -60,6 +60,7 @@ class Customer(SyncModel):
     last_sale_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     csv_connector_access = BooleanField(default=False)
     brand_pricelist_ids = CharField(null=True)
+    tag_ids = CharField(null=True)
     email_sat = CharField(max_length=70, null=True)
 
     MOD_NAME = 'customer'
@@ -67,14 +68,4 @@ class Customer(SyncModel):
     def __unicode__(self):
         return self.fiscal_name
 
-
-class CustomerTagCustomerRel(SyncModel):
-
-    odoo_id = IntegerField()
-    customertag_id = ForeignKeyField(CustomerTag, on_delete='CASCADE')
-
-    MOD_NAME = 'customertagcustomerrel'
-
-    def __unicode__(self):
-        return "Customer id: %s - Tag id: %s" % (self.odoo_id, self.customertag_id)
 

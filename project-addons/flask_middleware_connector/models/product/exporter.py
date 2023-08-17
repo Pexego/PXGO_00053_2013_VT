@@ -48,6 +48,7 @@ class ProductProductExporter(Component):
             'cost_price': binding.standard_price_2_inc,
             'real_stock': binding.qty_available,
             'special_shipping_costs': binding.special_shipping_costs,
+            "tag_ids": f'{binding.tag_ids.ids or ""}',
             'equivalent_products':  str(binding.equivalent_product_ids.mapped("product_name"))
         }
         if binding.show_stock_outside:
@@ -67,18 +68,6 @@ class ProductProductExporter(Component):
     def delete(self, binding):
         self.backend_adapter.remove(binding.id)
         return True
-
-    def insert_product_tag_rel(self, product_record, tag_record):
-        vals = {
-            "odoo_id": product_record.id,
-            "producttag_id": tag_record.id,
-        }
-        return self.backend_adapter.insert_rel('producttagproductrel', vals)
-
-    def delete_product_tag_rel(self, partner_record_id):
-        return self.backend_adapter.remove_rel(
-            'producttagproductrel', partner_record_id)
-
 
 class ProductProductAdapter(Component):
     _name = 'product.general.adapter'
