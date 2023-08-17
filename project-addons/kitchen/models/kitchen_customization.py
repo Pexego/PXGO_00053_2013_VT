@@ -342,6 +342,7 @@ class KitchenCustomization(models.Model):
                 for preview in line.preview_ids.filtered(lambda p, l=line: l.preview_selector != p):
                     preview.photo = False
 
+    @api.multi
     def action_recover_request(self):
         for customization in self:
             customization.state = customization.old_state
