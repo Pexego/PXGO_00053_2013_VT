@@ -149,7 +149,6 @@ class StockPicking(models.Model):
     weight_net = fields.Float('Net Weight', compute="cal_weight", readonly=False,
                               digits=dp.get_precision('Stock Weight'))
     carrier_tracking_ref = fields.Char('Carrier Tracking Ref', copy=False)
-    number_of_packages = fields.Integer('Number of Packages', copy=False)
     weight_uom_id = fields.Many2one('product.uom', 'Unit of Measure',
                                     required=True, readonly="1",
                                     help="Unit of measurement for Weight",
