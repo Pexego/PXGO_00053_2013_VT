@@ -39,10 +39,11 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="national_arrivals_es.view_national_arrivals_tree"/>
         <field name="domain" eval="['&amp;', ('picking_type_code', '=', 'incoming'),
-                                    ('partner_id.property_account_position_id', 'in', (
+                                    '&amp;', ('partner_id.property_account_position_id', 'in', (
                                         ref('l10n_es.1_fp_nacional'),
                                         ref('l10n_es.1_fp_intra')
-                                    ))]"/>
+                                    )), '|', ('partner_id.supplier', '=', True),
+                                    ('location_id', '=', ref('stock.stock_location_suppliers'))]"/>
         <field name="context">{'search_default_last7days':1}</field>
         <field name="search_view_id" ref="search_last_7_days_picking"/>
     </record>
