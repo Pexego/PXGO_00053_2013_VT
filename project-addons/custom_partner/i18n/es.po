@@ -540,7 +540,7 @@ msgstr "Has desactivado recientemente este cliente de la web, se supone que eso 
 msgid "Confirmation Date"
 msgstr "Fecha de confirmación"
 
-#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form_extended
 msgid "Color selection"
 msgstr "Selección de color"
 

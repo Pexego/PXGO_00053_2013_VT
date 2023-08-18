@@ -29,7 +29,6 @@ from datetime import datetime, timedelta
 import dateutil.relativedelta,re
 from calendar import monthrange
 from odoo.addons.phone_validation.tools import phone_validation
-import sys
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
@@ -961,7 +960,6 @@ class ResPartnerCategory(models.Model):
             vals['color'] = vals['color_selection']
 
         category = super(ResPartnerCategory, self).create(vals)
-
         return category
 
     @api.multi
@@ -969,8 +967,10 @@ class ResPartnerCategory(models.Model):
         if vals.get('color_selection'):
             vals['color'] = vals['color_selection']
             self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
+        elif vals.get('parent_id') and not self.color_selection:
+            vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
+            self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
 
         res = super(ResPartnerCategory, self).write(vals)
-
         return res
 

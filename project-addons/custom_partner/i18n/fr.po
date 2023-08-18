@@ -39,7 +39,7 @@ msgstr ' "%s" (Email de comptabilité)'
 msgid "Forwarder"
 msgstr "Transitaire"
 
-#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form_extended
 msgid "Color selection"
 msgstr "Sélection de couleurs"
 

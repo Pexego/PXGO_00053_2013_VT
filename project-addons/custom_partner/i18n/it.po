@@ -519,7 +519,7 @@ msgstr "Hai recentemente disattivato il partner dal web, che dovrebbe essere qua
 msgid "Confirmation Date"
 msgstr "Data di conferma"
 
-#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form_extended
 msgid "Color selection"
 msgstr "Selezione del colore"
 
