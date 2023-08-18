@@ -959,8 +959,7 @@ class ResPartnerCategory(models.Model):
         else:
             vals['color'] = vals['color_selection']
 
-        category = super(ResPartnerCategory, self).create(vals)
-        return category
+        return super(ResPartnerCategory, self).create(vals)
 
     @api.multi
     def write(self, vals):
@@ -969,8 +968,5 @@ class ResPartnerCategory(models.Model):
             self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
         elif vals.get('parent_id') and not self.color_selection:
             vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
-            self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
 
-        res = super(ResPartnerCategory, self).write(vals)
-        return res
-
+        return super(ResPartnerCategory, self).write(vals)
