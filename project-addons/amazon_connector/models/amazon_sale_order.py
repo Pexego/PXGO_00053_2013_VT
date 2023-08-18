@@ -18,7 +18,7 @@ class AmazonSaleOrder(models.Model):
     order_line = fields.One2many('amazon.sale.order.line', 'order_id', string='Order Lines', readonly=True)
     deposits = fields.One2many("stock.deposit", 'amazon_order_id')
     sale_deposits = fields.One2many("sale.order", compute='_compute_count')
-    invoice_deposits = fields.One2many("account.invoice", compute='_compute_count')
+    invoice_deposits = fields.One2many("account.invoice", "amazon_order")
     deposits_count = fields.Integer(compute='_compute_count', default=0)
     sale_deposits_count = fields.Integer(compute='_compute_count', default=0)
     invoice_deposits_count = fields.Integer(compute='_compute_count', default=0)
@@ -53,14 +53,28 @@ class AmazonSaleOrder(models.Model):
     partner_id = fields.Many2one('res.partner')
     is_business_order = fields.Boolean()
 
+    invoice_id = fields.Many2one(
+        'account.invoice',
+        compute='_compute_invoice',
+        string="Invoice number"
+    )
+    invoice_state = fields.Selection(
+        related='invoice_id.state',
+        readonly=True,
+    )
+
+    def _compute_invoice(self):
+        for order in self:
+            invoice = order.invoice_deposits.filtered(lambda l: l.type == 'out_invoice' and l.state != 'cancel')
+            if invoice:
+                order.invoice_id = invoice[0]
+
     def _compute_count(self):
         for order in self:
-            if order.deposits:
-                order.deposits_count = len(order.deposits)
-                order.sale_deposits = order.deposits.mapped('sale_id')
-                order.invoice_deposits = self.env['account.invoice'].search([('amazon_order', '=', order.id)])
-                order.sale_deposits_count = len(order.sale_deposits)
-                order.invoice_deposits_count = len(order.invoice_deposits)
+            order.deposits_count = len(order.deposits)
+            order.sale_deposits = order.deposits.mapped('sale_id')
+            order.sale_deposits_count = len(order.sale_deposits)
+            order.invoice_deposits_count = len(order.invoice_deposits)
 
     def action_view_sales(self):
         action = self.env.ref('sale.action_quotations').read()[0]

@@ -78,11 +78,12 @@ class CustomizationLine(models.TransientModel):
                     }
             preview_types = product.customization_type_ids.filtered(lambda t: t.preview)
             if not line.order_id.skip_checking_previews and preview_types:
-                previews_url, headers = self.env['kitchen.customization']._get_previews_params()
-                req = post(previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                    line.order_id.partner_id.ref, product.default_code), headers=headers)
+                base_url, headers = self.env['kitchen.customization']._get_previews_params()
+                url = f'{base_url}GetCreatedPreview?idOdooClient={line.order_id.partner_id.ref}&reference={product.default_code}'
+                req = post(url, headers=headers)
                 if req.status_code != codes.ok or len(req.json()) == 0:
                     dicc['preview_error'] = True
+                    return dicc
                 previews = req.json()
                 new_previews = [x for x in previews if x.get('status') in ['Approved', 'OldPreview']]
                 if new_previews:
@@ -130,12 +131,10 @@ class CustomizationWizard(models.TransientModel):
         """ Calculate the products that do not have a preview in rubrika"""
         for wiz in self:
             errors = ''
-            products = ''
-            for line in wiz.customization_line:
-                if line.preview_error and line.type_ids.filtered(lambda t:t.preview):
-                    products += f' {line.original_product_id.default_code},'
+            products = ", ".join(line.original_product_id.default_code % line for line in wiz.customization_line if
+                                 line.preview_error and line.type_ids.filtered(lambda t: t.preview))
             if products:
-                errors += _("There are no previews for this partner and these products:%s") % products
+                errors += _("There are no previews for this partner and these products: %s") % products
             wiz.errors = errors
 
     errors = fields.Text(compute=_get_errors, store=True)
