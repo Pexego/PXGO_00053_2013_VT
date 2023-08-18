@@ -39,27 +39,29 @@ class ProductProduct(models.Model):
         purchase_order_lines = self.env['purchase.order.line'].read_group(domain,
                                                                           ['product_qty', 'product_id', 'state'],
                                                                           ['product_id', 'state'], lazy=False)
-        dict_split_purchase = {}
-        dict_purchase = defaultdict(int)
 
-        self._calculate_purchases(purchase_order_lines, dict_split_purchase, dict_purchase)
+        dict_split_purchase, dict_purchase = self._calculate_purchases(purchase_order_lines)
 
         for product in self:
             product.split_purchase_count = dict_split_purchase.get(product.id) or 0
             product.purchase_count = dict_purchase.get(product.id) or 0
 
     @api.multi
-    def _calculate_purchases(self, purchase_order_lines, dict_split_purchase, dict_purchase):
+    def _calculate_purchases(self, purchase_order_lines):
         """
         Assigns values to two dictionaries: One with values of the purchase count, and other
         of the split purchase count
         """
+        dict_split_purchase = {}
+        dict_purchase = defaultdict(int)
         for line in purchase_order_lines:
             product = line.get('product_id')[0]
             if line.get('state') == 'purchase_order':
                 dict_split_purchase[product] = line.get('product_qty')
             else:
                 dict_purchase[product] += line.get('product_qty')
+
+        return dict_split_purchase, dict_purchase
 
     purchase_count = fields.Integer(compute='_purchase_count')
     split_purchase_count = fields.Integer(compute='_purchase_count')
