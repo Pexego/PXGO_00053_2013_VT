@@ -69,8 +69,8 @@ class ImportSheet(models.Model):
         else:
             self.sheet_state = 'pending'
 
-    @staticmethod
-    def calculate_sheet_state(sheet_list):
+    @api.multi
+    def calculate_sheet_state(self, sheet_list):
         line_done = False
         line_state = ''
 
