@@ -6,10 +6,6 @@ import xlsxwriter
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    reservation = fields.Float(string="Reservation")
-
-    confirmed_reservation = fields.Float(string="Confirmed Reservation")
-
     def cron_stock_catalog(self):
         """
             This method build a XLS File with information of products and email purchasing team
@@ -28,14 +24,13 @@ class ProductProduct(models.Model):
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
                   "remaining_days_sale", "real_remaining_days_sale", "qty_available_input_loc", "average_margin",
                   "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state",
-                  "reservation", "confirmed_reservation"]
+                  "reservation_count", "outgoing_picking_reserved_qty"]
         rows = []
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
         products = self.env['product.product'].with_context({'lang': 'es_ES'}).search_read(domain,
-                                                                                           fields + ["seller_id",
-                                                                                                     "reservation_count", "outgoing_picking_reserved_qty"])
+                                                                                           fields + ["seller_id"])
 
         for product in products:
             product_fields = []
@@ -53,10 +48,10 @@ class ProductProduct(models.Model):
                     product_fields.append(round(product[field], 2))
                 elif field == 'last_purchase_date':
                     product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
-                elif field == 'reservation':
+                elif field == 'reservation_count':
                     product_fields.append(product['reservation_count'] +
                                           product['outgoing_picking_reserved_qty'])
-                elif field == 'confirmed_reservation':
+                elif field == 'outgoing_picking_reserved_qty':
                     product_fields.append(product['outgoing_picking_reserved_qty'])
                 else:
                     product_fields.append(product[field])
