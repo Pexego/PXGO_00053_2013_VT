@@ -39,21 +39,27 @@ class ProductProduct(models.Model):
         purchase_order_lines = self.env['purchase.order.line'].read_group(domain,
                                                                           ['product_qty', 'product_id', 'state'],
                                                                           ['product_id', 'state'], lazy=False)
+        dict_split_purchase = {}
+        dict_purchase = defaultdict(int)
 
-        if purchase_order_lines:
-            dicc_qty1 = defaultdict(int)
-            dicc_qty2 = defaultdict(int)
+        self._calculate_purchases(purchase_order_lines, dict_split_purchase, dict_purchase)
 
-            for purchase in purchase_order_lines:
-                product = purchase.get('product_id')[0]
-                if purchase.get('state') == 'purchase_order':
-                    dicc_qty1[product] += purchase.get('product_qty')
-                else:
-                    dicc_qty2[product] += purchase.get('product_qty')
+        for product in self:
+            product.split_purchase_count = dict_split_purchase.get(product.id) or 0
+            product.purchase_count = dict_purchase.get(product.id) or 0
 
-            for product in self:
-                product.split_purchase_count = dicc_qty1.get(product.id) or 0
-                product.purchase_count = dicc_qty2.get(product.id) or 0
+    @api.multi
+    def _calculate_purchases(self, purchase_order_lines, dict_split_purchase, dict_purchase):
+        """
+        Assigns values to two dictionaries: One with values of the purchase count, and other
+        of the split purchase count
+        """
+        for line in purchase_order_lines:
+            product = line.get('product_id')[0]
+            if line.get('state') == 'purchase_order':
+                dict_split_purchase[product] = line.get('product_qty')
+            else:
+                dict_purchase[product] += line.get('product_qty')
 
     purchase_count = fields.Integer(compute='_purchase_count')
     split_purchase_count = fields.Integer(compute='_purchase_count')
