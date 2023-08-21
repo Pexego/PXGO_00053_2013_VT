@@ -415,3 +415,13 @@ msgstr "<p>Se você aceitar, essas personalizações serão canceladas</p>"
 #: model:ir.ui.view,arch_db:kitchen.retrieve_customizations_wizard
 msgid "<p>Do you want to retrieve any cancel customization?</p>"
 msgstr "<p>Quer recuperar alguma personalização de cancelamento?</p>"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Are you sure you want to cancel?"
+msgstr "Você tem certeza que deseja cancelar?"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Recover request"
+msgstr "Solicitação de recuperação"
