@@ -1,10 +1,6 @@
+from .amazon_api_request import AmazonAPIRequest
 from odoo import models, fields, api, _
-from sp_api.api import Orders, Reports
-from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
-from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
-from odoo.exceptions import UserError
-import time
 import xml.etree.ElementTree as ET
 import re
 from dateutil.parser import parse
@@ -70,33 +66,20 @@ class AmazonSettlement(models.Model):
 
     def cron_reconcile_amazon_invoices(self, created_since=False, force_date=False):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-        credentials = self.env['amazon.sale.order']._get_credentials()
-        reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
+        amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
         if not created_since:
             created_since = (datetime.utcnow() - timedelta(days=14)).isoformat()
         reports_next_token = True
         while reports_next_token:
             if isinstance(reports_next_token, bool):
-                reports_answer = reports_obj.get_reports(reportTypes=['GET_V2_SETTLEMENT_REPORT_DATA_XML'],
-                                                         createdSince=created_since, pageSize=10)
-                reports = reports_answer.payload
-                reports_next_token = reports_answer.next_token
-            else:
-                reports_answer = reports_obj.get_reports(nextToken=reports_next_token)
-                reports = reports_answer.payload
-                reports_next_token = reports_answer.next_token
+                reports_next_token = False
+            reports_res = amazon_api.get_reports(report_types=['GET_V2_SETTLEMENT_REPORT_DATA_XML'],
+                                                 created_since=created_since,
+                                                 page_size=10, next_token=reports_next_token)
+            reports_next_token = reports_res.next_token
+            reports = reports_res.payload
             for report in reports.get('reports'):
-                read = False
-                while not read:
-                    try:
-                        last_report_document = reports_obj.get_report_document(report.get('reportDocumentId'),
-                                                                               download=True, decrypt=True).payload
-                        read = True
-                    except SellingApiRequestThrottledException:
-                        time.sleep(amazon_time_rate_limit)
-                        read = False
-                    except SellingApiException as e:
-                        raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report.get('reportDocumentId'), e))
+                last_report_document = amazon_api.get_report_document(report.get('reportDocumentId'))
                 document = last_report_document.get('document')
                 document = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\xff]', '', document)
                 root = ET.fromstring(document)
@@ -218,7 +201,10 @@ class AmazonSettlement(models.Model):
                     template.with_context(context).send_mail(settlement.id)
                     lines_error.check_other_settlement(settlement)
 
-    def parse_order_and_refund(self, parse_obj):
+    def parse_order_and_refund(self, parse_obj, amazon_api=None):
+        if not amazon_api:
+            amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+            amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
         if parse_obj.tag == 'Order':
             line_type = 'Order'
             item_name = 'Item'
@@ -248,21 +234,8 @@ class AmazonSettlement(models.Model):
                 line_vals.update({'amazon_order_id': amazon_order.id,
                                   'destination_country_id': amazon_order.country_id.id})
             else:
-                amazon_time_rate_limit = float(
-                    self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-                credentials = self.env['amazon.sale.order']._get_credentials()
-                order_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-                read = False
-                while not read:
-                    try:
-                        order_address = order_obj.get_order_address(order_id=amazon_order_name).payload
-                        read = True
-                    except SellingApiRequestThrottledException:
-                        time.sleep(amazon_time_rate_limit)
-                        read = False
-                    except SellingApiException as e:
-                        raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (amazon_order_name, e))
 
+                order_address = amazon_api.get_order_address(amazon_order_name)
                 address = order_address.get('ShippingAddress', False)
                 if address.get('CountryCode', False):
                     line_vals.update({'destination_country_id': self.env['res.country'].search(
