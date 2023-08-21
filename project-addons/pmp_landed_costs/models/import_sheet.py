@@ -59,15 +59,16 @@ class ImportSheet(models.Model):
     @api.multi
     @api.depends("landed_cost_ids.state", "invoice_ids.state")
     def _get_sheet_state(self):
-        cost_state = self.calculate_sheet_state(self.landed_cost_ids)
-        invoice_state = self.calculate_sheet_state(self.invoice_ids)
+        for sheet in self:
+            cost_state = sheet.calculate_sheet_state(sheet.landed_cost_ids)
+            invoice_state = sheet.calculate_sheet_state(sheet.invoice_ids)
 
-        if cost_state == 'done' and invoice_state == 'done':
-            self.sheet_state = 'done'
-        elif cost_state in ('done', 'in_process') or invoice_state in ('done', 'in_process'):
-            self.sheet_state = 'in_process'
-        else:
-            self.sheet_state = 'pending'
+            if cost_state == 'done' and invoice_state == 'done':
+                sheet.sheet_state = 'done'
+            elif cost_state in ('done', 'in_process') or invoice_state in ('done', 'in_process'):
+                sheet.sheet_state = 'in_process'
+            else:
+                sheet.sheet_state = 'pending'
 
     @api.multi
     def calculate_sheet_state(self, sheet_list):
