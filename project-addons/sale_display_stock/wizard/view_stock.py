@@ -75,7 +75,7 @@ class ViewStockLines(models.TransientModel):
     _name = 'view.stock.lines'
 
 
-    wizard_id = fields.Many2one('retry.amazon.orders.wizard')
+    wizard_id = fields.Many2one('view.stock.wizard')
 
     name = fields.Char()
     qty = fields.Float()
