@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="amazon_marketplace_tree" model="ir.ui.view">
+        <field name="name">amazon.marketplace.tree</field>
+        <field name="model">amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <tree string="Marketplaces">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="amazon_name"/>
+                <field name="account_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="amazon_marketplace_form" model="ir.ui.view">
+        <field name="name">amazon.marketplace.form</field>
+        <field name="model">amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <form string="Marketplaces">
+                <group>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="amazon_name"/>
+                    <field name="account_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_show_marketplaces">
+        <field name="name">Marketplaces</field>
+        <field name="res_model">amazon.marketplace</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="amazon_marketplace_tree"/>
+    </record>
+
+    <menuitem id="marketplaces_menu" name="Marketplaces" sequence="1" action="action_show_marketplaces"
+              string="Marketplaces" parent="config_amazon_menu"/>
+</odoo>

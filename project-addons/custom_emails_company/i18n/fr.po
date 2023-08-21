@@ -1360,3 +1360,43 @@ msgstr "\n"
 "\n"
 "\n"
 "            "
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "<span>Dear Sir or Madam:</span>"
+msgstr "<span>Nos chers messieurs:</span>"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Amount"
+msgstr "Montant"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Date"
+msgstr "Date"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Invoice number"
+msgstr "Nº facture"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "The destination bank account is:"
+msgstr "Le compte bancaire de destination est:"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Total amount:"
+msgstr "Montant total:"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "We would like to inform you that we have issued a direct debit receipt with the due date(s) corresponding to the invoice(s) detailed below:"
+msgstr "Nous vous informons que nous avons émis un reçu de prélèvement avec la ou les échéances correspondant à la ou aux factures détaillées ci-dessous :"
+
+#. module: custom_emails_company
+#: model:ir.ui.view,arch_db:custom_emails_company.payment_order_advise_partner_template
+msgid "Yours sincerely."
+msgstr "Cordialement."

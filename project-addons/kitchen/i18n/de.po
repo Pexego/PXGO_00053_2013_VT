@@ -422,3 +422,13 @@ msgstr "<p>Wenn Sie akzeptieren, werden diese Anpassungen abgebrochen</p>"
 #: model:ir.ui.view,arch_db:kitchen.retrieve_customizations_wizard
 msgid "<p>Do you want to retrieve any cancel customization?</p>"
 msgstr "<p>Möchten Sie eine Anpassung zum Abbrechen abrufen?</p>"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Are you sure you want to cancel?"
+msgstr "Bist du sicher, dass du abbrechen möchtest?"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Recover request"
+msgstr "Wiederherstellungs anfrage"

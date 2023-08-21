@@ -195,7 +195,7 @@ class StockPicking(models.Model):
         for pick in self:
             #check move lines confirmed qtys
             for move in pick.move_lines:
-                if move.qty_confirmed > move.reserved_availability:
+                if move.qty_confirmed > move.product_uom_qty:
                     raise exceptions.\
                         Warning(_("Cannot assign more qty that reserved "
                                   "availability."))
@@ -210,10 +210,8 @@ class StockPicking(models.Model):
                                             precision_rounding=precision)
                 if not move.qty_confirmed:
                     new_moves.append(move.id)
-                elif float_compare(remaining_qty, 0,
-                                   precision_rounding=precision) > 0 and \
-                    float_compare(remaining_qty, move.product_qty,
-                                  precision_rounding=precision) < 0:
+                elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0\
+                    > float_compare(remaining_qty, move.product_qty, precision_rounding=precision):
                     new_move = move._split(remaining_qty)
                     new_moves.append(new_move)
                 if not move.product_uom_qty:
@@ -226,7 +224,6 @@ class StockPicking(models.Model):
                 if self.add_notes:
                     bck.write({'internal_notes': self.internal_notes})
                 self.action_assign()
-                pick.move_lines.write({'state': 'assigned'})
                 result |= bck
             pick.message_post(body=_("User %s accepted confirmed qties.") %
                               self.env.user.name)
