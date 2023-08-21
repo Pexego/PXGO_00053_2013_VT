@@ -60,8 +60,8 @@ class ImportSheet(models.Model):
     @api.depends("landed_cost_ids.state", "invoice_ids.state")
     def _get_sheet_state(self):
         for sheet in self:
-            cost_state = sheet.calculate_sheet_state(sheet.landed_cost_ids)
-            invoice_state = sheet.calculate_sheet_state(sheet.invoice_ids)
+            cost_state = self.calculate_sheet_state(sheet.landed_cost_ids)
+            invoice_state = self.calculate_sheet_state(sheet.invoice_ids)
 
             if cost_state == 'done' and invoice_state == 'done':
                 sheet.sheet_state = 'done'
