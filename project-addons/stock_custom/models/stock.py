@@ -96,7 +96,9 @@ class StockPicking(models.Model):
         """
         if vals.get('state') == 'done' or vals.get('date_done'):
             incoming_picking_type = self.env.ref('stock.picking_type_in')
-            for picking in self.filtered(lambda p: p.picking_type_id == incoming_picking_type):
+            for picking in self.filtered(
+                lambda p: p.picking_type_id == incoming_picking_type and p.partner_id.email2 != False
+            ):
                 picking.send_request_supplier_invoice_mail()
 
     def send_request_supplier_invoice_mail(self):
