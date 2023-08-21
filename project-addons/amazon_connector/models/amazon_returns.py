@@ -1,10 +1,6 @@
+from .amazon_api_request import AmazonAPIRequest
 from odoo import models, fields, api, _
-from sp_api.api import Orders, Reports
-from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
-from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
-from odoo.exceptions import UserError
-import time
 import logging
 import csv
 import json
@@ -169,42 +165,18 @@ class AmazonReturn(models.Model):
 
     def cron_read_amazon_returns(self, data_start_time=False, data_end_time=False):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-        credentials = self.env['amazon.sale.order']._get_credentials()
-        reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
+        amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
 
         if not data_start_time:
             data_start_time = (datetime.utcnow() - timedelta(days=1)).isoformat()
         if not data_end_time:
             data_end_time = datetime.utcnow().isoformat()
-        try:
-            report_created = reports_obj.create_report(reportType="GET_FBA_FULFILLMENT_CUSTOMER_RETURNS_DATA",
-                                                       dataStartTime=data_start_time,
-                                                       dataEndTime=data_end_time).payload
-        except SellingApiException as e:
-            raise UserError(_("Amazon API Error. No return was created due to errors. '%s' \n") % e)
-        report_state = ""
-        while report_state != 'DONE':
-            try:
-                report = reports_obj.get_report(report_created.get('reportId')).payload
-                report_state = report.get("processingStatus")
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                continue
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
-
-        read = False
-        while not read:
-            try:
-                last_report_document = reports_obj.get_report_document(report.get('reportDocumentId'),
-                                                                       download=True, decrypt=True).payload
-                read = True
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                read = False
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report.get('reportDocumentId'), e))
-        document_lines = last_report_document.get('document').split("\n")
+        report_created = amazon_api.create_report("GET_FBA_FULFILLMENT_CUSTOMER_RETURNS_DATA",
+                                                       data_start_time,
+                                                       data_end_time)
+        report = amazon_api.get_report(report_created.get('reportId'))
+        report_document = amazon_api.get_report_document(report.get('reportDocumentId'))
+        document_lines = report_document.get('document').split("\n")
         reader = csv.DictReader(document_lines, delimiter="\t")
         data = list(reader)
         info = json.loads(json.dumps(data))
