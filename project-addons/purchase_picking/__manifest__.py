@@ -40,6 +40,8 @@
              'wizard/assign_container_view.xml',
              'wizard/cancel_moves_view.xml',
              'templates/assets.xml',
-             'views/warehouse_view.xml'],
+             'views/warehouse_view.xml',
+             'wizard/purchase_lines_checker_view.xml',
+             'data/parameters.xml'],
     "installable": True
 }
