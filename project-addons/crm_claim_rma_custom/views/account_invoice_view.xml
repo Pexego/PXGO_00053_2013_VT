@@ -13,6 +13,9 @@
                 <field name="discount"/>
                 <field name="price_subtotal"/>
                 <field name="sale_order_id"/>
+                <field name="date_invoice"/>
+                <field name="no_rappel"/>
+                <field name="product_brand" invisible="1"/>
             </tree>
         </field>
     </record>
