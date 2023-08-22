@@ -16,7 +16,6 @@ class MiddlewareBackend(models.TransientModel):
             ('products', 'Products'),
             ('order', 'Orders'),
             ('tags', 'Tags'),
-            ('customer_tags_rel', 'Customer Tags Rel'),
             ('translation', 'Translations'),
             ('rappel', 'Rappel'),
             ('rappel_section', 'Rappel Sections'),
@@ -24,7 +23,6 @@ class MiddlewareBackend(models.TransientModel):
             ('country', 'Country'),
             ('country_state', 'States'),
             ('product_tag', 'Product Tag'),
-            ('product_tag_product_rel', 'Product Tags Rel'),
             ('product_brand', 'Product Brand'),
             ('product_brand_product_rel', 'Product Brand Rel'),
             ('product_category', 'Product Category'),
@@ -67,13 +65,11 @@ class MiddlewareBackend(models.TransientModel):
             'rma': self.export_rmas,
             'products': self.export_products,
             'tags': self.export_tags,
-            'customer_tags_rel': self.export_customer_tags_rel,
             'order': self.export_orders,
             'rappel': self.export_rappel,
             'rappel_section': self.export_rappels_section,
             'country_state': self.export_country_states,
             'product_tag': self.export_product_tags,
-            'product_tag_product_rel': self.export_product_tag_product_rel,
             'users': self.export_users,
             'translation': self.export_translations,
             'rappel_info': self.export_rappel_info,
@@ -102,7 +98,6 @@ class MiddlewareBackend(models.TransientModel):
             for partner in partner_ids:
                 # Export all the partner things
                 partner.with_delay(priority=2).export_partner()
-                partner.with_delay(priority=2, eta=10).export_partner_tag_rel()
                 sales = self.env['sale.order'].search(
                     [('partner_id', 'child_of', [partner.id]),
                      ('company_id', '=', 1),
@@ -264,21 +259,6 @@ class MiddlewareBackend(models.TransientModel):
             for tag in tag_ids:
                 tag.with_delay(priority=2).unlink_partner_tag()
 
-    def export_customer_tags_rel(self, object_ids):
-        partner_obj = self.env['res.partner']
-        if object_ids:
-            partner_ids = partner_obj.browse(object_ids)
-        else:
-            partner_ids = partner_obj.search([('is_company', '=', True),
-                                              ('web', '=', True),
-                                              ('customer', '=', True)])
-        if self.mode_export in ('export', 'update'):
-            for partner in partner_ids:
-                partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
-        else:
-            for partner in partner_ids:
-                partner.with_delay(priority=2).unlink_partner_tag_rel()
-
     def export_orders(self, object_ids):
         if object_ids:
             sales = self.env['sale.order'].browse(object_ids)
@@ -371,20 +351,6 @@ class MiddlewareBackend(models.TransientModel):
         else:
             for tag in product_tag_ids:
                 tag.with_delay(priority=2).unlink_product_tag()
-
-    def export_product_tag_product_rel(self, object_ids):
-        product_obj = self.env['product.product']
-        if object_ids:
-            product_ids = product_obj.browse(object_ids)
-        else:
-            product_ids = product_obj.search([])
-
-        if self.mode_export == 'export':
-            for product in product_ids:
-                product.with_delay(priority=2, eta=120).export_product_tag_rel()
-        else:
-            for product in product_ids:
-                product.with_delay(priority=2).unlink_product_tag_rel()
 
     def export_users(self, object_ids):
         user_obj = self.env['res.users']

@@ -14,9 +14,9 @@
                         <br/>Make sure you have permission to move the reserves, the move will be registered.<br/>
                     </div>
                     <label for="reserves_origin_id"/>
-                    <field name="reserves_origin_id" options="{'no_create': True, 'no_open': True}" col="4"/>
+                    <field name="reserves_origin_id" options="{'no_create': True, 'no_open': True}" col="4" context="{'tree_view_ref': 'stock.view_move_tree'}"/>
                     <label for="reserves_dest_id"/>
-                    <field name="reserves_dest_id" options="{'no_create': True, 'no_open': True}" col="4"/>
+                    <field name="reserves_dest_id" options="{'no_create': True, 'no_open': True}" col="4" context="{'tree_view_ref': 'stock.view_move_tree'}"/>
                 </group>
                 <footer>
                     <button name="action_move_reserve" string="Move" type="object" class="btn-primary" icon="fa-exchange"/>

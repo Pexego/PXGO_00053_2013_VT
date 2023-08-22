@@ -527,3 +527,13 @@ msgstr "Non ci sono anteprime per questo partner e questi prodotti:%s"
 #: model:ir.model.fields,field_description:kitchen.field_customization_wizard_errors
 msgid "Errors"
 msgstr "Errori"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Are you sure you want to cancel?"
+msgstr "Sei sicuro di voler cancellare?"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Recover request"
+msgstr "Richiesta di recupero"

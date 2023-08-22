@@ -46,6 +46,7 @@ class SaleOrder(models.Model):
                 vals['carrier_id'] = order.partner_id.property_delivery_carrier_id.id
         return super()._write(vals)
 
+
     @api.multi
     def write(self, vals):
         res = super().write(vals)
