@@ -85,7 +85,7 @@ class AmazonAPIRequest(object):
 
     def get_reports(self, report_types, created_since, page_size, next_token=False):
         if next_token:
-            return self.reports_obj.get_reports(next_token=next_token)
+            return self.reports_obj.get_reports(nextToken=next_token)
         else:
             return self.reports_obj.get_reports(reportTypes=report_types,
                                                        createdSince=created_since, pageSize=page_size)
