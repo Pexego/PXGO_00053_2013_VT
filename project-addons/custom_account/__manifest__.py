@@ -24,8 +24,7 @@
                 'account_invoice_merge', 'customer_area',
                 'res_currency_rate_force', 'equivalent_products',
                 'purchase_picking', 'purchase_batch_invoicing'],
-    "data": ['data/parameter.xml',
-             'data/res_partner_category_data.xml',
+    "data": ['data/res_partner_category_data.xml',
              'data/groups.xml',
              'views/account_view.xml',
              'views/partner_view.xml',
@@ -42,7 +41,6 @@
              'report/account_invoice_contact_report_view.xml',
              'views/account_bank_statement.xml',
              'wizard/statement_ignore.xml',
-             'views/sale_view.xml',
              'wizard/purchase_batch_invoicing_view.xml',
              ],
     "installable": True
