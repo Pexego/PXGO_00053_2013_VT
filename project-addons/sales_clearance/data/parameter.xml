@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="max_amount_in_payment_term" model="ir.config_parameter">
+        <field name="key">max.amount.in.payment.term</field>
+        <field name="value">10000</field>
+    </record>
+</odoo>
