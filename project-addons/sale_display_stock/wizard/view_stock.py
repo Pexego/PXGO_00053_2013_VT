@@ -30,8 +30,11 @@ class ViewStockWizard(models.TransientModel):
                                                ('state', '!=', 'cancel')])
         wiz_lines = []
         for move in moves:
-            wiz_lines.append((0, 0, {'name': move.purchase_line_id.order_id.name, 'qty': move.product_uom_qty,
-                                     'purchase_id': move.purchase_line_id.order_id.id}))
+            order = move.purchase_line_id.order_id
+            wiz_lines.append((0, 0, {'name': order.name, 'qty': move.product_uom_qty,
+                                     'purchase_id': order.id,
+                                     'date_order': order.date_order,
+                                     'partner_ref': order.partner_ref}))
 
         return wiz_lines
 
@@ -80,6 +83,8 @@ class ViewStockLines(models.TransientModel):
     name = fields.Char()
     qty = fields.Float()
     purchase_id = fields.Many2one("purchase.order")
+    date_order = fields.Datetime()
+    partner_ref = fields.Char('Vendor Reference')
 
     def _show_purchase(self):
         """

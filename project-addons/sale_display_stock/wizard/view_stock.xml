@@ -11,11 +11,14 @@
                 </group>
                 <field name="line_ids" readonly="1">
                     <tree>
+                        <field name="purchase_id" invisible="1"/>
                         <button name="open_element" type="object"
                                             class="oe_link"
                                             icon="fa fa-external-link"
                                             style="font-size: 16px;"/>
                         <field name="name"/>
+                        <field name="partner_ref" attrs="{'invisible': [('purchase_id','=',False)]}"/>
+                        <field name="date_order"/>
                         <field name="qty" sum="Total Qty"/>
                     </tree>
                 </field>
@@ -25,5 +28,5 @@
             </form>
         </field>
     </record>
-    
+
 </odoo>
