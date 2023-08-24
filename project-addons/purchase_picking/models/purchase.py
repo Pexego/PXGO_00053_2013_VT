@@ -20,7 +20,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import except_orm,UserError
-from odoo.addons.purchase_picking.models.product import NoLastPurchaseException
+from odoo.tools.float_utils import float_is_zero, float_compare
 
 
 class PurchaseOrder(models.Model):
@@ -168,53 +168,6 @@ class PurchaseOrder(models.Model):
                 order.invoice_status = 'invoiced'
             elif order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
                 order.invoice_status = 'partially'
-
-    @api.multi
-    def button_confirm(self):
-        """
-        Extends the original method to check if purchase.order lines prices are correct.
-        If there are lines without price or with a high variance in price since last purchase,
-        these lines are shown in a wizard.
-        """
-        if self.env.context.get('bypass_po_check_lines'):
-            return super().button_confirm()
-        for order in self:
-            lines_with_no_price = order.order_line.filtered(lambda l: l.price_subtotal == 0)
-            lines_with_high_price_variation_ids = order.get_lines_with_high_price_variation()
-            wizard = self.env['confirm.purchase.lines.checker'].create({
-                'purchase_lines_with_no_price': [(6, 0, lines_with_no_price.ids)],
-                'purchase_lines_with_price_variance': [(6, 0, lines_with_high_price_variation_ids)],
-                'purchase_id': order.id
-            })
-        action = self.env.ref('purchase_picking.action_open_purchase_lines_checker').read()[0]
-        action['res_id'] = wizard.id
-        return action
-
-    def get_lines_with_high_price_variation(self):
-        """
-        Returns id lines that have a bigger product price variation than umbral
-
-        Return:
-        ------
-        List[Int]
-        """
-        lines_with_high_price_variation = []
-        umbral = float(self.env['ir.config_parameter'].sudo().get_param(
-            'max_product_purchase_price_diff_perc'
-        ))
-        for line in self.order_line:
-            try:
-                product = line.product_id
-                last_purchase_price = product.get_last_purchase_price()  # field in stock_custom
-                if last_purchase_price:
-                    price_variation = product.calculate_product_price_variation(last_purchase_price, line.price_unit)
-                    if price_variation > umbral:
-                        lines_with_high_price_variation.append(line.id)
-            except NoLastPurchaseException:
-                continue
-        return lines_with_high_price_variation
-
-
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'

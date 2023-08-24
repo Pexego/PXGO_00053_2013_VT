@@ -18,9 +18,6 @@
 #
 ##############################################################################
 
-from . import (
-    create_picking_move,
-    assign_container,
-    cancel_moves,
-    purchase_lines_checker
-)
+from . import create_picking_move
+from . import assign_container
+from . import cancel_moves

@@ -61,7 +61,6 @@
 
     <menuitem id="move_reserves_menu" name="Move Reserves" parent="sale.sale_order_menu"
               action="action_view_move_reserves"
-              groups="base.group_system"
               sequence="5"/>
 
     <menuitem id="move_reserves_log_menu" name="Move Reserves Log" parent="sale.menu_sale_report"
