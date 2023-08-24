@@ -18,8 +18,11 @@ class ViewStockWizard(models.TransientModel):
                                                     ('order_id.completed_purchase','=',False)])
 
         for line in order_lines.filtered(lambda l:l.production_qty > 0):
-            res.append((0, 0, {'name': line.order_id.name, 'qty': line.production_qty,
-                              'purchase_id': line.order_id.id}))
+            order = line.order_id
+            res.append((0, 0, {'name': order.name, 'qty': line.production_qty,
+                               'purchase_id': order.id,
+                               'date_order': order.date_order,
+                               'partner_ref': order.partner_ref}))
 
         return res
 
