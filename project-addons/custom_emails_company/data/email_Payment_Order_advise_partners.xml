@@ -35,18 +35,18 @@
                                         <tr>
                                             <td style="color: #555; font-size: 14px;">
                                                 <p style="margin-bottom: 0cm; line-height: 14.95px; background-color: rgb(255, 255, 255);">
-                                                    Les informamos que, hemos puesto en circulación recibo/s domiciliado/s con el/los vencimiento/s indicado/s correspondiente/s a la/s factura/s que detallamos a continuación:
+                                                    We would like to inform you that we have issued a direct debit receipt with the due date(s) corresponding to the invoice(s) detailed below:
                                                 </p>
                                                 <p style="line-height: 14.95px;"/>
                                                 <div>
                                                     <br/>
                                                     <table width="516">
                                                         <tbody>
-                                                          <table align="center" cellpadding="10" border="0" style="border-collapse:collapse; width:80%; min-height: 1px;">
-                                                             <tr>
-                                                               <td style="border: 1px solid black">Nº Factura</td>
-                                                               <td style="border: 1px solid black">Fecha</td>
-                                                               <td style="border: 1px solid black">Importe</td>
+                                                          <table align="center" cellpadding="10" border="0" style="border-collapse:collapse; width:80%;">
+                                                             <tr style="height:10;">
+                                                               <td style="font-size: 11px; border: 1px solid black">Invoice number</td>
+                                                               <td style="font-size: 11px; border: 1px solid black">Date</td>
+                                                               <td style="font-size: 11px; border: 1px solid black">Amount</td>
                                                              </tr>
                                                             <tr t-foreach="obj.payment_line_ids" t-as="line" valign="middle" style="height:10;">
                                                                 <td style="border: 1px solid black">
@@ -65,10 +65,10 @@
                                                                     </p>
                                                                 </td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr style="height:10;">
                                                               <td/>
-                                                              <td style="text-align: right;">Importe total:  </td>
-                                                              <td style="border: 1px solid black">
+                                                              <td style="text-align: right; font-size: 11px;">Total amount:  </td>
+                                                              <td style="border: 1px solid black; font-size: 11px;" >
                                                                   <t t-set="total" t-value="sum(obj.payment_line_ids.mapped('amount_currency'))"/>
                                                                   <span t-esc="total" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/> €
                                                               </td>
@@ -79,9 +79,9 @@
                                                             <tr>
                                                                 <td style="color: #555; font-size: 14px;">
                                                                   <br/>
-                                                                  <p>La cuenta bancaria de destino es: <span t-esc="obj.partner_bank_id.acc_number[:2] + '** **** **** **** **** '+obj.partner_bank_id.acc_number[-4:]"/></p>
+                                                                  <p>The destination bank account is: <span t-esc="obj.partner_bank_id.acc_number[:2] + '** **** **** **** **** '+obj.partner_bank_id.acc_number[-4:]"/></p>
                                                                   <br/>
-                                                                  <p>Sin otro particular, aprovechamos la ocasión para saludarles.</p>
+                                                                  <p>Yours sincerely.</p>
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
