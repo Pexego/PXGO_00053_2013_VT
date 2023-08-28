@@ -108,20 +108,10 @@ class StockPicking(models.Model):
         """
         self.ensure_one()
         purchase_order_id = self.env['purchase.order'].search([('name', '=', self.origin)])
-        email_body = self.with_context(lang=self.partner_id.commercial_partner_id.lang)._(
-            "<p>Dear Supplier,</p> "
-            "<p>We inform you that we have received the products corresponding to %s.</p>"
-            "<p>Please send us the corresponding invoice as soon as possible, so that we can "
-            "enter it in our system and proceed with the payment under the agreed conditions.</p>"
-            "<p>Sincerely,</p>"
-            "<p>VISIOTECH</p>"
-        ) % purchase_order_id.name
+
         mail_template = self.env.ref('stock_custom.purchase_order_received_template')
         mail_template.with_context(lang=self.partner_id.commercial_partner_id.lang,
-                                   email_body=email_body).send_mail(self.id)
-
-    def _(self, src):
-        return _(src)
+                                   order_name=purchase_order_id.partner_ref).send_mail(self.id)
 
     @api.multi
     def action_confirm(self):
