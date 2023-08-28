@@ -648,16 +648,15 @@ msgid "Visiotech - Order received"
 msgstr "Visiotech - Ordine Ricevuto"
 
 #. module: stock_custom
-#: code:addons/stock_custom/models/stock.py:120
-#, python-format
+#: model:mail.template,body_html:stock_custom.purchase_order_received_template
 msgid "<p>Dear Supplier,</p> "
-"<p>We inform you that we have received the products corresponding to %s.</p>"
+"<p>We inform you that we have received the products corresponding to ${ctx.get('order_name')}.</p>"
 "<p>Please send us the corresponding invoice as soon as possible, so that we can "
 "enter it in our system and proceed with the payment under the agreed conditions.</p>"
 "<p>Sincerely,</p>"
 "<p>VISIOTECH</p>"
 msgstr "<p>Caro fornitore,</p> "
-"<p>Vi informiamo che abbiamo ricevuto i prodotti corrispondenti a %s.</p>"
+"<p>Vi informiamo che abbiamo ricevuto i prodotti corrispondenti a ${ctx.get('order_name')}.</p>"
 "<p>Vi preghiamo di inviarci la fattura corrispondente il prima possibile, in modo da ""
 "poterla registrare nel nostro sistema e procedere al pagamento alle condizioni concordate.</p>"
 "<p>Cordiali saluti,</p>"
