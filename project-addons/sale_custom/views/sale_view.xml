@@ -337,6 +337,7 @@
         <field name="arch" type="xml">
             <group name="others" position="inside">
                 <field name="force_generic_product" string="Force generic product" groups="base.group_system" />
+                <field name="allow_overcome_weight" groups="base.group_system" />
             </group>
         </field>
     </record>
