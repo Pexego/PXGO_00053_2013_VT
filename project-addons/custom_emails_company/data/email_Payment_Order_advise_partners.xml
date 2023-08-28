@@ -42,25 +42,25 @@
                                                     <br/>
                                                     <table width="516">
                                                         <tbody>
-                                                          <table align="center" cellpadding="10" border="0" style="border-collapse:collapse; width:100%">
+                                                          <table align="center" cellpadding="10" border="0" style="border-collapse:collapse; width:80%; min-height: 1px;">
                                                              <tr>
                                                                <td style="border: 1px solid black">Nº Factura</td>
                                                                <td style="border: 1px solid black">Fecha</td>
                                                                <td style="border: 1px solid black">Importe</td>
                                                              </tr>
-                                                            <tr t-foreach="obj.payment_line_ids" t-as="line" valign="middle">
+                                                            <tr t-foreach="obj.payment_line_ids" t-as="line" valign="middle" style="height:10;">
                                                                 <td style="border: 1px solid black">
-                                                                    <p style="font-size: 14px;">
+                                                                    <p style="font-size: 11px;">
                                                                         <span t-field="line.communication"/>
                                                                     </p>
                                                                 </td>
                                                                 <td style="border: 1px solid black">
-                                                                  <p style="font-size: 14px;">
+                                                                  <p style="font-size: 11px;">
                                                                         <span t-field="line.date"/>
                                                                     </p>
                                                                 </td>
                                                                 <td style="border: 1px solid black">
-                                                                  <p style="font-size: 14px;">
+                                                                  <p style="font-size: 11px;">
                                                                         <span t-field="line.amount_currency"/>
                                                                     </p>
                                                                 </td>
