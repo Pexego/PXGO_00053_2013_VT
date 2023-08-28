@@ -3,7 +3,6 @@ import base64
 from datetime import datetime, timedelta
 import xlsxwriter
 
-
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -16,7 +15,7 @@ class ProductProduct(models.Model):
                    "Cant. pedido más grande", "Días de stock restantes", "Días de stock restantes (real)",
                    "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
-                   "Última fecha de compra", "Reemplazado por", "Estado"]
+                   "Última fecha de compra", "Reemplazado por", "Estado", "Reservas", "Reservas confirmadas"]
 
         domain = [('custom', '=', False), ('type', '!=', 'service'),
                   ("categ_id.name", "not in", ["Outlet", "O1", "O2", "Descatalogados"])]
@@ -24,13 +23,15 @@ class ProductProduct(models.Model):
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
                   "remaining_days_sale", "real_remaining_days_sale", "qty_available_input_loc", "average_margin",
-                  "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state"]
+                  "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state",
+                  "reservation_count", "outgoing_picking_reserved_qty"]
         rows = []
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
         products = self.env['product.product'].with_context({'lang': 'es_ES'}).search_read(domain,
                                                                                            fields + ["seller_id"])
+
         for product in products:
             product_fields = []
             for field in fields:
@@ -47,6 +48,11 @@ class ProductProduct(models.Model):
                     product_fields.append(round(product[field], 2))
                 elif field == 'last_purchase_date':
                     product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
+                elif field == 'reservation_count':
+                    product_fields.append(product['reservation_count'] +
+                                          product['outgoing_picking_reserved_qty'])
+                elif field == 'outgoing_picking_reserved_qty':
+                    product_fields.append(product['outgoing_picking_reserved_qty'])
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
