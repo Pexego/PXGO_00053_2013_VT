@@ -1,1 +1,1 @@
-from . import stock, purchase, product
+from . import stock, purchase
