@@ -42,13 +42,13 @@
                                                     <br/>
                                                     <table width="516">
                                                         <tbody>
-                                                          <table align="center" cellpadding="10" border="0" style="border-collapse:collapse; width:80%;">
-                                                             <tr style="height:10;">
+                                                          <table align="center" border="0" style="border-collapse:collapse; width:80%;">
+                                                             <tr>
                                                                <td style="font-size: 11px; border: 1px solid black">Invoice number</td>
                                                                <td style="font-size: 11px; border: 1px solid black">Date</td>
                                                                <td style="font-size: 11px; border: 1px solid black">Amount</td>
                                                              </tr>
-                                                            <tr t-foreach="obj.payment_line_ids" t-as="line" valign="middle" style="height:10;">
+                                                            <tr t-foreach="obj.payment_line_ids" t-as="line" valign="middle">
                                                                 <td style="border: 1px solid black">
                                                                     <p style="font-size: 11px;">
                                                                         <span t-field="line.communication"/>
@@ -65,7 +65,7 @@
                                                                     </p>
                                                                 </td>
                                                             </tr>
-                                                            <tr style="height:10;">
+                                                            <tr>
                                                               <td/>
                                                               <td style="text-align: right; font-size: 11px;">Total amount:  </td>
                                                               <td style="border: 1px solid black; font-size: 11px;" >
@@ -141,7 +141,7 @@
 
     <record id="account_banking_sepa_mail.payment_order_advise_partner" model="mail.template">
         <field name="name"> Payment Order advise partners 11 </field>
-        <field name="email_from">${'contabilidad@visiotech.es'}</field>
+        <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
         <field name="subject">Aviso de recibo</field>
         <field name="partner_to">${ctx.get('partner_id') or ''}</field>
         <field name="model_id" ref="account_payment_order.model_account_payment_order"/>
