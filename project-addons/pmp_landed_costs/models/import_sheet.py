@@ -60,8 +60,9 @@ class ImportSheet(models.Model):
     @api.depends("landed_cost_ids.state", "invoice_ids.state")
     def _get_sheet_state(self):
         for sheet in self:
-            cost_state = self.calculate_sheet_state(sheet.landed_cost_ids)
-            invoice_state = self.calculate_sheet_state(sheet.invoice_ids)
+            cost_state = self.calculate_sheet_state(sheet.landed_cost_ids.filtered(lambda l: l.state != 'cancel'))
+            invoice_state = self.calculate_sheet_state(sheet.invoice_ids.filtered(lambda l: l.state not in ('cancel',
+                                                                                                            'history')))
 
             if cost_state == 'done' and invoice_state == 'done':
                 sheet.sheet_state = 'done'
@@ -72,18 +73,14 @@ class ImportSheet(models.Model):
 
     @api.multi
     def calculate_sheet_state(self, sheet_list):
-        line_done = False
-        line_state = ''
+        line_state = 'pending'
 
         for line in sheet_list:
             if line.state == 'draft':
                 line_state = 'in_process'
                 break
-            elif line.state in ('cancel', 'history') and not line_done:
-                line_state = 'pending'
             else:
                 line_state = 'done'
-                line_done = True
 
         return line_state
 
