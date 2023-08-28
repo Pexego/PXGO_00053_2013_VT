@@ -62,7 +62,7 @@ msgid "Reserves Origin"
 msgstr "Riserva Origine"
 
 #. module: move_reserves
-#: code:addons/move_reserves/wizard/move_reserves.py:83
+#: code:addons/move_reserves/wizard/move_reserves.py:121
 #, python-format
 msgid "There is been an error, try again later"
 msgstr "C'e stato un errore, prova di nuevo piu tardi"
@@ -84,6 +84,12 @@ msgstr "Hai selezionato piu cuantitá da quella disponibile in destinazione"
 #, python-format
 msgid "You have selected the same move in both"
 msgstr "Hai selezionato la stessa riserva in entrambi movimenti"
+
+#. module: move_reserves
+#: code:addons/move_reserves/wizard/move_reserves.py:72
+#, python-format
+msgid "The origin or destination is already process by vstock"
+msgstr "L'origine o la destinazione e già stato processato in stock"
 
 #. module: move_reserves
 #: model:ir.actions.act_window,name:move_reserves.action_move_reserves_log
