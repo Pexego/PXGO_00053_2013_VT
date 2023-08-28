@@ -1,1 +1,1 @@
-from . import separate_orders_wizard
+from . import separate_orders_wizard, view_stock
