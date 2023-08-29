@@ -143,7 +143,6 @@
         <field name="name"> Payment Order advise partners 11 </field>
         <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
         <field name="subject">Aviso de recibo</field>
-        <field name="partner_to">${ctx.get('partner_id') or ''}</field>
         <field name="model_id" ref="account_payment_order.model_account_payment_order"/>
         <field name="auto_delete" eval="False"/>
         <field name="body_type">qweb</field>
