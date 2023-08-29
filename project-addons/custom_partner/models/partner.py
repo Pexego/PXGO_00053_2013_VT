@@ -954,7 +954,7 @@ class ResPartnerCategory(models.Model):
 
     @api.model
     def create(self, vals):
-        if not vals['color_selection'] and vals['parent_id']:
+        if not vals.get('color_selection') and vals.get('parent_id'):
             vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
         else:
             vals['color'] = vals['color_selection']
@@ -965,7 +965,8 @@ class ResPartnerCategory(models.Model):
     def write(self, vals):
         if vals.get('color_selection'):
             vals['color'] = vals['color_selection']
-            self.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
+            for etiquette in self:
+                etiquette.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
         elif vals.get('parent_id') and not self.color_selection:
             vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
 
