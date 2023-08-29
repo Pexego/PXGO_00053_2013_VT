@@ -1,10 +1,10 @@
-from odoo import fields, api, models, _, exceptions
+from odoo import models, fields, api, exceptions, _
 
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    allow_payment_term = fields.Boolean("Allow payment term",copy=False)
+    allow_payment_term = fields.Boolean("Allow payment term", copy=False)
 
     @api.multi
     def action_confirm(self):

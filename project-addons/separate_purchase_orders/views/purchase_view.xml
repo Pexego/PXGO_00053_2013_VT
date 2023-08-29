@@ -199,13 +199,59 @@
             </tree>
         </field>
     </record>
+    <record id="purchase_order_line_form_oc" model="ir.ui.view">
+        <field name="name">purchase.order.line.form.oc</field>
+        <field name="model">purchase.order.line</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <form string="Purchase Order Line" create="false">
+                <sheet>
+                    <label for="order_id" class="oe_edit_only" />
+                    <h1>
+                        <field name="order_id" class="oe_inline" context="{'form_view_ref':'separate_purchase_orders.purchase_order_form_custom'}"/>
+                        <label string="," attrs="{'invisible':[('date_order','=',False)]}"/>
+                        <field name="date_order" class="oe_inline"/>
+                    </h1>
+                    <label for="partner_id" class="oe_edit_only"/>
+                    <h2>
+                        <field name="partner_id"/>
+                    </h2>
+                    <group>
+                        <group>
+                            <field name="product_id" readonly="1"/>
+                            <label for="product_qty"/>
+                            <div>
+                                <field name="product_qty" readonly="1" class="oe_inline"/>
+                                <field name="product_uom" readonly="1" groups="product.group_uom" class="oe_inline"/>
+                            </div>
+                            <field name="price_unit"/>
+                        </group>
+                        <group>
+                            <field name="taxes_id" widget="many2many_tags"
+                                   domain="[('type_tax_use', '=', 'purchase')]"/>
+                            <field name="date_planned" widget="date" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="account_analytic_id" colspan="4" groups="purchase.group_analytic_accounting"/>
+                        </group>
+                    </group>
+                    <field name="name"/>
+                    <separator string="Manual Invoices"/>
+                    <field name="invoice_lines"/>
+                    <separator string="Stock Moves"/>
+                    <field name="move_ids"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record model="ir.actions.act_window" id="action_split_purchase_line_product_tree_2">
         <field name="context">{}</field>
         <field name="domain">[('product_id.id','in',active_ids), ('order_id.state', '=', 'purchase_order')]</field>
         <field name="name">Purchase orders to split</field>
         <field name="res_model">purchase.order.line</field>
-        <field name="view_id" ref="separate_purchase_orders.purchase_order_line_tree_add_production_qty"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'tree', 'view_id': ref('separate_purchase_orders.purchase_order_line_tree_add_production_qty')}),
+                                      (0, 0, {'view_mode': 'form', 'view_id': ref('separate_purchase_orders.purchase_order_line_form_oc')})]"/>
     </record>
 
     <record id="view_product_product_split_purchase_buttons_from" model="ir.ui.view">

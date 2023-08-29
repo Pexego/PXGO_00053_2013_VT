@@ -297,3 +297,18 @@ msgstr "Por definir"
 #, python-format
 msgid "Can't calculate landed costs. There are lines with split method to define."
 msgstr "Error al calcular los costes de destino. Hay lineas con método de división por definir"
+
+#. module: pmp_landed_costs
+#: selection:import.sheet,sheet_state:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: pmp_landed_costs
+#: selection:import.sheet,sheet_state:0
+msgid "In process"
+msgstr "En trámite"
+
+#. module: pmp_landed_costs
+#: selection:import.sheet,sheet_state:0
+msgid "Done"
+msgstr "Finalizado"

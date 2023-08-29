@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_add_clearance_page" model="ir.ui.view">
+        <field name="name">view.order.add.clearance.page</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Clearance" name="clearance">
+                    <group>
+                        <group col="3" name="accounting" string="Accounting"
+                               groups="account.group_account_manager,base.group_system">
+                            <field name="allow_payment_term" groups="account.group_account_manager"/>
+                        </group>
+                        <group col="3" name="others" string="Others Clearances">
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

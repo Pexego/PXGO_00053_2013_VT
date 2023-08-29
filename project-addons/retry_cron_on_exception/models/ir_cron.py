@@ -16,6 +16,13 @@ class IrCron(models.Model):
              "Retries are infinite when 0.",
     )
 
+    @api.model
+    def _callback(self, cron_name, server_action_id, job_id):
+        cron = self.env['ir.cron'].sudo().browse(job_id)
+        if cron.retry_on_exception and cron.interval_type in ('end_month_w', 'end_month'):
+            return super(IrCron, self.with_context({'force_time': cron.nextcall}))._callback(cron_name, server_action_id, job_id)
+        return super(IrCron, self)._callback(cron_name, server_action_id, job_id)
+
     @classmethod
     def _process_job(cls, job_cr, job, cron_cr):
         """ The original function is inherited to add the possibility to retry a cron if there is a RetryCallbackException.

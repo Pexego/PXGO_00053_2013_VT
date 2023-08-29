@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class ImportSheet(models.Model):
@@ -52,6 +52,37 @@ class ImportSheet(models.Model):
     landed_cost_count = fields.Integer("Landed cost count", compute="_get_landed_cost_count", default=0)
 
     invoice_ids = fields.Many2many('account.invoice', string='Invoices', domain=[('type', '=', 'in_invoice')])
+
+    sheet_state = fields.Selection([('pending', 'Pending'), ('in_process', 'In process'), ('done', 'Done')],
+                                   string='Status', default='pending', compute="_get_sheet_state", store=True)
+
+    @api.multi
+    @api.depends("landed_cost_ids.state", "invoice_ids.state")
+    def _get_sheet_state(self):
+        for sheet in self:
+            cost_state = self.calculate_sheet_state(sheet.landed_cost_ids.filtered(lambda l: l.state != 'cancel'))
+            invoice_state = self.calculate_sheet_state(sheet.invoice_ids.filtered(lambda l: l.state not in ('cancel',
+                                                                                                            'history')))
+
+            if cost_state == 'done' and invoice_state == 'done':
+                sheet.sheet_state = 'done'
+            elif cost_state in ('done', 'in_process') or invoice_state in ('done', 'in_process'):
+                sheet.sheet_state = 'in_process'
+            else:
+                sheet.sheet_state = 'pending'
+
+    @api.multi
+    def calculate_sheet_state(self, sheet_list):
+        line_state = 'pending'
+
+        for line in sheet_list:
+            if line.state == 'draft':
+                line_state = 'in_process'
+                break
+            else:
+                line_state = 'done'
+
+        return line_state
 
     def _get_landed_cost_count(self):
         """
@@ -177,7 +208,7 @@ class ImportSheetXlsx(models.AbstractModel):
         row_dict = {
             'Import Sheets': [
                 (
-                    sheet.dua, sheet.container_id.name,  sheet.dua_date, sheet.treasury,
+                    sheet.dua, sheet.container_id.name, sheet.dua_date, sheet.treasury,
                     sheet.kgs, sheet.cbm, sheet.incoterm, sheet.destination_port,
                     sheet.forwarder_comercial, sheet.container_type, sheet.channel, sheet.freight,
                     sheet.fee, sheet.inspection, sheet.arrival_cost
