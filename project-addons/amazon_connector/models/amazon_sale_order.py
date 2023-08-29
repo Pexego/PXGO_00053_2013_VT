@@ -1,24 +1,23 @@
+from .amazon_api_request import AmazonAPIRequest
 from odoo import models, fields, api, _
-from sp_api.api import Orders, Reports
-from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
-from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
 from odoo.exceptions import UserError
-import re
-import time
 from stdnum.eu import vat
 from zeep.exceptions import Fault
 from stdnum import exceptions as stdnumExceptions
+import pandas as pd
+from io import StringIO
 
 class AmazonSaleOrder(models.Model):
     _name = 'amazon.sale.order'
+
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
     name = fields.Char("Amazon Order Id")
     order_line = fields.One2many('amazon.sale.order.line', 'order_id', string='Order Lines', readonly=True)
     deposits = fields.One2many("stock.deposit", 'amazon_order_id')
     sale_deposits = fields.One2many("sale.order", compute='_compute_count')
-    invoice_deposits = fields.One2many("account.invoice", compute='_compute_count')
+    invoice_deposits = fields.One2many("account.invoice", "amazon_order")
     deposits_count = fields.Integer(compute='_compute_count', default=0)
     sale_deposits_count = fields.Integer(compute='_compute_count', default=0)
     invoice_deposits_count = fields.Integer(compute='_compute_count', default=0)
@@ -48,19 +47,40 @@ class AmazonSaleOrder(models.Model):
     zip = fields.Char(string='Postal Code')
     fiscal_position_id = fields.Many2one("account.fiscal.position", "Fiscal Position")
     billing_name = fields.Char()
-    billing_address = fields.Char('Address')
-    billing_country_id = fields.Many2one('res.country', string='Country')
+    billing_address = fields.Char('Billing Address')
+    billing_country_id = fields.Many2one('res.country', string='Billing Country')
     partner_id = fields.Many2one('res.partner')
     is_business_order = fields.Boolean()
+    ship_from_country_id = fields.Many2one('res.country', string='Ship From Country')
+    tax_address_role = fields.Selection([
+        ('ShipTo', 'ShipTo'),
+        ('ShipFrom', 'ShipFrom')])
+    seller_vat = fields.Char()
+    tax_country_id = fields.Many2one('res.country', string='Tax Country')
+    amazon_company_id = fields.Many2one('amazon.company')
+
+    invoice_id = fields.Many2one(
+        'account.invoice',
+        compute='_compute_invoice',
+        string="Invoice number"
+    )
+    invoice_state = fields.Selection(
+        related='invoice_id.state',
+        readonly=True,
+    )
+
+    def _compute_invoice(self):
+        for order in self:
+            invoice = order.invoice_deposits.filtered(lambda l: l.type == 'out_invoice' and l.state != 'cancel')
+            if invoice:
+                order.invoice_id = invoice[0]
 
     def _compute_count(self):
         for order in self:
-            if order.deposits:
-                order.deposits_count = len(order.deposits)
-                order.sale_deposits = order.deposits.mapped('sale_id')
-                order.invoice_deposits = self.env['account.invoice'].search([('amazon_order', '=', order.id)])
-                order.sale_deposits_count = len(order.sale_deposits)
-                order.invoice_deposits_count = len(order.invoice_deposits)
+            order.deposits_count = len(order.deposits)
+            order.sale_deposits = order.deposits.mapped('sale_id')
+            order.sale_deposits_count = len(order.sale_deposits)
+            order.invoice_deposits_count = len(order.invoice_deposits)
 
     def action_view_sales(self):
         action = self.env.ref('sale.action_quotations').read()[0]
@@ -118,194 +138,155 @@ class AmazonSaleOrder(models.Model):
     message_error = fields.Text()
     warning_price = fields.Boolean(default=False)
 
-    def cron_create_amazon_sale_orders(self, data_start_time=False, data_end_time=False, marketplaces=False,
-                                       only_read=False):
-        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+    def set_billing_data(self):
+        for amazon_order in self:
+            vies_response = amazon_order.get_data_from_vies()
+            if vies_response and vies_response['valid'] and (vies_response['name'] != '---' or vies_response[
+                'address'] != '---'):
+                amazon_order.billing_country_id = self.env['res.country'].search(
+                    [('code', '=', vies_response['countryCode'])]).id
+                amazon_order.billing_name = vies_response['name']
+                amazon_order.billing_address = vies_response['address']
+                if amazon_order.billing_country_id.code != amazon_order.vat_imputation_country:
+                    amazon_order.state = 'error'
+                    amazon_order.message_error += _('There country in VIES is diferent to Amazon order country')
+            else:
+                amazon_order.state = 'error'
+                amazon_order.message_error += _('There is no billing info in VIES')
+
+    def get_data_from_vies(self):
+        read = False
+        vies_response = False
+        while not read:
+            try:
+                vies_response = vat.check_vies(self.partner_vat)
+                read = True
+            except Fault as e:
+                read = e.message != 'MS_MAX_CONCURRENT_REQ'
+            except stdnumExceptions.InvalidComponent as e:
+                self.state = 'error'
+                self.message_error += _('There is a error calling vat service: %s') % e.message
+                break
+        return vies_response
+
+    def check_max_difference_allowed(self):
         amazon_max_difference_allowed = float(
             self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
-        credentials = self._get_credentials()
-        if not data_start_time:
-            data_start_time = (datetime.utcnow() - timedelta(days=1)).isoformat()
-        if not data_end_time:
-            data_end_time = datetime.utcnow().isoformat()
-        orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-        reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
-        if not marketplaces:
-            marketplaces = self._get_marketplaces()
-        try:
-            report_created = reports_obj.create_report(reportType="SC_VAT_TAX_REPORT",
-                                                       marketplaceIds=marketplaces,
-                                                       dataStartTime=data_start_time,
-                                                       dataEndTime=data_end_time).payload
-        except SellingApiException as e:
-            raise UserError(_("Amazon API Error. No order was created due to errors. '%s' \n") % e)
-        report_state = ""
-        while report_state != 'DONE':
-            try:
-                report = reports_obj.get_report(report_created.get('reportId')).payload
-                report_state = report.get("processingStatus")
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                continue
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
+        for amazon_order in self:
+            if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
+                warning_price = True
+                if amazon_order.is_business_order:
+                    fiscal_position_id = self.env['account.fiscal.position'].search(
+                        [('company_id', '=', self.env.user.company_id.id),
+                         ('country_id.code', '=', 'ES')])
+                    amazon_order.fiscal_position_id = fiscal_position_id.id
+                    amazon_order.recalculate_taxes()
+                    warning_price = abs(
+                        amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed
+                if warning_price:
+                    amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
+                        amazon_order.amount_total, amazon_order.theoretical_total_amount)
+                    amazon_order.warning_price = True
 
-        report_document = reports_obj.get_report_document(report.get('reportDocumentId'), download=True, decrypt=True).payload
-        document_lines = report_document.get('document').split("\n")
-        headers = document_lines[0].split(',')
-        orders = document_lines[1:-1]
-        order_name_index = headers.index('"Order ID"')
-        vat_number_index = headers.index('"Buyer Tax Registration"')
-        vat_imputation_country_index = headers.index('"Buyer Tax Registration Jurisdiction"')
-        order_date_index = headers.index('"Order Date"')
-        amazon_invoice_index = headers.index('"VAT Invoice Number"')
-        transaction_type_index = headers.index('"Transaction Type"')
-        city_index = headers.index('"Ship To City"')
-        state_index = headers.index('"Ship To State"')
-        country_index = headers.index('"Ship To Country"')
-        zip_index = headers.index('"Ship To Postal Code"')
-        orders_len = len(orders)
+    def add_billing_info(self, amazon_api=None):
+        if not amazon_api:
+            amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+            amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
+        for amazon_order in self:
+            if (amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
+                or amazon_order.amount_tax == 0:
+                buyer_info = amazon_api.get_order_buyer_info(amazon_order.name)
+                amazon_order.buyer_email = buyer_info.get('BuyerEmail', False)
+                amazon_order.buyer_name = buyer_info.get('BuyerName', False)
+                if amazon_order.partner_vat:
+                    amazon_order.set_billing_data()
+                else:
+                    amazon_order.state = 'error'
+                    amazon_order.message_error += _('There is no vat in this order')
+
+    @api.model
+    def _get_report_order_columns(self):
+        return ["Order ID", "Buyer Tax Registration", "Buyer Tax Registration Jurisdiction", "Order Date",
+                "VAT Invoice Number", "Transaction Type", "Ship To City", "Ship To State", "Ship To Country",
+                "Ship To Postal Code","Tax Address Role", "Jurisdiction Name", "Ship From Country", "Seller Tax Registration"
+                ]
+
+    def cron_create_amazon_sale_orders(self, data_start_time=(datetime.utcnow() - timedelta(days=1)).isoformat(),
+                                       data_end_time=datetime.utcnow().isoformat(), marketplaces=False,
+                                       only_read=False):
         max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
-        for count, order in enumerate(orders):
-            order = re.split(r',\s*(?![^"]*\"\,)', order)
-            order_number = count + 1
-            if order[transaction_type_index] == "SHIPMENT":
-                order_name = order[order_name_index]
-                exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
-                if exist_order:
-                    continue
-                read = False
-                while not read:
-                    try:
-                        res_order = orders_obj.get_order_items(order_name)
-                        read = True
-                    except SellingApiRequestThrottledException:
-                        time.sleep(amazon_time_rate_limit)
-                        read = False
-                    except SellingApiException as e:
-                        raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
-                new_order = res_order.payload
-                if new_order:
-                    country_id = self.env['res.country'].search([('code', '=', order[country_index])]).id
-                    fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', country_id)])
-                    amazon_order_values = {'name': order_name,
-                                           'partner_vat': order[vat_number_index] or False,
-                                           'vat_imputation_country': order[vat_imputation_country_index] or False,
-                                           'purchase_date': order[order_date_index] or False,
-                                           'amazon_invoice_name': order[amazon_invoice_index] or False,
-                                           'city': order[city_index] or '',
-                                           'country_id': country_id,
-                                           'state_id': order[state_index],
-                                           'zip': order[zip_index] or '',
-                                           'fiscal_position_id': fiscal_position.id
-                                           }
-                    read = False
-                    while not read:
-                        try:
-                            order_complete = orders_obj.get_order(order_name).payload
-                            read = True
-                        except SellingApiRequestThrottledException:
-                            time.sleep(amazon_time_rate_limit)
-                            read = False
-                        except SellingApiException as e:
-                            raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
-                    amazon_order_values.update({
-                        'fulfillment': order_complete.get('FulfillmentChannel', False),
-                        'sales_channel': self.env['amazon.marketplace'].search(
-                            [('amazon_name', '=', order_complete.get('SalesChannel', False))]).id,
-                        'is_business_order': order_complete.get('IsBusinessOrder', False)})
-                    amazon_order_values_lines = self._get_lines_values(new_order, fiscal_position)
-                    amazon_order_values.update(amazon_order_values_lines)
-                    amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
-                    if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
-                        warning_price = True
-                        if amazon_order.is_business_order:
-                            fiscal_position_id = self.env['account.fiscal.position'].search(
-                                [('company_id', '=', self.env.user.company_id.id),
-                                 ('country_id.code', '=', 'ES')])
-                            amazon_order.fiscal_position_id = fiscal_position_id.id
-                            amazon_order.recalculate_taxes()
-                            warning_price = abs(
-                                amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed
-                        if warning_price:
-                            amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
-                                amazon_order.amount_total, amazon_order.theoretical_total_amount)
-                            amazon_order.warning_price = True
-                    if (
-                            amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
-                            or amazon_order.amount_tax == 0:
-                        read = False
-                        while not read:
-                            try:
-                                buyer_info = orders_obj.get_order_buyer_info(order_name).payload
-                                read = True
-                            except SellingApiRequestThrottledException:
-                                time.sleep(amazon_time_rate_limit)
-                                read = False
-                            except SellingApiException as e:
-                                raise UserError(
-                                    _("Amazon API Error. Buyer Info Request. Order %s. '%s' \n") % (order_name, e))
+        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+        amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit, marketplaces)
 
-                        amazon_order.buyer_email = buyer_info.get('BuyerEmail', False)
-                        amazon_order.buyer_name = buyer_info.get('BuyerName', False)
-                        if amazon_order.partner_vat:
-                            read = False
-                            vies_response=False
-                            while not read:
-                                try:
-                                    vies_response = vat.check_vies(amazon_order.partner_vat)
-                                    read = True
-                                except Fault as e:
-                                    read = e.message != 'MS_MAX_CONCURRENT_REQ'
-                                except stdnumExceptions.InvalidComponent as e:
-                                    amazon_order.state = 'error'
-                                    amazon_order.message_error += _('There is a error calling vat service: %s') %e.message
-                                    break
-                            if vies_response and vies_response['valid'] and vies_response['name']!='---' and vies_response['address']!='---':
-                                amazon_order.billing_country_id = self.env['res.country'].search(
-                                    [('code', '=', vies_response['countryCode'])]).id
-                                amazon_order.billing_name = vies_response['name']
-                                amazon_order.billing_address = vies_response['address']
-                                if amazon_order.billing_country_id.code!=amazon_order.vat_imputation_country:
-                                    amazon_order.state = 'error'
-                                    amazon_order.message_error += _('There country in VIES is diferent to Amazon order country')
-                            else:
-                                amazon_order.state = 'error'
-                                amazon_order.message_error += _('There is no billing info in VIES')
-                        else:
-                            amazon_order.state = 'error'
-                            amazon_order.message_error += _('There is no vat in this order')
+        report_created = amazon_api.create_report("SC_VAT_TAX_REPORT", data_start_time, data_end_time)
+        report = amazon_api.get_report(report_created.get('reportId'))
+        report_document = amazon_api.get_report_document(report.get('reportDocumentId'))
 
-                    if amazon_order.state == 'error':
-                        amazon_order.send_error_mail()
-                    else:
-                        if amazon_order.warning_price or amazon_order.state == 'warning':
-                            amazon_order.send_error_mail()
-                        if not only_read:
-                            amazon_order.process_order()
-            if (order_number >= max_commit_len and order_number % max_commit_len == 0) or order_number == orders_len:
+        cols = self._get_report_order_columns()
+        #Read file with pandas
+        csv_converted = StringIO(report_document.get('document'))
+        input_file = pd.read_csv(csv_converted, encoding='latin1', usecols=cols, na_filter=False)
+        #Filter rows to get only shipments
+        input_file = input_file[input_file["Transaction Type"] == 'SHIPMENT']
+        orders_len = len(input_file.index)
+
+        for number, row in input_file.iterrows():
+            order_name = row["Order ID"]
+            exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
+            if exist_order:
+                continue
+            new_order = amazon_api.get_order_items(order_name)
+            if not new_order:
+                continue
+            country_id = self.env['res.country'].search([('code', '=', row["Ship To Country"])]).id
+            tax_country = self.env['res.country'].with_context({'lang':'en_US'}).search([('name', '=ilike', row["Jurisdiction Name"])]).id
+            seller_vat = row["Seller Tax Registration"]
+            amazon_company_id = self.env['amazon.company'].search([('vat', '=', seller_vat)])
+            fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', tax_country)])
+            ship_from_country_id = self.env['res.country'].search([('code', '=', row["Ship From Country"])]).id
+            amazon_order_values = {'name': order_name,
+                                   'partner_vat': row["Buyer Tax Registration"],
+                                   'vat_imputation_country': row["Buyer Tax Registration Jurisdiction"],
+                                   'purchase_date': row["Order Date"],
+                                   'amazon_invoice_name': row["VAT Invoice Number"],
+                                   'city': row["Ship To City"],
+                                   'country_id': country_id,
+                                   'state_id': row["Ship To State"],
+                                   'zip': row["Ship To Postal Code"],
+                                   'fiscal_position_id': fiscal_position.id,
+                                   'tax_address_role': row["Tax Address Role"],
+                                   'seller_vat': seller_vat,
+                                   'amazon_company_id': amazon_company_id.id,
+                                   'tax_country_id': tax_country,
+                                   'ship_from_country_id': ship_from_country_id
+                                   }
+            order_complete = amazon_api.get_order(order_name)
+            amazon_order_values.update({
+                'fulfillment': order_complete.get('FulfillmentChannel', False),
+                'sales_channel': self.env['amazon.marketplace'].search(
+                    [('amazon_name', '=', order_complete.get('SalesChannel', False))]).id,
+                'is_business_order': order_complete.get('IsBusinessOrder', False)})
+            amazon_order_values_lines = self._get_lines_values(new_order, fiscal_position)
+            amazon_order_values.update(amazon_order_values_lines)
+            amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
+            amazon_order.check_max_difference_allowed()
+            amazon_order.add_billing_info(amazon_api)
+            if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
+                amazon_order.send_error_mail()
+                if (number >= max_commit_len and number % max_commit_len == 0) or number == orders_len:
+                    self.env.cr.commit()
+                continue
+            if not only_read:
+                amazon_order.process_order()
+            if (number >= max_commit_len and number % max_commit_len == 0) or number == orders_len:
                 self.env.cr.commit()
 
     @api.multi
     def retry_order(self):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-        amazon_max_difference_allowed = float(
-            self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
-        credentials = self._get_credentials()
+        amazon_api = AmazonAPIRequest(self.env.user.company_id, amazon_time_rate_limit)
         for amazon_order in self:
-            orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-            read = False
-            while not read:
-                try:
-                    res_order_header = orders_obj.get_order(amazon_order.name)
-                    read = True
-                except SellingApiRequestThrottledException:
-                    time.sleep(amazon_time_rate_limit)
-                    read = False
-                except SellingApiException as e:
-                    raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
-
-            order_header = res_order_header.payload
+            order_header = amazon_api.get_order(amazon_order.name)
             amazon_order.write({'fulfillment': order_header.get('FulfillmentChannel', False),
                                 'sales_channel': self.env['amazon.marketplace'].search(
                                     [('amazon_name', '=', order_header.get('SalesChannel', False))]).id,
@@ -313,88 +294,18 @@ class AmazonSaleOrder(models.Model):
                                 'is_business_order':order_header.get('IsBusinessOrder', False),
                                 'warning_price':False})
             amazon_order.message_error = ""
-            read = False
-            while not read:
-                try:
-                    res_order = orders_obj.get_order_items(amazon_order.name)
-                    read = True
-                except SellingApiRequestThrottledException:
-                    time.sleep(amazon_time_rate_limit)
-                    read = False
-                except SellingApiException as e:
-                    raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
-            order = res_order.payload
+            order = amazon_api.get_order_items(amazon_order.name)
             if order:
                 amazon_order.order_line.unlink()
                 if not amazon_order.fiscal_position_id:
                     raise UserError(_("Please add a valid fiscal position before retry this order"))
                 amazon_order_values = amazon_order._get_lines_values(order, amazon_order.fiscal_position_id)
                 amazon_order.write(amazon_order_values)
-                if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
-                    warning_price=True
-                    if amazon_order.is_business_order:
-                        fiscal_position_id = self.env['account.fiscal.position'].search([('company_id','=',self.env.user.company_id.id),
-                                                                                         ('country_id.code', '=', 'ES')])
-                        amazon_order.fiscal_position_id=fiscal_position_id.id
-                        amazon_order.recalculate_taxes()
-                        warning_price=abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed
-                    if warning_price:
-                        amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
-                            amazon_order.amount_total, amazon_order.theoretical_total_amount)
-                        amazon_order.warning_price = True
-
-                if (
-                        amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
-                        or amazon_order.amount_tax == 0:
-                    read = False
-                    while not read:
-                        try:
-                            buyer_info = orders_obj.get_order_buyer_info(amazon_order.name).payload
-                            read = True
-                        except SellingApiRequestThrottledException:
-                            time.sleep(amazon_time_rate_limit)
-                            read = False
-                        except SellingApiException as e:
-                            raise UserError(
-                                _("Amazon API Error. Buyer Info Request. Order %s. '%s' \n") % (amazon_order.name, e))
-
-                    amazon_order.buyer_email = buyer_info.get('BuyerEmail', False)
-                    amazon_order.buyer_name = buyer_info.get('BuyerName', False)
-                    if amazon_order.partner_vat:
-                        read = False
-                        vies_response=False
-                        while not read:
-                            try:
-                                vies_response = vat.check_vies(amazon_order.partner_vat)
-                                read = True
-                            except Fault as e:
-                                read = e.message != 'MS_MAX_CONCURRENT_REQ'
-                            except stdnumExceptions.InvalidComponent as e:
-                                amazon_order.state = 'error'
-                                amazon_order.message_error += _('There is a error calling vat service: %s') %e.message
-                                break
-                        if vies_response and vies_response['valid'] and vies_response['name'] != '---' and vies_response[
-                            'address'] != '---':
-                            amazon_order.billing_country_id = self.env['res.country'].search(
-                                [('code', '=', vies_response['countryCode'])]).id
-                            amazon_order.billing_name = vies_response['name']
-                            amazon_order.billing_address = vies_response['address']
-                            if amazon_order.billing_country_id.code != amazon_order.vat_imputation_country:
-                                amazon_order.state = 'error'
-                                amazon_order.message_error += _(
-                                    'There country in VIES is diferent to Amazon order country')
-                        else:
-                            amazon_order.state = 'error'
-                            amazon_order.message_error += _('There is no billing info in VIES')
-                    else:
-                        amazon_order.state='error'
-                        amazon_order.message_error += _('There is no vat in this order')
+                amazon_order.check_max_difference_allowed()
+                amazon_order.add_billing_info(amazon_api)
                 if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
                     amazon_order.send_error_mail()
 
-    def _get_marketplaces(self):
-        company = self.env.user.company_id
-        return company.marketplace_ids.mapped('code')
 
     def _get_lines_values(self, order, fiscal_position_id):
         amazon_order_values = {'order_line': [],
@@ -420,22 +331,14 @@ class AmazonSaleOrder(models.Model):
                 amazon_order_values['message_error'] += _('ItemPrice or ItemTax fields are empty %s\n') % asin_code
             else:
                 price_total = float(order_item.get('ItemPrice').get('Amount'))
-                shipping_price = 0
-                shipping_discount_price = 0
-                shipping_tax = 0
-                shipping_discount_tax = 0
                 shipping_tax_obj = order_item.get('ShippingTax', False)
-                if shipping_tax_obj:
-                    shipping_tax = float(shipping_tax_obj.get('Amount'))
+                shipping_tax = float(shipping_tax_obj.get('Amount')) if shipping_tax_obj else 0
                 shipping_price_obj = order_item.get('ShippingPrice', False)
-                if shipping_price_obj:
-                    shipping_price = float(shipping_price_obj.get('Amount'))
-                shipping_discount_tax_obj = order_item.get('ShippingDiscountTax', False)
-                if shipping_discount_tax_obj:
-                    shipping_discount_tax = float(shipping_discount_tax_obj.get('Amount'))
-                shipping_discount_price_obj = order_item.get('ShippingDiscount', False)
-                if shipping_discount_price_obj:
-                    shipping_discount_price = float(shipping_discount_price_obj.get('Amount'))
+                shipping_price = float(shipping_price_obj.get('Amount')) if shipping_price_obj else 0
+                discount_tax_obj = order_item.get('ShippingDiscountTax', False)
+                shipping_discount_tax = float(discount_tax_obj.get('Amount')) if discount_tax_obj else 0
+                discount_price_obj = order_item.get('ShippingDiscount', False)
+                shipping_discount_price = float(discount_price_obj.get('Amount')) if discount_price_obj else 0
                 shipping_final_total = shipping_price - shipping_discount_price
                 shipping_taxes_total = (shipping_tax - shipping_discount_tax)
                 price_total += shipping_final_total
@@ -479,16 +382,6 @@ class AmazonSaleOrder(models.Model):
             amazon_order_values["state"] = "read"
         return amazon_order_values
 
-    def _get_credentials(self):
-        company = self.env.user.company_id
-        return dict(
-            refresh_token=company.refresh_token,
-            lwa_app_id=company.lwa_app_id,
-            lwa_client_secret=company.lwa_client_secret,
-            aws_secret_key=company.aws_secret_key,
-            aws_access_key=company.aws_access_key,
-            role_arn=company.role_arn,
-        )
     def recalculate_taxes(self):
         for order in self:
             taxes_obj = self.env['account.tax'].search(
@@ -500,16 +393,13 @@ class AmazonSaleOrder(models.Model):
 
     def send_error_mail(self):
         template = self.env.ref('amazon_connector.send_mail_errors_amazon')
+        context = {'lang': 'es_ES'}
         if self.warning_price:
-            context = {'message_warning': 'The order has been processed but the invoice is in draft status.',
-                       'lang': 'es_ES'}
-            template.with_context(context).send_mail(self.id)
+            context['message_warning'] = 'The order has been processed but the invoice is in draft status.'
         elif self.state == 'warning':
-            context = {'message_warning': 'The order has been processed but the invoice has not been created.',
-                       'lang': 'es_ES'}
-            template.with_context(context).send_mail(self.id)
-        else:
-            template.send_mail(self.id)
+            context['message_warning'] ='The order has been processed but the invoice has not been created.'
+        template.with_context(context).send_mail(self.id)
+
 
     @api.multi
     def process_order(self, orders_obj=False):
@@ -555,11 +445,14 @@ class AmazonSaleOrder(models.Model):
                 # Buscar el depósito, crear la venta, crear factura, ajustar precio de la factura generada con el de venta en amazon y validarla
                 deposits = self.env['stock.deposit']
                 if not order.deposits:
+                    if not order.amazon_company_id:
+                        raise UserError(_("There is no Amazon company linked to this order"))
+                    partner = order.amazon_company_id.partner_id
                     for line in order.order_line:
                         cont = 0
                         max = line.product_qty
                         deposits_part = self.env['stock.deposit'].search(
-                            [('partner_id.name', '=', 'Ventas Amazon'),
+                            [('partner_id', '=', partner.id),
                              ('state', '=', 'draft'),
                              ('product_id', '=', line.product_id.id)],
                             order='delivery_date asc')
@@ -593,8 +486,8 @@ class AmazonSaleOrder(models.Model):
             if (order.partner_vat and order.vat_imputation_country and order.amount_total > 400) \
                     or order.amount_tax == 0:
                 partner = order.create_partner()
-                order.partner_id=partner.id
-                journal_id = self.env['account.journal'].search([('type', '=', 'sale')], order='id')[0]
+                order.partner_id = partner.id
+                journal_id = order.amazon_company_id.journal_id
                 invoices_ids = order.deposits.with_context({'force_partner_id': partner}).create_invoice(
                     journal_id=journal_id)
             else:
@@ -614,12 +507,11 @@ class AmazonSaleOrder(models.Model):
                 order.state = 'invoice_open'
 
     def create_partner(self):
-        # Código para crear la factura completa. No se incorpora todavía porque no tenemos la info de facturación de los clientes
         if not self.partner_vat:
             raise UserError(_("There is no vat in this Order"))
-        domain = [('name', '=', self.billing_name)]
+        domain = ['&','|',('active','=',True),('active','=',False),('name', '=', self.billing_name)]
         if self.buyer_email:
-            domain += [('email', '=', self.buyer_email)]
+            domain = ['&',('email', '=', self.buyer_email)] + domain
         partner_id = self.env['res.partner'].search(domain)
         if partner_id:
             partner_id = partner_id[0]
@@ -690,13 +582,3 @@ class AmazonSaleOrderLine(models.Model):
                 'price_total': taxes['total_included'],
                 'price_subtotal': taxes['total_excluded'],
             })
-
-
-class AmazonMarketplace(models.Model):
-    _name = 'amazon.marketplace'
-
-    name = fields.Char(translate=True)
-    code = fields.Char()
-    amazon_name = fields.Char()
-    account_id = fields.Many2one("account.account")
-    color = fields.Integer()

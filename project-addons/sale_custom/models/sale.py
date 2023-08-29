@@ -41,12 +41,13 @@ class SaleOrderLine(models.Model):
             self.product_packaging = False
             return {}
         if self.order_id.state == 'sale':
-            exception = self.order_id.check_weight(True)
-            if exception:
-                warning_mess =  {
-                        'title': _('Max weight advise'),
-                        'message': exception}
-                return {'warning': warning_mess}
+            if not self.allow_overcome_weight:
+                exception = self.order_id.check_weight(True)
+                if exception:
+                    warning_mess =  {
+                            'title': _('Max weight advise'),
+                            'message': exception}
+                    return {'warning': warning_mess}
         if self.product_id.type == 'product':
             precision = self.env['decimal.precision'].\
                 precision_get('Product Unit of Measure')
@@ -124,6 +125,8 @@ class SaleOrder(models.Model):
     pricelist_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     force_generic_product = fields.Boolean(default=False, copy=False)
+
+    allow_overcome_weight = fields.Boolean(default=False, copy=False)
 
     is_editable = fields.Boolean(compute='_get_is_editable', default=True)
 
@@ -262,9 +265,10 @@ class SaleOrder(models.Model):
             user_buyer = self.env['ir.config_parameter'].sudo().get_param(
                 'web.user.buyer')
             for sale in self:
-                exception = sale.check_weight()
-                if exception:
-                    return exception
+                if not sale.allow_overcome_weight:
+                    exception = sale.check_weight()
+                    if exception:
+                        return exception
                 if not sale.validated_dir and sale.create_uid.email == \
                         user_buyer and self.delivery_type not in 'installations':
                     message = _('Please, validate shipping address.')

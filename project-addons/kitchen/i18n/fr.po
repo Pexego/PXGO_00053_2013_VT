@@ -428,4 +428,12 @@ msgstr "<p>Si vous acceptez, ces personnalisations seront annulées</p>"
 msgid "<p>Do you want to retrieve any cancel customization?</p>"
 msgstr "<p>Voulez-vous récupérer une personnalisation d'annulation?</p>"
 
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Are you sure you want to cancel?"
+msgstr "Es-tu sûre de vouloir annuler?"
 
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Recover request"
+msgstr "Récupérer la sollicitude"

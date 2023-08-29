@@ -1059,3 +1059,15 @@ msgstr "Omitir comprobación de Previews"
 #: code:addons/kitchen/wizard/create_customization_wizard.py:165
 msgid "You can't create a customization with no preview selected : %s"
 msgstr "No puedes crear una personalización sin seleccionar una preview : %s"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Are you sure you want to cancel?"
+msgstr "¿Está seguro de que desea cancelar?"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.kitchen_customization_form
+msgid "Recover request"
+msgstr "Recuperar solicitud"
+
+

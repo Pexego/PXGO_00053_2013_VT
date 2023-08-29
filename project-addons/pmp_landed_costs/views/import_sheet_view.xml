@@ -6,6 +6,9 @@
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
             <form string="Import Sheet">
+                <header>
+                    <field name="sheet_state" widget="statusbar" statusbar_visible="pending,in_process,done" clickable="True"/>
+                </header>
                 <group col="2" string="General">
                     <field name="dua"/>
                     <field name="container_id" readonly="1"/>
@@ -31,7 +34,7 @@
                 <group>
                     <field name="landed_cost_count" invisible="1"/>
                     <button name="action_open_landed_cost_creator" string="Create landed costs"
-                            type="object" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>
+                            type="object"/>
                 </group>
                 <field name="landed_cost_ids">
                     <tree create="false" editable="true">
@@ -57,7 +60,7 @@
         <field name="name">import.sheet.tree</field>
         <field name="model">import.sheet</field>
         <field name="arch" type="xml">
-            <tree default_order="dua asc">
+            <tree default_order="treasury desc">
                 <field name="dua"/>
                 <field name="container_id"/>
                 <field name="dua_date"/>
