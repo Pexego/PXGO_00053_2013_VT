@@ -589,6 +589,17 @@
         <menuitem id="contacts.menu_localisation" name="Localization"
             parent="crm.crm_menu_config" sequence="5"/>
 
+        <record id="view_partner_category_form_extended" model="ir.ui.view">
+            <field name="name">Contact Tags Extended</field>
+            <field name="model">res.partner.category</field>
+            <field name="inherit_id" ref="base.view_partner_category_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="color_selection" string="Color selection"/>
+                </xpath>
+            </field>
+        </record>
+
         <menuitem id="contacts.menu_partner_category_form"
             action="base.action_partner_category_form"
             name="Contact Tags"

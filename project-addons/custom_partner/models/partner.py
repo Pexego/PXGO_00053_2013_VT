@@ -30,7 +30,6 @@ import dateutil.relativedelta,re
 from calendar import monthrange
 from odoo.addons.phone_validation.tools import phone_validation
 
-
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
 
@@ -932,3 +931,43 @@ class Followers(models.Model):
                 for p in dups:
                     p.sudo().unlink()
         return super(Followers, self).create(vals)
+
+
+class ResPartnerCategory(models.Model):
+    _inherit = "res.partner.category"
+
+    color = fields.Integer(string='Color Index')
+
+    color_selection = fields.Selection(
+        [(1, 'Red'),
+         (2, 'Orange'),
+         (3, 'Yellow'),
+         (4, 'Light blue'),
+         (5, 'Dark purple'),
+         (6, 'Salmon pink'),
+         (7, 'Medium blue'),
+         (8, 'Dark blue'),
+         (9, 'Fuchsia'),
+         (10, 'Green'),
+         (11, 'Purple')],
+        string="Color Index")
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('color_selection') and vals.get('parent_id'):
+            vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
+        else:
+            vals['color'] = vals['color_selection']
+
+        return super(ResPartnerCategory, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('color_selection'):
+            vals['color'] = vals['color_selection']
+            for etiquette in self:
+                etiquette.child_ids.filtered(lambda l: l.color_selection is False).write({'color': vals['color']})
+        elif vals.get('parent_id') and not self.color_selection:
+            vals['color'] = self.env['res.partner.category'].browse(vals['parent_id']).color
+
+        return super(ResPartnerCategory, self).write(vals)
