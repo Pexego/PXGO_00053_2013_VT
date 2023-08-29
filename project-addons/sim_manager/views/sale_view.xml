@@ -4,11 +4,11 @@
     <record id="view_order_add_allow_confirm_sim_form" model="ir.ui.view">
         <field name="name">sale.order.form</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="sales_clearance.view_order_add_clearance_page"/>
         <field name="arch" type="xml">
-            <field name="fiscal_position_id" position="after">
+            <group name="others" position="inside">
                 <field name="allow_sale_sim" groups="base.group_system"/>
-            </field>
+            </group>
         </field>
     </record>
 </odoo>
