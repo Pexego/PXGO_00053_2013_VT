@@ -694,6 +694,6 @@ msgid "Invoice Date"
 msgstr "Data fattura"
 
 #. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_product_brand
-msgid "Brand Name"
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_product_brand_id
+msgid "Brand"
 msgstr "Marchio"

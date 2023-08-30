@@ -66,4 +66,4 @@ class AccountInvoiceLine(models.Model):
 
     type = fields.Selection(related="invoice_id.type", string="Type")
     date_invoice = fields.Date('Invoice Date', related='invoice_id.date_invoice')
-    product_brand = fields.Char('Brand Name', related='product_id.product_brand_id.name')
+    product_brand_id = fields.Many2one(related='product_id.product_brand_id')
