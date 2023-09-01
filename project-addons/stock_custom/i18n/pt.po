@@ -20,3 +20,18 @@ msgstr ""
 #: model:mail.template,subject:stock_custom.picking_done_template
 msgid "VISIOTECH - Shipped products"
 msgstr "VISIOTECH - Produtos enviados"
+
+#. module: stock_custom
+#: model:mail.template,body_html:stock_custom.purchase_order_received_template
+msgid "<p>Dear Supplier,</p> "
+"<p>We inform you that we have received the products corresponding to ${ctx.get('order_name')}.</p>"
+"<p>Please send us the corresponding invoice as soon as possible, so that we can "
+"enter it in our system and proceed with the payment under the agreed conditions.</p>"
+"<p>Sincerely,</p>"
+"<p>VISIOTECH</p>"
+msgstr "<p>Caro fornecedor:</p> "
+"<p>Gostaríamos de informar que recebemos os produtos para ${ctx.get('order_name')}.</p>"
+"<p>Agradecemos que nos envie a fatura correspondente com a maior brevidade possível, para podermos "
+"introduzi-la no nosso sistema e proceder ao pagamento da fatura nas condições acordadas.</p>"
+"<p>Com os melhores cumprimentos,</p>"
+"<p>VISIOTECH</p>"
