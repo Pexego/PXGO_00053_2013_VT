@@ -10,11 +10,10 @@ class ProductProduct(models.Model):
         """
             This method build a XLS File with information of products and email purchasing team
         """
-        headers = ["ID", "Último Proveedor", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
-                   "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
+        headers = ["ID", "Último Proveedor", "Referencia interna", "Fabricando", "Entrante", "Total incoming",
+                   "Stock cocina", "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
                    "Cant. pedido más grande", "Días de stock restantes", "Días de stock restantes (real)",
-                   "Stock en playa",
-                   "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
+                   "Stock en playa", "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado", "Reservas", "Reservas confirmadas"]
 
         domain = [('custom', '=', False), ('type', '!=', 'service'),
@@ -51,8 +50,11 @@ class ProductProduct(models.Model):
                 elif field == 'reservation_count':
                     product_fields.append(product['reservation_count'] +
                                           product['outgoing_picking_reserved_qty'])
-                elif field == 'outgoing_picking_reserved_qty':
-                    product_fields.append(product['outgoing_picking_reserved_qty'])
+                elif field == 'incoming_qty':
+                    incoming_qty = product[field]
+                    product_fields.append(incoming_qty)
+                    total_incoming_qty = incoming_qty + product['qty_in_production']
+                    product_fields.append(total_incoming_qty)
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
