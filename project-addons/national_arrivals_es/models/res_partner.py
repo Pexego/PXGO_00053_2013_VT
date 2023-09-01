@@ -10,6 +10,7 @@ class ResPartner(models.Model):
         store=True
     )
 
+    @api.depends('supplier', 'property_account_position_id')
     def _compute_is_national_supplier(self):
         """
         Calculates if a supplier has intra or national fiscal position
