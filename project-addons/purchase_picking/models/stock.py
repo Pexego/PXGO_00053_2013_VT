@@ -21,6 +21,7 @@
 from odoo import models, fields, api, _, exceptions
 from datetime import datetime, timedelta
 
+
 class StockContainer(models.Model):
 
     _name = 'stock.container'
@@ -154,6 +155,12 @@ class StockContainer(models.Model):
                 container.date_to_order = container.date_expected
             else:
                 container.date_to_order = container.eta
+
+    @api.one
+    def copy(self, default=None):
+        default = default and default or {}
+        default['name'] = "%s (copy)" % self.name
+        return super().copy(default)
 
     name = fields.Char("Container Ref.", required=True)
     date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
