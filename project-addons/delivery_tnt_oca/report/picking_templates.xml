@@ -89,8 +89,9 @@
 ^FT40,768^A0N,25,20^FD<t t-esc="picking.partner_id.state_id.name" /> <t
                             t-esc="picking.partner_id.zip"
                         />^FS
-^FT40,799^A0N,25,20^FD<t t-esc="picking.partner_id.country_id.code" />^FS
-^FT510,480^A0N,80,82^FD<t t-esc="picking.tnt_consignment_transit_depot" />^FS
+^FT40,799^A0N,25,20^FD<t t-esc="picking.partner_id.country_id.code" />^FS<t
+                        t-foreach="picking.tnt_consignment_transit_depot.split(',')" t-as="transit_depot">
+^FT510,<t t-esc="480 + transit_depot_index * 70" />^A0N,80,82^FD<t t-esc="transit_depot"/>^FS</t>
 ^FT510,550^A0N,80,82^FD^FS
 ^FT510,625^A0N,80,82^FD^FS
 ^FT510,695^A0N,80,82^FD^FS

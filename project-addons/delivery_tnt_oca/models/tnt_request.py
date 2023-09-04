@@ -479,8 +479,8 @@ class TntRequest(object):
             "tnt_piece_barcode": p_data["barcode"]["#text"],
         }
         if "transitDepots" in c_data and c_data["transitDepots"]:
-            transitDepot = c_data["transitDepots"]["transitDepot"]
-            vals["tnt_consignment_transit_depot"] = transitDepot["depotCode"]
+            depot_codes = ','.join([transit_depot["depotCode"] for transit_depot in c_data["transitDepots"]["transitDepot"]])
+            vals["tnt_consignment_transit_depot"] = depot_codes
         if "xrayDisplay" in c_data and "#text" in c_data["xrayDisplay"]:
             vals["tnt_consignment_xray"] = c_data["xrayDisplay"]["#text"]
         self.record.write(vals)
