@@ -186,13 +186,26 @@ class PurchaseOrderLine(models.Model):
                 raise UserError(_("You cannot delete a line that has confirmed quantities"))
         return super(PurchaseOrderLine, self).unlink()
 
+    @staticmethod
+    def _delete_fields_if_empty(field_names, values):
+        """
+        Delete from the 'values' dictionary those fields whose names are present and have empty values.
+        :param field_names: List of field names to check.
+        :param values: Dictionary of values to process.
+        """
+        for field_name in field_names:
+            if field_name in values and not values[field_name]:
+                del values[field_name]
+
     @api.model
     def _prepare_add_missing_fields(self, values):
         """ Deduce missing required fields from the onchange """
         res = {}
         onchange_fields = ['name', 'price_unit', 'product_uom', 'taxes_id', 'date_planned']
+        delete_fields_if_empty = ['name']
         if values.get('order_id') and values.get('product_id') and any(f not in values for f in onchange_fields):
             with self.env.do_in_onchange():
+                self._delete_fields_if_empty(delete_fields_if_empty, values)
                 line = self.new(values)
                 line.onchange_product_id()
                 for field in onchange_fields:

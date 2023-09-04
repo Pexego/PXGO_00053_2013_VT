@@ -12,7 +12,6 @@ class PartnerListener(Component):
 
     def export_partner_data(self, record):
         record.with_delay(priority=8).export_partner()
-        record.with_delay(priority=8, eta=60).export_partner_tag_rel()
 
         sales = self.env['sale.order'].search(
             [('partner_id', 'child_of', [record.id]),
@@ -58,7 +57,7 @@ class PartnerListener(Component):
                      "country_id", "state_id", "email_web", "email3", "ref",
                      'user_id', "property_product_pricelist", "lang", "type",
                      "parent_id", "is_company", "email",
-                     "prospective", "phone", "mobile", "csv_connector_access"]
+                     "prospective", "phone", "mobile","csv_connector_access", "pricelist_brand_ids", "category_id"]
         if partner.is_company:
 
             if partner.web and (partner.active or partner.prospective):
@@ -95,7 +94,7 @@ class PartnerListener(Component):
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
             "is_company", "email", "active", "prospective", "phone", "mobile",
             "property_payment_term_id", "last_sale_date", "csv_connector_access",
-            "pricelist_brand_ids"
+            "pricelist_brand_ids", "category_id"
         ]
         if 'web' in fields and record.web and \
                 (partner.active or partner.prospective):
@@ -113,9 +112,6 @@ class PartnerListener(Component):
             self.export_partner_data(record)
 
         elif partner.web:
-            if 'category_id' in fields:
-                partner.with_delay(priority=11, eta=60).unlink_partner_tag_rel()
-                partner.with_delay(priority=11, eta=120).export_partner_tag_rel()
             for field in up_fields:
                 if field in fields:
                     if field == 'last_sale_date' and not partner.csv_connector_access:
@@ -231,25 +227,6 @@ class ResPartner(models.Model):
             return exporter.delete(self)
         return True
 
-    @job(retry_pattern={
-        1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def export_partner_tag_rel(self):
-        backend = self.env["middleware.backend"].search([])[0]
-        with backend.work_on('res.partner') as work:
-            exporter = work.component(usage='record.exporter')
-            for category in self.category_id:
-                exporter.insert_category_rel(self, category)
-        return True
-
-    @job(retry_pattern={
-        1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def unlink_partner_tag_rel(self):
-        backend = self.env["middleware.backend"].search([])[0]
-        with backend.work_on('res.partner') as work:
-            exporter = work.component(usage='record.exporter')
-            return exporter.delete_category_rel(self.id)
-        return True
-
 
 class PartnerCategoryListener(Component):
     _name = 'partner.category.event.listener'
@@ -268,8 +245,7 @@ class PartnerCategoryListener(Component):
             record.with_delay(priority=1).unlink_partner_tag()
 
             for partner in partner_ids:
-                partner.with_delay(priority=11).unlink_partner_tag_rel()
-                partner.with_delay(priority=11, eta=120).export_partner_tag_rel()
+                partner.with_delay(priority=11).update_partner()
         elif 'active' in fields and record.active or \
              'prospective' in fields and record.prospective:
             partner_ids = self.env['res.partner'].search(
@@ -279,8 +255,7 @@ class PartnerCategoryListener(Component):
                  ('category_id', 'in', record.id)])
             record.with_delay(priority=11, eta=60).export_partner_tag()
             for partner in partner_ids:
-                partner.with_delay(priority=11).unlink_partner_tag_rel()
-                partner.with_delay(priority=11, eta=120).export_partner_tag_rel()
+                partner.update_partner()
         elif record.active:
             record.with_delay(priority=11, eta=60).update_partner_tag()
 

@@ -127,3 +127,7 @@ class StockMove(models.Model):
         if self.env.context.get('claim_mode', False):
             merge = False
         return super(StockMove, self)._action_confirm(merge, merge_into)
+
+    def get_move_order_name(self):
+        res = super().get_move_order_name()
+        return self.claim_line_id.claim_id.display_name or res
