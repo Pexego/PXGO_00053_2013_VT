@@ -40,14 +40,13 @@ class SaleOrderLine(models.Model):
                 self.product_uom:
             self.product_packaging = False
             return {}
-        if self.order_id.state == 'sale':
-            if not self.allow_overcome_weight:
-                exception = self.order_id.check_weight(True)
-                if exception:
-                    warning_mess =  {
-                            'title': _('Max weight advise'),
-                            'message': exception}
-                    return {'warning': warning_mess}
+        if self.order_id.state == 'sale' and not self.order_id.allow_overcome_weight:
+            exception = self.order_id.check_weight(True)
+            if exception:
+                warning_mess = {
+                    'title': _('Max weight advise'),
+                    'message': exception}
+                return {'warning': warning_mess}
         if self.product_id.type == 'product':
             precision = self.env['decimal.precision'].\
                 precision_get('Product Unit of Measure')
