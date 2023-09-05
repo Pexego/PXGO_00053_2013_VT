@@ -342,11 +342,17 @@ class CrmClaim(models.Model):
         customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer')
         supplier_type = self.env.ref('crm_claim_type.crm_claim_type_supplier')
         if self.claim_type.id == customer_type.id:
-            return {'domain': {'partner_id': [('customer', '=', True),
-                                              ('is_company', '=', True)]}}
+            return {'domain': {
+                'partner_id': ['&', ('customer', '=', True),
+                               '|', ('is_company', '=', True),
+                               ('parent_id', '=', False)
+                               ]}}
         elif self.claim_type.id == supplier_type.id:
-            return {'domain': {'partner_id': [('supplier', '=', True),
-                                              ('is_company', '=', True)]}}
+            return {'domain': {
+                'partner_id': ['&', ('supplier', '=', True),
+                               '|', ('is_company', '=', True),
+                               ('parent_id', '=', False)
+                               ]}}
         else:
             return {}
 

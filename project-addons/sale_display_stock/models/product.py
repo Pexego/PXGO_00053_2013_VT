@@ -237,3 +237,8 @@ class ProductProduct(models.Model):
             dicc[product] += move.get('product_uom_qty')
         for product in self:
             product.reservation_count= dicc.get(product.id) or 0
+
+    def view_stock_wizard_action(self):
+        stock_field = self.env.context.get('stock_field')
+        return self.env['view.stock.wizard'].create(
+            {'product_id': self.id, 'qty': getattr(self, stock_field)}).action_show()

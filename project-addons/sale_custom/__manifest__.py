@@ -28,7 +28,8 @@
         "scheduled_shipment",
         "product_customer_reference",
         "product_minimum_order",
-        "sale_promotions_extend"
+        "sale_promotions_extend",
+        "sales_clearance"
     ],
     "data": [
         'views/sale_view.xml', 'views/email_purchase_template.xml',

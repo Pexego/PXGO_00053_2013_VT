@@ -24,9 +24,9 @@ msgid "\n"
 "         \n"
 "        "
 msgstr "\n"
-"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">El informe de pago de amazon <strong style=\"font-weight:bold;\">${object.name} - ${object.marketplace_id.name} </strong> ha terminado.</p>\n"
-"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">ERRORES: ${ctx.get('error_count')}</p>\n"
-"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">CONCILIADAS: ${ctx.get('reconciled_count')}</p>\n"
+"            <p>El informe de pago de Amazon <strong>${object.name} - ${object.marketplace_id.name} </strong> ha terminado.</p>\n"
+"            <p>ERRORS: ${ctx.get('error_count')}</strong></p>\n"
+"            <p>RECONCILED: ${ctx.get('reconciled_count')}</p>\n"
 "         \n"
 "        "
 
@@ -39,7 +39,7 @@ msgid "\n"
 "         \n"
 "        "
 msgstr "\n"
-"            <p>El pedido de Amazon <strong>${object.name}</strong> tiene los siguientes errores:</p>\n"
+"            <p>El pedido de amazon <strong>${object.name}</strong> tiene los siguientes errores:</p>\n"
 "            <p>ERRORES: ${object.message_error}</strong></p>\n"
 "            <p>${ctx.get('message_warning','')}</p>\n"
 "         \n"
@@ -72,7 +72,6 @@ msgstr "Asiento contable"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_address
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_address
 msgid "Address"
 msgstr "Dirección"
 
@@ -105,47 +104,55 @@ msgid "Amazon"
 msgstr "Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:244
-#: code:addons/amazon_connector/models/amazon_sale_order.py:350
+#: code:addons/amazon_connector/models/amazon_sale_order.py:144
 #, python-format
-msgid "Amazon API Error. Buyer Info Request. Order %s. '%s' \n"
-msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
+msgid "Amazon API Error. Method: %s.Order %s. '%s' \n"
+""
+msgstr "Error API Amazon. Llamada a la API: %s. Pedido %s. '%s' \n"
+""
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:141
+#: code:addons/amazon_connector/models/amazon_sale_order.py:157
 #, python-format
 msgid "Amazon API Error. No order was created due to errors. '%s' \n"
+""
 msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_returns.py:183
+#: code:addons/amazon_connector/models/amazon_returns.py:184
 #, python-format
 msgid "Amazon API Error. No return was created due to errors. '%s' \n"
-msgstr "Amazon API Error. No return was created due to errors. '%s' \n"
+""
+msgstr "Error API Amazon. No se ha creado ninguna devolución debido a errores. '%s' \n"
+""
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:183
-#: code:addons/amazon_connector/models/amazon_sale_order.py:208
-#: code:addons/amazon_connector/models/amazon_sale_order.py:297
-#: code:addons/amazon_connector/models/amazon_sale_order.py:316
-#: code:addons/amazon_connector/models/amazon_settlement.py:259
-#, python-format
-msgid "Amazon API Error. Order %s. '%s' \n"
-msgstr "Error API Amazon. Pedido %s. '%s'"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_returns.py:193
-#: code:addons/amazon_connector/models/amazon_returns.py:205
-#: code:addons/amazon_connector/models/amazon_sale_order.py:151
+#: code:addons/amazon_connector/models/amazon_returns.py:194
+#: code:addons/amazon_connector/models/amazon_returns.py:206
+#: code:addons/amazon_connector/models/amazon_sale_order.py:168
 #: code:addons/amazon_connector/models/amazon_settlement.py:99
 #, python-format
 msgid "Amazon API Error. Report %s. '%s' \n"
+""
 msgstr "Error API Amazon. Informe %s. '%s'"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_product_product_asin_code
 msgid "Amazon ASIN"
 msgstr "Amazon ASIN"
+
+#. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.action_show_companies
+#: model:ir.ui.menu,name:amazon_connector.amazon_companies_menu
+msgid "Amazon Companies"
+msgstr "Compañias de Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amazon_company_id
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_company_form
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_company_tree
+msgid "Amazon Company"
+msgstr "Compañia Amazon"
 
 #. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.view_company_amazon_connector_form
@@ -210,7 +217,7 @@ msgstr "Pedidos de Amazon"
 #: model:ir.model.fields,field_description:amazon_connector.field_res_partner_amazon_parent_id
 #: model:ir.model.fields,field_description:amazon_connector.field_res_users_amazon_parent_id
 msgid "Amazon Parent"
-msgstr "Amazon Parent"
+msgstr "Cliente Padre Amazon"
 
 #. module: amazon_connector
 #: model:ir.model.fields,help:amazon_connector.field_amazon_return_asin
@@ -321,9 +328,19 @@ msgid "Aws Secret Key"
 msgstr "AWS clave secreta"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_address
 msgid "Billing Address"
-msgstr "Dirección fiscal"
+msgstr "Dirección de facturación"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_country_id
+msgid "Billing Country"
+msgstr "País de la dirección de facturación"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Billing Information"
+msgstr "Información de facturación"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_name
@@ -332,76 +349,76 @@ msgstr "Nombre fiscal"
 
 #. module: amazon_connector
 #: model:ir.model.fields,help:amazon_connector.field_amazon_return_reason
-msgid "Brief description of the reason for the return indicated by the customer. Meanings: \n"
+msgid "Brief description of the reason for the return indicated by the customer. Meanings:\n"
 "                                    Reason                                     Description\n"
-"                                      OTHER                                     Return option not available                                      \n"
-"                                      ORDERED_WRONG_ITEM                        I accidentally ordered the wrong item                                      \n"
-"                                      FOUND_BETTER_PRICE                        I found better prices elsewhere                                      \n"
-"                                      NO_REASON_GIVEN                           No reason--I just don't want the product any more                                      \n"
-"                                      QUALITY_UNACCEPTABLE                      Product performance/quality is not up to my expectations                                      \n"
-"                                      NOT_COMPATIBLE                            Product is not compatible with my existing system                                      \n"
-"                                      DAMAGED_BY_FC                             Product became damaged/defective after arrival                                      \n"
-"                                      MISSED_ESTIMATED_DELIVERY                 Item took too long to arrive; I don't want it any more                                      \n"
-"                                      MISSING_PARTS                             Shipment was missing items or accessories                                      \n"
-"                                      DAMAGED_BY_CARRIER                        Product was damaged/defective on arrival                                      \n"
-"                                      SWITCHEROO                                Amazon sent me the wrong item                                      \n"
-"                                      DEFECTIVE                                 Item is defective                                      \n"
-"                                      EXTRA_ITEM                                Extra item included in shipment                                      \n"
-"                                      UNWANTED_ITEM                             Unwanted Item                                      \n"
-"                                      WARRANTY                                  Item defective after arrival -- Warranty                                      \n"
-"                                      UNAUTHORIZED_PURCHASE                     Unauthorized purchase -- i.e. fraud                                      \n"
-"                                      UNDELIVERABLE_INSUFFICIENT_ADDRESS        Undeliverable; Insufficient address                                      \n"
-"                                      UNDELIVERABLE_FAILED_DELIVERY_ATTEMPTS    Undeliverable; Failed delivery attempts                                      \n"
-"                                      UNDELIVERABLE_REFUSED                     Undeliverable; Refused                                      \n"
-"                                      UNDELIVERABLE_UNKNOWN                     Undeliverable; Unknown                                      \n"
-"                                      UNDELIVERABLE_UNCLAIMED                   Undeliverable; Unclaimed                                      \n"
-"                                      APPAREL_TOO_SMALL                         Apparel; Product was too small                                      \n"
-"                                      APPAREL_TOO_LARGE                         Apparel; Product was too large                                      \n"
-"                                      APPAREL_STYLE                             Apparel; Did not like style of garment                                      \n"
-"                                      MISORDERED                                Ordered wrong style/size/color                                      \n"
-"                                      NOT_AS_DESCRIBED                          Not as described on website                                      \n"
-"                                      JEWELRY_TOO_SMALL                         Jewelry; Too small/short                                      \n"
-"                                      JEWELRY_TOO_LARGE                         Jewelry; Too large/long                                      \n"
-"                                      JEWELRY_BATTERY                           Jewelry; Battery is dead                                      \n"
-"                                      JEWELRY_NO_DOCS                           Jewelry; Missing manual/warranty                                      \n"
-"                                      JEWELRY_BAD_CLASP                         Jewelry; Broken or malfunctioning clasp                                      \n"
-"                                      JEWELRY_LOOSE_STONE                       Jewelry; Missing or loose stone                                      \n"
+"                                      OTHER                                     Return option not available\n"
+"                                      ORDERED_WRONG_ITEM                        I accidentally ordered the wrong item\n"
+"                                      FOUND_BETTER_PRICE                        I found better prices elsewhere\n"
+"                                      NO_REASON_GIVEN                           No reason--I just don't want the product any more\n"
+"                                      QUALITY_UNACCEPTABLE                      Product performance/quality is not up to my expectations\n"
+"                                      NOT_COMPATIBLE                            Product is not compatible with my existing system\n"
+"                                      DAMAGED_BY_FC                             Product became damaged/defective after arrival\n"
+"                                      MISSED_ESTIMATED_DELIVERY                 Item took too long to arrive; I don't want it any more\n"
+"                                      MISSING_PARTS                             Shipment was missing items or accessories\n"
+"                                      DAMAGED_BY_CARRIER                        Product was damaged/defective on arrival\n"
+"                                      SWITCHEROO                                Amazon sent me the wrong item\n"
+"                                      DEFECTIVE                                 Item is defective\n"
+"                                      EXTRA_ITEM                                Extra item included in shipment\n"
+"                                      UNWANTED_ITEM                             Unwanted Item\n"
+"                                      WARRANTY                                  Item defective after arrival -- Warranty\n"
+"                                      UNAUTHORIZED_PURCHASE                     Unauthorized purchase -- i.e. fraud\n"
+"                                      UNDELIVERABLE_INSUFFICIENT_ADDRESS        Undeliverable; Insufficient address\n"
+"                                      UNDELIVERABLE_FAILED_DELIVERY_ATTEMPTS    Undeliverable; Failed delivery attempts\n"
+"                                      UNDELIVERABLE_REFUSED                     Undeliverable; Refused\n"
+"                                      UNDELIVERABLE_UNKNOWN                     Undeliverable; Unknown\n"
+"                                      UNDELIVERABLE_UNCLAIMED                   Undeliverable; Unclaimed\n"
+"                                      APPAREL_TOO_SMALL                         Apparel; Product was too small\n"
+"                                      APPAREL_TOO_LARGE                         Apparel; Product was too large\n"
+"                                      APPAREL_STYLE                             Apparel; Did not like style of garment\n"
+"                                      MISORDERED                                Ordered wrong style/size/color\n"
+"                                      NOT_AS_DESCRIBED                          Not as described on website\n"
+"                                      JEWELRY_TOO_SMALL                         Jewelry; Too small/short\n"
+"                                      JEWELRY_TOO_LARGE                         Jewelry; Too large/long\n"
+"                                      JEWELRY_BATTERY                           Jewelry; Battery is dead\n"
+"                                      JEWELRY_NO_DOCS                           Jewelry; Missing manual/warranty\n"
+"                                      JEWELRY_BAD_CLASP                         Jewelry; Broken or malfunctioning clasp\n"
+"                                      JEWELRY_LOOSE_STONE                       Jewelry; Missing or loose stone\n"
 "                                      JEWELRY_NO_CERT                           Jewelry; Missing promised certification\n"
 "                   "
-msgstr "Breve descripción del motivo de la devolución indicado por el cliente. Significado: \n"
+msgstr "Breve descripción del motivo de la devolución indicado por el cliente. Significado:\n"
 "                                    Reason                                     Description\n"
-"                                      OTHER                                     Devolución no disponible                                      \n"
-"                                      ORDERED_WRONG_ITEM                        He pedido el producto equivocado                                        \n"
-"                                      FOUND_BETTER_PRICE                        He encontrado este producto a mejor precio en otro lugar                                     \n"
-"                                      NO_REASON_GIVEN                           No tengo un motivo; simplemente ya no quiero el producto                                      \n"
-"                                      QUALITY_UNACCEPTABLE                      El rendimiento o la calidad del producto no cumple mis expectativas                                      \n"
-"                                      NOT_COMPATIBLE                            El producto no es compatible con mi sistema actual                                      \n"
-"                                      DAMAGED_BY_FC                             El producto está dañado o presenta defectos tras la llegada                                      \n"
-"                                      MISSED_ESTIMATED_DELIVERY                 El producto ha tardado demasiado en llegar. Ya no lo quiero                                      \n"
-"                                      MISSING_PARTS                             Faltaban componentess o accesorios en el envío                                      \n"
-"                                      DAMAGED_BY_CARRIER                        El producto está dañado o presenta defectos a la llegada                                      \n"
-"                                      SWITCHEROO                                Amazon me ha enviado el producto equivocado                                      \n"
-"                                      DEFECTIVE                                 El producto es defectuoso                                      \n"
-"                                      EXTRA_ITEM                                Se ha incluido un producto o unidad adicional en el envío                                      \n"
-"                                      UNWANTED_ITEM                             Producto no deseado                                      \n"
-"                                      WARRANTY                                  Producto defectuoso tras su llegada y sujeto a garantía                                      \n"
-"                                      UNAUTHORIZED_PURCHASE                     Compra no autorizada (p. ej., fraude)                                      \n"
-"                                      UNDELIVERABLE_INSUFFICIENT_ADDRESS        No se ha podido entregar: dirección incompleta                                      \n"
-"                                      UNDELIVERABLE_FAILED_DELIVERY_ATTEMPTS    No se ha podido entregar tras varios intentos                                      \n"
-"                                      UNDELIVERABLE_REFUSED                     Rechazado a la entrega                                      \n"
-"                                      UNDELIVERABLE_UNKNOWN                     No se ha podido entregar: motivo desconocido                                      \n"
-"                                      UNDELIVERABLE_UNCLAIMED                   No se ha podido entregar: no solicitado                                      \n"
-"                                      APPAREL_TOO_SMALL                         Prenda de vestir: demasiado pequeña                                      \n"
-"                                      APPAREL_TOO_LARGE                         Prenda de vestir: demasiado grande                                      \n"
-"                                      APPAREL_STYLE                             Prenda de vestir: no le ha gustado el estilo                                      \n"
-"                                      MISORDERED                                Se ha equivocado al elegir el estilo, la talla o el color                                      \n"
-"                                      NOT_AS_DESCRIBED                          No se ajusta a la descripción de la página web                                      \n"
-"                                      JEWELRY_TOO_SMALL                         Producto de joyería demasiado pequeño o corto                                      \n"
-"                                      JEWELRY_TOO_LARGE                         Producto de joyería demasiado grande o largo                                      \n"
-"                                      JEWELRY_BATTERY                           Joyería: pila agotada                                      \n"
-"                                      JEWELRY_NO_DOCS                           Falta la garantía o el manual de un producto de joyería                                      \n"
-"                                      JEWELRY_BAD_CLASP                         Joyería: producto roto o cierre defectuoso                                      \n"
-"                                      JEWELRY_LOOSE_STONE                       Joyería: falta la piedra o está suelta                                     \n"
+"                                      OTHER                                     Devolución no disponible\n"
+"                                      ORDERED_WRONG_ITEM                        He pedido el producto equivocado\n"
+"                                      FOUND_BETTER_PRICE                        He encontrado este producto a mejor precio en otro\n"
+"                                      NO_REASON_GIVEN                           No tengo un motivo; simplemente ya no quiero el producto\n"
+"                                      QUALITY_UNACCEPTABLE                      El rendimiento o la calidad del producto no cumple mis expectativas\n"
+"                                      NOT_COMPATIBLE                            El producto no es compatible con mi sistema actual\n"
+"                                      DAMAGED_BY_FC                             El producto está dañado o presenta defectos tras la llegada\n"
+"                                      MISSED_ESTIMATED_DELIVERY                 El producto ha tardado demasiado en llegar. Ya no lo quiero\n"
+"                                      MISSING_PARTS                             Faltaban componentes o accesorios en el envío\n"
+"                                      DAMAGED_BY_CARRIER                        El producto está dañado o presenta defectos a la llegada\n"
+"                                      SWITCHEROO                                Amazon me ha enviado el producto equivocado\n"
+"                                      DEFECTIVE                                 El producto es defectuoso\n"
+"                                      EXTRA_ITEM                                Se ha incluido un producto o unidad adicional en el envío\n"
+"                                      UNWANTED_ITEM                             Producto no deseado\n"
+"                                      WARRANTY                                  Producto defectuoso tras su llegada y sujeto a garantía\n"
+"                                      UNAUTHORIZED_PURCHASE                     Compra no autorizada (p. ej., fraude)\n"
+"                                      UNDELIVERABLE_INSUFFICIENT_ADDRESS        No se ha podido entregar: dirección incompleta\n"
+"                                      UNDELIVERABLE_FAILED_DELIVERY_ATTEMPTS    No se ha podido entregar tras varios intentos\n"
+"                                      UNDELIVERABLE_REFUSED                     Rechazado a la entrega\n"
+"                                      UNDELIVERABLE_UNKNOWN                     No se ha podido entregar: motivo desconocido\n"
+"                                      UNDELIVERABLE_UNCLAIMED                   No se ha podido entregar: no solicitado\n"
+"                                      APPAREL_TOO_SMALL                         Prenda de vestir: demasiado pequeña\n"
+"                                      APPAREL_TOO_LARGE                         Prenda de vestir: demasiado grande\n"
+"                                      APPAREL_STYLE                             Prenda de vestir: no le ha gustado el estilo\n"
+"                                      MISORDERED                                Se ha equivocado al elegir el estilo, la talla o el color\n"
+"                                      NOT_AS_DESCRIBED                           No se ajusta a la descripción de la página web\n"
+"                                      JEWELRY_TOO_SMALL                         Producto de joyería demasiado pequeño o corto\n"
+"                                      JEWELRY_TOO_LARGE                         Producto de joyería demasiado grande o largo\n"
+"                                      JEWELRY_BATTERY                           Joyería: pila agotada\n"
+"                                      JEWELRY_NO_DOCS                           Falta la garantía o el manual de un producto de joyería\n"
+"                                      JEWELRY_BAD_CLASP                         Joyería: producto roto o cierre defectuoso\n"
+"                                      JEWELRY_LOOSE_STONE                       Joyería: falta la piedra o está suelta\n"
 "                                      JEWELRY_NO_CERT                           Joyería: falta la certificación del producto\n"
 "                   "
 
@@ -442,6 +459,11 @@ msgid "Code"
 msgstr "Código"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_color
+msgid "Color"
+msgstr "Color"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_report_amazon_commercial_partner_id
 #: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_report_filter_amazon_commercial_partner_id
 msgid "Commercial Partner"
@@ -470,10 +492,9 @@ msgstr "Configuración"
 #. module: amazon_connector
 #: model:ir.model,name:amazon_connector.model_res_partner
 msgid "Contact"
-msgstr "Cliente"
+msgstr "Contacto"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_country_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_country_id
 msgid "Country"
 msgstr "País"
@@ -496,6 +517,7 @@ msgid "Create Full Invoices"
 msgstr "Crear facturas completas"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_create_uid
@@ -512,6 +534,7 @@ msgid "Created by"
 msgstr "Creado por"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_create_date
@@ -555,7 +578,7 @@ msgstr "Dañado por el Cliente"
 #. module: amazon_connector
 #: selection:amazon.return,product_state:0
 msgid "Damaged"
-msgstr "dañado"
+msgstr "Dañado"
 
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
@@ -565,7 +588,7 @@ msgstr "Dañado después de la entrega"
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
 msgid "Damaged By Carrier"
-msgstr "Dñado por transportista"
+msgstr "Dañado por transportista"
 
 #. module: amazon_connector
 #: model:ir.model.fields,help:amazon_connector.field_amazon_return_return_date
@@ -614,6 +637,7 @@ msgid "Discount"
 msgstr "Descuento"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_display_name
@@ -711,6 +735,7 @@ msgid "General Info"
 msgstr "Info. General"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_id
@@ -782,10 +807,12 @@ msgid "Item Event"
 msgstr "Evento del elemento"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:407
+#: code:addons/amazon_connector/models/amazon_sale_order.py:353
 #, python-format
 msgid "ItemPrice or ItemTax fields are empty %s\n"
+""
 msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
+""
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_items_ids
@@ -828,6 +855,7 @@ msgid "Jewelry too small"
 msgstr "Joyería: Muy pequeño"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order___last_update
@@ -844,6 +872,7 @@ msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_write_uid
@@ -860,6 +889,7 @@ msgid "Last Updated by"
 msgstr "Última actualización de"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_write_date
@@ -934,7 +964,7 @@ msgstr "Promoción Vendedor"
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_message_error
 msgid "Message Error"
-msgstr "Mensaje de Error"
+msgstr "Message Error"
 
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
@@ -955,7 +985,7 @@ msgstr "Faltan partes"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_move_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_move_ids
 msgid "Move"
-msgstr "Asientos de ventas"
+msgstr "Movimiento"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_move_refund_ids
@@ -965,7 +995,7 @@ msgstr "Asiento de las devoluciones"
 #. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
 msgid "Moves"
-msgstr "Asientos"
+msgstr "Movimientos"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_moves_count
@@ -973,6 +1003,7 @@ msgid "Moves Count"
 msgstr "Contador de Asientos"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_name
@@ -1034,7 +1065,7 @@ msgstr "Depósito original devuelto"
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
 msgid "Other"
-msgstr "otro"
+msgstr "Otro"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amount
@@ -1057,6 +1088,7 @@ msgid "Partially Reconciled"
 msgstr "Conciliado Parcialmente"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_partner_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_partner_id
 #: model:ir.ui.view,arch_db:amazon_connector.account_invoice_report_replace_partner_filter
 msgid "Partner"
@@ -1073,7 +1105,7 @@ msgid "Pending Repackaging"
 msgstr "Pendiente de reempaquetar"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:321
+#: code:addons/amazon_connector/models/amazon_sale_order.py:320
 #, python-format
 msgid "Please add a valid fiscal position before retry this order"
 msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
@@ -1096,7 +1128,7 @@ msgstr "Precio"
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_subtotal
 msgid "Price Subtotal"
-msgstr "Price Subtotal"
+msgstr "Precio Subtotal"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_tax
@@ -1167,10 +1199,12 @@ msgid "Product not spanish"
 msgstr "Producto no en español"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:404
+#: code:addons/amazon_connector/models/amazon_sale_order.py:350
 #, python-format
 msgid "Product with ASIN CODE %s not found\n"
+""
 msgstr "El producto con código ASIN %s no ha sido encontrado \n"
+""
 
 #. module: amazon_connector
 #: selection:amazon.settlement.item.event,type:0
@@ -1230,7 +1264,7 @@ msgid "Reconciled"
 msgstr "Conciliado"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_settlement.py:695
+#: code:addons/amazon_connector/models/amazon_settlement.py:723
 #, python-format
 msgid "Reconciled with more lines of the same order in other settlements %s"
 msgstr "Conciliado con más líneas del mismo pedido en otros informes %s"
@@ -1269,6 +1303,12 @@ msgstr "Reembolsado"
 #: selection:amazon.return,status:0
 msgid "Repackaged Successfully"
 msgstr "Reempaquetado completado"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_partner_retail_phone
+#: model:ir.model.fields,field_description:amazon_connector.field_res_users_retail_phone
+msgid "Retail Phone"
+msgstr "Teléfono Retail"
 
 #. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
@@ -1349,6 +1389,11 @@ msgid "Sellable"
 msgstr "Vendible"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_seller_vat
+msgid "Seller Vat"
+msgstr "CIF del vendedor"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_settlement_id
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_tree
 msgid "Settlement"
@@ -1367,14 +1412,34 @@ msgid "Settlements"
 msgstr "Liquidaciones"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_ship_from_country_id
+msgid "Ship From Country"
+msgstr "País origen del envío"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,tax_address_role:0
+msgid "ShipFrom"
+msgstr "Origen del Envío"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,tax_address_role:0
+msgid "ShipTo"
+msgstr "Destino del Envío"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_shipment_id
 msgid "Shipment"
-msgstr "Shipment"
+msgstr "Envío"
 
 #. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
 msgid "Shipping Address"
 msgstr "Dirección de envío"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_sii_enabled
+msgid "Sii Enabled"
+msgstr "Sii Activado"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_return_sku
@@ -1405,52 +1470,62 @@ msgstr "Estado"
 msgid "Status of the returned product. Meaning:\n"
 "                           Disposition           Description\n"
 "                            SELLABLE              The unit was returned to stock and is available for purchase.\n"
-"                                                       \n"
+"\n"
 "                            DAMAGED               Amazon takes responsibility for the damage. Ownership transferred to Amazon.\n"
 "                                                  Amazon compensates you based on the FBA Lost and Damaged Inventory Reimbursement Policy.\n"
-"                                                  \n"
+"\n"
 "                            CUSTOMER DAMAGED      The unit was returned to stock as 'unsellable.' This does not necessarily\n"
 "                                                  mean that the item itself is damaged (for example, external packaging may have been opened),\n"
 "                                                  but it cannot be sold again in this condition. When this happens the customer is refunded,\n"
 "                                                  but the unit stays in your inventory as \"unsellable.\" You may request to have the unit returned to you.\n"
-"                                                  \n"
-"                            DEFECTIVE             The unit was returned to stock as \"unsellable.\" The unit is either obviously damaged \n"
+"\n"
+"                            DEFECTIVE             The unit was returned to stock as \"unsellable.\" The unit is either obviously damaged\n"
 "                                                  or the customer stated that it is faulty. The customer is refunded, but the unit stays\n"
 "                                                  in your inventory as 'unsellable'. You may request to have the unit returned to you.\n"
-"                                                  \n"
-"                            CARRIER DAMAGED       Amazon takes responsibility for the damage. Ownership transferred to Amazon. \n"
+"\n"
+"                            CARRIER DAMAGED       Amazon takes responsibility for the damage. Ownership transferred to Amazon.\n"
 "                                                  Amazon compensates you based on the FBA Lost and Damaged Inventory Reimbursement Policy.\n"
-"                                                  \n"
-"                            EXPIRED               Units that are within 50 days of the expiration date may be set aside as 'unsellable' and eventually removed \n"
-"                                                  for disposal by Amazon. Units that have been disposed will not be available for return. You may request to have \n"
+"\n"
+"                            EXPIRED               Units that are within 50 days of the expiration date may be set aside as 'unsellable' and eventually removed\n"
+"                                                  for disposal by Amazon. Units that have been disposed will not be available for return. You may request to have\n"
 "                                                  expired units returned to you if they have not been disposed of."
 msgstr "Status of the returned product. Meaning:\n"
 "                           Disposition           Description\n"
 "                            SELLABLE              La unidad se devolvió a tu inventario y está disponible de nuevo para la compra.\n"
-"                                                       \n"
-"                            DAMAGED               Amazon se responsabiliza de los daños. Propiedad transferida a Amazon. Amazon te compensa según la"
-"                                                  Política de reembolso por inventario extraviado o dañado de Logística de Amazon..\n"
-"                                                  \n"
-"                            CUSTOMER DAMAGED      La unidad se devolvió a tu inventario como "no apta para venta". Esto no significa necesariamente que el propio producto
-"                                                  esté dañado (por ejemplo, podría simplemente estar abierto el embalaje original), pero no puede venderse de nuevo en este estado.
-"                                                  Cuando esto sucede, se reembolsa al cliente, pero la unidad permanece en tu inventario como "no apta para venta". Puedes solicitar que se te devuelva la unidad. Más información sobre la creación de
-"                                                  solicitudes de retirada de inventario.\n"
-"                                                  \n"
-"                            DEFECTIVE             La unidad se devolvió a tu inventario como "no apta para venta". La unidad está claramente dañada o el cliente ha declarado que es defectuosa.
-"                                                  Se reembolsa al cliente, pero la unidad permanece en tu inventario como "no apto para la venta". Puedes solicitar que se te devuelva la unidad. Más información sobre la creación
-"                                                  de solicitudes de retirada de inventario.\n"
-"                                                  \n"
-"                            CARRIER DAMAGED       Amazon se responsabiliza de los daños. Propiedad transferida a Amazon. Amazon te compensa según la
+"\n"
+"                            DAMAGED               Amazon se responsabiliza de los daños. Propiedad transferida a Amazon. Amazon te compensa según la\n"
 "                                                  Política de reembolso por inventario extraviado o dañado de Logística de Amazon.\n"
-"                                                  \n"
-"                            EXPIRED               Las unidades que caduquen en un plazo de 50 días se marcarán como "no aptas para venta" y, posteriormente, se darán de baja.
-"                                                  Las unidades dadas de baja no se te podrán devolver. Puedes solicitar que se te devuelvan las unidades caducadas si aún no se han dado de baja. Más información sobre la creación de
-"                                                  solicitudes de retirada de inventario"
+"\n"
+"                            CUSTOMER DAMAGED      La unidad se devolvió a tu inventario como 'no apta para venta'. Esto no significa necesariamente que el propio producto\n"
+"                                                  esté dañado (por ejemplo, podría simplemente estar abierto el embalaje original), pero no puede venderse de nuevo en este estado\n"
+"                                                  Cuando esto sucede, se reembolsa al cliente, pero la unidad permanece en tu inventario como 'no apta para venta'. Puedes solicitar que se te devuelva la unidad. Más información sobre la creación de\n"
+"                                                  solicitudes de retirada de inventario.\n"
+"\n"
+"                            DEFECTIVE             La unidad se devolvió a tu inventario como 'no apta para venta'. La unidad está claramente dañada o el cliente ha declarado que es defectuosa.\n"
+"                                                  Se reembolsa al cliente, pero la unidad permanece en tu inventario como 'no apto para la venta'. Puedes solicitar que se te devuelva la unidad. Más información sobre la creación\n"
+"                                                  de solicitudes de retirada de inventario.\n"
+"\n"
+"                            CARRIER DAMAGED       Amazon se responsabiliza de los daños. Propiedad transferida a Amazon. Amazon te compensa según la\n"
+"                                                  Política de reembolso por inventario extraviado o dañado de Logística de Amazon.\n"
+"\n"
+"                            EXPIRED               Las unidades que caduquen en un plazo de 50 días se marcarán como 'no aptas para venta' y, posteriormente, se darán de baja.\n"
+"                                                  as unidades dadas de baja no se te podrán devolver. Puedes solicitar que se te devuelvan las unidades caducadas si aún no se han dado de baja. Más información sobre la creación de\n"
+"                                                  solicitudes de retirada de inventario."
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_tax_id
 msgid "Tax"
 msgstr "Impuesto"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_tax_address_role
+msgid "Tax Address Role"
+msgstr "Rol impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_tax_country_id
+msgid "Tax Country"
+msgstr "País del impuesto"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_tax_in_price_unit
@@ -1478,20 +1553,19 @@ msgid "Theoretical Total Taxes"
 msgstr "Impuestos aplicados por Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:574
+#: code:addons/amazon_connector/models/amazon_sale_order.py:512
 #, python-format
 msgid "There are no deposit for this order"
 msgstr "No hay depósitos para este pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:642
+#: code:addons/amazon_connector/models/amazon_sale_order.py:579
 #, python-format
 msgid "There aren't any invoices linked to this Amazon order"
 msgstr "No hay ninguna factura asociada a este pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:264
-#: code:addons/amazon_connector/models/amazon_sale_order.py:371
+#: code:addons/amazon_connector/models/amazon_sale_order.py:183
 #, python-format
 msgid "There country in VIES is diferent to Amazon order country"
 msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
@@ -1503,40 +1577,54 @@ msgid "There country in VIES is different to Amazon order country"
 msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:267
-#: code:addons/amazon_connector/models/amazon_sale_order.py:375
+#: code:addons/amazon_connector/models/amazon_sale_order.py:199
+#, python-format
+msgid "There is a error calling vat service: %s"
+msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:481
+#, python-format
+msgid "There is no Amazon company linked to this order"
+msgstr "No hay Compañia de Amazon asociada a este pedido"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:186
 #: code:addons/amazon_connector/wizard/create_full_invoices.py:48
 #, python-format
 msgid "There is no billing info in VIES"
 msgstr "No hay información de facturación en el VIES"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:435
+#: code:addons/amazon_connector/models/amazon_sale_order.py:373
 #, python-format
 msgid "There is no currency with this name or it is no activated %s\n"
+""
 msgstr "No hay ninguna moneda con este nombre o no está activa. %s \n"
+""
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_returns.py:262
+#: code:addons/amazon_connector/models/amazon_returns.py:263
 #, python-format
 msgid "There is no enough qty in deposit for this return"
 msgstr "TNo hay suficiente cantidad de este producto en depósito para su devolución"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_settlement.py:427
+#: code:addons/amazon_connector/models/amazon_settlement.py:449
 #, python-format
 msgid "There is no invoice for this order\n"
+""
 msgstr "No hay factura para este pedido\n"
+""
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:606
+#: code:addons/amazon_connector/models/amazon_sale_order.py:543
 #, python-format
 msgid "There is no vat in this Order"
-msgstr "Np hay CIF en este pedido"
+msgstr "Np hay CIF en este pedid"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:270
-#: code:addons/amazon_connector/models/amazon_sale_order.py:378
+#: code:addons/amazon_connector/models/amazon_sale_order.py:233
 #, python-format
 msgid "There is no vat in this order"
 msgstr "No hay CIF en este pedido"
@@ -1557,18 +1645,21 @@ msgid "Total Amount Company Currency"
 msgstr "Importe total divisa compañia"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:228
-#: code:addons/amazon_connector/models/amazon_sale_order.py:333
-#: code:addons/amazon_connector/models/amazon_settlement.py:421
+#: code:addons/amazon_connector/models/amazon_sale_order.py:218
+#: code:addons/amazon_connector/models/amazon_settlement.py:443
 #, python-format
 msgid "Total amount != Theoretical total amount (%f-%f)\n"
+""
 msgstr "Total != Total enviado por Amazon (%f-%f)\n"
+""
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_settlement.py:708
+#: code:addons/amazon_connector/models/amazon_settlement.py:740
 #, python-format
 msgid "Total amount != Theoretical total amount (%f-%f). (There are more lines in settlement %s)\n"
+""
 msgstr "Cantidad total != Cantidad total teórica (%f-%f). (Hay más líneas en el informe %s)\n"
+""
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_transaction_name
@@ -1587,22 +1678,26 @@ msgid "Type"
 msgstr "Tipo"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_returns.py:256
+#: code:addons/amazon_connector/models/amazon_returns.py:257
 #, python-format
 msgid "Unable to find a deposit for this order"
-msgstr "no es posible encontrar un depósito para este pedido"
+msgstr "No es posible encontrar un depósito para este pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_returns.py:244
+#: code:addons/amazon_connector/models/amazon_returns.py:245
 #, python-format
 msgid "Unable to find amazon order for name '%s' \n"
-msgstr "no es posible encontrar un pedido de amazon con este nombre '%s' \n"
+""
+msgstr "No es posible encontrar un pedido de amazon con este nombre '%s' \n"
+""
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_returns.py:246
+#: code:addons/amazon_connector/models/amazon_returns.py:247
 #, python-format
 msgid "Unable to find product with this ASIN '%s'\n"
+""
 msgstr "No es posible encontrar un producto con este ASIN '%s'\n"
+""
 
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
@@ -1652,7 +1747,12 @@ msgstr "Base imponible"
 #. module: amazon_connector
 #: selection:amazon.return,reason:0
 msgid "Unwanted Item"
-msgstr "producto no deseado"
+msgstr "Producto no deseado"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_vat
+msgid "Vat"
+msgstr "CIF"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_vat_imputation_country
@@ -1695,6 +1795,11 @@ msgstr "producto Equivocado"
 #, python-format
 msgid "You cannot merge invoices with differents amazon orders: %s"
 msgstr "No puedes fusionar facturas con diferentes pedidos de Amazon: %s"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_company
+msgid "amazon.company"
+msgstr "amazon.company"
 
 #. module: amazon_connector
 #: model:ir.model,name:amazon_connector.model_amazon_marketplace
@@ -1757,19 +1862,19 @@ msgid "retry.amazon.orders.wizard"
 msgstr "retry.amazon.orders.wizard"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_report_amazon_commercial_partner_id
-msgid "Commercial Partner"
-msgstr "Entidad Comercial"
+#: selection:amazon.return,reason:0
+msgid "undeliverable_carrier_miss_sorted"
+msgstr "undeliverable_carrier_miss_sorted"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_is_business_order
-msgid "Is Business Order"
-msgstr "Cliente empresarial"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_company_journal_id
+msgid "Journal"
+msgstr "Diario"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_res_partner_retail_phone
-msgid "Retail Phone"
-msgstr "Teléfono Retail"
+#: model:ir.model.fields,help:amazon_connector.field_amazon_company_journal_id
+msgid "Journal of full invoices"
+msgstr "Diarío para facturas completas"
 
 #. module: amazon_connector
 #: code:addons/amazon_connector/models/amazon_sale_order.py:262
@@ -1777,3 +1882,54 @@ msgstr "Teléfono Retail"
 #, python-format
 msgid "There is a error calling vat service: %s"
 msgstr "Hay un error al llamar al comprobar cif en el VIES: %s"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_id
+msgid "Invoice number"
+msgstr "Número de factura"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_state
+msgid "Invoice state"
+msgstr "Estado de factura"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Paid"
+msgstr "Pagada"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Open"
+msgstr "Abierta"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,invoice_state:0
+msgid "History"
+msgstr "Historial"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_refund_amount_untaxed
+msgid "Untaxed Amount"
+msgstr "Cantidad sin impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_refund_state
+msgid "Status"
+msgstr "Estado del abono"
+
+#. module: amazon_connector
+#: model:ir.ui.menu,name:amazon_connector.settlement_amazon_refund_menu
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_line_tree
+msgid "Refunds"
+msgstr "Abonos"
+
+#. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
+msgid "Amazon Refunds"
+msgstr "Abonos Amazon"

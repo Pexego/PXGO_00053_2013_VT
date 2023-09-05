@@ -71,7 +71,7 @@ class EdifMenssage(models.Model):
 
     def NAD(self, typ, code, **kwargs):
         msg = "NAD+{}+{}::9".format(typ, code)
-        if typ in ('SCO', 'BCO'):  # Razón social del Proveedor/Cliente
+        if typ in ('SCO', 'BCO', 'PR'):  # Razón social del Proveedor/Cliente
             name = kwargs.get('name', None)
             msg += "++{}".format(name[:35])
             msg += ":{}".format(name[35:])
@@ -85,7 +85,21 @@ class EdifMenssage(models.Model):
             msg += "+{}".format(city)
             pc = kwargs.get('pc', None)
             msg += "++{}".format(pc)
-            msg += "+ES"
+            if typ != 'PR':
+                msg += "+ES"
+        return msg + "'\n"
+
+    def NAD_LM_IV(self, typ, code, **kwargs):
+        msg = "NAD+{}+{}::9".format(typ, code)
+        name = kwargs.get('name', None)
+        msg += "++{}".format(name[:35])
+        msg += ":{}".format(name[35:])
+        street = kwargs.get('street', None)
+        msg += "+{}".format(street)
+        city = kwargs.get('city', None)
+        msg += "+{}".format(city)
+        pc = kwargs.get('pc', None)
+        msg += "++{}".format(pc)
         return msg + "'\n"
 
     def CUX(self):
@@ -152,6 +166,8 @@ class EdifMenssage(models.Model):
         length = 35
         street_partner = invoice.partner_id.commercial_partner_id.street
         street_partner_cut = [street_partner[i:i+length] for i in range(0, len(street_partner), length)]
+        street_partner_inv = invoice.partner_final_invoicing_id.street or invoice.partner_shipping_id.street
+        street_partner_inv_cut = [street_partner_inv[i:i + length] for i in range(0, len(street_partner_inv), length)]
 
         msg += self.UNH(msg_ref, 'INVOIC')
         if invoice.type == 'out_invoice':
@@ -173,14 +189,34 @@ class EdifMenssage(models.Model):
                         pc=invoice.company_id.zip)
         msg += self.RFF('VA', self.env.user.company_id.vat)
         # msg += self.NAD('II') # Mismo que SCO
-        msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
+        if invoice.partner_id.commercial_partner_id.ean == '8424019100001':  # LM
+            msg += self.NAD_LM_IV('IV', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean,
+                            name=invoice.partner_final_invoicing_id.name or invoice.partner_shipping_id.name,
+                            street=':'.join(street_partner_inv_cut),
+                            city=invoice.partner_final_invoicing_id.city or invoice.partner_shipping_id.city,
+                            pc=invoice.partner_final_invoicing_id.zip or invoice.partner_shipping_id.zip)
+        else:
+            msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
         msg += self.NAD('DP', invoice.partner_shipping_id.ean)
         msg += self.NAD('BY', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean)
-        msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
-                        name=invoice.partner_id.commercial_partner_id.name,
-                        street=':'.join(street_partner_cut),
-                        city=invoice.partner_id.commercial_partner_id.city,
-                        pc=invoice.partner_id.commercial_partner_id.zip)
+        if invoice.partner_id.commercial_partner_id.ean == '8424019100001':  # LM
+            msg += self.NAD('BCO', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean,
+                            name=invoice.partner_final_invoicing_id.name or invoice.partner_shipping_id.name,
+                            street=':'.join(street_partner_inv_cut),
+                            city=invoice.partner_final_invoicing_id.city or invoice.partner_shipping_id.city,
+                            pc=invoice.partner_final_invoicing_id.zip or invoice.partner_shipping_id.zip)
+        else:
+            msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
+                            name=invoice.partner_id.commercial_partner_id.name,
+                            street=':'.join(street_partner_cut),
+                            city=invoice.partner_id.commercial_partner_id.city,
+                            pc=invoice.partner_id.commercial_partner_id.zip)
+        if invoice.partner_id.commercial_partner_id.ean == '8424019100001':  # LM
+            msg += self.NAD('PR', invoice.partner_id.commercial_partner_id.ean,
+                            name=invoice.partner_id.commercial_partner_id.name,
+                            street=':'.join(street_partner_cut),
+                            city=invoice.partner_id.commercial_partner_id.city,
+                            pc=invoice.partner_id.commercial_partner_id.zip)
         msg += self.RFF('VA', invoice.partner_id.commercial_partner_id.vat)
 
         msg += self.CUX()
@@ -243,23 +279,25 @@ class EdifMenssage(models.Model):
         return msg
 
     def parse_order(self, order_file):
-        parse_errors = ""
-        order_vals = {
-            'state': 'reserve',
-            'sale_notes': '',
-            'order_line': []
-        }
-        line = {}
         ref_message = ""
-        total_net = 0.0
-        client_ref = ""
         for long_segment in order_file.split("'"):
             segment = re.split("\+|:", long_segment.replace("\n", ""))
             if segment[0] == 'UNH':
-                ref_message = segment[1]
                 if segment[2] != 'ORDERS':
                     parse_errors += _('The message does not contain an order')
                     break
+                else:
+                    # Beginning of the order, reset all the variables
+                    ref_message = segment[1]
+                    parse_errors = ""
+                    order_vals = {
+                        'state': 'reserve',
+                        'sale_notes': '',
+                        'order_line': []
+                    }
+                    line = {}
+                    total_net = 0.0
+                    client_ref = ""
             elif segment[0] == 'BGM':
                 if segment[1] == '220':
                     order_vals['client_order_ref'] = segment[2]
@@ -341,41 +379,43 @@ class EdifMenssage(models.Model):
                 if ref_message != segment[2]:
                     parse_errors += _('Message identifier does not match')
                     break
+                else:
+                    # End of order, then create it
+                    order_vals['no_promos'] = True
+                    if not parse_errors:
+                        shipping_prod = self.env['product.product'].search([('default_code', '=', 'GASTOS DE ENVIO')])
+                        sale = self.env['sale.order'].create(order_vals)
+                        if sale:
+                            shipping_vals = {
+                                'product_id': shipping_prod.id,
+                                'name': shipping_prod.default_code,
+                                'product_uom_qty': 1,
+                                'product_uom': 1,
+                                'price_unit': 7,
+                                'discount': 100,
+                                'order_id': sale.id
+                            }
+                            self.env['sale.order.line'].create(shipping_vals)
+                            sale.onchange_partner_id()
+                            sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
+                            sale.apply_commercial_rules()
 
-        order_vals['no_promos'] = True
-        if not parse_errors:
-            shipping_prod = self.env['product.product'].search([('default_code', '=', 'GASTOS DE ENVIO')])
-            sale = self.env['sale.order'].create(order_vals)
-            if sale:
-                shipping_vals = {
-                    'product_id': shipping_prod.id,
-                    'name': shipping_prod.default_code,
-                    'product_uom_qty': 1,
-                    'product_uom': 1,
-                    'price_unit': 7,
-                    'discount': 100,
-                    'order_id': sale.id
-                }
-                self.env['sale.order.line'].create(shipping_vals)
-                sale.onchange_partner_id()
-                sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
-                sale.apply_commercial_rules()
+                            # Add the read data to the attachment
 
-                # Add the read data to the attachment
-
-                fileb = io.BytesIO()
-                fileb.write(order_file.encode('latin-1'))
-                fileb.seek(0)
-                filename = "{}-{}.EDI".format(sale.name, client_ref)
-                ctx = {}
-                self.env['ir.attachment'].with_context(ctx).create({
-                    'name': filename,
-                    'res_id': sale.id,
-                    'res_model': str(sale._name),
-                    'datas': base64.b64encode(fileb.getvalue()),
-                    'datas_fname': filename,
-                    'type': 'binary',
-                })
+                            fileb = io.BytesIO()
+                            fileb.write(order_file.encode('latin-1'))
+                            fileb.seek(0)
+                            filename = "{}-{}.EDI".format(sale.name, client_ref)
+                            ctx = {}
+                            self.env['ir.attachment'].with_context(ctx).create({
+                                'name': filename,
+                                'res_id': sale.id,
+                                'res_model': str(sale._name),
+                                'datas': base64.b64encode(fileb.getvalue()),
+                                'datas_fname': filename,
+                                'type': 'binary',
+                            })
+                            fileb.close()
 
         return parse_errors
 

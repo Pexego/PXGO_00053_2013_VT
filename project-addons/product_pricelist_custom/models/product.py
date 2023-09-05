@@ -17,6 +17,7 @@
 
 from odoo import models, fields, api,_
 from odoo.exceptions import ValidationError
+from odoo.tools import float_compare
 import re
 
 
@@ -252,15 +253,30 @@ class ProductPricelistItem(models.Model):
     def write(self, vals):
         """ This method writes the same values to the associated items and writes its calculated price
          to fixed_price in case it does not have a fixed price and is a calculated item without a base pricelist.
+        It also adds records to the price change log.
         :param vals: values to change
         :return: super()
         """
+        new_fixed_price = vals.get('fixed_price')
+        old_prices = {}
+
+        if new_fixed_price:
+            for item in self.filtered(lambda i: float_compare(i.fixed_price, new_fixed_price, precision_digits=2) != 0):
+                old_prices[item.id] = item.fixed_price
+
         res = super().write(vals)
+        pricelist_item_log = self.env['product.pricelist.item.log']
         for item in self:
             if item.item_ids:
                 item.item_ids.write(vals)
-            elif 'fixed_price' not in vals and not item.base_pricelist_id and not item.pricelist_id and item.pricelist_calculated:
+            elif not new_fixed_price and not item.base_pricelist_id and not item.pricelist_id and item.pricelist_calculated:
                 item.fixed_price = item.pricelist_calculated_price
+            if item.id in old_prices:
+                pricelist_item_log.create({'user_id': self.env.user.id,
+                                           'product_id': item.product_id.id,
+                                           'old_fixed_price': old_prices[item.id],
+                                           'new_fixed_price': new_fixed_price,
+                                           'date': fields.Datetime.now()})
         return res
 
     @api.multi

@@ -14,7 +14,11 @@
                     <field name="qty_available_wo_wh"/>
                     <field name="qty_available_input_loc"/>
                     <field name="incoming_qty"/>
-                    <field name="qty_in_production"/>
+                    <label for="qty_in_production"/>
+                    <button name="view_stock_wizard_action" type="object" class="oe_link no_button_padding"
+                                        context="{'stock_field': 'qty_in_production'}">
+                        <field name="qty_in_production"/>
+                    </button>
                     <field name="qty_available_italy" invisible="1"/>
                 </group>
             </group>
