@@ -18,7 +18,7 @@ class SaleOrder(models.Model):
                 web_invoice_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.limit.endpoint')
                 api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
                 sim_active_limit = self.env['ir.config_parameter'].sudo().get_param('web.sim.active.limit')
-                c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+                c_code = self.env.user.company_id.country_id.code
 
                 headers = {'x-api-key': api_key,
                            'Content-Type': 'application/json'}

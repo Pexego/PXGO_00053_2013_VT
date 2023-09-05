@@ -30,7 +30,7 @@ class ProductTemplate(models.Model):
     def create(self, vals):
         prod = super().create(vals)
         prod.property_valuation = prod.categ_id.property_valuation
-        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT':
+        if self.env.user.company_id.country_id.code == 'IT':
             if not prod.seller_ids:
                 supplierinfo = self.env['product.supplierinfo'].create({
                     'name': 27,
@@ -207,7 +207,7 @@ class ProductProduct(models.Model):
     @api.model
     def create(self, vals):
         prod = super().create(vals)
-        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT'and prod.seller_ids:
+        if self.env.user.company_id.country_id.code == 'IT'and prod.seller_ids:
             prod.last_supplier_id = prod.seller_ids[0].name.id
         return prod
 

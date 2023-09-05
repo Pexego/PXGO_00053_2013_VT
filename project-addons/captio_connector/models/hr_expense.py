@@ -49,7 +49,7 @@ class HrExpense(models.Model):
     def cron_import_captio_expenses(self):
 
         company = self.env.user.company_id
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         url_api = self.env['ir.config_parameter'].sudo().get_param('captio.api_endpoint')
 
         if not company.captio_token_expire or \

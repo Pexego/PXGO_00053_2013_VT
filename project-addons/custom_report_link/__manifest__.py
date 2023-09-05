@@ -31,7 +31,6 @@
                 'product_customer_reference', 'crm_claim_rma'],
     "data": [
         "data/report_paperformat.xml",
-        "data/parameters.xml",
         "views/custom_layout.xml",
         "views/partner_view.xml",
         "views/stock_custom_report.xml",

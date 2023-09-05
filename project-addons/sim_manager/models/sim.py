@@ -133,7 +133,7 @@ class SimPackage(models.Model):
     @api.multi
     def notify_sale_web(self, mode):
         web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint')
-        c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        c_code = self.env.user.company_id.country_id.code
         api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
         headers = {'x-api-key': api_key}
         for package in self:

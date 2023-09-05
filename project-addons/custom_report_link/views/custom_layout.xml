@@ -12,7 +12,7 @@
         <t t-if="not o or not 'company_id' in o">
             <t t-set="company" t-value="res_company"/>
         </t>
-        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
+        <t t-set="country_code" t-value="company.country_id.code"/>
         <div class="header">
             <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
             <div class="row" style="margin-bottom: 2%">
@@ -354,7 +354,7 @@ BIC: CAIXESBBXXX
         <t t-if="not o or not 'company_id' in o">
             <t t-set="company" t-value="res_company"/>
         </t>
-        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
+        <t t-set="country_code" t-value="company.country_id.code"/>
         <div class="header">
             <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
             <div class="row" style="margin-bottom: 2%">
@@ -665,7 +665,7 @@ BIC: CAIXESBBXXX
         <t t-if="not company.id">
             <t t-set="company" t-value="res_company"/>
         </t>
-        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
+        <t t-set="country_code" t-value="company.country_id.code"/>
         <div class="header">
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
@@ -704,7 +704,6 @@ BIC: CAIXESBBXXX
 
 
     <template id="external_layout_custom_invoice">
-        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
         <t t-if="not o and doc">
             <t t-set="o" t-value="doc"/>
         </t>
@@ -718,7 +717,7 @@ BIC: CAIXESBBXXX
         <t t-if="not company.id">
             <t t-set="company" t-value="res_company"/>
         </t>
-        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
+        <t t-set="country_code" t-value="company.country_id.code"/>
 
         <div class="header" style="margin-left: 2.2%; margin-right: 2.2%">
             <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
@@ -1228,7 +1227,7 @@ BIC: CAIXESBBXXX
         </t>
         <t t-set="picking_valued" t-value="doc.env.context.get('picking_valued',False)"/>
         <t t-set="dropship" t-value="doc.env.context.get('dropship',False)"/>
-        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
+        <t t-set="country_code" t-value="company.country_id.code"/>
         <div class="header">
             <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
             <div class="row" style="margin-bottom: 2%">

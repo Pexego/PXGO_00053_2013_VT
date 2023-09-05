@@ -7,7 +7,7 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     def prepare_order_es(self, purchase, odoo_es):
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
 
         transporter = False
         service = False

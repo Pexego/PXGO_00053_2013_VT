@@ -74,7 +74,7 @@ class BaseSynchro(models.TransientModel):
         module_id = module.search([("name", "ilike", "base_synchro"),
                                    ('state', '=', 'installed')])
 
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         if object.context:
             ctx.update(dict(eval(object.context)))
         if not module_id:

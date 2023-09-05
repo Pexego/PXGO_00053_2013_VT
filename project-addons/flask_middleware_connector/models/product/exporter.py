@@ -55,7 +55,7 @@ class ProductProductExporter(Component):
                 "product." + self.backend_record.product_stock_field_id.name,
                 {'product': binding})
             vals["stock"] = stock_qty
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         if country_code == "IT":
             vals['stock_available_es'] = binding.virtual_stock_conservative_es
         if mode == "insert":

@@ -48,7 +48,7 @@ class ProductTemplateListener(Component):
             "name", "list_price", "categ_id", "product_brand_id",
             "show_stock_outside", "sale_ok", "weight", "volume", "special_shipping_costs"]
 
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         if country_code == "IT":
             up_fields += ['virtual_stock_conservative_es']
         if record.image or len(fields) != 1:
@@ -92,7 +92,7 @@ class ProductListener(Component):
             "special_shipping_costs"
         ]
 
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         if country_code == "IT":
             up_fields += ['virtual_stock_conservative_es']
 

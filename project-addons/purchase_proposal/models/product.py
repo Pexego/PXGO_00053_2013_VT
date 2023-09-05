@@ -42,7 +42,7 @@ class ProductProduct(models.Model):
 
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         move_obj = self.env['stock.move']
         picking_type_obj = self.env['stock.picking.type']
         picking_type_ids = picking_type_obj.search([('code', '=', 'outgoing')])
@@ -50,23 +50,23 @@ class ProductProduct(models.Model):
         if country_code == 'ES':
             query = """
                         select pp.id,
-                               (select sum(sm.product_uom_qty) 
-                                from stock_move sm 
-                                inner join stock_picking_type spt on spt.id = sm.picking_type_id 
-                                inner join procurement_group po on po.id = sm.group_id 
-                                where date >= (select min(t.datum) 
-                                               from (select product_id, datum 
-                                                     from stock_days_positive 
-                                                     where product_id = pp.id 
-                                                     order by datum desc limit 60) as t) 
-                                      and sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing' 
-                                      and po.sale_id is not null and sm.location_dest_id = {}), 
-                                (select min(t2.datum) from (select product_id, datum 
-                                                            from stock_days_positive 
-                                                            where product_id = pp.id 
+                               (select sum(sm.product_uom_qty)
+                                from stock_move sm
+                                inner join stock_picking_type spt on spt.id = sm.picking_type_id
+                                inner join procurement_group po on po.id = sm.group_id
+                                where date >= (select min(t.datum)
+                                               from (select product_id, datum
+                                                     from stock_days_positive
+                                                     where product_id = pp.id
+                                                     order by datum desc limit 60) as t)
+                                      and sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing'
+                                      and po.sale_id is not null and sm.location_dest_id = {}),
+                                (select min(t2.datum) from (select product_id, datum
+                                                            from stock_days_positive
+                                                            where product_id = pp.id
                                                             order by datum desc
-                                                            limit 60) as t2) 
-                        from product_product pp inner join product_template pt on pt.id = pp.product_tmpl_id 
+                                                            limit 60) as t2)
+                        from product_product pp inner join product_template pt on pt.id = pp.product_tmpl_id
                         where pt.type != 'service'
                     """.format(location_customer.id)
             if not records:

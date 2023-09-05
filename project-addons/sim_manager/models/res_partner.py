@@ -26,7 +26,7 @@ class ResPartner(models.Model):
         num_active_sims = 0
         api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
         headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
-        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        country_code = self.env.user.company_id.country_id.code
         data = {
             'odoo_id': self.id,
             'origin': country_code.lower()
@@ -52,7 +52,7 @@ class ResPartner(models.Model):
             mail_bank_error_message = ''
             web_invoice_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint')
             api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
-            c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+            c_code = self.env.user.company_id.country_id.code
             headers = {'x-api-key': api_key,
                        'Content-Type': 'application/json'}
             if not month:
