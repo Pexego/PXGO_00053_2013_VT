@@ -377,11 +377,11 @@
         <field name="recipient_ids">False</field>
         <field name="reply_to">${('noreply@localhost')|safe}</field>
         <field name="body_html"><![CDATA[
-            <p>Dear Supplier,</p>
-            <p>We inform you that we have received the products corresponding to ${ctx.get('order_name')}.</p>
-            <p>Please send us the corresponding invoice as soon as possible, so that we can
-            enter it in our system and proceed with the payment under the agreed conditions.</p>
-            <p>Sincerely,</p>
+            <p>Dear Provider,</p>
+            <p>Please be informed that we have received the products corresponding to ${ctx.get('order_name')}.</p>
+            <p>Please send us the corresponding invoice as soon as possible, so that we can enter
+            it in our system and proceed with the payment under the agreed conditions.</p>
+            <p>Yours sincerely,</p>
             <p>VISIOTECH</p>
         ]]></field>
     </record>

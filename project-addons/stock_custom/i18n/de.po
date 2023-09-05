@@ -22,11 +22,11 @@ msgstr "VISIOTECH - Bestellung versendet"
 
 #. module: stock_custom
 #: model:mail.template,body_html:stock_custom.purchase_order_received_template
-msgid "<p>Dear Supplier,</p> "
-"<p>We inform you that we have received the products corresponding to ${ctx.get('order_name')}.</p>"
-"<p>Please send us the corresponding invoice as soon as possible, so that we can "
-"enter it in our system and proceed with the payment under the agreed conditions.</p>"
-"<p>Sincerely,</p>"
+msgid "<p>Dear Provider,</p>"
+"<p>Please be informed that we have received the products corresponding to ${ctx.get('order_name')}.</p>"
+"<p>Please send us the corresponding invoice as soon as possible, so that we can enter "
+"it in our system and proceed with the payment under the agreed conditions.</p>"
+"<p>Yours sincerely,</p>"
 "<p>VISIOTECH</p>"
 msgstr "<p>Sehr geehrter Lieferant:</p> "
 "<p>Wir möchten Ihnen mitteilen, dass wir die Produkte von ${ctx.get('order_name')} bekommen haben.</p>"
