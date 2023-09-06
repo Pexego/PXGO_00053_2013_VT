@@ -103,15 +103,18 @@ class StockPicking(models.Model):
 
     def send_request_supplier_invoice_mail(self):
         """
-        Sends an email requesting purchase invoice to the supplier
+        Sends an email requesting purchase invoice to the supplier only when we have
+        purchase supplier reference.
         This mail is sent to email2 (accounting mail)
         """
         self.ensure_one()
-        purchase_order_id = self.env['purchase.order'].search([('name', '=', self.origin)])
-
+        purchase_order_id = self.env['purchase.order'].search([('name', 'in', self.origin.split(', '))])
+        purchase_ref = purchase_order_id.filtered(lambda p: p.partner_ref).mapped('partner_ref')
+        if not purchase_ref:
+            return
         mail_template = self.env.ref('stock_custom.purchase_order_received_template')
         mail_template.with_context(lang=self.partner_id.commercial_partner_id.lang,
-                                   order_name=purchase_order_id.partner_ref).send_mail(self.id)
+                                   order_name=', '.join(purchase_ref)).send_mail(self.id)
 
     @api.multi
     def action_confirm(self):
