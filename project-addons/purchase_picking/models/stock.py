@@ -156,8 +156,9 @@ class StockContainer(models.Model):
             else:
                 container.date_to_order = container.eta
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
+        self.ensure_one()
         default = default and default or {}
         default['name'] = "%s (copy)" % self.name
         return super().copy(default)
