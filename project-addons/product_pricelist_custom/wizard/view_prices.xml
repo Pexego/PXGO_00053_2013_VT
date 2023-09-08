@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="wizard_prices" model="ir.ui.view">
+        <field name="name">wizard.prices</field>
+        <field name="model">view.prices</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <h2>
+                        <field name="default_code"/>
+                    </h2>
+                </group>
+                <group attrs="{'invisible':[('table_item_brand_ids','=',[])]}">
+                    <separator string="Brands Pricing" colspan="8"/>
+                    <group>
+                        <field name="table_item_brand_ids" nolabel="1"  >
+                            <tree default_order="pricelist_calculated_sequence">
+                                <field name="pricelist_calculated_sequence" invisible="1"/>
+                                <field name="pricelist_calculated"/>
+                                <field name="pricelist_calculated_price"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <group>
+                    <separator string="Pricing"/>
+                    <group colspan="8" col="8">
+                        <field name="table_item_ids" nolabel="1">
+                            <tree default_order="pricelist_sequence">
+                                <field name="pricelist_sequence" invisible="1"/>
+                                <field name="name_pricelist"/>
+                                <field name="fixed_price"/>
+                                <field name="margin"/>
+                                <field name="pricelist_calculated"/>
+                                <field name="pricelist_calculated_price"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <footer/>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_wizard_prices" model="ir.actions.act_window">
+        <field name="name">Prices</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">view.prices</field>
+        <field name="view_id" ref="wizard_prices"/>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
