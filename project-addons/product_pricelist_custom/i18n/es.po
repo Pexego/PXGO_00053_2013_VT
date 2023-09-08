@@ -309,3 +309,8 @@ msgstr "Precio antiguo"
 #: model:ir.ui.view,arch_db:product_pricelist_custom.view_product_pricelist_item_log
 msgid "New Fixed Price"
 msgstr "Nuevo precio"
+
+#. module: product_pricelist_custom
+#: model:ir.actions.act_window,name:action_wizard_prices
+msgid "Prices"
+msgstr "Precios"

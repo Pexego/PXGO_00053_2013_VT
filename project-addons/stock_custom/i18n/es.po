@@ -724,3 +724,8 @@ msgstr "País de Destino"
 #: model:ir.model.fields,field_description:stock_custom.field_product_product_last_landed_cost_date
 msgid "Last LC date"
 msgstr "Último día LC"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_tree
+msgid "Prices"
+msgstr "Precios"
