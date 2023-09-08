@@ -687,3 +687,13 @@ msgstr "Fattura"
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Shipping pending for lack of stock"
 msgstr "In sospeso per mancanza di disponibilitá"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_date_invoice
+msgid "Invoice Date"
+msgstr "Data fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_account_invoice_line_product_brand_id
+msgid "Brand"
+msgstr "Marchio"

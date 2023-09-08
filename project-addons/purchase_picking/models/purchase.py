@@ -168,6 +168,18 @@ class PurchaseOrder(models.Model):
                 order.invoice_status = 'invoiced'
             elif order.invoice_status == "invoiced" and any(line.qty_invoiced != line.product_qty for line in order.order_line):
                 order.invoice_status = 'partially'
+
+    first_uninvoiced_date = fields.Datetime(compute="_get_date_from_first_uninvoiced_picking", store=True)
+
+    @api.depends('picking_ids', 'picking_ids.state', 'picking_ids.date_done', 'picking_ids.invoice_ids')
+    def _get_date_from_first_uninvoiced_picking(self):
+        """
+            Compute the first uninvoiced picking date done.
+        """
+        for order in self:
+            uninvoiced_pickings = order.picking_ids.filtered(lambda p:p.state=='done' and p.date_done and not p.invoice_ids).sorted(key=lambda p: p.date_done)
+            if uninvoiced_pickings:
+                order.first_uninvoiced_date = uninvoiced_pickings[0].date_done
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
