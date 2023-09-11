@@ -12,12 +12,13 @@ class ProductProduct(models.Model):
         ------
         Float
         """
-        res = self.env['purchase.order.line'].search([('product_id', '=', self.id)])
-        res_filtered = res.filtered(lambda self: self.order_id.state in ['purchase', 'purchase_order'])
-        if not res_filtered:
+        res = self.env['purchase.order.line'].search([
+            ('product_id', '=', self.id),
+            ('order_id.state', 'in', ['purchase', 'purchase_order'])
+        ], order='write_date desc', limit=1)
+        if not res:
             raise NoLastPurchaseException(self.default_code)
-        last_line = res_filtered.sorted(key=lambda self: self.order_id.write_date, reverse=True)[0]
-        return last_line.price_unit
+        return res.price_unit
 
     @staticmethod
     def calculate_product_price_variation(old_price, new_price):
