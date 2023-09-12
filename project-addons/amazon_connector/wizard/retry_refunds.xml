@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="retry_amazon_refunds_form" model="ir.ui.view">
+        <field name="name">retry.amazon.refunds.form</field>
+        <field name="model">retry.amazon.refunds.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Orders" readonly="1">
+                <field name="amazon_refund_line_ids" mode="tree" readonly="1">
+                    <tree editable="bottom">
+                        <field name="refund_id"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button string="Retry Refunds" name="retry_refunds" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Retry Refunds"
+                res_model="retry.amazon.refunds.wizard"
+                src_model="amazon.sale.refund"
+                view_id="retry_amazon_refunds_form"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="retry_amazon_refunds_action"/>
+</odoo>

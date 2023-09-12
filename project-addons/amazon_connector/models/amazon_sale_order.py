@@ -35,6 +35,7 @@ class AmazonSaleOrder(models.Model):
     ], readonly=1)
     sales_channel = fields.Many2one("amazon.marketplace", "Sales Channel")
     purchase_date = fields.Date("Purchase Date")
+    shipment_date = fields.Date("Shipment Date")
     partner_vat = fields.Char()
     vat_imputation_country = fields.Char()
     buyer_email = fields.Char()
@@ -68,6 +69,7 @@ class AmazonSaleOrder(models.Model):
         related='invoice_id.state',
         readonly=True,
     )
+    amazon_sale_refund_ids = fields.One2many("amazon.sale.refund", "amazon_order_id")
 
     def _compute_invoice(self):
         for order in self:
@@ -208,7 +210,8 @@ class AmazonSaleOrder(models.Model):
     def _get_report_order_columns(self):
         return ["Order ID", "Buyer Tax Registration", "Buyer Tax Registration Jurisdiction", "Order Date",
                 "VAT Invoice Number", "Transaction Type", "Ship To City", "Ship To State", "Ship To Country",
-                "Ship To Postal Code","Tax Address Role", "Jurisdiction Name", "Ship From Country", "Seller Tax Registration"
+                "Ship To Postal Code","Tax Address Role", "Jurisdiction Name", "Ship From Country", "Shipment Date",
+                "Seller Tax Registration", 'Shipment ID', 'Quantity', 'ASIN'
                 ]
 
     def cron_create_amazon_sale_orders(self, data_start_time=(datetime.utcnow() - timedelta(days=1)).isoformat(),
@@ -223,11 +226,21 @@ class AmazonSaleOrder(models.Model):
         report_document = amazon_api.get_report_document(report.get('reportDocumentId'))
 
         cols = self._get_report_order_columns()
+
         #Read file with pandas
         csv_converted = StringIO(report_document.get('document'))
         input_file = pd.read_csv(csv_converted, encoding='latin1', usecols=cols, na_filter=False)
+
         #Filter rows to get only shipments
-        input_file = input_file[input_file["Transaction Type"] == 'SHIPMENT']
+        shipment_rows = input_file[input_file["Transaction Type"] == 'SHIPMENT']
+        self.create_orders(shipment_rows, amazon_api, max_commit_len, only_read)
+
+        #Filter rows to get refunds
+        returns_rows = input_file[(input_file["Transaction Type"] == 'REFUND') | (input_file["Transaction Type"] == 'RETURN')]
+        self.env['amazon.sale.refund'].create_refunds(returns_rows, max_commit_len, only_read)
+
+
+    def create_orders(self, input_file, amazon_api, max_commit_len=100, only_read=False):
         orders_len = len(input_file.index)
 
         for number, row in input_file.iterrows():
@@ -248,6 +261,7 @@ class AmazonSaleOrder(models.Model):
                                    'partner_vat': row["Buyer Tax Registration"],
                                    'vat_imputation_country': row["Buyer Tax Registration Jurisdiction"],
                                    'purchase_date': row["Order Date"],
+                                   'shipment_date': row["Shipment Date"],
                                    'amazon_invoice_name': row["VAT Invoice Number"],
                                    'city': row["Ship To City"],
                                    'country_id': country_id,
@@ -280,7 +294,6 @@ class AmazonSaleOrder(models.Model):
                 amazon_order.process_order()
             if (number >= max_commit_len and number % max_commit_len == 0) or number == orders_len:
                 self.env.cr.commit()
-
     @api.multi
     def retry_order(self):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
