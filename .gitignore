@@ -166,3 +166,4 @@ cron_endmonth
 retry_cron_on_exception
 papeur_connector
 national_arrivals_es
+sales_clearance

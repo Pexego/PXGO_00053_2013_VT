@@ -5,7 +5,7 @@
     'description': """""",
     'author': 'Visiotech',
     'website': 'www.visiotechsecurity.com',
-    "depends": ['product', 'stock', "delivery_carrier_custom"],
+    "depends": ['product', 'stock', "delivery_carrier_custom", "sales_clearance"],
     "data": ['data/battery_data.xml', 'views/product_view.xml', 'views/battery_view.xml', 'views/sale_view.xml',
              'security/ir.model.access.csv'
              ],

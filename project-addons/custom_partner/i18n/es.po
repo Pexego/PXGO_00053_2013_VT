@@ -539,3 +539,62 @@ msgstr "Has desactivado recientemente este cliente de la web, se supone que eso 
 #: model:ir.model.fields,field_description:custom_partner.field_sale_order_line_confirmation_date
 msgid "Confirmation Date"
 msgstr "Fecha de confirmación"
+
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_category_form_extended
+msgid "Color selection"
+msgstr "Selección de color"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Red"
+msgstr "Rojo"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Orange"
+msgstr "Naranja"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Yellow"
+msgstr "Amarillo"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Light blue"
+msgstr "Azul claro"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Dark purple"
+msgstr "Púrpura"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Salmon pink"
+msgstr "Rosa salmón"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Medium blue"
+msgstr "Azul turquesa"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Dark blue"
+msgstr "Azul oscuro"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Fuchsia"
+msgstr "Fucsia"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Green"
+msgstr "Verde"
+
+#. module: custom_partner
+#: selection:res.partner.category,color_selection:0
+msgid "Purple"
+msgstr "Violeta"
