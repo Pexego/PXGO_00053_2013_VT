@@ -22,6 +22,7 @@ from odoo import api, models, fields, _
 from odoo.tools.misc import ustr
 from odoo.exceptions import except_orm, UserError
 import re
+from odoo.tools.profiler import profile
 
 PRODUCT_UOM_ID = 1
 
@@ -271,6 +272,10 @@ class PromotionsRulesActions(models.Model):
             self.product_code = '("brand",...)'
             self.arguments = '0.00'
 
+        elif self.action_type == 'buy_x_get1free_product_tag':
+            self.product_code = '"product_tag"'
+            self.arguments = '0'
+
         return super().on_change()
 
     def create_line(self, vals):
@@ -455,14 +460,16 @@ class PromotionsRulesActions(models.Model):
 
         promo_products = order.order_line.filtered(lambda l: not l.promotion_line and eval(self.product_code) in l.product_id.tag_ids.mapped('name'))
         promo_products_sorted = promo_products.sorted('price_unit')
-        expanded_products = []
-        # Sets in a list, as much ids as qty there is.
-        # order.line(id1, id2) -> [id1, id1, id1, id2, id2]
-        # That means order.line(id1) has product_uom_qty = 3 and That means order.line(id2) has product_uom_qty = 2
-        for prod in promo_products_sorted:
-            expanded_products += [prod.id]*int(prod.product_uom_qty)
-        for line in range(int(sum(promo_products.mapped('product_uom_qty'))/qty)):
-            self.create_y_line_axb(order, promo_products.filtered(lambda p: p.id == expanded_products[line]), 1)
+
+        groups = int(sum(promo_products.mapped('product_uom_qty')) / qty)
+        for line in promo_products_sorted:
+            if groups <= 0:
+                # This means that all the possible promos has been applied
+                break
+            # Get the maximum quantity possible from the line
+            qty_to_discount = min(groups, line.product_uom_qty)
+            self.create_y_line_axb(order, line, qty_to_discount)
+            groups -= qty_to_discount
         return {}
 
     def action_prod_fixed_price_tag(self, order):
