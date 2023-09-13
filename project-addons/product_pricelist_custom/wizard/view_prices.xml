@@ -11,10 +11,10 @@
                         <field name="default_code"/>
                     </h2>
                 </group>
-                <group attrs="{'invisible':[('table_item_brand_ids','=',[])]}">
+                <group attrs="{'invisible':[('item_brand_ids','=',[])]}">
                     <separator string="Brands Pricing" colspan="8"/>
                     <group>
-                        <field name="table_item_brand_ids" nolabel="1"  >
+                        <field name="item_brand_ids" nolabel="1"  >
                             <tree default_order="pricelist_calculated_sequence">
                                 <field name="pricelist_calculated_sequence" invisible="1"/>
                                 <field name="pricelist_calculated"/>
@@ -26,7 +26,7 @@
                 <group>
                     <separator string="Pricing"/>
                     <group colspan="8" col="8">
-                        <field name="table_item_ids" nolabel="1">
+                        <field name="item_ids" nolabel="1">
                             <tree default_order="pricelist_sequence">
                                 <field name="pricelist_sequence" invisible="1"/>
                                 <field name="name_pricelist"/>

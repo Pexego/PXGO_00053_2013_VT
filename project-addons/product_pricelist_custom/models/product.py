@@ -338,7 +338,7 @@ class ProductProduct(models.Model):
 
         changer_wzd = self.env['view.prices'].create(
             {
-                'table_item_ids': [(6, 0, item_ids_unified)],
+                'item_ids': [(6, 0, item_ids_unified)],
                 'default_code': default_code
             }
         )
