@@ -22,7 +22,7 @@ from odoo import api, models, fields, _
 from odoo.tools.misc import ustr
 from odoo.exceptions import except_orm, UserError
 import re
-from odoo.tools.profiler import profile
+
 
 PRODUCT_UOM_ID = 1
 
