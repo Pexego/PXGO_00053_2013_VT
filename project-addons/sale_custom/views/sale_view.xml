@@ -333,11 +333,23 @@
     <record id="view_order_form_sync_picking" model="ir.ui.view">
         <field name="name">sale.order.sync.picking</field>
         <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sales_clearance.view_order_add_clearance_page"/>
+        <field name="arch" type="xml">
+            <group name="others" position="inside">
+                <field name="force_generic_product" string="Force generic product" groups="base.group_system" />
+                <field name="allow_overcome_weight" groups="base.group_system" />
+            </group>
+        </field>
+    </record>
+
+    <record id="view_order_form_not_sync_picking_add_account_manager_group" model="ir.ui.view">
+        <field name="name">view.order.form.not.sync.picking.add.account.manager.group</field>
+        <field name="model">sale.order</field>
         <field name="inherit_id" ref="scheduled_shipment.view_order_form_scheduled_date"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@name='sale_shipping']/field[@name='scheduled_date']" position="after">
-                <field name="force_generic_product" string="Force generic product" groups="base.group_system" />
-            </xpath>
+            <field name="not_sync_picking" position="attributes">
+                <attribute name="groups">base.group_system,account.group_account_manager</attribute>
+            </field>
         </field>
     </record>
 
