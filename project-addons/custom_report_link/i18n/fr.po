@@ -1137,4 +1137,4 @@ msgstr "EXPÉDITION EN SUSPENS POUR MANQUE DE STOCK"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Order reference:"
-msgstr "Référence de l'achat:"
+msgstr "Réf. l'achat:"

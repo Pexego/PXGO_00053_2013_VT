@@ -914,7 +914,7 @@ BIC: CAIXESBBXXX
                         </t>
                         <t t-if="o.type == 'out_refund' and o.name">
                             <div style="font-size:14px; font-weight: bold; color:#da1f2e">Order reference:
-                                <strong style="color:#6D6E70" t-esc="str(o.name)[:25]"/>
+                                <span style="font-weight: normal; color:#6D6E70" t-esc="str(o.name)[:25]"/>
                             </div>
                         </t>
                     </div>

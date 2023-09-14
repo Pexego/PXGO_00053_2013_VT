@@ -1148,4 +1148,4 @@ msgstr "O ENVIO ESTÁ A AGUARDAR DISPONIBILIDAD DE STOCK"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Order reference:"
-msgstr "Referência do pedido:"
+msgstr "Ref. pedido:"
