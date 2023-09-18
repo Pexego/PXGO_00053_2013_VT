@@ -61,6 +61,19 @@ class MrpBomLine(models.Model):
     final_lot = fields.Boolean('Same final product lot')
 
 
+class MrpBom(models.Model):
+
+    _inherit = 'mrp.bom'
+
+    @api.model
+    def _bom_find(self, product_tmpl=None, product=None, picking_type=None,
+                  company_id=False):
+        """Se evita el filtro pro compañía, ya que se comportanten entre
+        todas las compañías"""
+        return super()._bom_find(product_tmpl=product_tmpl, product=product,
+                                 picking_type=picking_type, company_id=False)
+
+
 class MrpProductProduceLine(models.TransientModel):
 
     _inherit = 'mrp.product.produce.line'
