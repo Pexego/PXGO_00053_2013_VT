@@ -214,3 +214,23 @@ msgstr "Campo que da acceso al conector CSV"
 #: model:ir.model.fields,field_description:flask_middleware_connector.field_res_partner_csv_connector_access
 msgid "CSV Connector Access"
 msgstr "Acceso al conector CSV"
+
+#. module: flask_middleware_connector
+#: selection:res.partner,csv_connector_access:0
+msgid "No connector"
+msgstr "Sin conector"
+
+#. module: flask_middleware_connector
+#: selection:res.partner,csv_connector_access:0
+msgid "Only networking"
+msgstr "Solo Networking"
+
+#. module: flask_middleware_connector
+#: selection:res.partner,csv_connector_access:0
+msgid "Only online security store"
+msgstr "Solo Tienda Online Seguridad"
+
+#. module: flask_middleware_connector
+#: selection:res.partner,csv_connector_access:0
+msgid "Premium"
+msgstr "Premium"

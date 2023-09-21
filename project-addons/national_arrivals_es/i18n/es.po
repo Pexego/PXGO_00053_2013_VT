@@ -26,3 +26,8 @@ msgstr "Llegadas nacionales"
 #: model:ir.ui.view,arch_db:national_arrivals_es.search_last_7_days_picking
 msgid "Last 7 days"
 msgstr "Últimos 7 días"
+
+#. module: national_arrivals_es
+#: model:ir.model.fields,field_description:national_arrivals_es.field_res_partner_is_national_supplier
+msgid "Is national supplier"
+msgstr "Es proveedor nacional"
