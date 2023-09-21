@@ -1,15 +1,17 @@
-from odoo import models, api, _
+from odoo import models, api, fields, _
 
 
 class StockPicking(models.Model):
 
     _inherit = 'stock.picking'
 
+    warehouse_id = fields.Many2one(related="picking_type_id.warehouse_id")
+
     @api.multi
     def action_copy_reserv_qty(self):
         super().action_copy_reserv_qty()
         for pick in self:
-            stock_loc = self.warehouse_id.lot_stock_id
+            stock_loc = pick.warehouse_id.lot_stock_id
             for move in pick.move_lines:
                 if move.reserved_availability % move.product_id.sale_in_groups_of != 0\
                         and (move.sale_line_id and not move.sale_line_id.product_id.is_pack)\
@@ -21,7 +23,7 @@ class StockPicking(models.Model):
     @api.multi
     def action_accept_confirmed_qty(self):
         for pick in self:
-            stock_loc = self.warehouse_id.lot_stock_id
+            stock_loc = pick.warehouse_id.lot_stock_id
             for move in pick.move_lines:
                 if move.qty_confirmed % move.product_id.sale_in_groups_of != 0\
                         and (move.sale_line_id and not move.sale_line_id.product_id.is_pack)\
