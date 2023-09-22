@@ -56,7 +56,7 @@ class PartnerListener(Component):
         up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                      "country_id", "state_id", "email_web", "email3", "ref",
                      'user_id', "property_product_pricelist", "lang", "type",
-                     "parent_id", "is_company", "email", "zone"
+                     "parent_id", "is_company", "email", "area_id",
                      "prospective", "phone", "mobile","csv_connector_access", "pricelist_brand_ids", "category_id"]
         if partner.is_company:
 
@@ -94,7 +94,7 @@ class PartnerListener(Component):
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
             "is_company", "email", "active", "prospective", "phone", "mobile",
             "property_payment_term_id", "last_sale_date", "csv_connector_access",
-            "pricelist_brand_ids", "category_id", "zone"
+            "pricelist_brand_ids", "category_id", "area_id"
         ]
         if 'web' in fields and record.web and \
                 (partner.active or partner.prospective):
