@@ -58,7 +58,7 @@ class Customer(SyncModel):
     phone2 = CharField(max_length=40, null=True)
     is_prepaid_payment_term = BooleanField(default=False)
     last_sale_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
-    csv_connector_access = BooleanField(default=False)
+    csv_connector_access = CharField(max_length=40, null=True)
     brand_pricelist_ids = CharField(null=True)
     tag_ids = CharField(null=True)
     email_sat = CharField(max_length=70, null=True)

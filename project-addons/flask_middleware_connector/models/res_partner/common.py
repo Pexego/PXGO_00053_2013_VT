@@ -155,7 +155,16 @@ class ResPartner(models.Model):
                     discount = item.price_discount
                 partner.discount = discount
 
-    csv_connector_access = fields.Boolean("CSV Connector Access", help="System field to allow csv connector access")
+    csv_connector_access = fields.Selection(string="CSV Connector Access",
+                                            help="System field to allow csv connector access",
+                                            selection=[
+                                                ("no_connector", "No connector"),
+                                                ("only_networking", "Only networking"),
+                                                ("only_online_store", "Only online security store"),
+                                                ("premium", "Premium")
+                                            ],
+                                            default="no_connector"
+                                            )
 
     @api.model
     def create(self, vals):

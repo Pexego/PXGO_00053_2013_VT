@@ -202,7 +202,7 @@ class PurchaseOrderLine(models.Model):
         """ Deduce missing required fields from the onchange """
         res = {}
         onchange_fields = ['name', 'price_unit', 'product_uom', 'taxes_id', 'date_planned']
-        delete_fields_if_empty = ['name']
+        delete_fields_if_empty = ['name', 'price_unit']
         if values.get('order_id') and values.get('product_id') and any(f not in values for f in onchange_fields):
             with self.env.do_in_onchange():
                 self._delete_fields_if_empty(delete_fields_if_empty, values)

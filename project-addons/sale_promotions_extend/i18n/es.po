@@ -714,6 +714,12 @@ msgstr "Limitar cantidad de un producto en un pedido"
 msgid "Discount % on Sub Total excluding brands"
 msgstr "Descuento % en Sub total excluyendo marcas"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Buy x and get 1 free group by product tags"
+msgstr "Compra x y llevate uno gratis, agrupado por tag"
+
 #. module: openerp_sale_promotions
 #: code:addons/sale_promotions_extend/models/rules.py:257
 #: code:addons/sale_promotions_extend/models/rules.py:282

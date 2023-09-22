@@ -50,6 +50,7 @@ class AccountInvoice(models.Model):
 
         return recs.name_get()
 
+
 class AccountInvoiceLine(models.Model):
 
     _inherit = 'account.invoice.line'
@@ -64,3 +65,5 @@ class AccountInvoiceLine(models.Model):
     claim_invoice_line_qty = fields.Float(compute="_compute_claim_invoice_line", string="Claim Invoice Line Qty")
 
     type = fields.Selection(related="invoice_id.type", string="Type")
+    date_invoice = fields.Date('Invoice Date', related='invoice_id.date_invoice')
+    product_brand_id = fields.Many2one(related='product_id.product_brand_id')

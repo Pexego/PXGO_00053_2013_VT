@@ -45,6 +45,11 @@ class StockMove(models.Model):
                               "processed in Vstock."))
         return super()._action_cancel()
 
+    def split_and_reserve(self, remaining_qty):
+        new_move = self._split(remaining_qty)
+        self.action_do_unreserve()
+        self._action_assign()
+        return new_move
 
 class StockPicking(models.Model):
 
@@ -127,19 +132,16 @@ class StockPicking(models.Model):
                                         precision_rounding=precision)
             if not move.qty_ready:
                 new_moves.append(move.id)
-            elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0 and \
-                    float_compare(remaining_qty, move.product_qty, precision_rounding=precision) < 0:
+            elif (float_compare(remaining_qty, 0, precision_rounding=precision) > 0 >
+                  float_compare(remaining_qty, move.product_qty, precision_rounding=precision)):
                 move_ctx = move._context.copy()
                 move_ctx.update(accept_ready_qty=True)
-                new_move = move.with_context(move_ctx)._split(remaining_qty)
+                new_move = move.with_context(move_ctx).split_and_reserve(remaining_qty)
                 new_moves.append(new_move)
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
             bcko = self._create_backorder_incidences(new_moves)
             new_moves.write({'qty_ready': 0.0})
-            #self.do_unreserve()
-            #self.action_assign()
-            #self.recheck_availability()
         self.message_post(body=_("User %s accepted ready quantities.") %
                           (self.env.user.name))
         self.action_done()
@@ -210,9 +212,9 @@ class StockPicking(models.Model):
                                             precision_rounding=precision)
                 if not move.qty_confirmed:
                     new_moves.append(move.id)
-                elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0\
-                    > float_compare(remaining_qty, move.product_qty, precision_rounding=precision):
-                    new_move = move._split(remaining_qty)
+                elif (float_compare(remaining_qty, 0, precision_rounding=precision) > 0 >
+                      float_compare(remaining_qty, move.product_qty, precision_rounding=precision)):
+                    new_move = move.split_and_reserve(remaining_qty)
                     new_moves.append(new_move)
                 if not move.product_uom_qty:
                     move.state = 'draft'
@@ -223,7 +225,6 @@ class StockPicking(models.Model):
                 bck.write({'move_type': 'one'})
                 if self.add_notes:
                     bck.write({'internal_notes': self.internal_notes})
-                self.action_assign()
                 result |= bck
             pick.message_post(body=_("User %s accepted confirmed qties.") %
                               self.env.user.name)
