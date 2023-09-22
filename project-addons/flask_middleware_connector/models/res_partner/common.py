@@ -301,3 +301,18 @@ class ResPartnerCategory(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete(self)
         return True
+
+
+class PartnerAreaListener(Component):
+    _name = 'partner.area.event.listener'
+    _inherit = 'base.event.listener'
+    _apply_on = ['res.partner.area']
+
+    def on_record_write(self, record, fields=None):
+        if 'name' in fields:
+            partner_ids = self.env['res.partner'].search([
+                ('web', '=', True), ('area_id', '=', record.id)
+            ])
+
+            for partner in partner_ids:
+                partner.with_delay(priority=11).update_partner()
