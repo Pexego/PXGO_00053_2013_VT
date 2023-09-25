@@ -158,13 +158,14 @@ class TntRequest(object):
     # ShippingSevice
     def _quant_package_data_from_picking(self):
         data_total = self._get_data_total_shipping()
+        number_of_packages = self.record.number_of_packages or 1
         return {
-            "ITEMS": self.record.number_of_packages,
+            "ITEMS": number_of_packages,
             "DESCRIPTION": self.record.name,
-            "LENGTH": max((data_total["length"] / self.record.number_of_packages), 0.1),
-            "HEIGHT": max((data_total["height"] / self.record.number_of_packages), 0.1),
-            "WIDTH": max((data_total["width"] / self.record.number_of_packages), 0.1),
-            "WEIGHT": data_total["weight"] / self.record.number_of_packages,
+            "LENGTH": max((data_total["length"] / number_of_packages), 0.1),
+            "HEIGHT": max((data_total["height"] / number_of_packages), 0.1),
+            "WIDTH": max((data_total["width"] / number_of_packages), 0.1),
+            "WEIGHT": data_total["weight"] / number_of_packages,
         }
 
     def _prepare_address(self, partner):
@@ -293,7 +294,7 @@ class TntRequest(object):
             },
         }
         xml_info = dicttoxml.dicttoxml(
-            data, attr_type=False, custom_root="ESHIPPER"
+            data, attr_type=False, custom_root="ESHIPPER", cdata=True
         ).decode("utf-8")
         return "xml_in=%s" % xml_info
 
@@ -367,13 +368,13 @@ class TntRequest(object):
         if partner.street2:
             address += " " + partner.street2
         res = {
-            "name": partner.name,
+            "name": partner.name[:40],
             "addressLine1": address[:30],
-            "town": partner.city,
+            "town": partner.city[:40],
             "exactMatch": "Y",
-            "province": partner.state_id.name,
-            "postcode": partner.zip,
-            "country": partner.country_id.code,
+            "province": partner.state_id.name[:30],
+            "postcode": partner.zip[:9],
+            "country": partner.country_id.code[:2],
         }
         if len(address) > 30:
             res.update({"addressLine2": address[30:30]})
