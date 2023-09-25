@@ -16,4 +16,38 @@
             </data>
         </field>
     </record>
+
+    <record id="amazon_account_invoice_tree" model="ir.ui.view">
+        <field name="name">amazon.account.invoice.tree</field>
+        <field name="model">account.invoice</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="date_invoice"/>
+                <field name="number"/>
+                <field name="amazon_order"/>
+                <field name="marketplace_id"/>
+                <field name="date_amazon_first_refund" string="Date Amazon Refund"/>
+                <field name="journal_id"/>
+                <field name="date_due"/>
+                <field name="amount_untaxed_signed" sum="Subtotal"/>
+                <field name="amount_total_signed" string="Total" sum="Total"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_show_invoice_refunds" model="ir.actions.act_window">
+        <field name="name">Amazon Refunds</field>
+        <field name="res_model">account.invoice</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('type', '=', 'out_refund'),('amazon_order','!=', False)]</field>
+        <field name="view_id" ref="amazon_account_invoice_tree"/>
+    </record>
+
+    <menuitem id="settlement_amazon_account_invoice_refund_menu" name="Refunds" sequence="2" action="action_show_invoice_refunds"
+              parent="settlement_amazon_menu"/>
+
 </odoo>

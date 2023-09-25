@@ -13,7 +13,7 @@
              "views/amazon_sale_order.xml", "views/amazon_company.xml","views/amazon_marketplace.xml",
              "views/amazon_returns.xml", "views/stock_deposit.xml", "wizard/retry_orders.xml",
              "wizard/create_full_invoices.xml", "views/invoice.xml", "views/amazon_settlement.xml",
-             "views/partner_view.xml"
+             "views/partner_view.xml","views/amazon_sale_refund.xml", "wizard/retry_refunds.xml"
              ],
     "installable": True
 }

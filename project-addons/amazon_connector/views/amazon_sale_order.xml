@@ -5,7 +5,7 @@
         <field name="res_model">amazon.sale.order</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field eval="False" name="view_id"/>
+        <field name="view_id" ref="amazon_sale_order_tree" />
         <field name="view_amazon_sale_order_filter"/>
         <field name="context">{
             'search_default_errors_filter': 1
@@ -83,6 +83,7 @@
                             <field name="sales_channel" readonly="1"/>
                             <field name="is_business_order" readonly="1"/>
                             <field name="purchase_date" readonly="1"/>
+                            <field name="shipment_date" readonly="1"/>
                             <field name="fiscal_position_id" attrs="{'readonly':[('state','!=','error')]}"/>
                             <field name="ship_from_country_id" readonly="1"/>
                         </group>
@@ -143,6 +144,17 @@
                                 </group>
                             </group>
                         </page>
+                         <page string="Refunds">
+                            <field name="amazon_sale_refund_ids" readonly="1">
+                                <tree string="Refunds">
+                                    <field name="product_id"/>
+                                    <field name="refund_date"/>
+                                    <field name="product_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="refund_id"/>
+                                </tree>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
@@ -163,6 +175,7 @@
                 <field name="fulfillment"/>
                 <field name="sales_channel"/>
                 <field name="purchase_date"/>
+                <field name="shipment_date"/>
                 <field name="amount_untaxed"/>
                 <field name="amount_total"/>
                 <field name="state"/>
