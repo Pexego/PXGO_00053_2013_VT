@@ -28,6 +28,7 @@ msgstr "Assegnare spedizione"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_lines_checker_view
 msgid "Cancel"
 msgstr "Cancellare"
 
@@ -574,3 +575,36 @@ msgstr "Riferimento fornitore"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_customs_channel
 msgid "Customs Channel"
 msgstr "Canale"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_first_uninvoiced_date
+msgid "First Uninvoiced Date"
+msgstr "Prima data non fatturata"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_confirm_purchase_lines_checker_purchase_lines_with_no_price
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_lines_checker_view
+msgid "Lines with no price"
+msgstr "Líneas sin precio"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_confirm_purchase_lines_checker_purchase_lines_with_price_variance
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_lines_checker_view
+msgid "Product with high price variance"
+msgstr "Productos con gran variación en el precio"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_open_purchase_lines_checker
+msgid "Purchase lines checker"
+msgstr "Comprobación de líneas de compra"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_lines_checker_view
+msgid "Continue"
+msgstr "Continuar"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/product.py:48
+#, python-format
+msgid "The product "%s" has not last purchase"
+msgstr "El producto "%s" no tiene última compra"

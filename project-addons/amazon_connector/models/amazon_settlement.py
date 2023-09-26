@@ -356,7 +356,6 @@ class AmazonSettlement(models.Model):
     def _reconcile_amazon_settlement_lines(self, line_order_ids, amazon_max_difference_allowed, refund_mode=False):
         total_amount = 0
         states = ['cancel']
-        lines_with_products = {}
         moves = {}
         partner_lines = {}
         partner_amount = {}
@@ -373,29 +372,7 @@ class AmazonSettlement(models.Model):
             theoretical_amount = 0
             if amazon_invoice:
                 if refund_mode:
-                    for item in line.items_ids:
-                        product = self.env['amazon.sale.order.line'].search(
-                            ['&', '|', ('product_seller_sku', '=', item.sku),
-                             ('order_item', '=', item.amazon_order_item_code),
-                             ('order_id', '=', line.amazon_order_id.id),
-                             ]).mapped('product_id')
-                        if product:
-                            invoice_line = amazon_invoice.invoice_line_ids.filtered(
-                                lambda il: il.product_id == product[0])
-                            if invoice_line:
-                                invoice_line = invoice_line[0]
-                                i_price_unit = invoice_line.price_total / invoice_line.quantity
-                                i_uds = round(abs(sum(
-                                    item.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped(
-                                        'amount'))) / i_price_unit)
-                                theoretical_amount += i_price_unit * i_uds
-                                if i_uds > 0:
-                                    item_val = {'product_id': product, 'invoice_line': invoice_line, 'qty': i_uds}
-                                    if line.id in lines_with_products.keys():
-                                        lines_with_products[line.id].append(item_val)
-                                    else:
-                                        lines_with_products[line.id] = [item_val]
-
+                    theoretical_amount +=  line._associate_refunds_to_items()
                 else:
                     theoretical_amount = sum(amazon_invoice.mapped('amount_total'))
                 rate = line.settlement_id.currency_id.with_context(
@@ -437,7 +414,7 @@ class AmazonSettlement(models.Model):
         if moves:
             for m, lines_to_r in moves.items():
                 if refund_mode:
-                    lines_to_r.reconcile_refund_lines(m, lines_with_products)
+                    lines_to_r.reconcile_refund_lines(m)
                 else:
                     lines_to_r.reconcile_order_lines(m)
         for p, lines_group_by_partner in partner_lines.items():
@@ -447,7 +424,7 @@ class AmazonSettlement(models.Model):
                 move = self._create_move(total_amount, total_difference, p, refund_mode)
                 lines_group_by_partner.write({'move_id': move.id})
                 if refund_mode:
-                    lines_group_by_partner.reconcile_refund_lines(move, lines_with_products)
+                    lines_group_by_partner.reconcile_refund_lines(move)
                 else:
                     lines_group_by_partner.reconcile_order_lines(move)
 
@@ -513,57 +490,42 @@ class AmazonSettlementLine(models.Model):
     state = fields.Selection([('read', 'Read'), ('reconciled', 'Reconciled')], string='Status', readonly=True,
                              copy=False,
                              index=True, track_visibility='onchange', default='read')
-    refund_invoice_id = fields.Many2one('account.invoice')
-    refund_amount_untaxed = fields.Monetary(related="refund_invoice_id.amount_untaxed")
-    refund_amount_total = fields.Monetary(related="refund_invoice_id.amount_total")
+    refund_invoice_ids = fields.One2many('account.invoice',compute="_get_refunds")
     refund_state = fields.Selection(related="refund_invoice_id.state")
     error = fields.Char()
     destination_country_id = fields.Many2one('res.country')
     move_id = fields.Many2one('account.move')
 
+    #Fields Deprecated: These fields are only for the old amazon.settlement.line. They are no longer used.
+    refund_invoice_id = fields.Many2one('account.invoice')
+    refund_amount_untaxed = fields.Monetary(related="refund_invoice_id.amount_untaxed")
+    refund_amount_total = fields.Monetary(related="refund_invoice_id.amount_total")
+
+    @api.multi
+    def _get_refunds(self):
+        for line in self:
+            line.refund_invoice_ids = line.items_ids.mapped("refund_id").ids
+
     @api.multi
     def _compute_items_value(self):
         for line in self:
+            amount_items = 0
             if line.type in ['Order', 'Refund']:
-                line.amount_items = sum(line.items_ids.mapped('amount')) + sum(
+                amount_items = sum(line.items_ids.mapped('amount')) + sum(
                     line.items_ids.mapped('item_event_ids.amount'))
-            else:
-                line.amount_items = 0
+            line.amount_items = amount_items
 
     @api.multi
     def _compute_items_positive_items(self):
         for line in self:
+            amount_items_positive_events = 0
             if line.type in ['Order', 'Refund']:
-                line.amount_items_positive_events = sum(
+                amount_items_positive_events = sum(
                     line.items_ids.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped('amount'))
-            else:
-                line.amount_items_positive_events = 0
+            line.amount_items_positive_events = amount_items_positive_events
 
     @api.multi
-    def make_refund_invoice(self, invoice):
-        header_vals = {
-            'partner_id': invoice.partner_id.id,
-            'fiscal_position_id':
-                invoice.fiscal_position_id.id,
-            'date_invoice': datetime.now(),
-            'journal_id': invoice.journal_id.id,
-            'account_id':
-                invoice.partner_id.property_account_receivable_id.id,
-            'currency_id':
-                invoice.currency_id.id,
-            'company_id': invoice.company_id.id,
-            'user_id': self.env.user.id,
-            'type': 'out_refund',
-            'payment_term_id': False,
-            'payment_mode_id':
-                invoice.payment_mode_id.id,
-            'name': invoice.name,
-            'amazon_order': invoice.amazon_order.id,
-        }
-        return self.env['account.invoice'].create(header_vals)
-
-    @api.multi
-    def reconcile_refund_lines(self, move_id, line_with_products={}):
+    def reconcile_refund_lines(self, move_id):
         max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
         len_lines = len(self)
         lines_commit = self.env['amazon.settlement.line']
@@ -573,82 +535,55 @@ class AmazonSettlementLine(models.Model):
                     [('name', '=', line.amazon_order_name)])
                 if am_o:
                     line.amazon_order_id = am_o
-            if not line.refund_invoice_id:
-                if line_with_products.get(line.id, False):
-                    elements = line_with_products[line.id]
-                    refund = line.make_refund_invoice(elements[0].get('invoice_line').invoice_id)
-                    line.refund_invoice_id = refund
-                    for e in elements:
-                        product = e.get('product_id')
-                        invoice_line = e.get('invoice_line')
-                        vals = {
-                            'invoice_id': refund.id,
-                            'name': invoice_line.name,
-                            'product_id': product.id,
-                            'account_id': invoice_line.account_id.id,
-                            'quantity': e.get('qty') or 1,
-                            'price_unit': invoice_line.price_unit,
-                            'cost_unit': invoice_line.cost_unit,
-                            'discount': invoice_line.discount,
-                            'account_analytic_id': False,
-                            'invoice_line_tax_ids': [(6, 0, invoice_line.invoice_line_tax_ids.ids)]
-                        }
-                        self.env['account.invoice.line'].create(vals)
-                    refund.compute_taxes()
-                    refund.action_invoice_open()
-                else:
-                    amazon_invoice = line.amazon_order_id.invoice_deposits.filtered(
-                        lambda i: i.state != 'cancel' and i.type != 'out_refund')
-                    if amazon_invoice:
-                        refund = line.make_refund_invoice(amazon_invoice)
-                        line.refund_invoice_id = refund
-                        for item in line.items_ids:
-                            product = self.env['amazon.sale.order.line'].search(
-                                ['&', '|', ('product_seller_sku', '=', item.sku),
-                                 ('order_item', '=', item.amazon_order_item_code),
-                                 ('order_id', '=', line.amazon_order_id.id),
-                                 ]).mapped('product_id')
-                            if product:
-                                invoice_line = amazon_invoice.invoice_line_ids.filtered(
-                                    lambda il: il.product_id == product[0])
-                                if invoice_line:
-                                    i_price_unit = invoice_line.price_total / invoice_line.quantity
-                                    i_uds = int(abs(sum(
-                                        item.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped(
-                                            'amount'))) / i_price_unit)
-                                    vals = {
-                                        'invoice_id': refund.id,
-                                        'name': invoice_line[0].name,
-                                        'product_id': product.id,
-                                        'account_id': invoice_line.account_id.id,
-                                        'quantity': i_uds or 1,
-                                        'price_unit': invoice_line[0].price_unit,
-                                        'cost_unit': invoice_line[0].cost_unit,
-                                        'discount': invoice_line[0].discount,
-                                        'account_analytic_id': False,
-                                        'uom_id': invoice_line.uom_id.id,
-                                        'invoice_line_tax_ids': [(6, 0, invoice_line[0].invoice_line_tax_ids.ids)]
-                                    }
-                                    self.env['account.invoice.line'].create(vals)
-                        refund.compute_taxes()
-                        refund.action_invoice_open()
-
-            if line.refund_invoice_id:
-                move_line_id = line.refund_invoice_id.move_id.line_ids.filtered(
-                    lambda aml: aml.account_id.code == '43000000')
-                if move_line_id:
-                    moves = move_id.line_ids.filtered(
-                        lambda ml: ml.account_id.code == '43000000' and ml.debit > 0) + move_line_id
-                    move_lines_filtered = moves.filtered(lambda aml: not aml.reconciled)
-                    move_lines_filtered.with_context(skip_full_reconcile_check='amount_currency_excluded').reconcile()
-                    moves.force_full_reconcile()
-                    line.state = "reconciled"
+            if not line.refund_invoice_ids:
+                line._associate_refunds_to_items()
+            else:
+                moves = move_id.line_ids.filtered(
+                    lambda ml: ml.account_id.code == '43000000' and ml.debit > 0)
+                for refund in line.refund_invoice_ids:
+                    move_line_id = refund.move_id.line_ids.filtered(
+                        lambda aml: aml.account_id.code == '43000000')
+                    if move_line_id:
+                        moves += move_line_id
+                move_lines_filtered = moves.filtered(lambda aml: not aml.reconciled)
+                move_lines_filtered.with_context(skip_full_reconcile_check='amount_currency_excluded').reconcile()
+                moves.force_full_reconcile()
+                line.state = "reconciled"
             lines_commit += line
             line_number = count + 1
             if (line_number >= max_commit_len and line_number % max_commit_len == 0) or line_number == len_lines:
                 self.env.cr.commit()
                 _logger.info("COMMIT DONE: %s" % lines_commit)
                 lines_commit = self.env['amazon.settlement.line']
+
+    @api.multi
+    def _associate_refunds_to_items(self):
+        theoretical_amount = 0
+        for line in self:
+            for item in line.items_ids:
+                product = self.env['amazon.sale.order.line'].search(
+                    ['&', '|', ('product_seller_sku', '=', item.sku),
+                     ('order_item', '=', item.amazon_order_item_code),
+                     ('order_id', '=', line.amazon_order_id.id),
+                     ]).mapped('product_id')
+                if product:
+                    refund_sale = line.amazon_order_id.amazon_sale_refund_ids.filtered(
+                        lambda il: il.product_id == product[0]
+                                   and il.state != 'error' and il.refund_id and il.refund_id.state == 'open')
+                    if refund_sale:
+                        i_price_unit = refund_sale[0].refund_id.amount_total / (refund_sale[0].product_qty or 1)
+                        i_uds = int(abs(sum(
+                            item.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped(
+                                'amount'))) / i_price_unit)
+                        theoretical_amount += i_price_unit * i_uds
+                        refund_sale = refund_sale.filtered(lambda r: r.product_qty == i_uds)
+                        if refund_sale:
+                            item.refund_id = refund_sale[0].refund_id.id
+                        else:
+                            line.error = _('There is no refund with this qty (%i)\n') %i_uds
+                    else:
+                        line.error = _('There is no refund invoice for this order\n')
+        return theoretical_amount
 
     @api.multi
     def reconcile_order_lines(self, move_id):
@@ -753,6 +688,7 @@ class AmazonSettlementItem(models.Model):
         'res.currency',
         readonly=True,
         default=lambda self: self.line_id.settlement_id.currency_id.id)
+    refund_id = fields.Many2one("account.invoice")
 
     def parse_item(self, event, type):
         name_index = 0 if type != 'promotion' else 1

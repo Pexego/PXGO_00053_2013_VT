@@ -111,7 +111,8 @@ class ProductPricelist(models.Model):
             LEFT JOIN product_category AS categ ON item.categ_id = categ.id
             LEFT JOIN product_brand AS brand ON item.product_brand_id = brand.id
             WHERE
-                (item.product_tmpl_id IS NULL OR item.product_tmpl_id = any(%s))
+                item.active IS TRUE
+                AND (item.product_tmpl_id IS NULL OR item.product_tmpl_id = any(%s))
                 AND (item.product_id IS NULL OR item.product_id = any(%s))
                 AND (item.categ_id IS NULL OR item.categ_id = any(%s))
                 AND (item.product_brand_id IS NULL OR item.product_brand_id = any(%s))

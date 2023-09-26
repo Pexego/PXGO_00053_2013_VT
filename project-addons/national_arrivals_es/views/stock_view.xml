@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_national_arrivals_tree" model="ir.ui.view">
+        <field name="name">national.arrivals.tree</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <tree string="National arrivals">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="scheduled_date"/>
+                <field name="date_done"/>
+                <field name="origin"/>
+                <field name="shipping_identifier"/>
+                <field name="backorder_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="search_last_7_days_picking">
         <field name="name">Last 7 days</field>
         <field name="model">stock.picking</field>
@@ -7,7 +24,8 @@
             <search string="Last 7 days">
                 <field name="scheduled_date"/>
                 <filter string="Last 7 days" name="last7days" domain="[
-                ('scheduled_date', '&gt;=', ((context_today()-datetime.timedelta(days=7)).strftime('%Y-%m-%d')))
+                ('scheduled_date', '&gt;=', ((context_today()-datetime.timedelta(days=7)).strftime('%Y-%m-%d'))),
+                ('state', 'not in', ('cancel', 'done'))
                 ]"/>
             </search>
         </field>
@@ -19,16 +37,14 @@
         <field name="type">ir.actions.act_window</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="purchase_picking.vpicktree_add_shipping_id"/>
+        <field name="view_id" ref="national_arrivals_es.view_national_arrivals_tree"/>
         <field name="domain" eval="['&amp;', ('picking_type_code', '=', 'incoming'),
-                                    ('partner_id.property_account_position_id', 'in', (
-                                        ref('l10n_es.1_fp_nacional'),
-                                        ref('l10n_es.1_fp_intra')
-                                    ))]"/>
+                                    '&amp;', ('partner_id.is_national_supplier', '=', True),
+                                    ('location_id', '=', ref('stock.stock_location_suppliers'))]"/>
         <field name="context">{'search_default_last7days':1}</field>
         <field name="search_view_id" ref="search_last_7_days_picking"/>
     </record>
 
-    <menuitem id="national_incoming_picking_menu" name="National arrivals"
-            parent="purchase.menu_purchase_control" action="action_open_national_arrivals"/>
+    <menuitem id="national_incoming_picking_menu" name="National arrivals" sequence="101"
+            parent="stock.menu_stock_warehouse_mgmt" action="action_open_national_arrivals"/>
 </odoo>

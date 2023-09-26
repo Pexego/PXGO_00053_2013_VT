@@ -20,12 +20,29 @@
         </field>
     </record>
 
+    <record id="view_urgent_orders_filter" model="ir.ui.view">
+        <field name="name">view.urgent.orders.search</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="origin"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="state_vstock"/>
+                <field name="state_papeur"/>
+                <field name="id_vstock"/>
+            </search>
+        </field>
+    </record>
+
     <record id="action_urgent_orders" model="ir.actions.act_window">
         <field name="name">Urgent Orders</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">stock.picking</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_urgent_orders"/>
+        <field name="search_view_id" ref="view_urgent_orders_filter"/>
         <field name="domain">[('state','=','assigned'),('picking_type_code', '=', 'outgoing')]</field>
     </record>
 
