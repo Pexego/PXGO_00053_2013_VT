@@ -911,6 +911,11 @@ BIC: CAIXESBBXXX
                                 <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/>
                             </div>
                         </t>
+                        <t t-if="o.type == 'out_refund' and o.name">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Order reference:
+                                <span style="font-weight: normal; color:#6D6E70" t-esc="str(o.name)[:25]"/>
+                            </div>
+                        </t>
                     </div>
                 </t>
                 <t t-if="country_code != 'ES'">

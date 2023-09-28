@@ -92,6 +92,7 @@ class PurchaseOrder(models.Model):
         # Confirm purchase order
         context = self._context.copy()
         context['bypass_override'] = True
+        context['bypass_po_check_lines'] = True
         context.pop('default_state', False)
         self.with_context(context).sudo().button_confirm()
         for pick in self.picking_ids:

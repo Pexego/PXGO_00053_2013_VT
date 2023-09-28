@@ -56,7 +56,7 @@ class PartnerListener(Component):
         up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                      "country_id", "state_id", "email_web", "email3", "ref",
                      'user_id', "property_product_pricelist", "lang", "type",
-                     "parent_id", "is_company", "email",
+                     "parent_id", "is_company", "email", "area_id",
                      "prospective", "phone", "mobile","csv_connector_access", "pricelist_brand_ids", "category_id"]
         if partner.is_company:
 
@@ -94,7 +94,7 @@ class PartnerListener(Component):
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
             "is_company", "email", "active", "prospective", "phone", "mobile",
             "property_payment_term_id", "last_sale_date", "csv_connector_access",
-            "pricelist_brand_ids", "category_id"
+            "pricelist_brand_ids", "category_id", "area_id"
         ]
         if 'web' in fields and record.web and \
                 (partner.active or partner.prospective):
@@ -155,7 +155,16 @@ class ResPartner(models.Model):
                     discount = item.price_discount
                 partner.discount = discount
 
-    csv_connector_access = fields.Boolean("CSV Connector Access", help="System field to allow csv connector access")
+    csv_connector_access = fields.Selection(string="CSV Connector Access",
+                                            help="System field to allow csv connector access",
+                                            selection=[
+                                                ("no_connector", "No connector"),
+                                                ("only_networking", "Only networking"),
+                                                ("only_online_store", "Only online security store"),
+                                                ("premium", "Premium")
+                                            ],
+                                            default="no_connector"
+                                            )
 
     @api.model
     def create(self, vals):
@@ -292,3 +301,18 @@ class ResPartnerCategory(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete(self)
         return True
+
+
+class PartnerAreaListener(Component):
+    _name = 'partner.area.event.listener'
+    _inherit = 'base.event.listener'
+    _apply_on = ['res.partner.area']
+
+    def on_record_write(self, record, fields=None):
+        if 'name' in fields:
+            partner_ids = self.env['res.partner'].search([
+                ('web', '=', True), ('area_id', '=', record.id)
+            ])
+
+            for partner in partner_ids:
+                partner.with_delay(priority=11).update_partner()

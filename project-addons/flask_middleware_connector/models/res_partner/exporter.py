@@ -37,7 +37,8 @@ class ResPartnerExporter(Component):
             "last_sale_date": binding.last_sale_date,
             "csv_connector_access": binding.csv_connector_access,
             "brand_pricelist_ids": f'{binding.pricelist_brand_ids.ids or ""}',
-            "tag_ids": f'{binding.category_id.ids or ""}'
+            "tag_ids": f'{binding.category_id.ids or ""}',
+            "zone": binding.area_id.name
         }
         if not vals['is_company'] and binding.parent_id:
             vals.update({"type": binding.type, "parent_id": binding.parent_id.id, "email": binding.email})

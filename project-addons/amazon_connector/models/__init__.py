@@ -9,5 +9,6 @@ from . import (
     amazon_settlement,
     partner,
     amazon_returns,
-    amazon_api_request
+    amazon_api_request,
+    amazon_sale_refund
 )
