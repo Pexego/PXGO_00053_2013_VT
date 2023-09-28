@@ -272,6 +272,7 @@ class ProductPricelistItem(models.Model):
             if item.id in old_prices:
                 pricelist_item_log.create({'user_id': self.env.user.id,
                                            'product_id': item.product_id.id,
+                                           'pricelist_id': item.pricelist_id.id,
                                            'old_fixed_price': old_prices[item.id],
                                            'new_fixed_price': new_fixed_price,
                                            'date': fields.Datetime.now()})

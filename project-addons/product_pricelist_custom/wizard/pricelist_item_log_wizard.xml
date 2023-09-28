@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <tree string="Product Pricelist Item Log" create="false" edit="false">
                 <field name="product_id" readonly="1"/>
+                <field name="pricelist_id" readonly="1"/>
                 <field name="old_fixed_price" readonly="1"/>
                 <field name="new_fixed_price" readonly="1"/>
                 <field name="user_id" readonly="1"/>
@@ -25,5 +26,17 @@
     <menuitem id="move_product_pricelist_item_log_menu" name="Product Pricelist Item Log" parent="sale.menu_sale_report"
               action="action_product_pricelist_item_log" groups="base.group_system"
               sequence="10"/>
+
+    <record id="view_product_pricelist_item_search" model="ir.ui.view">
+        <field name="name">product.pricelist.item.log.search</field>
+        <field name="model">product.pricelist.item.log</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+               <field name="product_id"/>
+               <field name="pricelist_id"/>
+               <field name="user_id"/>
+           </search>
+        </field>
+    </record>
 
 </odoo>

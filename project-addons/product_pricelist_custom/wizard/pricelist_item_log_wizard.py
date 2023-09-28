@@ -9,6 +9,7 @@ class ReservesLog(models.TransientModel):
 
     user_id = fields.Many2one("res.users", "User")
     product_id = fields.Many2one("product.product", "Product")
+    pricelist_id  = fields.Many2one("product.pricelist")
     old_fixed_price = fields.Float("Old Fixed Price")
     new_fixed_price = fields.Float("New Fixed Price")
     date = fields.Datetime("Date")
