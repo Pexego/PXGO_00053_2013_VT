@@ -148,5 +148,25 @@ msgstr "Cancelar"
 msgid "Set to Purchase Order"
 msgstr "Pasar a Orden de compra"
 
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:separate_purchase_orders.field_purchase_report_partner_ref
+msgid "Partner Ref"
+msgstr "Referencia proveedor"
+
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:separate_purchase_orders.field_purchase_report_order_id
+msgid "Order"
+msgstr "Pedido"
+
+#. module: separate_purchase_orders
+#: model:ir.ui.view,arch_db:separate_purchase_orders.view_purchase_order_search_add_filters
+msgid "This Year"
+msgstr "Este año"
+
+#. module: separate_purchase_orders
+#: model:ir.ui.view,arch_db:separate_purchase_orders.view_purchase_order_search_add_filters
+#: selection:purchase.report,state:0
+msgid "Purchase Order State"
+msgstr "Órdenes de compra"
 
 
