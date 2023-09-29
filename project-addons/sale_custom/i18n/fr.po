@@ -27,3 +27,24 @@ msgstr "La quantité du produit sélectionné (%i unités) n'est pas disponible 
 #, python-format
 msgid "Not enough inventory but we have a replacement product!"
 msgstr "vous pouvez le remplacer par un autre produit!"
+
+#. module: sale_custom
+#: model:mail.template,body_html:sale_custom.email_template_purchase_product_to_order
+msgid "\n"
+"<p>Hello,</p>\n"
+"<p>The sale ${object.name} has been created. There are some products to make the order: </p>\n"
+"<p>${ctx['products_to_order']}</p>\n"
+"<p>The client is ${ctx['partner_name']}</p>\n"
+"<p>The order is assigned to ${object.user_id.name}</p>\n"
+"<p>Regards.</p>\n"
+"\n"
+"         "
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour,</p>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">La vente ${object.name} a été créé. Il y a certains produits sur demande: </p>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">${ctx['products_to_order']}</p>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est ${ctx['partner_name']}</p>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">La commande est attribuée à ${object.user_id.name}</p>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Salutations.</p>\n"
+"\n"
+"         "

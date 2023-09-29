@@ -5,8 +5,17 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     amazon_order = fields.Many2one(comodel_name='amazon.sale.order')
+    marketplace_id = fields.Many2one(related="amazon_order.sales_channel")
     amazon_invoice = fields.Char()
     tax_in_price_unit = fields.Boolean()
+    amazon_sale_refund_ids = fields.One2many("amazon.sale.refund", "refund_id")
+    date_amazon_first_refund = fields.Date(compute="_get_date_amazon_first_refund")
+
+    @api.multi
+    def _get_date_amazon_first_refund(self):
+        for invoice in self:
+            invoice.date_amazon_first_refund = invoice.amazon_sale_refund_ids[0].refund_date\
+                if invoice.amazon_sale_refund_ids else False
 
     @api.multi
     def action_invoice_open(self):

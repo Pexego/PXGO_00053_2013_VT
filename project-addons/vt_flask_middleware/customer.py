@@ -62,6 +62,7 @@ class Customer(SyncModel):
     brand_pricelist_ids = CharField(null=True)
     tag_ids = CharField(null=True)
     email_sat = CharField(max_length=70, null=True)
+    zone = CharField(max_length=70, null=True)
 
     MOD_NAME = 'customer'
 
