@@ -1133,3 +1133,8 @@ msgstr "OFFRE VALABLE PENDANT 30 JOURS"
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "SHIPPING PENDING FOR LACK OF STOCK"
 msgstr "EXPÉDITION EN SUSPENS POUR MANQUE DE STOCK"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Order reference:"
+msgstr "Réf. commande:"
