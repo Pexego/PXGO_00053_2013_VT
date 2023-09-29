@@ -35,40 +35,40 @@
                                         <tr>
                                             <td style="color: #555; font-size: 14px;">
                                                 <p style="margin-bottom: 0cm; line-height: 14.95px; background-color: rgb(255, 255, 255);">
-                                                    Les informamos que, hemos puesto en circulación recibo/s domiciliado/s con el/los vencimiento/s indicado/s correspondiente/s a la/s factura/s que detallamos a continuación:
+                                                    We would like to inform you that we have issued a direct debit receipt with the due date(s) corresponding to the invoice(s) detailed below:
                                                 </p>
                                                 <p style="line-height: 14.95px;"/>
                                                 <div>
                                                     <br/>
                                                     <table width="516">
                                                         <tbody>
-                                                          <table align="center" cellpadding="10" border="0" style="border-collapse:collapse; width:100%">
+                                                          <table align="center" border="0" style="border-collapse:collapse; width:80%;">
                                                              <tr>
-                                                               <td style="border: 1px solid black">Nº Factura</td>
-                                                               <td style="border: 1px solid black">Fecha</td>
-                                                               <td style="border: 1px solid black">Importe</td>
+                                                               <td style="font-size: 11px; border: 1px solid black">Invoice number</td>
+                                                               <td style="font-size: 11px; border: 1px solid black">Date</td>
+                                                               <td style="font-size: 11px; border: 1px solid black">Amount</td>
                                                              </tr>
                                                             <tr t-foreach="obj.payment_line_ids" t-as="line" valign="middle">
                                                                 <td style="border: 1px solid black">
-                                                                    <p style="font-size: 14px;">
+                                                                    <p style="font-size: 11px;">
                                                                         <span t-field="line.communication"/>
                                                                     </p>
                                                                 </td>
                                                                 <td style="border: 1px solid black">
-                                                                  <p style="font-size: 14px;">
+                                                                  <p style="font-size: 11px;">
                                                                         <span t-field="line.date"/>
                                                                     </p>
                                                                 </td>
                                                                 <td style="border: 1px solid black">
-                                                                  <p style="font-size: 14px;">
+                                                                  <p style="font-size: 11px;">
                                                                         <span t-field="line.amount_currency"/>
                                                                     </p>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                               <td/>
-                                                              <td style="text-align: right;">Importe total:  </td>
-                                                              <td style="border: 1px solid black">
+                                                              <td style="text-align: right; font-size: 11px;">Total amount:  </td>
+                                                              <td style="border: 1px solid black; font-size: 11px;" >
                                                                   <t t-set="total" t-value="sum(obj.payment_line_ids.mapped('amount_currency'))"/>
                                                                   <span t-esc="total" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/> €
                                                               </td>
@@ -79,9 +79,9 @@
                                                             <tr>
                                                                 <td style="color: #555; font-size: 14px;">
                                                                   <br/>
-                                                                  <p>La cuenta bancaria de destino es: <span t-esc="obj.partner_bank_id.acc_number[:2] + '** **** **** **** **** '+obj.partner_bank_id.acc_number[-4:]"/></p>
+                                                                  <p>The destination bank account is: <span t-esc="obj.partner_bank_id.acc_number[:2] + '** **** **** **** **** '+obj.partner_bank_id.acc_number[-4:]"/></p>
                                                                   <br/>
-                                                                  <p>Sin otro particular, aprovechamos la ocasión para saludarles.</p>
+                                                                  <p>Yours sincerely.</p>
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
@@ -141,9 +141,11 @@
 
     <record id="account_banking_sepa_mail.payment_order_advise_partner" model="mail.template">
         <field name="name"> Payment Order advise partners 11 </field>
-        <field name="email_from">${'contabilidad@visiotech.es'}</field>
+        <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
+        <field name="email_to">${ctx.get('partner_email2') or ctx.get('partner_email') or ''}</field>
+        <field name="partner_to"></field>
         <field name="subject">Aviso de recibo</field>
-        <field name="partner_to">${ctx.get('partner_id') or ''}</field>
+        <field name="reply_to">${(ctx.get('partner_team').name == 'Italia' and 'contabilita@visiotechsecurity.com') or (ctx.get('partner_team').name == 'Francia' and 'comptabilite@visiotechsecurity.com') or (ctx.get('partner_team').name == 'Portugal' and 'contabilidade@visiotechsecurity.com') or 'contabilidad@visiotechsecurity.com'}</field>
         <field name="model_id" ref="account_payment_order.model_account_payment_order"/>
         <field name="auto_delete" eval="False"/>
         <field name="body_type">qweb</field>

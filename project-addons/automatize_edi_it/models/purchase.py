@@ -100,7 +100,7 @@ class PurchaseOrder(models.Model):
             es_sale = order_es.name
             if order_es.invoice_status == 'to invoice':
                 for line in order_es.order_line:
-                    amt_to_invoice += line.qty_to_invoice * line.price_unit
+                    amt_to_invoice += line.qty_to_invoice * line.price_unit * (1-(line.discount/100))
         return amt_to_invoice, es_sale
 
     def cron_check_qty_to_invoice_lx(self, months=1):
