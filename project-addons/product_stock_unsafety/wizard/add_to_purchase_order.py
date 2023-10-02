@@ -38,7 +38,7 @@ class AddToPurchaseOrderWzd(models.TransientModel):
                     purchase_qty = -(product.min_suggested_qty)
                 else:
                     purchase_qty = min_suggested_qty
-            line_vals['product_uom_qty'] = purchase_qty
+            line_vals['product_qty'] = purchase_qty
             line_vals.update(
                 self.env['purchase.order.line'].play_onchanges(
                     line_vals, ['product_id']))
