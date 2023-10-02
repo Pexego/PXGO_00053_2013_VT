@@ -422,7 +422,20 @@
                 <separator colspan="2" string="Refunds"/>
                 <field name="invoice_ids" colspan="4" readonly="1"/>
                 <separator colspan="2" string="Receptions / Deliveries"/>
-                <field name="picking_ids" colspan="4" readonly="1"/>
+                <field name="picking_ids" colspan="4" readonly="1">
+                    <tree>
+                        <field name="name"/>
+                        <field name="location_id"/>
+                        <field name="location_dest_id"/>
+                        <field name="partner_id"/>
+                        <field name="scheduled_date"/>
+                        <field name="date_done"/>
+                        <field name="origin"/>
+                        <field name="shipping_identifier"/>
+                        <field name="backorder_id"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
             </page>
        </xpath>
     </field>
