@@ -37,11 +37,11 @@
                             type="object"/>
                 </group>
                 <field name="landed_cost_ids">
-                    <tree create="false" editable="true">
+                    <tree create="false" editable="false" delete="false">
                         <field name="name"/>
                         <field name="date"/>
                         <field name="picking_ids" widget="many2many_tags"/>
-                        <field name="container_ids" widget="many2many_tags" edit="false"/>
+                        <field name="container_ids" widget="many2many_tags" readonly="1"/>
                         <field name="state"/>
                     </tree>
                 </field>
