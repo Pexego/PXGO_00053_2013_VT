@@ -54,11 +54,18 @@ class MrpProduction(models.Model):
         self.move_raw_ids.write({'picking_id': pick_out.id})
         self.move_raw_ids.mapped('move_line_ids').write({'picking_id': pick_out.id})
 
+
 class MrpBomLine(models.Model):
 
     _inherit = 'mrp.bom.line'
 
     final_lot = fields.Boolean('Same final product lot')
+
+
+class MrpBom(models.Model):
+    _inherit = 'mrp.bom'
+
+    product_tmpl_name = fields.Char(related='product_tmpl_id.name', String='Product')
 
 
 class MrpProductProduceLine(models.TransientModel):
