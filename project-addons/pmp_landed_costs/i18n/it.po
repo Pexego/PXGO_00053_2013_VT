@@ -310,3 +310,8 @@ msgstr "In corso"
 #: selection:import.sheet,sheet_state:0
 msgid "Done"
 msgstr "Finalizzato"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_import_sheet_sheet_state
+msgid "Status"
+msgstr "Stato"

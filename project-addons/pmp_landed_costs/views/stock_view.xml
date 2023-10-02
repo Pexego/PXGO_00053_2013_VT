@@ -24,6 +24,7 @@
                             <field name="fee"/>
                             <field name="inspection"/>
                             <field name="arrival_cost"/>
+                            <field name="sheet_state"/>
                             <field name="landed_cost_count" invisible="1"/>
                             <button name="action_open_landed_cost_creator" string="Create landed costs"
                                     type="object" icon="fa-thumbs-o-down" attrs="{'invisible': [('landed_cost_count', '!=', 0)]}"/>

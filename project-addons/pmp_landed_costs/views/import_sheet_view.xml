@@ -76,6 +76,7 @@
                 <field name="fee"/>
                 <field name="inspection"/>
                 <field name="arrival_cost"/>
+                <field name="sheet_state"/>
             </tree>
         </field>
     </record>
