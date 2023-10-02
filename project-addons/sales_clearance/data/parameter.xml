@@ -4,4 +4,8 @@
         <field name="key">max.amount.in.payment.term</field>
         <field name="value">10000</field>
     </record>
+    <record id="max_risk_percentage_in_payment_term" model="ir.config_parameter">
+        <field name="key">max.risk.percentage.in.payment.term</field>
+        <field name="value">20</field>
+    </record>
 </odoo>

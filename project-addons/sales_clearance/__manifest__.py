@@ -4,7 +4,7 @@
     'category': 'Extra Tools',
     'author': "Visiotech",
     'website': 'www.visiotechsecurity.com',
-    'depends': ['base','sale','account'],
+    'depends': ['base','sale','account', 'custom_partner'],
     'data': ["data/parameter.xml",
              "views/sale_order.xml"],
     'installable': True,
