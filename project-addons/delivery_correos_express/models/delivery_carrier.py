@@ -54,7 +54,7 @@ class DeliveryCarrier(models.Model):
         partner = picking.partner_id
         sending_partner = picking.picking_type_id.warehouse_id.company_id.partner_id
         streets = self._get_partner_streets(partner)
-        phone = partner.mobile or partner.phone or ""
+        phone = (partner.mobile or partner.phone or "").replace(" ", "")
         national = partner.country_id.code == sending_partner.country_id.code
         return {
             "codDest": "",
@@ -83,7 +83,7 @@ class DeliveryCarrier(models.Model):
             "paisISORte": partner.country_id.code or "",
             "codPosIntRte": "",
             "contacRte": partner.name or "",
-            "telefRte": partner.phone or "",
+            "telefRte": (partner.phone or "").replace(" ",""),
             "emailRte": partner.email or "",
         }
 
