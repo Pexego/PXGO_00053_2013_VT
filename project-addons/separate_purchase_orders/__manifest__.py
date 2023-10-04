@@ -13,7 +13,8 @@
                 'purchase_picking'],
     "data": ['wizard/separate_orders_wizard.xml',
              'views/purchase_view.xml',
-             "data/sequence.xml"
+             "data/sequence.xml",
+             "report/purchase_order_report_view.xml"
              ],
     "installable": True
 }
