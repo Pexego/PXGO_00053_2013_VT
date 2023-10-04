@@ -25,7 +25,7 @@ class StockPicking(models.Model):
                 # Pedido en preparación
                 picking.with_delay(priority=1).prepare_order_reception()
                 picking.with_delay(priority=1).notify_user()
-            if vals.get('state', False) and vals.get('state') == 'done' and picking.state_papeur in ('notified', 'urgent'):
+            if vals.get('date_done', False) and picking.state == 'done' and picking.state_papeur in ('notified', 'urgent'):
                 # Pedido finalizado
                 picking.cancel_order_urgent()
                 picking.vstock_data.state_papeur = 'done'
