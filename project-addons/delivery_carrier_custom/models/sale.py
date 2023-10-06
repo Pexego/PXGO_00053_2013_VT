@@ -6,6 +6,7 @@ class SaleOrder(models.Model):
 
     transporter_id = fields.Many2one('res.partner', 'Transporter',
                                      domain=[('is_transporter', '=', True)])
+    service_id = fields.Integer('Service Id', related='carrier_id.id', store=True)
     delivery_type = fields.Selection([
         ('shipping', 'Shipping'),
         ('carrier', 'Carrier - Customer'),
