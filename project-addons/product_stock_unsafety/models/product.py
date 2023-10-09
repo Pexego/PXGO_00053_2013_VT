@@ -164,8 +164,9 @@ class ProductProduct(models.Model):
             next_moves = product._get_next_move(limit=3)
             sixty_days_sales = - product.last_sixty_days_sales
             order_cycle = product.order_cycle
+            virtual_stock = product.virtual_stock_conservative + product.incoming_qty + product.qty_in_production
             res = (sixty_days_sales / 60.0) * order_cycle \
-                + product.virtual_stock_conservative
+                + virtual_stock
             for move in next_moves:
                 res += move.product_uom_qty
             product.min_suggested_qty = res

@@ -21,16 +21,17 @@ class ClaimMakePickingFromPicking(models.TransientModel):
 
     @api.multi
     def action_create_picking_from_picking(self):
-        #import wdb
-        #wdb.set_trace()
+        rmp_type_id = self.env.ref('crm_claim_type.crm_claim_type_supplier')
         for pick_line in self.picking_line_ids:
             move = pick_line.move_id
-            if move.product_id.track_serial and not move.claim_line_id.prodlot_id and not move.claim_line_id.product_id.bom_count > 0:
+            claim_line_id = move.claim_line_id
+            if claim_line_id.claim_id.claim_type != rmp_type_id and move.product_id.track_serial and \
+                not claim_line_id.prodlot_id and not pick_line.prodlot_id and (not claim_line_id.product_id.bom_ids or
+                 'normal' in claim_line_id.product_id.bom_ids.mapped('type')):
                 raise UserError(_("You must specify the serial number of the serial products"))
-            elif move.claim_line_id.product_id.track_serial and move.claim_line_id.prodlot_id:
-                move.lots_text = move.claim_line_id.prodlot_id
-        res = super(ClaimMakePickingFromPicking, self).action_create_picking_from_picking()
-        return res
+            elif claim_line_id.product_id.track_serial and claim_line_id.prodlot_id:
+                move.lots_text = claim_line_id.prodlot_id
+        return super(ClaimMakePickingFromPicking, self).action_create_picking_from_picking()
 
 
 class ClaimLine(models.Model):

@@ -37,19 +37,21 @@
                             type="object"/>
                 </group>
                 <field name="landed_cost_ids">
-                    <tree create="false" editable="true">
+                    <tree create="false" editable="false" delete="false">
                         <field name="name"/>
                         <field name="date"/>
                         <field name="picking_ids" widget="many2many_tags"/>
-                        <field name="container_ids" widget="many2many_tags" edit="false"/>
+                        <field name="container_ids" widget="many2many_tags" readonly="1"/>
                         <field name="state"/>
                     </tree>
                 </field>
                 <separator string="Invoices" colspan="4"/>
                 <field name="invoice_ids">
-                    <tree editable="bottom">
-                        <field name="state" invisible="1"/>
+                    <tree editable="false" create="false" delete="false">
+                        <field name="number"/>
                         <field name="reference"/>
+                        <field name="date_invoice"/>
+                        <field name="state"/>
                     </tree>
                 </field>
             </form>
@@ -76,6 +78,7 @@
                 <field name="fee"/>
                 <field name="inspection"/>
                 <field name="arrival_cost"/>
+                <field name="sheet_state"/>
             </tree>
         </field>
     </record>

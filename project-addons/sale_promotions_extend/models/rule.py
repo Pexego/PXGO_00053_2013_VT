@@ -23,6 +23,7 @@ from odoo.tools.misc import ustr
 from odoo.exceptions import except_orm, UserError
 import re
 
+
 PRODUCT_UOM_ID = 1
 
 
@@ -206,6 +207,8 @@ class PromotionsRulesActions(models.Model):
              _('Limit quantity of a product in an order')),
             ('cart_disc_perc_exclude_brands',
              _('Discount % on Sub Total excluding brands')),
+            ('buy_x_get1free_product_tag',
+             _('Buy x and get 1 free group by product tags')),
             ])
 
     @api.onchange('action_type')
@@ -268,6 +271,10 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'cart_disc_perc_exclude_brands':
             self.product_code = '("brand",...)'
             self.arguments = '0.00'
+
+        elif self.action_type == 'buy_x_get1free_product_tag':
+            self.product_code = '"product_tag"'
+            self.arguments = '0'
 
         return super().on_change()
 
@@ -443,6 +450,28 @@ class PromotionsRulesActions(models.Model):
                         promo_products.append(order_line.product_id.id)
         return {}
 
+    def action_buy_x_get1free_product_tag(self, order):
+        """
+        Generates one line of discount for each group of products
+        Given the size of the group and the tag of the products
+        Gets first the less expensive
+        """
+        qty = eval(self.arguments)
+
+        promo_products = order.order_line.filtered(lambda l: not l.promotion_line and eval(self.product_code) in l.product_id.tag_ids.mapped('name'))
+        promo_products_sorted = promo_products.sorted('price_unit')
+
+        groups = int(sum(promo_products.mapped('product_uom_qty')) / qty)
+        for line in promo_products_sorted:
+            if groups <= 0:
+                # This means that all the possible promos has been applied
+                break
+            # Get the maximum quantity possible from the line
+            qty_to_discount = min(groups, line.product_uom_qty)
+            self.create_y_line_axb(order, line, qty_to_discount)
+            groups -= qty_to_discount
+        return {}
+
     def action_prod_fixed_price_tag(self, order):
         for order_line in order.order_line:
             if eval(self.product_code) in eval(order_line.product_tags):
@@ -467,9 +496,7 @@ class PromotionsRulesActions(models.Model):
             'order_id': order.id,
             'sequence': order_line.sequence,
             'product_id': self.env.ref('commercial_rules.product_discount').id,
-            'name': '%s (%s)' % (
-                     product_id.default_code,
-                     self.promotion.with_context({'lang': order.partner_id.lang}).line_description),
+            'name': f"{product_id.default_code} ({self.promotion.with_context({'lang': order.partner_id.lang}).line_description})",
             'price_unit': -order_line.price_unit,
             'discount': order_line.discount,
             'promotion_line': True,

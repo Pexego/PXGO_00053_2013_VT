@@ -36,9 +36,10 @@ msgid "Quotation"
 msgstr "Ordine"
 
 #. module: sales_clearance
-#: code:addons/sales_clearance/models/sale.py:18
+#: code:addons/sales_clearance/models/sale.py:41
+#: code:addons/sales_clearance/models/sale.py:52
 #, python-format
-msgid "The order can not be confirmed, maximum amount exceeded for payment term selected"
+msgid "The order cannot be confirmed. The maximum amount for the selected payment term has been exceeded."
 msgstr "L'ordine non può essere confermato, importo massimo superato per il termino di pagamento scelto"
 
 #. module: sales_clearance

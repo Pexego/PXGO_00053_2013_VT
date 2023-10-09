@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_search_add_filters" model="ir.ui.view">
+        <field name="name">report.purchase.order.search</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_search"/>
+        <field name="arch" type="xml">
+            <filter name="orders" position="after">
+                <filter string="Purchase Order State" name="purchase_order_state"
+                        domain="[('state','=','purchase_order')]"/>
+                <separator/>
+                <filter string="This Year" name="this_year"
+                        domain="['|', ('date_order', '=', False), '&amp;',('date_order','&lt;=', time.strftime('%%Y-12-31')),
+                        ('date_order','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+            </filter>
+            <filter name="orders" position="attributes">
+                <attribute name="domain">[('state','not in',('draft','cancel','purchase_order'))]</attribute>
+            </filter>
+        </field>
+    </record>
+
+    <record id="purchase.action_purchase_order_report_all" model="ir.actions.act_window">
+        <field name="context">{'search_default_this_year':1, 'search_default_purchase_order_state': 1}</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+</odoo>

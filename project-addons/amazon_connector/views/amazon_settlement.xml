@@ -44,7 +44,7 @@
     </record>
 
 
-    <menuitem id="settlement_amazon_refund_menu" name="Refunds" sequence="2" action="action_show_refunds"
+    <menuitem id="settlement_amazon_refund_menu" name="Refunds (OLD)" sequence="2" action="action_show_refunds"
               parent="settlement_amazon_menu"/>
 
     <record id="amazon_settlement_form" model="ir.ui.view">

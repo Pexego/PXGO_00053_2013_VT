@@ -111,7 +111,8 @@ class ProductPricelist(models.Model):
             LEFT JOIN product_category AS categ ON item.categ_id = categ.id
             LEFT JOIN product_brand AS brand ON item.product_brand_id = brand.id
             WHERE
-                (item.product_tmpl_id IS NULL OR item.product_tmpl_id = any(%s))
+                item.active IS TRUE
+                AND (item.product_tmpl_id IS NULL OR item.product_tmpl_id = any(%s))
                 AND (item.product_id IS NULL OR item.product_id = any(%s))
                 AND (item.categ_id IS NULL OR item.categ_id = any(%s))
                 AND (item.product_brand_id IS NULL OR item.product_brand_id = any(%s))
@@ -272,6 +273,7 @@ class ProductPricelistItem(models.Model):
             if item.id in old_prices:
                 pricelist_item_log.create({'user_id': self.env.user.id,
                                            'product_id': item.product_id.id,
+                                           'pricelist_id': item.pricelist_id.id,
                                            'old_fixed_price': old_prices[item.id],
                                            'new_fixed_price': new_fixed_price,
                                            'date': fields.Datetime.now()})

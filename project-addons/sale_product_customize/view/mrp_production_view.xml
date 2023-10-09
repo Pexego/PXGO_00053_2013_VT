@@ -50,6 +50,17 @@
             </field>
         </record>
 
+        <record id="mrp_bom_tree_view_product_name" model="ir.ui.view">
+            <field name="name">mrp.bom.tree.replace</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="product_tmpl_id" position="replace">
+                    <field name="product_tmpl_name"/>
+                </field>
+            </field>
+        </record>
+
         <record id="mrp.product_template_action" model="ir.actions.act_window">
             <field name="name">Products</field>
             <field name="res_model">product.template</field>
