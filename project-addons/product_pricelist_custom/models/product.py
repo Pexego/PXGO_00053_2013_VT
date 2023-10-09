@@ -332,7 +332,7 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     def view_prices_model(self):
-
+        self.ensure_one()
         item_ids_unified = self.item_ids.ids + self.item_brand_ids.ids
         default_code = self.default_code
 
