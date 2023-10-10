@@ -181,6 +181,7 @@ msgstr "Albarán"
 #: field:mrp.customization.wizard,product_id:0
 #: field:product.product.mount,head_product_id:0
 #: field:product.product.mount,product_id:0
+#: model:ir.model.fields,field_description:sale_product_customize.field_mrp_bom_product_tmpl_name
 msgid "Product"
 msgstr "Producto"
 
