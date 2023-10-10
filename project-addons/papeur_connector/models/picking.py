@@ -25,10 +25,11 @@ class StockPicking(models.Model):
                 # Pedido en preparación
                 picking.with_delay(priority=1).prepare_order_reception()
                 picking.with_delay(priority=1).notify_user()
+                picking.vstock_data.write({'state_vstock': 'En preparación'})
             if vals.get('date_done', False) and picking.state_papeur in ('notified', 'urgent'):
                 # Pedido finalizado
                 picking.cancel_order_urgent()
-                picking.vstock_data.state_papeur = 'done'
+                picking.vstock_data.write({'state_papeur': 'done'})
                 picking.with_delay(priority=1, eta=1800).auto_deliver_order()
                 picking.with_delay(priority=1).ready_order()
 
@@ -53,7 +54,7 @@ class StockPicking(models.Model):
                 response_reception = requests.post(web_endpoint_reception, json=data_reception)
                 response.raise_for_status()
                 response_reception.raise_for_status()
-                picking.vstock_data.state_papeur = 'notified'
+                picking.vstock_data.write({'state_papeur': 'notified'})
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
 
@@ -85,7 +86,7 @@ class StockPicking(models.Model):
             try:
                 response = requests.post(web_endpoint, json=data)
                 response.raise_for_status()
-                picking.vstock_data.state_papeur = 'urgent'
+                picking.vstock_data.write({'state_papeur': 'urgent'})
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
 
@@ -110,7 +111,7 @@ class StockPicking(models.Model):
                 response_reception.raise_for_status()
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
-            picking.vstock_data.state_papeur = False
+            picking.vstock_data.write({'state_papeur': False})
 
     @api.multi
     def deliver_order(self):
