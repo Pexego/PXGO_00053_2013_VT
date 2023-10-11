@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="transporter_form_country_ids" model="ir.ui.view">
-        <field name="name">transporter.form.country.ids</field>
-        <field name="model">transportation.transporter</field>
-        <field name="inherit_id" ref="transportation.transporter_form"/>
-        <field name="arch" type="xml">
-            <field name="service_ids" position="after">
-                <field name="country_group_id"/>
-                <label for="fuel"/>
-                <div>
-                    <field name="fuel" class="oe_inline"/> %%
-                </div>
-            </field>
-        </field>
-    </record>
 
     <record id="res_country_group_form_add_shipment" model="ir.ui.view">
         <field name="name">res.country.group.form.add.shipment</field>
@@ -33,17 +19,13 @@
     <record id="view_price_calc" model="ir.ui.view">
         <field name="name">view.price.calc</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="transportation.sale_order_add_transporter"/>
+        <field name="inherit_id" ref="delivery_carrier_custom.sale_order_add_carrier_transporter"/>
         <field name="arch" type="xml">
-            <field name="service_id" position="after">
-                <label for="service_id" string=" "/>
-                <div>
-                    <field name="service_id" invisible="1"/>
-                    <button name="compute_variables"
-                        string="  Calculate Shipping Prices" type="object"
+            <field name="carrier_id" position="after">
+                <button name="compute_variables"
+                        string="Calculate Shipping Prices" type="object"
                         class="oe_highlight"
                         icon="fa-truck"/>
-                </div>
             </field>
         </field>
     </record>

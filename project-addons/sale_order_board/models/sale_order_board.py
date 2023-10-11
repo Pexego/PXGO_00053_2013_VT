@@ -45,61 +45,60 @@ class SaleOrder(models.Model):
             shipment_groups = order.env['res.country.group'].search([
                 ('shipment', '=', True), ('country_ids', 'in', order.partner_shipping_id.country_id.id)
             ])
-            transporter_ids = order.env['transportation.transporter'].search(
-                [('country_group_id', 'in', shipment_groups.ids)]
+            transporter_ids = order.env['res.partner'].search(
+                [('country_group_id', 'in', shipment_groups.ids),
+                 ('is_transporter', '=', True), ('api_name', 'in', ['UPS', 'DHL', 'SEUR', 'TNT'])]
             )
 
             for transporter in transporter_ids:
-                # if we don't check name it may raise an unwanted AttributeError
-                if transporter.name in ['UPS', 'DHL', 'SEUR', 'TNT']:
-                    call_method = f'_add_services_cost_{transporter.name}'
-                    try:
-                        sale_order_weight = order.get_sale_order_weight()
-                        # equals to do order.call_method(...)
-                        getattr(order, call_method)(
-                            new,
-                            package_weight=sale_order_weight,
-                            num_pieces=math.ceil(sale_order_weight / 20),
-                            package_pieces=int(sum(order.order_line.mapped('product_uom_qty')))
-                        )
-                    except(requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
-                        message_error += (
-                            "{transporter_name}: Connection error on {transporter_name} webpage."
-                            " {error} \n".format(transporter_name=transporter.name, error=e)
-                        )
-                        break
-                    except AttributeError:
-                        message_error += (
-                            "{transporter_name}: The response is not valid or it "
-                            "changed \n".format(transporter_name=transporter.name)
-                        )
-                        continue
-                    except requests.HTTPError as e:
-                        message_error += "{transporter_name}: {text}\n".format(
-                            transporter_name=transporter.name, text=e.args[0]
-                        )
-                        continue
-                    except KeyError as e:
-                        message_error += (
-                            "{transporter_name}: The services code \"{services_code}\" are not "
-                            "defined in the system.\n".format(
-                                transporter_name=transporter.name,
-                                services_code=e.args[0]
-                            ))
-                        continue
-                    except TransporterUrlResponseError as e:
-                        message_error += (
-                            "{transporter_name}: Could not find information on url "
-                            "'{response_url}' \n".format(
-                                transporter_name=transporter.name,
-                                response_url=e.response_url
-                            ))
-                        continue
-                    except TransporterProviderResponseError as e:
-                        message_error += "{transporter_name}: {message} \n".format(
-                            transporter_name=transporter.name,
-                            message=e.message
-                        )
+                call_method = f'_add_services_cost_{transporter.api_name}'
+                try:
+                    sale_order_weight = order.get_sale_order_weight()
+                    # equals to do order.call_method(...)
+                    getattr(order, call_method)(
+                        new,
+                        package_weight=sale_order_weight,
+                        num_pieces=math.ceil(sale_order_weight / 20),
+                        package_pieces=int(sum(order.order_line.mapped('product_uom_qty')))
+                    )
+                except(requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+                    message_error += (
+                        "{transporter_name}: Connection error on {transporter_name} webpage."
+                        " {error} \n".format(transporter_name=transporter.api_name, error=e)
+                    )
+                    break
+                except AttributeError:
+                    message_error += (
+                        "{transporter_name}: The response is not valid or it "
+                        "changed \n".format(transporter_name=transporter.api_name)
+                    )
+                    continue
+                except requests.HTTPError as e:
+                    message_error += "{transporter_name}: {text}\n".format(
+                        transporter_name=transporter.api_name, text=e.args[0]
+                    )
+                    continue
+                except KeyError as e:
+                    message_error += (
+                        "{transporter_name}: The services code \"{services_code}\" are not "
+                        "defined in the system.\n".format(
+                            transporter_name=transporter.api_name,
+                            services_code=e.args[0]
+                        ))
+                    continue
+                except TransporterUrlResponseError as e:
+                    message_error += (
+                        "{transporter_name}: Could not find information on url "
+                        "'{response_url}' \n".format(
+                            transporter_name=transporter.api_name,
+                            response_url=e.response_url
+                        ))
+                    continue
+                except TransporterProviderResponseError as e:
+                    message_error += "{transporter_name}: {message} \n".format(
+                        transporter_name=transporter.api_name,
+                        message=e.message
+                    )
             if message_error:
                 new.message_error = message_error
 
@@ -111,14 +110,14 @@ class SaleOrder(models.Model):
         """
         Calculates DHL service prices and writes them into picking_rated
         """
-        dhl_transporter = self.env['transportation.transporter'].search([('name', '=', 'DHL')])
-        dhl_services = dhl_transporter.service_ids.mapped('name')
+        dhl_transporter = self.env['res.partner'].search([('api_name', '=', 'DHL')])
+        dhl_services = dhl_transporter.carrier_ids.mapped('name')
         account_user = self.env['ir.config_parameter'].sudo().get_param('account.user.dhl.api.request')
         account_password = self.env['ir.config_parameter'].sudo().get_param('account.password.dhl.api.request')
         url = self.env['ir.config_parameter'].sudo().get_param('url.prod.dhl.api.request')
         account_account = self.env['ir.config_parameter'].sudo().get_param('account.dhl.api.request')
 
-        shipper = self.env['res.company'].browse(1).partner_id
+        shipper = self.env.user.company_id.partner_id
         shipper_address_line = shipper.street
         shipper_city = shipper.city
         shipper_postal_code = shipper.zip
@@ -261,7 +260,7 @@ class SaleOrder(models.Model):
         account_password = self.env['ir.config_parameter'].sudo().get_param('account.password.tnt.api.request')
         url = self.env['ir.config_parameter'].sudo().get_param('url.tnt.api.request')
 
-        sender = self.env['res.company'].browse(1).partner_id
+        sender = self.env.user.company_id.partner_id
         sender_country = sender.country_id.code
         sender_town = sender.city
         sender_postcode = sender.zip
@@ -270,7 +269,7 @@ class SaleOrder(models.Model):
         delivery_postcode = self.partner_shipping_id.zip
         delivery_country = self.partner_shipping_id.country_id.code
 
-        tnt_transporter = self.env['transportation.transporter'].search([('name', '=', 'TNT')])
+        tnt_transporter = self.env['res.partner'].search([('api_name', '=', 'TNT')])
         volume_weight = self.get_sale_order_volume() * tnt_transporter.weight_volume_translation
         package_weight = max(volume_weight, package_weight)
 
@@ -384,7 +383,7 @@ class SaleOrder(models.Model):
         list_services = ast.literal_eval(self.env['ir.config_parameter'].sudo().get_param('services.seur.api.request'))
         list_products = self.env['ir.config_parameter'].sudo().get_param('products.seur.api.request')
 
-        seur_transporter = self.env['transportation.transporter'].search([('name', '=', 'SEUR')])
+        seur_transporter = self.env['res.partner'].search([('api_name', '=', 'SEUR')])
         volume_weight = self.get_sale_order_volume() * seur_transporter.weight_volume_translation
         package_weight = max(volume_weight, package_weight)
 
@@ -464,8 +463,8 @@ class SaleOrder(models.Model):
         """
         Calculates UPS service prices and writes them into picking_rated
         """
-        ups_transporter = self.env['transportation.transporter'].search([('name', '=', 'UPS')])
-        ups_services = ups_transporter.service_ids
+        ups_transporter = self.env['res.partner'].search([('api_name', '=', 'UPS')])
+        ups_services = ups_transporter.carrier_ids
         service_codes = ast.literal_eval(
             self.env['ir.config_parameter'].sudo().get_param('service.codes.ups.api.request')
         )
@@ -478,7 +477,7 @@ class SaleOrder(models.Model):
         package_weight = max(volume_weight, package_weight)
 
         shipper_name = "Visiotech"
-        shipper = self.env['res.company'].browse(1).partner_id
+        shipper = self.env.user.company_id.partner_id
         shipper_address_line = shipper.street
         shipper_city = shipper.city
         shipper_province_code = shipper.state_id.code
@@ -715,18 +714,11 @@ class SaleOrder(models.Model):
         }
 
 
-class TransportationTransporter(models.Model):
-    _inherit = 'transportation.transporter'
-
-    country_group_id = fields.Many2one('res.country.group', 'Country Group')
-    fuel = fields.Float(string="Fuel(%)", help="Percentage increase in transportation which varies depending on transporter")
-
-
 class ResCountryGroup(models.Model):
     _inherit = 'res.country.group'
 
     shipment = fields.Boolean('Shipment', default=False)
-    transporter_ids = fields.One2many('transportation.transporter', 'country_group_id', readonly=True)
+    transporter_ids = fields.One2many('res.partner', 'country_group_id', readonly=True)
 
 
 class TransporterUrlResponseError(Exception):

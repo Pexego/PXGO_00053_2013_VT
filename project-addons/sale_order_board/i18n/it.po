@@ -57,21 +57,21 @@ msgstr "dei prodotti dell'ordine non hanno i pesi contrassegnati, si ricorda che
 
 #. module: sale_order_board
 #: model:ir.ui.view,arch_db:sale_order_board.view_price_calc
-msgid "  Calculate Shipping Prices"
-msgstr "  Calcolo della spedizione"
+msgid "Calculate Shipping Prices"
+msgstr "Calcolo della spedizione"
 
 #. module: sale_order_board
-#: model:ir.model.fields,help:sale_order_board.field_transportation_transporter_fuel
+#: model:ir.model.fields,help:sale_order_board.field_res_partner_fuel
 msgid "Percentage increase in transportation which varies depending on transporter"
 msgstr "Aumento percentuale del costo di trasporto che varia a seconda del corriere "
 
 #. module: sale_order_board
-#: model:ir.model.fields,field_description:sale_order_board.field_transportation_transporter_fuel
+#: model:ir.model.fields,field_description:sale_order_board.field_res_partner_fuel
 msgid "Fuel(%)"
 msgstr "Aumento dei costi di trasporto(%)"
 
 #. module: sale_order_board
-#: model:ir.model.fields,field_description:sale_order_board.field_transportation_transporter_weight_volume_translation
+#: model:ir.model.fields,field_description:sale_order_board.field_res_partner_weight_volume_translation
 msgid "Translation (kg/cbm)"
 msgstr "Conversione (kg/cbm)"
 
@@ -79,4 +79,9 @@ msgstr "Conversione (kg/cbm)"
 #: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_shipping_weight
 msgid "Shipping weight"
 msgstr "Peso di spedizione"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_res_partner_api_name
+msgid "API Name"
+msgstr "Nome API"
 

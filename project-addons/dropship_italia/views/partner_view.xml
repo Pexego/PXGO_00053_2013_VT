@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="transporter_form_dropship" model="ir.ui.view">
+        <field name="name">transporter.form.dropship</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="delivery_carrier_custom.res_partner_add_transporter_page"/>
+        <field name="arch" type="xml">
+            <field name="carrier_ids" position="before">
+                <group>
+                    <field name="transporter_dropship"/>
+                </group>
+            </field>
+            <xpath expr="//field[@name='carrier_ids']/tree/field[@name='name']" position="after">
+                <field name="dropship"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

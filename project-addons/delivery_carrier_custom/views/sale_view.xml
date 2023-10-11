@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_remove_old_carrier_id" model="ir.ui.view">
+            <field name="name">sale.order.remove_old_carrier_id</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
+            <field name="arch" type="xml">
+                <div name="carrier_selection" position="replace">
+                </div>
+                <label for="carrier_id" position="replace">
+                </label>
+            </field>
+        </record>
+
+        <record id="sale_order_add_carrier_transporter" model="ir.ui.view">
+            <field name="name">sale.order.add.carrier.transporter</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
+            <field name="arch" type="xml">
+                <field name="payment_term_id" position="after">
+                    <field name="transporter_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
+                    <field name="carrier_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

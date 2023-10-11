@@ -1,0 +1,328 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* delivery_carrier_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-20 11:25+0000\n"
+"PO-Revision-Date: 2023-06-20 11:25+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_area_id
+msgid "Area"
+msgstr "Area"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_delivery_carrier_by_air
+msgid "By Air"
+msgstr "Aerea"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_delivery_carrier
+msgid "Carrier"
+msgstr "Trasportatore"
+
+#. module: delivery_carrier_custom
+#: selection:res.partner,delivery_type:0
+#: selection:sale.order,delivery_type:0
+msgid "Carrier - Customer"
+msgstr "Corriere - Cliente"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_city
+msgid "City"
+msgstr "Città"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_res_partner
+msgid "Contact"
+msgstr "Contatto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_res_country
+msgid "Country"
+msgstr "Nazione"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_country_group_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_country_group_id
+msgid "Country Group"
+msgstr "Gruppo nazione"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_create_uid
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_create_uid
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_create_date
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_create_date
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_date
+msgid "Date"
+msgstr "Data"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_country_default_transporter
+msgid "Default transporter"
+msgstr "Corriere default"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_delivery_type
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_delivery_type
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_sale_order_delivery_type
+msgid "Delivery type"
+msgstr "Tipo de invio"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_display_name
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_display_name
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_display_name
+msgid "Display Name"
+msgstr "Visualizza Nome"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_id_22925
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel___last_update
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard___last_update
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard___last_update
+msgid "Last Modified on"
+msgstr "Data di ultima modifica"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_last_record
+msgid "Last Record"
+msgstr "Ultimo record"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_write_uid
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_write_uid
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Ultima modifica di"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_write_date
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_write_date
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_write_date
+msgid "Last Updated on"
+msgstr "Ultima modifica il"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_num_packages
+msgid "Num Packages"
+msgstr "Num.Pacchi"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_picking_id
+msgid "Picking"
+msgstr "Bolla"
+
+#. module: delivery_carrier_custom
+#: selection:res.partner,delivery_type:0
+#: selection:sale.order,delivery_type:0
+msgid "Pickup in installations"
+msgstr "Raccolta nelle strutture"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_sale_order
+msgid "Quotation"
+msgstr "Vendite"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_status_picking
+msgid "STATUS"
+msgstr "Stato attuale"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_status_list
+msgid "STATUS LIST"
+msgstr "Elenco stato"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.res_partner_add_transporter_page
+msgid "Service"
+msgstr "Servizio"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_carrier_ids
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_carrier_ids
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.res_partner_add_transporter_page
+msgid "Services"
+msgstr "Servizi"
+
+#. module: delivery_carrier_custom
+#: selection:res.partner,delivery_type:0
+#: selection:sale.order,delivery_type:0
+msgid "Shipping"
+msgstr "Invio"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_status
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_tracking_status
+msgid "Status"
+msgstr "Stato"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_wizard_status_request
+msgid "Status request"
+msgstr "Stato della richiesta"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_packages_reference
+msgid "Tracking number"
+msgstr "Numero di tracciamento"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_tracking_status
+msgid "Tracking status information"
+msgstr "Informazione tracking"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_carrier_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_carrier_id
+msgid "Transport service"
+msgstr "Servizio"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.res_partner_add_transporter_page
+msgid "Transportation"
+msgstr "Trasporto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_transporter_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_is_transporter
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_transporter_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_is_transporter
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_users_transporter_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_sale_order_transporter_id
+msgid "Transporter"
+msgstr "Trasportatore"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_res_partner_area_transporter_rel_ids
+msgid "Transporters"
+msgstr "Corriere"
+
+#. module: delivery_carrier_custom
+#: code:addons/delivery_carrier_custom/models/partner.py:50
+#: code:addons/delivery_carrier_custom/models/partner.py:57
+#, python-format
+msgid "Value error"
+msgstr "Value error"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_picking_tracking_status_list_wizard_wizard_id
+msgid "Wizard"
+msgstr "Procedura guidata"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_area_transporter_rel_ratio_shipping
+msgid "ratio"
+msgstr "Rapporto"
+
+#. module: delivery_carrier_custom
+#: code:addons/delivery_carrier_custom/models/partner.py:50
+#: code:addons/delivery_carrier_custom/models/partner.py:57
+#, python-format
+msgid "the ratio can not be 0"
+msgstr "Tl rapporto non può essere 0"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_carrier_tracking_ref
+msgid "Carrier Tracking Ref"
+msgstr "Rif. Tracking del corriere"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_carrier_name
+msgid "Carrier name"
+msgstr "Nome corriere"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_carrier_service
+msgid "Carrier service"
+msgstr "Servizio di trasporto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_weight_net
+msgid "Net Weight"
+msgstr "Peso netto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_move_weight_net
+msgid "Net weight"
+msgstr "Peso netto"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_stock_picking
+msgid "Picking List"
+msgstr "Bolla"
+
+#. module: delivery_carrier_custom
+#: model:ir.model,name:delivery_carrier_custom.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di scorta"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_move_weight_uom_id
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_weight_uom_id
+msgid "Unit of Measure"
+msgstr "Unità di misura"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,help:delivery_carrier_custom.field_stock_move_weight_uom_id
+msgid "Unit of Measure (Unit of Measure) is the unit of measurement for Weight"
+msgstr "L'unità di misura è l'unità di misura del peso"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,help:delivery_carrier_custom.field_stock_picking_weight_uom_id
+msgid "Unit of measurement for Weight"
+msgstr "Unità di misura per peso"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_volume
+msgid "Volume"
+msgstr "Volume"
+
+#. module: delivery_carrier_custom
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_move_weight
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+#: model:ir.model.fields,field_description:delivery_carrier_custom.field_stock_picking_weight
+msgid "Weight"
+msgstr "Peso"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+msgid "Carrier Information"
+msgstr "Informazioni sul corriere"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+msgid "Weight Net"
+msgstr "Peso netto"
+
+#. module: delivery_carrier_custom
+#: model:ir.ui.view,arch_db:delivery_carrier_custom.view_picking_withtransport_out_form
+msgid "Check tracking status"
+msgstr "Controlla lo stato della spedizione"
+

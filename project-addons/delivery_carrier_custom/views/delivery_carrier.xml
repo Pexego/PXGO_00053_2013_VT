@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="delivery_carrier_add_by_air" model="ir.ui.view">
+        <field name="name">delivery.carrier.add.by.air</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery_carrier_partner.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="by_air"/>
+            </field>
+        </field>
+    </record>
+</odoo>

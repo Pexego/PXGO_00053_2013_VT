@@ -1,0 +1,373 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* delivery_tnt_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-09 10:45+0000\n"
+"PO-Revision-Date: 2023-08-09 10:45+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_service_d:0
+#: selection:delivery.carrier,tnt_product_service_n:0
+msgid "10:00 Express"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_code_d:0
+msgid "12:00 EXPRESS"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_service_n:0
+msgid "12:00 Economy Express"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_service_d:0
+#: selection:delivery.carrier,tnt_product_service_n:0
+msgid "12:00 Express"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_code_d:0
+msgid "9:00 EXPRESS"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_service_d:0
+#: selection:delivery.carrier,tnt_product_service_n:0
+msgid "9:00 Express"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.ui.view,arch_db:delivery_tnt_oca.view_delivery_carrier_tnt_oca_form
+msgid "Account"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_service_option:0
+msgid "BB"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model,name:delivery_tnt_oca.model_delivery_carrier
+msgid "Carrier"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_collect_time_from
+msgid "Collect time from"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_collect_time_to
+msgid "Collect time to"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.ui.view,arch_db:delivery_tnt_oca.view_delivery_carrier_tnt_oca_form
+msgid "Credentials"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_default_packaging_id
+msgid "Default Packaging Type"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_type:0
+msgid "Document (paper/manuals/reports)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_line_of_business:0
+msgid "Domestic transfers"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_code_n:0
+msgid "ECONOMY EXPRESS"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_service_option:0
+msgid "EQ"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_service_n:0
+msgid "Economy Express"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_service_d:0
+#: selection:delivery.carrier,tnt_product_service_n:0
+msgid "Express"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_code_d:0
+#: selection:delivery.carrier,tnt_product_code_n:0
+msgid "GLOBAL EXPRESS"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_service_option:0
+msgid "HZ"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_line_of_business:0
+msgid "International non-domestic transfers"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_line_of_business
+msgid "Line of business"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.ui.view,arch_db:delivery_tnt_oca.view_delivery_carrier_tnt_oca_form
+msgid "Misc"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_product_type:0
+msgid "Non-document (packages)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_service_option:0
+msgid "PR"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model,name:delivery_tnt_oca.model_product_packaging
+msgid "Packaging"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.ui.view,arch_db:delivery_tnt_oca.view_delivery_carrier_tnt_oca_form
+msgid "Password"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_payment_indicator
+msgid "Payment indicator"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_code
+msgid "Product code"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_code_d
+msgid "Product code (Docs)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_code_n
+msgid "Product code (Non docs)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_service
+msgid "Product service"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_service_d
+msgid "Product service (Docs)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_service_n
+msgid "Product service (Non docs)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_product_type
+msgid "Product type"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_payment_indicator:0
+msgid "Receiver pays"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_payment_indicator:0
+msgid "Sender pays"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: code:addons/delivery_tnt_oca/models/tnt_request.py:144
+#: code:addons/delivery_tnt_oca/models/tnt_request.py:327
+#: code:addons/delivery_tnt_oca/models/tnt_request.py:453
+#, python-format
+msgid "Sending to TNT\n"
+"%s"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: code:addons/delivery_tnt_oca/models/tnt_request.py:60
+#, python-format
+msgid "Server not reachable, please try again later"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_service_option
+msgid "Service option"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.ui.view,arch_db:delivery_tnt_oca.view_delivery_carrier_tnt_oca_form
+msgid "TNT"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: code:addons/delivery_tnt_oca/models/delivery_carrier.py:188
+#, python-format
+msgid "TNT API does not allow you to cancel a shipment."
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.actions.report,name:delivery_tnt_oca.label_delivery_tnt_oca
+msgid "TNT Label (ZPL)"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: code:addons/delivery_tnt_oca/models/tnt_request.py:58
+#, python-format
+msgid "Timeout: the server did not reply within 60s"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_cluster_code
+msgid "Tnt Consignment Cluster Code"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_data
+msgid "Tnt Consignment Data"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_date
+msgid "Tnt Consignment Date"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_destination_depot
+msgid "Tnt Consignment Destination Depot"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_destination_depot_day
+msgid "Tnt Consignment Destination Depot Day"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_free_circulation
+msgid "Tnt Consignment Free Circulation"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_market
+msgid "Tnt Consignment Market"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_mumber
+msgid "Tnt Consignment Mumber"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_option
+msgid "Tnt Consignment Option"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_origin_depot
+msgid "Tnt Consignment Origin Depot"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_product
+msgid "Tnt Consignment Product"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_sort_split
+msgid "Tnt Consignment Sort Split"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_transit_depot
+msgid "Tnt Consignment Transit Depot"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_transport
+msgid "Tnt Consignment Transport"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_consignment_xray
+msgid "Tnt Consignment Xray"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_piece_barcode
+msgid "Tnt Piece Barcode"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_stock_picking_tnt_piece_data
+msgid "Tnt Piece Data"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model,name:delivery_tnt_oca.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_use_packages_from_picking
+msgid "Use packages from picking"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.ui.view,arch_db:delivery_tnt_oca.view_delivery_carrier_tnt_oca_form
+msgid "Username"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_oca_ws_account
+msgid "WS Account"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_oca_ws_password
+msgid "WS Password"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: model:ir.model.fields,field_description:delivery_tnt_oca.field_delivery_carrier_tnt_oca_ws_username
+msgid "WS Username"
+msgstr ""
+
+#. module: delivery_tnt_oca
+#: selection:delivery.carrier,tnt_service_option:0
+msgid "XBB"
+msgstr ""

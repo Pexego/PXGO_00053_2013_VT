@@ -1,5 +1,6 @@
-from odoo import models, fields, api, _, exceptions
+from odoo import models, fields, api, _
 from odoo.addons.queue_job.job import job
+from odoo.exceptions import UserError
 import odoorpc
 
 
@@ -66,9 +67,12 @@ class StockPicking(models.Model):
     @api.multi
     def action_cancel(self):
         for picking in self:
-            if picking.sale_id.partner_id.commercial_partner_id.country_code \
-                    and picking.sale_id.partner_shipping_id.dropship and not self.env.user.has_group('base.group_system'):
-                raise exceptions.UserError(_('This order cannot be canceled here, should be canceled in Italy'))
+            if (
+                picking.sale_id.partner_id.commercial_partner_id.country_code and
+                picking.sale_id.partner_shipping_id.dropship and
+                not self.env.user.has_group('base.group_system')
+            ):
+                raise UserError(_('This order cannot be canceled here, should be canceled in Italy'))
         return super(StockPicking, self).action_cancel()
 
     def check_send_email_base(self, vals):

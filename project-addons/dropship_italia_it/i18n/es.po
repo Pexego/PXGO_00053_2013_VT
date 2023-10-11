@@ -31,7 +31,7 @@ msgid "Picking Es"
 msgstr "Albarán ES"
 
 #. module: dropship_italia_it
-#: code:addons/dropship_italia_it/models/stock.py:26
+#: code:addons/dropship_italia_it/models/stock.py:24
 #, python-format
 msgid "The order cannot be canceled"
 msgstr "El pedido no puede ser cancelado"
@@ -57,7 +57,7 @@ msgid "Transporter"
 msgstr "Transportista"
 
 #. module: dropship_italia_it
-#: code:addons/dropship_italia_it/models/sale.py:76
+#: code:addons/dropship_italia_it/models/sale.py:78
 #, python-format
 msgid "Error! A line cannot be dropship and deposit at the same time"
 msgstr "Error! Una linea no puede ser dropship y depósito a la vez"

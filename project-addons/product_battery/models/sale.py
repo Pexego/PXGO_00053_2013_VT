@@ -1,4 +1,5 @@
-from odoo import fields, models, _, exceptions, api
+from odoo import fields, models, _, api
+from odoo.exceptions import UserError
 
 
 class SaleOrder(models.Model):
@@ -11,15 +12,19 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         for sale in self:
             if not sale.allow_ship_battery:
-                transport_service = sale.service_id
+                delivery_carrier = sale.carrier_id
                 msg = ''
                 for line in sale.order_line:
-                    if transport_service in line.product_id.battery_id.forbidden_ship_ids:
-                        msg += "\n %s - %s" % (line.product_id.default_code, line.product_id.battery_id.name)
+                    if delivery_carrier in line.product_id.battery_id.forbidden_ship_ids:
+                        msg += "\n %s - %s" % (
+                            line.product_id.default_code,
+                            line.product_id.battery_id.name
+                        )
                 if msg:
-                    msg_error = _("\nThe order can not be confirmed, there are products with batteries that can not be shipped by %s") \
-                           % transport_service.name
+                    msg_error = _(
+                        "\nThe order can not be confirmed, there are products"
+                        " with batteries that can not be shipped by %s") % delivery_carrier.name
                     msg_error += msg
-                    raise exceptions.UserError(msg_error)
+                    raise UserError(msg_error)
 
         return super(SaleOrder, self).action_confirm()
