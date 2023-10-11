@@ -37,7 +37,6 @@
              'wizard/picking_tracking_status_view.xml',
              'views/res_partner_view.xml',
              'views/transportation_view.xml',
-             'views/sale_view.xml', 'views/stock_view.xml',
-             'data/parameters.xml'],
+             'views/sale_view.xml'],
     "installable": True
 }

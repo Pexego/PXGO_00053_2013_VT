@@ -1,4 +1,7 @@
-from . import transport
-from . import stock
-from . import purchase
-from . import sale
+from . import (
+    stock,
+    purchase,
+    sale,
+    partner,
+    delivery_carrier
+)

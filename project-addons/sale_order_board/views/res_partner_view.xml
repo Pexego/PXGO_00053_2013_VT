@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_add_translation" model="ir.ui.view">
+        <field name="name">res.partner.add.translation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="delivery_carrier_custom.res_partner_add_transporter_page"/>
+        <field name="arch" type="xml">
+            <field name="carrier_ids" position="before">
+                <group>
+                    <field name="api_name"/>
+                    <field name="weight_volume_translation"/>
+                    <field name="country_group_id"/>
+                    <label for="fuel"/>
+                    <div>
+                        <field name="fuel" class="oe_inline"/> %%
+                    </div>
+                </group>
+            </field>
+        </field>
+    </record>
+</odoo>

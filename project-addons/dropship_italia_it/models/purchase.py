@@ -65,7 +65,7 @@ class PurchaseOrder(models.Model):
         }
         if transporter and service:
             vals['transporter_id'] = transporter.remote_id
-            vals['service_id'] = service.remote_id
+            vals['carrier_id'] = service.remote_id
         return vals
 
     def prepare_order_line_es(self, line, order_es, odoo_es):
@@ -104,9 +104,9 @@ class PurchaseOrder(models.Model):
         order_es = odoo_es.env['sale.order'].browse(order_es_id)
         order_es.onchange_partner_id()
         order_es.write({'partner_shipping_id': vals['partner_shipping_id']})
-        if vals.get('transporter_id', False) and vals.get('service_id', False):
+        if vals.get('transporter_id', False) and vals.get('carrier_id', False):
             order_es.write({'transporter_id': vals['transporter_id'],
-                            'service_id': vals['service_id']})
+                            'carrier_id': vals['carrier_id']})
 
         for line in self.order_line.filtered(lambda l: l.product_id.type == 'product'):
             l_vals = self.prepare_order_line_es(line, order_es_id, odoo_es)

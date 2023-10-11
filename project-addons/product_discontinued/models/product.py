@@ -42,9 +42,9 @@ class ProductProduct(models.Model):
         """ :param date: date min to search stock_moves
             :returns the domain to search the stock_moves with products in eol
         """
-        return ['&','&',('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),
-             ('product_id.state', '=', 'end'), '|',
-             ('sale_line_id', '!=', False), ('claim_line_id', '!=', False)]
+        return ['&', '&', ('state', 'in', ('partially_available', 'confirmed', 'waiting')),
+                ('date', '>=', date), ('product_id.state', '=', 'end'), '|',
+                ('sale_line_id', '!=', False), ('claim_line_id', '!=', False)]
 
     @api.model
     def cron_send_mail_to_commercials_products_discontinued(self, date=False):
@@ -56,21 +56,21 @@ class ProductProduct(models.Model):
         moves = self.env['stock.move'].search(domain)
         moves_group_by_commercial = dict()
         if moves:
-            moves_sales = moves.filtered(lambda m:m.sale_line_id)
+            moves_sales = moves.filtered(lambda m: m.sale_line_id)
             moves_claims = moves.filtered(lambda m: m.claim_line_id)
             template = self.env.ref('product_discontinued.alert_cron_send_mail_to_commercials_products_discontinued')
             if moves_sales:
                 for move in moves_sales:
                     if move.sale_line_id.salesman_id in moves_group_by_commercial:
-                        moves_group_by_commercial[move.sale_line_id.salesman_id]+=move
+                        moves_group_by_commercial[move.sale_line_id.salesman_id] += move
                     else:
                         moves_group_by_commercial[move.sale_line_id.salesman_id] = move
                 for commercial,values in moves_group_by_commercial.items():
                     ctx = dict()
                     ctx.update({
                         'email_to': commercial.login,
-                        'moves':values,
-                        'lang':commercial.lang
+                        'moves': values,
+                        'lang': commercial.lang
                     })
                     template.with_context(ctx).send_mail(self.id)
             if moves_claims:
@@ -82,8 +82,3 @@ class ProductProduct(models.Model):
                     'lang': support_team_user.lang
                 })
                 template.with_context(ctx).send_mail(self.id)
-
-
-
-
-
