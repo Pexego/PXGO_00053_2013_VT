@@ -643,6 +643,26 @@ msgid "Last LC date"
 msgstr "Ultimo giorno LC"
 
 #. module: stock_custom
+#: model:mail.template,subject:stock_custom.purchase_order_received_template
+msgid "Visiotech - Order received"
+msgstr "Visiotech - Ordine Ricevuto"
+
+#. module: stock_custom
+#: model:mail.template,body_html:stock_custom.purchase_order_received_template
+msgid "<p>Dear Provider,</p>"
+"<p>Please be informed that we have received the products corresponding to ${ctx.get('order_name')}.</p>"
+"<p>Please send us the corresponding invoice as soon as possible, so that we can enter "
+"it in our system and proceed with the payment under the agreed conditions.</p>"
+"<p>Yours sincerely,</p>"
+"<p>VISIOTECH</p>"
+msgstr "<p>Gentile Fornitore:</p> "
+"<p>La informiamo che abbiamo ricevuto i prodotti relativi a ${ctx.get('order_name')}.</p>"
+"<p>La preghiamo di inviarci al più presto la fattura corrispondente, in modo da poterla inserire "
+"nel nostro sistema e procedere al pagamento della stessa in base alle condizioni concordate.</p>"
+"<p>Cordiali saluti,</p>"
+"<p>VISIOTECH</p>"
+
+#. module: stock_custom
 #: model:ir.ui.view,arch_db:stock_custom.view_stock_product_tree
 msgid "Prices"
 msgstr "Prezzi"
