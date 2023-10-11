@@ -106,6 +106,7 @@
             </field>
             <field name="barcode" position="after">
                 <field name="categ_id"/>
+                <button name="view_prices_model" type="object" string="Prices"/>
             </field>
         </field>
     </record>

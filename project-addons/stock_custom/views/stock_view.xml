@@ -379,4 +379,22 @@
         </field>
     </record>
 
+    <record id="purchase_order_received_template" model="mail.template">
+        <field name="name">Purchase Received Notification</field>
+        <field name="subject">Visiotech - Order received</field>
+        <field name="model_id" ref="stock_custom.model_stock_picking"/>
+        <field name="email_from">${('noreply@localhost')|safe}</field>
+        <field name="email_to">${(object.partner_id.email2 or '')|safe}</field>
+        <field name="recipient_ids">False</field>
+        <field name="reply_to">${('noreply@localhost')|safe}</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear Provider,</p>
+            <p>Please be informed that we have received the products corresponding to ${ctx.get('order_name')}.</p>
+            <p>Please send us the corresponding invoice as soon as possible, so that we can enter
+            it in our system and proceed with the payment under the agreed conditions.</p>
+            <p>Yours sincerely,</p>
+            <p>VISIOTECH</p>
+        ]]></field>
+    </record>
+
 </odoo>

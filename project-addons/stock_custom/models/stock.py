@@ -88,7 +88,36 @@ class StockPicking(models.Model):
                 # We need to do this after the write, otherwise the email template won't get well some  picking values
                 picking_template = picking.get_email_template()
                 picking_template.send_mail(picking.id)
+
+        self.check_and_send_supplier_invoice_mail(vals)
         return result
+
+    def check_and_send_supplier_invoice_mail(self, vals):
+        """
+        Checks if incoming pickings are finished and sends an email
+        requesting supplier invoice.
+        """
+        if vals.get('state') == 'done' or vals.get('date_done'):
+            incoming_picking_type = self.env.ref('stock.picking_type_in')
+            for picking in self.filtered(
+                lambda p: p.picking_type_id == incoming_picking_type and p.partner_id.email2 != False
+            ):
+                picking.send_request_supplier_invoice_mail()
+
+    def send_request_supplier_invoice_mail(self):
+        """
+        Sends an email requesting purchase invoice to the supplier only when we have
+        purchase supplier reference.
+        This mail is sent to email2 (accounting mail)
+        """
+        self.ensure_one()
+        purchase_order_id = self.env['purchase.order'].search([('name', 'in', self.origin.split(', '))])
+        purchase_ref = purchase_order_id.filtered(lambda p: p.partner_ref).mapped('partner_ref')
+        if not purchase_ref:
+            return
+        mail_template = self.env.ref('stock_custom.purchase_order_received_template')
+        mail_template.with_context(lang=self.partner_id.commercial_partner_id.lang,
+                                   order_name=', '.join(purchase_ref)).send_mail(self.id)
 
     @api.multi
     def action_confirm(self):

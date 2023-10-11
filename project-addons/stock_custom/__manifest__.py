@@ -12,7 +12,7 @@
                 'reserve_without_save_sale', 'sale_display_stock',
                 'stock_reserve_sale', 'product_brand', 'sale_customer_discount',
                 'product_stock_unsafety', 'stock', 'stock_landed_costs', 'stock_account',
-                'stock_picking_back2draft', 'delivery'],
+                'stock_picking_back2draft', 'delivery', 'product_customer_reference'],
     'data': ['views/ir_attachment_view.xml',
              'data/groups.xml',
              'security/stock_custom_security.xml',

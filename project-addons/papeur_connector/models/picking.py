@@ -18,6 +18,24 @@ class StockPicking(models.Model):
     vstock_data = fields.One2many('stock.picking.vstock', 'picking_id')
 
     @api.multi
+    def write(self, vals):
+        res = super().write(vals)
+        for picking in self:
+            if vals.get('block_picking', False) and vals.get('block_picking') is True and picking.state_papeur in ('notified', 'urgent'):
+                # Pedido en preparación
+                picking.with_delay(priority=1).prepare_order_reception()
+                picking.with_delay(priority=1).notify_user()
+                picking.vstock_data.write({'state_vstock': 'En preparación'})
+            if vals.get('date_done', False) and picking.state_papeur in ('notified', 'urgent'):
+                # Pedido finalizado
+                picking.cancel_order_urgent()
+                picking.vstock_data.write({'state_papeur': 'done'})
+                picking.with_delay(priority=1, eta=1800).auto_deliver_order()
+                picking.with_delay(priority=1).ready_order()
+
+        return res
+
+    @api.multi
     def prepare_order(self):
         ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
         web_endpoint = f'{ppu_endpoint}/prepare_order'
@@ -36,7 +54,23 @@ class StockPicking(models.Model):
                 response_reception = requests.post(web_endpoint_reception, json=data_reception)
                 response.raise_for_status()
                 response_reception.raise_for_status()
-                picking.vstock_data.state_papeur = 'notified'
+                picking.vstock_data.write({'state_papeur': 'notified'})
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60})
+    @api.multi
+    def prepare_order_reception(self):
+        ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
+        web_endpoint = f'{ppu_endpoint}/doing'
+        for picking in self:
+            data = {
+                "name": f"{picking.origin or ''} - {picking.name}",
+                "odoo_id": picking.id
+            }
+            try:
+                response = requests.post(web_endpoint, json=data)
+                response.raise_for_status()
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
 
@@ -52,7 +86,7 @@ class StockPicking(models.Model):
             try:
                 response = requests.post(web_endpoint, json=data)
                 response.raise_for_status()
-                picking.vstock_data.state_papeur = 'urgent'
+                picking.vstock_data.write({'state_papeur': 'urgent'})
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
 
@@ -77,7 +111,7 @@ class StockPicking(models.Model):
                 response_reception.raise_for_status()
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
-            picking.vstock_data.state_papeur = False
+            picking.vstock_data.write({'state_papeur': False})
 
     @api.multi
     def deliver_order(self):
@@ -94,6 +128,23 @@ class StockPicking(models.Model):
             except requests.exceptions.RequestException as e:
                 raise UserError(_("Something went wrong: %s" % e))
 
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60})
+    @api.multi
+    def ready_order(self):
+        ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
+        web_endpoint = f'{ppu_endpoint}/ready'
+        for picking in self:
+            data = {
+                "name": f"{picking.origin or ''} - {picking.name}",
+                "odoo_id": picking.id
+            }
+            try:
+                response = requests.post(web_endpoint, json=data)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                raise UserError(_("Something went wrong: %s" % e))
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60})
     @api.multi
     def notify_user(self):
         ppu_endpoint = self.env['ir.config_parameter'].sudo().get_param('papeur.url')
@@ -101,7 +152,7 @@ class StockPicking(models.Model):
         for picking in self:
             data = {
                 "name": f"{picking.id_vstock} - {picking.name} - {picking.origin or ''} - {picking.partner_id.commercial_partner_id.name}",
-                "user": picking.user_vstock,
+                "user": "Asignado",
                 "odoo_id": picking.id
             }
             try:

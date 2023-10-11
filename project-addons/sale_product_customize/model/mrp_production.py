@@ -54,6 +54,7 @@ class MrpProduction(models.Model):
         self.move_raw_ids.write({'picking_id': pick_out.id})
         self.move_raw_ids.mapped('move_line_ids').write({'picking_id': pick_out.id})
 
+
 class MrpBomLine(models.Model):
 
     _inherit = 'mrp.bom.line'
@@ -72,6 +73,8 @@ class MrpBom(models.Model):
         todas las compañías"""
         return super()._bom_find(product_tmpl=product_tmpl, product=product,
                                  picking_type=picking_type, company_id=False)
+
+    product_tmpl_name = fields.Char(related='product_tmpl_id.name', String='Product')
 
 
 class MrpProductProduceLine(models.TransientModel):
