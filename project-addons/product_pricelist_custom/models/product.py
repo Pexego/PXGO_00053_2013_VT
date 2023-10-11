@@ -333,6 +333,22 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
+    def view_prices_model(self):
+        self.ensure_one()
+        item_ids_unified = self.item_ids.ids + self.item_brand_ids.ids
+        default_code = self.default_code
+
+        changer_wzd = self.env['view.prices'].create(
+            {
+                'item_ids': [(6, 0, item_ids_unified)],
+                'default_code': default_code
+            }
+        )
+
+        action = self.env.ref('product_pricelist_custom.action_wizard_prices').read()[0]
+        action['res_id'] = changer_wzd.id
+        return action
+
     @api.multi
     @api.depends('item_ids.fixed_price')
     def _get_margins_relation(self):
