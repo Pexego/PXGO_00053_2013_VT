@@ -661,3 +661,8 @@ msgstr "<p>Gentile Fornitore:</p> "
 "nel nostro sistema e procedere al pagamento della stessa in base alle condizioni concordate.</p>"
 "<p>Cordiali saluti,</p>"
 "<p>VISIOTECH</p>"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_tree
+msgid "Prices"
+msgstr "Prezzi"

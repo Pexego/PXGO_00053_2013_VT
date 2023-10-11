@@ -744,3 +744,9 @@ msgstr "<p>Estimado Proveedor,</p> "
 "en nuestro sistema y proceder al pago de la misma en las condiciones acordadas.</p>"
 "<p>Atentamente,</p>"
 "<p>VISIOTECH</p>"
+
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_tree
+msgid "Prices"
+msgstr "Precios"

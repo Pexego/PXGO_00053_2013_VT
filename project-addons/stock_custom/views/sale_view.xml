@@ -28,6 +28,18 @@
         </field>
     </record>
 
+    <record id="view_order_add_get_tech_files_button" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <button name="get_product_tech_pdf" type="object"
+                        string="Products Datasheet"
+                        groups="base.group_system,stock_custom.group_comercial_ext"/>
+            </field>
+        </field>
+    </record>
 
     <record id="action_sale_report_uniview_projects" model="ir.actions.act_window">
         <field name="name">Sales Analysis 2 - Uniview and Projects</field>
